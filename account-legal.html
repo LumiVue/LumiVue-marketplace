@@ -8,15 +8,14 @@
 
   <style>
     :root {
-      /* neutral latte / cream palette - SAME AS LISTINGS */
-      --lv-bg: #f4f1eb;          /* page background */
-      --lv-surface: #ffffff;     /* card background */
-      --lv-border: #ddd3c6;      /* soft beige border */
+      --lv-bg: #f4f1eb;
+      --lv-surface: #ffffff;
+      --lv-border: #ddd3c6;
       --lv-border-strong: #ccc0b1;
-      --lv-text: #2c1e19;        /* espresso text */
-      --lv-text-muted: #7a6a5c;  /* softer brown text */
-      --lv-accent: #c98a5a;      /* caramel accent */
-      --lv-accent-soft: #fbedd1; /* very light caramel accent */
+      --lv-text: #2c1e19;
+      --lv-text-muted: #7a6a5c;
+      --lv-accent: #c98a5a;
+      --lv-accent-soft: #fbedd1;
       --lv-radius-lg: 14px;
       --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
       --lv-danger: #dc2626;
@@ -32,13 +31,8 @@
       color: var(--lv-text);
     }
 
-    .shell {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    .shell { min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* TOP NAV */
     header {
       height: 64px;
       display: flex;
@@ -58,12 +52,7 @@
       justify-content: space-between;
     }
 
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
+    .brand { display: flex; flex-direction: column; gap: 2px; }
     .brand-main {
       font-size: 15px;
       letter-spacing: .22em;
@@ -71,7 +60,6 @@
       font-weight: 600;
       color: var(--lv-text);
     }
-
     .brand-sub {
       font-size: 11px;
       text-transform: uppercase;
@@ -79,45 +67,14 @@
       color: var(--lv-text-muted);
     }
 
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-    }
+    nav { display: flex; align-items: center; gap: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: .14em; }
+    nav a { text-decoration: none; color: var(--lv-text-muted); padding-bottom: 2px; border-bottom: 1px solid transparent; }
+    nav a.active { color: var(--lv-text); border-bottom-color: var(--lv-border-strong); }
 
-    nav a {
-      text-decoration: none;
-      color: var(--lv-text-muted);
-      padding-bottom: 2px;
-      border-bottom: 1px solid transparent;
-    }
+    .logout { border-left: 1px solid rgba(0,0,0,.08); padding-left: 14px; margin-left: 8px; }
+    .logout a { color: var(--lv-danger); font-weight: 500; }
 
-    nav a.active {
-      color: var(--lv-text);
-      border-bottom-color: var(--lv-border-strong);
-    }
-
-    .logout {
-      border-left: 1px solid rgba(0,0,0,.08);
-      padding-left: 14px;
-      margin-left: 8px;
-    }
-
-    .logout a {
-      color: var(--lv-danger);
-      font-weight: 500;
-    }
-
-    /* MAIN LAYOUT */
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      padding: 32px 16px 48px;
-    }
+    main { flex: 1; display: flex; justify-content: center; padding: 32px 16px 48px; }
 
     .card {
       width: 100%;
@@ -130,39 +87,13 @@
       position: relative;
     }
 
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      margin-bottom: 18px;
-      cursor: pointer;
-      color: var(--lv-text-muted);
-    }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .14em; margin-bottom: 18px; cursor: pointer; color: var(--lv-text-muted); }
+    .back-link span { font-size: 16px; }
 
-    .back-link span {
-      font-size: 16px;
-    }
+    h1 { margin: 0 0 6px; font-size: 22px; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; color: var(--lv-text); }
 
-    h1 {
-      margin: 0 0 6px;
-      font-size: 22px;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      font-weight: 800;
-      color: var(--lv-text);
-    }
+    p.lead { margin: 0 0 20px; font-size: 13px; color: var(--lv-text-muted); max-width: 540px; }
 
-    p.lead {
-      margin: 0 0 20px;
-      font-size: 13px;
-      color: var(--lv-text-muted);
-      max-width: 540px;
-    }
-
-    /* FORM GRID */
     form {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -178,9 +109,7 @@
       display: block;
     }
 
-    input,
-    textarea,
-    select {
+    input, textarea, select {
       width: 100%;
       padding: 8px 10px;
       border-radius: 10px;
@@ -190,62 +119,13 @@
       color: var(--lv-text);
     }
 
-    input::placeholder,
-    textarea::placeholder {
-      color: rgba(44,30,25,.55);
-    }
+    textarea { min-height: 70px; resize: vertical; }
 
-    input:focus,
-    textarea:focus,
-    select:focus {
-      background: #fef9f2;
-      color: var(--lv-text);
-      outline: none;
-      box-shadow: 0 0 0 1px var(--lv-accent);
-      border-color: var(--lv-accent);
-    }
+    .full { grid-column: 1 / -1; }
 
-    option {
-      background: #fef9f2;
-      color: var(--lv-text);
-    }
+    .actions { margin-top: 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 
-    /* stop blue autofill */
-    input:-webkit-autofill,
-    input:-webkit-autofill:hover,
-    input:-webkit-autofill:focus,
-    textarea:-webkit-autofill,
-    textarea:-webkit-autofill:hover,
-    textarea:-webkit-autofill:focus,
-    select:-webkit-autofill,
-    select:-webkit-autofill:focus {
-      -webkit-box-shadow: 0 0 0 1000px #fdf7ef inset !important;
-      -webkit-text-fill-color: #2c1e19 !important;
-      caret-color: #2c1e19;
-    }
-
-    textarea {
-      min-height: 70px;
-      resize: vertical;
-    }
-
-    .full {
-      grid-column: 1 / -1;
-    }
-
-    /* FOOTER ACTIONS */
-    .actions {
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .hint {
-      font-size: 11px;
-      color: var(--lv-text-muted);
-    }
+    .hint { font-size: 11px; color: var(--lv-text-muted); }
 
     .status-pill {
       font-size: 11px;
@@ -258,30 +138,6 @@
       color: var(--lv-text);
       min-width: 160px;
       text-align: center;
-    }
-
-    button {
-      padding: 9px 22px;
-      border-radius: 999px;
-      border: 1px solid rgba(37,25,17,.8);
-      background: #fff7ec;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      cursor: pointer;
-      box-shadow: 0 18px 35px rgba(0,0,0,.18);
-    }
-
-    button:hover:not([disabled]) {
-      background: var(--lv-accent);
-      color: #fff;
-      border-color: var(--lv-accent);
-    }
-
-    button[disabled] {
-      opacity: 0.6;
-      cursor: default;
-      box-shadow: none;
     }
 
     .loading-overlay {
@@ -298,25 +154,16 @@
       pointer-events: none;
     }
 
-    .loading-overlay.hidden {
-      display: none;
-    }
+    .loading-overlay.hidden { display: none; }
 
     @media (max-width: 768px) {
-      .nav-inner,
-      .card {
-        padding: 16px;
-      }
-      form {
-        grid-template-columns: 1fr;
-      }
-      .actions {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      .nav-inner, .card { padding: 16px; }
+      form { grid-template-columns: 1fr; }
+      .actions { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
+
 <body>
   <div class="shell">
     <header>
@@ -336,7 +183,7 @@
 
     <main>
       <section class="card">
-        <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-overlay hidden" id="loadingOverlay">
           Loading account details…
         </div>
 
@@ -352,53 +199,53 @@
         <form id="legalForm">
           <div class="full">
             <label for="legalName">Legal business name</label>
-            <input id="legalName" type="text" placeholder="Enter legal business name" />
+            <input id="legalName" type="text" />
           </div>
 
           <div>
             <label for="dbaName">Doing business as (optional)</label>
-            <input id="dbaName" type="text" placeholder="Enter brand or shop name" />
+            <input id="dbaName" type="text" />
           </div>
 
           <div>
             <label for="contactName">Primary contact name</label>
-            <input id="contactName" type="text" placeholder="Enter contact person" />
+            <input id="contactName" type="text" />
           </div>
 
           <div>
             <label for="email">Business email</label>
-            <input id="email" type="email" placeholder="Enter business email" />
+            <input id="email" type="email" />
           </div>
 
           <div>
             <label for="phone">Business phone</label>
-            <input id="phone" type="tel" placeholder="Enter business phone" />
+            <input id="phone" type="tel" />
           </div>
 
           <div class="full">
             <label for="address1">Street address</label>
-            <input id="address1" type="text" placeholder="Enter street address" />
+            <input id="address1" type="text" />
           </div>
 
           <div>
             <label for="city">City</label>
-            <input id="city" type="text" placeholder="Enter city" />
+            <input id="city" type="text" />
           </div>
 
           <div>
-            <label for="state">State / region</label>
-            <input id="state" type="text" placeholder="Enter state or region" />
+            <label for="state">State</label>
+            <input id="state" type="text" />
           </div>
 
           <div>
             <label for="postal">Postal code</label>
-            <input id="postal" type="text" placeholder="Enter postal code" />
+            <input id="postal" type="text" />
           </div>
 
           <div>
             <label for="country">Country</label>
             <select id="country">
-              <option value="">Select country</option>
+              <option value="">Select</option>
               <option>United States</option>
               <option>Canada</option>
               <option>United Kingdom</option>
@@ -407,14 +254,12 @@
           </div>
 
           <div class="full">
-            <label for="notes">Internal notes (optional)</label>
-            <textarea id="notes" placeholder="Optional internal notes for this vendor"></textarea>
+            <label for="notes">Internal notes</label>
+            <textarea id="notes"></textarea>
           </div>
 
           <div class="actions">
-            <span class="hint">
-              This information is required before payouts can be activated.
-            </span>
+            <span class="hint">Required before payouts can be activated.</span>
 
             <div style="display:flex; gap:10px; align-items:center;">
               <div class="status-pill" id="saveStatus">Connecting…</div>
@@ -426,24 +271,22 @@
     </main>
   </div>
 
-  <!-- Firebase CDN SDKs (compat, same as login/account) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <!-- ✔ UPDATED FIREBASE (compat 10.13.1) — WORKS ON GITHUB -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-storage-compat.js"></script>
 
   <script>
-    // LumiVue Firebase config (same project as login/account)
     const firebaseConfig = {
       apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
       authDomain: "lumivue-c8fdf.firebaseapp.com",
       projectId: "lumivue-c8fdf",
-      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      storageBucket: "lumivue-c8fdf.appspot.com", /* ✔ FIXED */
       messagingSenderId: "120420036736",
       appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
     };
 
-    // Initialize Firebase (compat)
     firebase.initializeApp(firebaseConfig);
   </script>
 
@@ -453,24 +296,23 @@
       const saveBtn = document.getElementById('saveButton');
       const saveStatus = document.getElementById('saveStatus');
 
-      const legalName    = document.getElementById('legalName');
-      const dbaName      = document.getElementById('dbaName');
-      const contactName  = document.getElementById('contactName');
-      const emailInput   = document.getElementById('email');
-      const phoneInput   = document.getElementById('phone');
-      const address1     = document.getElementById('address1');
-      const cityInput    = document.getElementById('city');
-      const stateInput   = document.getElementById('state');
-      const postalInput  = document.getElementById('postal');
+      const legalName = document.getElementById('legalName');
+      const dbaName = document.getElementById('dbaName');
+      const contactName = document.getElementById('contactName');
+      const emailInput = document.getElementById('email');
+      const phoneInput = document.getElementById('phone');
+      const address1 = document.getElementById('address1');
+      const cityInput = document.getElementById('city');
+      const stateInput = document.getElementById('state');
+      const postalInput = document.getElementById('postal');
       const countryInput = document.getElementById('country');
-      const notesInput   = document.getElementById('notes');
+      const notesInput = document.getElementById('notes');
 
-      let db = null;
-      let auth = null;
+      let db = firebase.firestore();
+      let auth = firebase.auth();
       let currentUser = null;
 
       function setStatus(text, tone) {
-        if (!saveStatus) return;
         saveStatus.textContent = text;
 
         if (tone === 'error') {
@@ -489,123 +331,86 @@
       }
 
       function showLoading(show) {
-        if (!loadingOverlay) return;
         loadingOverlay.classList.toggle('hidden', !show);
       }
 
-      function initFirebasePage() {
-        db = firebase.firestore();
-        auth = firebase.auth();
+      auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+          setStatus('Redirecting…', 'error');
+          window.location.href = 'login.html';
+          return;
+        }
 
-        auth.onAuthStateChanged(async (user) => {
-          if (!user) {
-            setStatus('Redirecting to sign in…', 'error');
-            const redirect = encodeURIComponent(window.location.pathname);
-            window.location.href = 'login.html?redirect=' + redirect;
-            return;
-          }
-
-          currentUser = user;
-          setStatus('Connected', 'success');
-          await loadExistingData();
-        });
-      }
+        currentUser = user;
+        setStatus('Connected', 'success');
+        loadExistingData();
+      });
 
       async function loadExistingData() {
-        try {
-          showLoading(true);
-          setStatus('Loading…');
+        showLoading(true);
+        setStatus('Loading…');
 
-          const docRef = db.collection('creators').doc(currentUser.uid);
-          const snap = await docRef.get();
+        const docRef = db.collection('creators').doc(currentUser.uid);
+        const snap = await docRef.get();
 
-          if (snap.exists) {
-            const data = snap.data() || {};
+        if (snap.exists) {
+          const data = snap.data() || {};
 
-            legalName.value    = data.legalName    || '';
-            dbaName.value      = data.dbaName      || '';
-            contactName.value  = data.contactName  || '';
-            emailInput.value   = data.email        || '';
-            phoneInput.value   = data.phone        || '';
-            address1.value     = data.address1     || '';
-            cityInput.value    = data.city         || '';
-            stateInput.value   = data.state        || '';
-            postalInput.value  = data.postal       || '';
-            countryInput.value = data.country      || '';
-            notesInput.value   = data.legalNotes   || data.notes || '';
-          }
-
-          setStatus('Loaded');
-        } catch (err) {
-          console.error('Error loading legal info', err);
-          setStatus('Load error', 'error');
-        } finally {
-          showLoading(false);
+          legalName.value = data.legalName || '';
+          dbaName.value = data.dbaName || '';
+          contactName.value = data.contactName || '';
+          emailInput.value = data.email || '';
+          phoneInput.value = data.phone || '';
+          address1.value = data.address1 || '';
+          cityInput.value = data.city || '';
+          stateInput.value = data.state || '';
+          postalInput.value = data.postal || '';
+          countryInput.value = data.country || '';
+          notesInput.value = data.legalNotes || data.notes || '';
         }
+
+        setStatus('Loaded');
+        showLoading(false);
       }
 
       async function saveLegalInfo() {
-        if (!currentUser) {
-          setStatus('Please sign in again', 'error');
-          return;
-        }
+        if (!currentUser) return;
 
-        const legal   = legalName.value.trim();
-        const contact = contactName.value.trim();
-        const email   = emailInput.value.trim();
-
-        if (!legal || !contact || !email) {
-          setStatus('Name, contact & email required', 'error');
-          return;
-        }
-
-        if (!saveBtn) return;
         saveBtn.disabled = true;
         setStatus('Saving…');
 
         try {
-          const docRef = db.collection('creators').doc(currentUser.uid);
-
           const payload = {
-            legalName:   legal,
-            dbaName:     dbaName.value.trim()      || null,
-            contactName: contact,
-            email:       email,
-            phone:       phoneInput.value.trim()   || null,
-            address1:    address1.value.trim()     || null,
-            city:        cityInput.value.trim()    || null,
-            state:       stateInput.value.trim()   || null,
-            postal:      postalInput.value.trim()  || null,
-            country:     countryInput.value        || null,
-            legalNotes:  notesInput.value.trim()   || null,
-            updatedAt:   firebase.firestore.FieldValue.serverTimestamp(),
-            sections: {
-              legal: { completed: true }
-            }
+            legalName: legalName.value.trim(),
+            dbaName: dbaName.value.trim() || null,
+            contactName: contactName.value.trim(),
+            email: emailInput.value.trim(),
+            phone: phoneInput.value.trim() || null,
+            address1: address1.value.trim() || null,
+            city: cityInput.value.trim() || null,
+            state: stateInput.value.trim() || null,
+            postal: postalInput.value.trim() || null,
+            country: countryInput.value || null,
+            legalNotes: notesInput.value.trim() || null,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            sections: { legal: { completed: true } }
           };
 
-          await docRef.set(payload, { merge: true });
+          await db.collection('creators').doc(currentUser.uid).set(payload, { merge: true });
 
           setStatus('Saved', 'success');
         } catch (err) {
-          console.error('Error saving legal info', err);
-          setStatus('Save error: ' + (err.code || 'unknown'), 'error');
-          alert('Could not save legal details: ' + err.message);
+          console.error(err);
+          setStatus('Save error', 'error');
+          alert('Could not save details: ' + err.message);
         } finally {
           saveBtn.disabled = false;
         }
       }
 
-      document.addEventListener('DOMContentLoaded', () => {
-        showLoading(true);
-        setStatus('Connecting…');
-        initFirebasePage();
-
-        if (saveBtn) {
-          saveBtn.addEventListener('click', saveLegalInfo);
-        }
-      });
+      saveBtn.addEventListener('click', saveLegalInfo);
     })();
   </script>
+
 </body>
 </html>
