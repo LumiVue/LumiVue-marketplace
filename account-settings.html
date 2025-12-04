@@ -2,288 +2,195 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LumiVue – Account Settings</title>
+  <title>LumiVue – Policies, returns & customer support</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css" />
-
   <style>
-    :root {
-      /* Latte / Cream luxury palette */
-      --lv-bg: #f4f1eb;            
-      --lv-surface: #ffffff;       
-      --lv-border: #ddd3c6;        
-      --lv-border-strong: #ccc0b1;
-      --lv-text: #2c1e19;          
-      --lv-text-muted: #7a6a5c;    
-      --lv-accent: #c98a5a;        
-      --lv-accent-soft: #fbede1;   
-      --lv-radius-lg: 14px;
-      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
-      --lv-danger: #dc2626;
+    :root{
+      --lv-bg:#e8dcc7;
+      --lv-surface:#e3ceb2;
+      --lv-border:#c9a07a;
+      --lv-text:#5c3f28;
+      --lv-muted:#7a6a59;
+      --lv-accent:#b8703b;
+      --lv-danger:#c15b4b;
+      --lv-accent-soft:#f3ddc2;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top left,#f3e4ce,#e8dcc7 48%,#ddc8aa);
+      color:var(--lv-text);
+    }
+    .shell{min-height:100vh;display:flex;flex-direction:column;}
+
+    header{
+      height:64px;display:flex;align-items:center;justify-content:center;
+      border-bottom:1px solid rgba(0,0,0,.04);
+      backdrop-filter:blur(16px);background:rgba(232,220,199,.88);
+    }
+    .nav-inner{width:100%;max-width:1120px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+    .brand{display:flex;flex-direction:column;gap:2px;}
+    .brand-main{font-size:15px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--lv-text);}
+    .brand-sub{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lv-muted);}
+    nav{display:flex;align-items:center;gap:16px;font-size:12px;text-transform:uppercase;letter-spacing:.14em;}
+    nav a{text-decoration:none;color:var(--lv-muted);padding-bottom:2px;border-bottom:1px solid transparent;}
+    nav a.active{color:var(--lv-text);border-bottom-color:var(--lv-border);}
+    .logout{border-left:1px solid rgba(0,0,0,.1);padding-left:14px;margin-left:8px;}
+    .logout a{color:var(--lv-danger);font-weight:500;}
+
+    main{flex:1;display:flex;justify-content:center;padding:32px 16px 48px;}
+    .card{
+      width:100%;max-width:1120px;background:rgba(255,255,255,.32);
+      border-radius:22px;border:1px solid rgba(201,160,122,.45);
+      padding:26px 28px 30px;
+      box-shadow:0 22px 60px rgba(115,82,52,.20),0 0 0 1px rgba(255,255,255,.6);
+      backdrop-filter:blur(14px);
+      position:relative;
     }
 
-    body {
-      margin: 0;
-      background: var(--lv-bg);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--lv-text);
+    .back-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px;color:var(--lv-muted);cursor:pointer;}
+    .back-link span{font-size:16px;}
+
+    h1{
+      margin:0 0 6px;font-size:22px;text-transform:uppercase;
+      letter-spacing:.1em;font-weight:800;color:#5c3f28;
+    }
+    p.lead{margin:0 0 20px;font-size:13px;color:var(--lv-muted);max-width:540px;}
+
+    form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px;}
+    label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--lv-muted);margin-bottom:4px;display:block;}
+    textarea{
+      width:100%;min-height:90px;resize:vertical;
+      padding:8px 10px;border-radius:8px;border:1px solid rgba(201,160,122,.8);
+      background:#f7e7cf;font-size:13px;color:var(--lv-text);
+    }
+    textarea::placeholder{color:rgba(92,63,40,.6);}
+    textarea:focus{
+      background:#f7e7cf;
+      color:#5c3f28;
+      outline:none;
+      box-shadow:0 0 0 1px rgba(184,112,59,.8);
+    }
+    .full{grid-column:1 / -1;}
+
+    .actions{margin-top:20px;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+    .hint{font-size:11px;color:var(--lv-muted);}
+    button{
+      padding:8px 18px;border-radius:999px;border:1px solid rgba(43,33,24,.7);
+      background:#fff7ec;font-size:11px;text-transform:uppercase;letter-spacing:.16em;cursor:pointer;
+      box-shadow:0 18px 35px rgba(0,0,0,.18);
+    }
+    button:hover:not([disabled]){background:var(--lv-accent);color:#fff;border-color:var(--lv-accent);}
+    button[disabled]{opacity:.6;cursor:default;box-shadow:none;}
+
+    .status-pill{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid var(--lv-border);
+      background:var(--lv-accent-soft);
+      color:var(--lv-text);
+      min-width:160px;
+      text-align:center;
     }
 
-    /* MAIN SHELL */
-    .lv-account-shell {
-      max-width: 1120px;
-      margin: 2.5rem auto;
-      padding: 2rem;
-      background: var(--lv-surface);
-      border-radius: var(--lv-radius-lg);
-      border: 1px solid var(--lv-border);
-      box-shadow: var(--lv-shadow-soft);
+    .loading-overlay{
+      position:absolute;
+      inset:0;
+      border-radius:22px;
+      background:rgba(243,228,206,.65);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      color:var(--lv-muted);
+      backdrop-filter:blur(4px);
+      pointer-events:none;
     }
+    .loading-overlay.hidden{display:none;}
 
-    .lv-account-header {
-      margin-bottom: 2rem;
-    }
-
-    .lv-account-title {
-      font-size: 1.9rem;
-      font-weight: 700;
-      color: var(--lv-text);
-      letter-spacing: 0.03em;
-    }
-
-    .lv-account-subtitle {
-      font-size: 0.92rem;
-      color: var(--lv-text-muted);
-      max-width: 520px;
-      line-height: 1.6;
-      margin-top: 0.35rem;
-    }
-
-    /* GRID */
-    .lv-account-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.3rem;
-    }
-
-    /* CARDS */
-    .lv-account-card {
-      background: var(--lv-surface);
-      border-radius: var(--lv-radius-lg);
-      border: 1px solid var(--lv-border);
-      padding: 1.5rem 1.4rem;
-      cursor: pointer;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease,
-        border-color 0.18s ease,
-        background 0.18s ease;
-    }
-
-    .lv-account-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--lv-accent);
-      background: var(--lv-accent-soft);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.08);
-    }
-
-    .lv-account-card-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--lv-text-muted);
-    }
-
-    .lv-account-card-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--lv-text);
-    }
-
-    .lv-account-card-text {
-      font-size: 0.85rem;
-      color: var(--lv-text-muted);
-      line-height: 1.5;
-    }
-
-    .lv-account-pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.2rem;
-    }
-
-    .lv-account-pill {
-      font-size: 0.72rem;
-      padding: 0.18rem 0.55rem;
-      border-radius: 999px;
-      background: var(--lv-accent-soft);
-      border: 1px solid var(--lv-border);
-      color: var(--lv-text-muted);
-    }
-
-    .lv-account-card-arrow {
-      margin-left: auto;
-      font-size: 0.95rem;
-      color: var(--lv-text-muted);
-    }
-
-    /* FOOTER CHIP */
-    .lv-account-chip {
-      margin-top: 1.8rem;
-      font-size: 0.8rem;
-      padding: 0.4rem 0.7rem;
-      border-radius: 999px;
-      border: 1px solid var(--lv-border);
-      background: var(--lv-accent-soft);
-      color: var(--lv-text);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .lv-account-chip-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
-    }
-
-    @media (max-width: 640px) {
-      .lv-account-shell {
-        margin: 1.2rem 1rem;
-        padding: 1.5rem;
-      }
-      .lv-account-title {
-        font-size: 1.55rem;
-      }
+    @media(max-width:768px){
+      .nav-inner,.card{padding:16px;}
+      form{grid-template-columns:1fr;}
+      .actions{flex-direction:column;align-items:flex-start;}
     }
   </style>
 </head>
-
 <body>
-
-  <main class="lv-account-shell">
-    <header class="lv-account-header">
-      <h1 class="lv-account-title">Account Settings</h1>
-      <p class="lv-account-subtitle">
-        Review and manage everything tied to your LumiVue creator account — legal details, payouts, tax information,
-        store policies, branding, shipping settings, and more.
-      </p>
+  <div class="shell">
+    <header>
+      <div class="nav-inner">
+        <div class="brand">
+          <div class="brand-main">LUMIVUE</div>
+          <div class="brand-sub">Marketplace · Vendor account</div>
+        </div>
+        <nav>
+          <a href="marketplace.html">Marketplace</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="listings.html">My listings</a>
+          <span class="logout"><a href="logout.html">Log out</a></span>
+        </nav>
+      </div>
     </header>
 
-    <section class="lv-account-grid">
-
-      <!-- Business + Branding -->
-      <a href="edit-store.html" class="lv-account-card">
-        <span class="lv-account-card-label">Profile</span>
-        <div class="lv-account-card-title">Business Information & Branding</div>
-        <p class="lv-account-card-text">Store name, business address, logo, banner, and buyer-facing profile details.</p>
-        <div class="lv-account-pill-row">
-          <span class="lv-account-pill">Store name</span>
-          <span class="lv-account-pill">Address</span>
-          <span class="lv-account-pill">Logo</span>
+    <main>
+      <section class="card">
+        <div class="loading-overlay" id="loadingOverlay">
+          Loading policies…
         </div>
-        <span class="lv-account-card-arrow">›</span>
-      </a>
 
-      <!-- Legal -->
-      <a href="account-legal.html" class="lv-account-card">
-        <span class="lv-account-card-label">Compliance</span>
-        <div class="lv-account-card-title">Legal & Compliance</div>
-        <p class="lv-account-card-text">Entity details, licenses, and business documentation.</p>
-        <div class="lv-account-pill-row">
-          <span class="lv-account-pill">Business entity</span>
-          <span class="lv-account-pill">Licenses</span>
+        <div class="back-link" onclick="window.location.href='account.html'">
+          <span>←</span> Back to vendor account
         </div>
-        <span class="lv-account-card-arrow">›</span>
-      </a>
 
-      <!-- Tax -->
-      <a href="account-tax.html" class="lv-account-card">
-        <span class="lv-account-card-label">Tax</span>
-        <div class="lv-account-card-title">Tax Information</div>
-        <p class="lv-account-card-text">Tax IDs and reporting information, visible only to you and LumiVue compliance.</p>
-        <div class="lv-account-pill-row">
-          <span class="lv-account-pill">EIN</span>
-          <span class="lv-account-pill">Region</span>
-        </div>
-        <span class="lv-account-card-arrow">›</span>
-      </a>
+        <h1>Policies, returns &amp; customer support</h1>
+        <p class="lead">
+          Vendors can define the policies shown on their public LumiVue storefront so customers know what to expect.
+        </p>
 
-      <!-- Payouts -->
-      <a href="account-payouts.html" class="lv-account-card">
-        <span class="lv-account-card-label">Payouts</span>
-        <div class="lv-account-card-title">Payout & Banking</div>
-        <p class="lv-account-card-text">Banking details and payout schedule settings.</p>
-        <div class="lv-account-pill-row">
-          <span class="lv-account-pill">Bank account</span>
-          <span class="lv-account-pill">Payout schedule</span>
-        </div>
-        <span class="lv-account-card-arrow">›</span>
-      </a>
+        <form id="policiesForm">
+          <div class="full">
+            <label for="shippingPolicy">Shipping policy</label>
+            <textarea id="shippingPolicy" placeholder="Describe processing times, carriers, tracking, etc."></textarea>
+          </div>
 
-      <!-- Policies -->
-      <a href="account-policies.html" class="lv-account-card">
-        <span class="lv-account-card-label">Policies</span>
-        <div class="lv-account-card-title">Store Policies</div>
-        <p class="lv-account-card-text">Return rules, cancellations, and customer support guidelines.</p>
-        <div class="lv-account-pill-row">
-          <span class="lv-account-pill">Refunds</span>
-          <span class="lv-account-pill">Processing time</span>
-        </div>
-        <span class="lv-account-card-arrow">›</span>
-      </a>
+          <div class="full">
+            <label for="returnPolicy">Return &amp; exchange policy</label>
+            <textarea id="returnPolicy" placeholder="Explain whether returns are accepted and any conditions or time limits."></textarea>
+          </div>
 
-      <!-- Shipping -->
-      <a href="shipping.html" class="lv-account-card">
-        <span class="lv-account-card-label">Logistics</span>
-        <div class="lv-account-card-title">Shipping & Delivery</div>
-        <p class="lv-account-card-text">Carriers, handling time, and shipping regions.</p>
-        <div class="lv-account-pill-row">
-          <span class="lv-account-pill">Carriers</span>
-          <span class="lv-account-pill">Regions</span>
-        </div>
-        <span class="lv-account-card-arrow">›</span>
-      </a>
+          <div class="full">
+            <label for="cancellationPolicy">Cancellation policy</label>
+            <textarea id="cancellationPolicy" placeholder="Explain when orders can be cancelled or changed."></textarea>
+          </div>
 
-      <!-- Google/SEO -->
-      <a href="google-fields.html" class="lv-account-card">
-        <span class="lv-account-card-label">Visibility</span>
-        <div class="lv-account-card-title">Google & SEO Fields</div>
-        <p class="lv-account-card-text">Search visibility details and Google business integration.</p>
-        <div class="lv-account-pill-row">
-          <span class="lv-account-pill">SEO</span>
-          <span class="lv-account-pill">Google fields</span>
-        </div>
-        <span class="lv-account-card-arrow">›</span>
-      </a>
+          <div class="full">
+            <label for="supportContact">Customer support contact</label>
+            <textarea id="supportContact" placeholder="Add email address, response time, and support hours."></textarea>
+          </div>
 
-      <!-- Reviews -->
-      <a href="reviews.html" class="lv-account-card">
-        <span class="lv-account-card-label">Support</span>
-        <div class="lv-account-card-title">Reviews & Support</div>
-        <p class="lv-account-card-text">Customer reviews and support settings.</p>
-        <div class="lv-account-pill-row">
-          <span class="lv-account-pill">Support email</span>
-          <span class="lv-account-pill">Response time</span>
-        </div>
-        <span class="lv-account-card-arrow">›</span>
-      </a>
+          <div class="full">
+            <label for="otherPolicy">Additional notes (optional)</label>
+            <textarea id="otherPolicy" placeholder="Any extra information you want buyers to see."></textarea>
+          </div>
 
-    </section>
-
-    <div class="lv-account-chip">
-      <span class="lv-account-chip-dot"></span>
-      Your settings are organized by section — open any card to edit and review your saved details.
-    </div>
-
-  </main>
+          <div class="actions">
+            <span class="hint">
+              These policies appear on your public store profile so customers know how you handle orders and support.
+            </span>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="status-pill" id="saveStatus">Connecting…</div>
+              <button type="button" id="saveButton">Save policies</button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
 
   <!-- ===== LUMIVUE · SHARED FIREBASE BLOCK (COMPAT) ===== -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -292,7 +199,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 
   <script>
-    // Your LumiVue Firebase config (shared across pages)
+    // Your LumiVue Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
       authDomain: "lumivue-c8fdf.firebaseapp.com",
@@ -306,23 +213,148 @@
     firebase.initializeApp(firebaseConfig);
 
     // Optional handles if the page needs them
-    const auth = firebase.auth();
-    const db   = firebase.firestore();
+    const auth    = firebase.auth();
+    const db      = firebase.firestore();
     const storage = firebase.storage();
   </script>
   <!-- ===== END LUMIVUE FIREBASE BLOCK ===== -->
 
   <script>
-    // Auth guard so only logged-in vendors can see this hub
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        const redirect = encodeURIComponent(window.location.pathname);
-        window.location.href = "login.html?redirect=" + redirect;
-      } else {
-        console.log("Account settings loaded for:", user.uid);
-      }
-    });
-  </script>
+    (function () {
+      const loadingOverlay      = document.getElementById('loadingOverlay');
+      const saveBtn             = document.getElementById('saveButton');
+      const saveStatus          = document.getElementById('saveStatus');
 
+      const shippingInput       = document.getElementById('shippingPolicy');
+      const returnInput         = document.getElementById('returnPolicy');
+      const cancellationInput   = document.getElementById('cancellationPolicy');
+      const supportInput        = document.getElementById('supportContact');
+      const otherInput          = document.getElementById('otherPolicy');
+
+      let currentUser = null;
+
+      function setStatus(text, tone) {
+        if (!saveStatus) return;
+        saveStatus.textContent = text;
+
+        if (tone === 'error') {
+          saveStatus.style.background   = '#fee2e2';
+          saveStatus.style.borderColor  = '#dc2626';
+          saveStatus.style.color        = '#7c1f1f';
+        } else if (tone === 'success') {
+          saveStatus.style.background   = 'var(--lv-accent-soft)';
+          saveStatus.style.borderColor  = 'var(--lv-accent)';
+          saveStatus.style.color        = '#3f3a2a';
+        } else {
+          saveStatus.style.background   = 'var(--lv-accent-soft)';
+          saveStatus.style.borderColor  = 'var(--lv-border)';
+          saveStatus.style.color        = 'var(--lv-text)';
+        }
+      }
+
+      function showLoading(show) {
+        if (!loadingOverlay) return;
+        loadingOverlay.classList.toggle('hidden', !show);
+      }
+
+      async function loadExistingData() {
+        try {
+          showLoading(true);
+          setStatus('Loading…');
+
+          const docRef = db.collection('creators').doc(currentUser.uid);
+          const snap   = await docRef.get();
+
+          if (snap.exists) {
+            const data = snap.data() || {};
+
+            shippingInput.value     = data.shippingPolicy      || '';
+            returnInput.value       = data.returnPolicy        || '';
+            cancellationInput.value = data.cancellationPolicy  || '';
+            supportInput.value      = data.supportContact      || '';
+            otherInput.value        = data.otherPolicy         || '';
+          }
+
+          setStatus('Loaded');
+        } catch (err) {
+          console.error('Error loading policies', err);
+          setStatus('Load error', 'error');
+        } finally {
+          showLoading(false);
+        }
+      }
+
+      async function savePolicies() {
+        if (!currentUser) {
+          setStatus('Please sign in again', 'error');
+          return;
+        }
+
+        const shippingVal     = shippingInput.value.trim();
+        const returnVal       = returnInput.value.trim();
+        const cancellationVal = cancellationInput.value.trim();
+        const supportVal      = supportInput.value.trim();
+
+        if (!shippingVal || !returnVal || !cancellationVal || !supportVal) {
+          setStatus('All main policy fields are required', 'error');
+          return;
+        }
+
+        if (!saveBtn) return;
+        saveBtn.disabled = true;
+        setStatus('Saving…');
+
+        try {
+          const docRef = db.collection('creators').doc(currentUser.uid);
+
+          const payload = {
+            shippingPolicy:      shippingVal,
+            returnPolicy:        returnVal,
+            cancellationPolicy:  cancellationVal,
+            supportContact:      supportVal,
+            otherPolicy:         otherInput.value.trim() || null,
+            updatedAt:           firebase.firestore.FieldValue.serverTimestamp(),
+            sections: {
+              policies: { completed: true }
+            }
+          };
+
+          await docRef.set(payload, { merge: true });
+          setStatus('Saved', 'success');
+        } catch (err) {
+          console.error('Error saving policies', err);
+          setStatus('Save error: ' + (err.code || 'unknown'), 'error');
+          alert('Could not save policies: ' + err.message);
+        } finally {
+          saveBtn.disabled = false;
+        }
+      }
+
+      function initFirebasePage() {
+        auth.onAuthStateChanged(async (user) => {
+          if (!user) {
+            setStatus('Redirecting to sign in…', 'error');
+            const redirect = encodeURIComponent(window.location.pathname);
+            window.location.href = 'login.html?redirect=' + redirect;
+            return;
+          }
+
+          currentUser = user;
+          setStatus('Connected', 'success');
+          await loadExistingData();
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        showLoading(true);
+        setStatus('Connecting…');
+        initFirebasePage();
+
+        if (saveBtn) {
+          saveBtn.addEventListener('click', savePolicies);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
