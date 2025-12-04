@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Store · LumiVue Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    body {
+      background: var(--lv-bg, #f4f1eb);
+      color: var(--lv-text, #2c1e19);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    }
+
+    /* Top LumiVue header */
+    .lv-header {
+      padding: 12px 24px 4px;
+      background: transparent;
+    }
+
+    .lv-header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .lv-header-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .lv-header-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--lv-text, #2c1e19);
+    }
+
+    .lv-header-logo-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fef3c7, #e0b77b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #3b2a20;
+    }
+
+    .lv-header-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+    }
+
+    .lv-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+    }
+
+    .lv-nav a {
+      text-decoration: none;
+      color: var(--lv-text-muted, #8b8175);
+    }
+
+    .lv-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lv-pill {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border, #ddd3c6);
+      background: #fff8f0;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--lv-text, #2c1e19);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lv-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f4e0c8, #e9c389);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #3b2a20;
+    }
+
+    /* Page layout + card */
+    .page-shell {
+      max-width: 1120px;
+      margin: 24px auto 48px;
+      padding: 0 24px 24px;
+    }
+
+    .card-shell {
+      background: var(--lv-surface, #ffffff);
+      border-radius: 24px;
+      border: 1px solid var(--lv-border, #ddd3c6);
+      padding: 24px 24px 28px;
+      box-shadow:
+        0 24px 60px rgba(15, 23, 42, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.6);
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted, #8b8175);
+      margin-bottom: 4px;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--lv-text-muted, #8b8175);
+      margin-bottom: 18px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px 24px;
+    }
+
+    @media (max-width: 768px) {
+      .field-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted, #8b8175);
+    }
+
+    .field small {
+      font-size: 11px;
+      color: var(--lv-text-muted, #9b8f82);
+    }
+
+    .lv-input,
+    .lv-textarea {
+      border-radius: 12px;
+      border: 1px solid var(--lv-border, #ddd3c6);
+      background: #fdfbf7;
+      padding: 9px 11px;
+      font-size: 13px;
+      color: var(--lv-text, #2c1e19);
+      outline: none;
+      width: 100%;
+      resize: vertical;
+    }
+
+    .lv-input:focus,
+    .lv-textarea:focus {
+      border-color: var(--accent-gold, #facc6b);
+      box-shadow: 0 0 0 1px rgba(250, 204, 107, 0.6);
+      background: #ffffff;
+    }
+
+    .lv-textarea {
+      min-height: 220px;
+      line-height: 1.6;
+    }
+
+    .media-row {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.8fr);
+      gap: 18px 26px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 860px) {
+      .media-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .banner-preview {
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f4e0c8, #e8d2b4);
+      min-height: 190px;
+      display: flex;
+      position: relative;
+    }
+
+    .banner-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .banner-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(0, 0, 0, 0.35);
+    }
+
+    .lv-btn-primary {
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: var(--accent-gold, #facc6b);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+      color: #1f2933;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .lv-btn-ghost {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border, #ddd3c6);
+      background: #ffffff;
+      color: var(--lv-text, #2c1e19);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .status-line {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--lv-text-muted, #8b8175);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 18px;
+    }
+
+    .status-pill {
+      border-radius: 999px;
+      font-size: 11px;
+      padding: 4px 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .status-pill.error {
+      border-color: rgba(248, 113, 113, 0.55);
+      background: rgba(254, 226, 226, 0.6);
+      color: #b91c1c;
+    }
+
+    .status-pill.success {
+      border-color: rgba(34, 197, 94, 0.55);
+      background: rgba(220, 252, 231, 0.75);
+      color: #166534;
+    }
+
+    .brand-values-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border, #ddd3c6);
+      background: #fdfbf7;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .brand-pill input {
+      accent-color: var(--accent-gold, #facc6b);
+    }
+
+    /* Shop Categories styling */
+    .lv-category-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .lv-category-chips {
+      margin-top: 10px;
+    }
+
+    .lv-category-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      margin: 4px 6px 0 0;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      font-size: 12px;
+      background: #fdfbf7;
+    }
+
+    .lv-category-chip button {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0;
+      color: #6b7280;
+    }
+
+    @media (max-width: 640px) {
+      .lv-category-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- LumiVue top bar -->
+<header class="lv-header">
+  <div class="lv-header-inner">
+
+    <div class="lv-header-left">
+      <a href="index.html" class="lv-header-logo">
+        <span class="lv-header-logo-circle">LV</span>
+        <span class="lv-header-title">L U M I V U E</span>
+      </a>
+
+      <nav class="lv-nav">
+        <a href="marketplace.html">Marketplace</a>
+        <a href="browse.html">Browse all</a>
+      </nav>
+    </div>
+
+    <div class="lv-header-right">
+      <a href="dashboard.html" class="lv-pill">Dashboard</a>
+      <a href="listings.html" class="lv-pill">Listings</a>
+      <button id="logoutBtn" class="lv-pill">LOG OUT</button>
+
+      <div class="lv-user-avatar">
+        <span>LV</span>
+      </div>
+    </div>
+
+  </div>
+</header>
+<!-- end header -->
+
+<div class="page-shell">
+
+  <section class="card-shell">
+
+    <!-- BASIC INFO -->
+    <div class="section">
+      <div class="section-title">Store basics</div>
+      <div class="section-subtitle">Displayed at the top of your public store.</div>
+
+      <div class="field-grid">
+
+        <div class="field">
+          <label for="storeName">Store name</label>
+          <input id="storeName" class="lv-input" placeholder="La Perj Studio" />
+        </div>
+
+        <div class="field">
+          <label for="tagline">Tagline</label>
+          <input id="tagline" class="lv-input" placeholder="Curated skincare, candles, and fragrances." />
+        </div>
+
+        <div class="field">
+          <label for="location">Location</label>
+          <input id="location" class="lv-input" placeholder="Tucson, AZ · Ships US only" />
+        </div>
+
+        <div class="field">
+          <label for="shippingNote">Shipping note</label>
+          <input id="shippingNote" class="lv-input" placeholder="Ships in 3–5 business days." />
+        </div>
+
+      </div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid rgba(221,211,198,0.7); margin:24px 0;" />
+
+    <!-- BRAND STORY -->
+    <div class="section">
+      <div class="section-title">Brand story</div>
+      <div class="section-subtitle">Tell buyers who you are. This text appears on your store page.</div>
+
+      <div class="field">
+        <label for="brandStory">Brand story</label>
+        <textarea id="brandStory" class="lv-textarea"
+          placeholder="La Perj didn’t start with a jar..."></textarea>
+      </div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid rgba(221,211,198,0.7); margin:24px 0;" />
+
+    <!-- BANNER + VIDEO -->
+    <div class="section">
+      <div class="section-title">Visuals</div>
+      <div class="section-subtitle">Upload one banner image + one 30-second intro video.</div>
+
+      <div class="media-row">
+
+        <!-- Banner -->
+        <div class="field">
+          <label for="bannerFile">Banner image</label>
+          <input id="bannerFile" type="file" accept="image/*" class="lv-input" />
+          <small>Large photo displayed across the top of your store.</small>
+
+          <div class="banner-preview" id="bannerPreview">
+            <div class="banner-placeholder" id="bannerPlaceholder">Store banner preview</div>
+          </div>
+        </div>
+
+        <!-- Video -->
+        <div class="field">
+          <label for="storeVideo">Intro video (30 seconds)</label>
+          <input id="storeVideo" type="file" accept="video/*" class="lv-input" />
+          <small>Short welcome video for your store.</small>
+
+          <video id="videoPreview" controls
+            style="width:100%; border-radius:18px; display:none; background:#000; margin-top:10px;"></video>
+          <small id="videoInfo" style="display:none; margin-top:6px;">This is your current intro video.</small>
+        </div>
+
+      </div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid rgba(221,211,198,0.7); margin:24px 0;" />
+
+    <!-- STORE STATUS / SOCIAL / BRAND VALUES / COMING NEXT -->
+    <div class="section">
+      <div class="section-title">Store visibility & values</div>
+      <div class="section-subtitle">
+        Control how your shop appears in LumiVue and share what your brand stands for.
+      </div>
+
+      <!-- Store status -->
+      <div class="field" style="margin-bottom:16px;">
+        <label for="storePublic">Store status</label>
+        <div style="display:flex; align-items:flex-start; gap:8px; margin-top:4px;">
+          <input id="storePublic" type="checkbox" style="margin-top:3px;" />
+          <div>
+            <span style="font-size:13px;">Make my store public on LumiVue (discoverable on marketplace).</span>
+            <div style="font-size:11px; color:var(--lv-text-muted);">
+              You can still draft products even while your store is public.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social links -->
+      <div class="field" style="margin-bottom:16px;">
+        <label>Social links</label>
+        <div class="field-grid">
+          <input id="socialShop" class="lv-input" placeholder="https://yourshop.com" />
+          <input id="socialInstagram" class="lv-input" placeholder="@yourbrand" />
+          <input id="socialTiktok" class="lv-input" placeholder="@tiktokhandle" />
+          <input id="socialYoutube" class="lv-input" placeholder="YouTube or channel name" />
+        </div>
+      </div>
+
+      <!-- Brand values -->
+      <div class="field" style="margin-bottom:12px;">
+        <label>Brand values</label>
+        <small>These will later appear as icons and filters on your listings.</small>
+
+        <div class="brand-values-grid" style="margin-top:8px;">
+          <label class="brand-pill">
+            <input type="checkbox" id="valueCrueltyFree" value="Cruelty-free" />
+            Cruelty-free
+          </label>
+          <label class="brand-pill">
+            <input type="checkbox" id="valueVegan" value="Vegan formulas" />
+            Vegan formulas
+          </label>
+          <label class="brand-pill">
+            <input type="checkbox" id="valueSmallBatch" value="Small batch" />
+            Small batch
+          </label>
+          <label class="brand-pill">
+            <input type="checkbox" id="valueHandmade" value="Handmade" />
+            Handmade
+          </label>
+          <label class="brand-pill">
+            <input type="checkbox" id="valueEco" value="Eco / recycled packaging" />
+            Eco / recycled packaging
+          </label>
+          <label class="brand-pill">
+            <input type="checkbox" id="valueCleanFragrance" value="Clean fragrance focus" />
+            Clean fragrance focus
+          </label>
+        </div>
+      </div>
+
+      <!-- Coming next note -->
+      <div style="font-size:11px; color:var(--lv-text-muted); margin-top:4px;">
+        <strong>Coming next (no action required yet)</strong><br />
+        Later you’ll be able to pin featured products, upload a shop intro video gallery, add FAQs,
+        and build a small studio gallery — all powered from this same store profile.
+      </div>
+    </div>
+
+    <hr style="border:none; border-top:1px solid rgba(221,211,198,0.7); margin:24px 0;" />
+
+    <!-- SHOP CATEGORIES -->
+    <div class="section">
+      <div class="section-title">Shop categories</div>
+      <div class="section-subtitle">
+        Create custom categories (like “Moisturizers”, “Body Wash”, “Holiday sets”) to organize products in your store.
+      </div>
+
+      <div class="field">
+        <label for="newCategoryName">Add a category</label>
+        <div class="lv-category-row">
+          <input
+            id="newCategoryName"
+            class="lv-input"
+            placeholder="e.g. Moisturizers, Body Wash, Serums, Holiday Gifts"
+          />
+          <button type="button" id="addCategoryBtn" class="lv-btn-ghost">
+            + Add category
+          </button>
+        </div>
+        <small>These categories belong only to your shop. Buyers will see them in your store’s sidebar.</small>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Current categories</label>
+        <div id="categoriesEmpty" style="font-size:12px; color:var(--lv-text-muted);">
+          You haven’t created any categories yet.
+        </div>
+        <div id="categoriesList" class="lv-category-chips">
+          <!-- Category chips injected here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- SAVE / VIEW ACTIONS AT BOTTOM -->
+    <div class="section" style="margin-top:28px;">
+      <div class="section-subtitle" style="margin-bottom:10px;">
+        Changes save to your live store when you click <strong>Save store profile</strong>.
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:12px;">
+        <button id="saveBtn" class="lv-btn-ghost">Save store profile</button>
+        <button id="viewStoreBtn" class="lv-btn-ghost">View my store</button>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-line" id="statusLine"></div>
+
+  </section>
+</div>
+
+<!-- FIREBASE LOGIC -->
+<script type="module">
+  import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+    authDomain: "lumivue-c8fdf.firebaseapp.com",
+    projectId: "lumivue-c8fdf",
+    storageBucket: "lumivue-c8fdf.firebasestorage.app",
+    messagingSenderId: "120420036736",
+    appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+  };
+
+  const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+  const storeNameInput = document.getElementById("storeName");
+  const taglineInput = document.getElementById("tagline");
+  const locationInput = document.getElementById("location");
+  const shippingNoteInput = document.getElementById("shippingNote");
+  const brandStoryInput = document.getElementById("brandStory");
+
+  const bannerFileInput = document.getElementById("bannerFile");
+  const bannerPreview = document.getElementById("bannerPreview");
+  const bannerPlaceholder = document.getElementById("bannerPlaceholder");
+
+  const videoInput = document.getElementById("storeVideo");
+  const videoPreview = document.getElementById("videoPreview");
+  const videoInfo = document.getElementById("videoInfo");
+
+  const storePublicCheckbox = document.getElementById("storePublic");
+  const socialShopInput = document.getElementById("socialShop");
+  const socialInstagramInput = document.getElementById("socialInstagram");
+  const socialTiktokInput = document.getElementById("socialTiktok");
+  const socialYoutubeInput = document.getElementById("socialYoutube");
+
+  const valueCrueltyFree = document.getElementById("valueCrueltyFree");
+  const valueVegan = document.getElementById("valueVegan");
+  const valueSmallBatch = document.getElementById("valueSmallBatch");
+  const valueHandmade = document.getElementById("valueHandmade");
+  const valueEco = document.getElementById("valueEco");
+  const valueCleanFragrance = document.getElementById("valueCleanFragrance");
+
+  const saveBtn = document.getElementById("saveBtn");
+  const viewStoreBtn = document.getElementById("viewStoreBtn");
+  const statusLine = document.getElementById("statusLine");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  // Categories elements
+  const newCategoryNameInput = document.getElementById("newCategoryName");
+  const addCategoryBtn = document.getElementById("addCategoryBtn");
+  const categoriesList = document.getElementById("categoriesList");
+  const categoriesEmpty = document.getElementById("categoriesEmpty");
+
+  let currentUser = null;
+
+  function setStatus(msg, type = "") {
+    statusLine.innerHTML = "";
+    if (!msg) return;
+
+    const pill = document.createElement("span");
+    pill.classList.add("status-pill");
+    if (type === "error") pill.classList.add("error");
+    if (type === "success") pill.classList.add("success");
+
+    const text = document.createElement("span");
+    text.textContent = msg;
+
+    statusLine.appendChild(pill);
+    statusLine.appendChild(text);
+  }
+
+  function previewBanner(url) {
+    bannerPreview.innerHTML = "";
+    if (!url) {
+      bannerPreview.appendChild(bannerPlaceholder);
+      bannerPlaceholder.style.display = "flex";
+      return;
+    }
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = "Store banner";
+    bannerPlaceholder.style.display = "none";
+    bannerPreview.appendChild(img);
+  }
+
+  function previewVideo(url) {
+    if (!url) {
+      videoPreview.style.display = "none";
+      videoInfo.style.display = "none";
+      return;
+    }
+    videoPreview.src = url;
+    videoPreview.style.display = "block";
+    videoInfo.style.display = "block";
+  }
+
+  function getSelectedBrandValues() {
+    const values = [];
+    if (valueCrueltyFree.checked) values.push(valueCrueltyFree.value);
+    if (valueVegan.checked) values.push(valueVegan.value);
+    if (valueSmallBatch.checked) values.push(valueSmallBatch.value);
+    if (valueHandmade.checked) values.push(valueHandmade.value);
+    if (valueEco.checked) values.push(valueEco.value);
+    if (valueCleanFragrance.checked) values.push(valueCleanFragrance.value);
+    return values;
+  }
+
+  function applyBrandValues(values) {
+    if (!Array.isArray(values)) return;
+    valueCrueltyFree.checked = values.includes(valueCrueltyFree.value);
+    valueVegan.checked = values.includes(valueVegan.value);
+    valueSmallBatch.checked = values.includes(valueSmallBatch.value);
+    valueHandmade.checked = values.includes(valueHandmade.value);
+    valueEco.checked = values.includes(valueEco.value);
+    valueCleanFragrance.checked = values.includes(valueCleanFragrance.value);
+  }
+
+  async function loadProfile(user) {
+    try {
+      const profileRef = doc(db, "stores", user.uid, "profile", "main");
+      const snap = await getDoc(profileRef);
+
+      if (snap.exists()) {
+        const data = snap.data();
+        storeNameInput.value = data.storeName || "";
+        taglineInput.value = data.tagline || "";
+        locationInput.value = data.location || "";
+        shippingNoteInput.value = data.shippingNote || "";
+        brandStoryInput.value = data.brandStory || "";
+        previewBanner(data.bannerImageUrl || "");
+        previewVideo(data.storeVideoUrl || "");
+
+        storePublicCheckbox.checked = !!data.storePublic;
+
+        socialShopInput.value = data.socialShop || "";
+        socialInstagramInput.value = data.socialInstagram || "";
+        socialTiktokInput.value = data.socialTiktok || "";
+        socialYoutubeInput.value = data.socialYoutube || "";
+
+        applyBrandValues(data.brandValues || []);
+      } else {
+        previewBanner("");
+        previewVideo("");
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus("Could not load your store profile.", "error");
+    }
+  }
+
+  async function ensureVendor(user) {
+    try {
+      const creatorRef = doc(db, "creators", user.uid);
+      const snap = await getDoc(creatorRef);
+
+      if (!snap.exists()) {
+        window.location.href = "account.html";
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.error(err);
+      setStatus("We couldn’t verify your creator account.", "error");
+      return false;
+    }
+  }
+
+  async function saveProfile(user) {
+    try {
+      setStatus("Saving…");
+
+      const profileRef = doc(db, "stores", user.uid, "profile", "main");
+      const data = {
+        storeName: storeNameInput.value.trim(),
+        tagline: taglineInput.value.trim(),
+        location: locationInput.value.trim(),
+        shippingNote: shippingNoteInput.value.trim(),
+        brandStory: brandStoryInput.value.trim(),
+        storePublic: storePublicCheckbox.checked,
+        socialShop: socialShopInput.value.trim(),
+        socialInstagram: socialInstagramInput.value.trim(),
+        socialTiktok: socialTiktokInput.value.trim(),
+        socialYoutube: socialYoutubeInput.value.trim(),
+        brandValues: getSelectedBrandValues(),
+        updatedAt: new Date().toISOString()
+      };
+
+      if (bannerFileInput.files[0]) {
+        const file = bannerFileInput.files[0];
+        const bannerRef = ref(storage, `creator-banners/${user.uid}/${Date.now()}-${file.name}`);
+        await uploadBytes(bannerRef, file);
+        const url = await getDownloadURL(bannerRef);
+        data.bannerImageUrl = url;
+        previewBanner(url);
+      }
+
+      if (videoInput.files[0]) {
+        const file = videoInput.files[0];
+        const videoRef = ref(storage, `listing-videos/${user.uid}/${Date.now()}-${file.name}`);
+        await uploadBytes(videoRef, file);
+        const url = await getDownloadURL(videoRef);
+        data.storeVideoUrl = url;
+        previewVideo(url);
+      }
+
+      // Save store profile
+      await setDoc(profileRef, data, { merge: true });
+
+      // 🔗 Also update the creators doc so dashboard can show storeName + visibility
+      const creatorRef = doc(db, "creators", user.uid);
+      await setDoc(
+        creatorRef,
+        {
+          storeName: data.storeName || "",
+          isPublic: !!data.storePublic,
+          ownerName: user.displayName || "",
+          updatedAt: serverTimestamp()
+        },
+        { merge: true }
+      );
+
+      setStatus("Profile saved", "success");
+
+    } catch (err) {
+      console.error(err);
+      setStatus("Could not save profile.", "error");
+    }
+  }
+
+  // Load seller's categories from Firestore
+  async function loadCategories(user) {
+    if (!categoriesList || !categoriesEmpty) return;
+    categoriesList.innerHTML = "";
+    categoriesEmpty.style.display = "block";
+    categoriesEmpty.textContent = "Loading categories…";
+
+    try {
+      const colRef = collection(db, "stores", user.uid, "categories");
+      const snap = await getDocs(colRef);
+
+      if (snap.empty) {
+        categoriesEmpty.style.display = "block";
+        categoriesEmpty.textContent = "You haven’t created any categories yet.";
+        return;
+      }
+
+      categoriesEmpty.style.display = "none";
+
+      snap.forEach((docSnap) => {
+        const data = docSnap.data();
+        const name = data.name || "Untitled";
+        const chip = document.createElement("div");
+        chip.className = "lv-category-chip";
+        chip.innerHTML = `
+          <span>${name}</span>
+          <button type="button" data-cat-id="${docSnap.id}" aria-label="Delete category ${name}">×</button>
+        `;
+        categoriesList.appendChild(chip);
+      });
+
+    } catch (err) {
+      console.error("Error loading categories", err);
+      categoriesEmpty.style.display = "block";
+      categoriesEmpty.textContent = "Could not load categories.";
+    }
+  }
+
+  // Add a category for this seller
+  async function addCategory() {
+    if (!currentUser || !newCategoryNameInput) return;
+    const name = newCategoryNameInput.value.trim();
+    if (!name) return;
+
+    try {
+      setStatus("Adding category…");
+
+      const colRef = collection(db, "stores", currentUser.uid, "categories");
+      await addDoc(colRef, {
+        name,
+        createdAt: serverTimestamp()
+      });
+
+      newCategoryNameInput.value = "";
+      await loadCategories(currentUser);
+      setStatus("Category added", "success");
+    } catch (err) {
+      console.error("Error adding category", err);
+      setStatus("Could not add category.", "error");
+    }
+  }
+
+  // Delete a category
+  async function deleteCategory(catId) {
+    if (!currentUser || !catId) return;
+    const ok = confirm("Remove this category from your shop?");
+    if (!ok) return;
+
+    try {
+      setStatus("Removing category…");
+      const catRef = doc(db, "stores", currentUser.uid, "categories", catId);
+      await deleteDoc(catRef);
+      await loadCategories(currentUser);
+      setStatus("Category removed", "success");
+    } catch (err) {
+      console.error("Error deleting category", err);
+      setStatus("Could not remove category.", "error");
+    }
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    currentUser = user;
+
+    const ok = await ensureVendor(user);
+    if (!ok) return;
+
+    await loadProfile(user);
+    await loadCategories(user);
+
+    if (saveBtn) {
+      saveBtn.onclick = () => saveProfile(user);
+    }
+
+    if (viewStoreBtn) {
+      viewStoreBtn.onclick = () =>
+        window.location.href = `store.html?uid=${encodeURIComponent(user.uid)}`;
+    }
+  });
+
+  if (bannerFileInput) {
+    bannerFileInput.addEventListener("change", () => {
+      const file = bannerFileInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => previewBanner(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  if (videoInput) {
+    videoInput.addEventListener("change", () => {
+      const file = videoInput.files[0];
+      if (!file) return;
+
+      const url = URL.createObjectURL(file);
+      videoPreview.src = url;
+      videoPreview.style.display = "block";
+      videoInfo.style.display = "block";
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
+  }
+
+  // Wire category UI events
+  if (addCategoryBtn) {
+    addCategoryBtn.addEventListener("click", addCategory);
+  }
+
+  if (categoriesList) {
+    categoriesList.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-cat-id]");
+      if (!btn) return;
+      const catId = btn.getAttribute("data-cat-id");
+      deleteCategory(catId);
+    });
+  }
+</script>
+
+</body>
+</html>

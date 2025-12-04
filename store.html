@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LumiVue Storefront</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    :root {
+      --lv-bg: #f4f1eb;
+      --lv-surface: #ffffff;
+      --lv-border: #ddd3c6;
+      --lv-border-strong: #ccc0b1;
+      --lv-text: #2c1e19;
+      --lv-text-muted: #7a6a5c;
+      --lv-accent: #c98a5a;
+      --lv-accent-soft: #fbede1;
+      --lv-radius-lg: 18px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+      --lv-danger: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, rgba(201,138,90,0.14), var(--lv-bg));
+      color: var(--lv-text);
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto 48px;
+      padding: 0 24px;
+    }
+
+    /***** TOP NAV (matches marketplace style) *****/
+
+    .site-nav {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+      background: rgba(250,247,241,0.98);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .site-nav-inner {
+      width: 100%;
+      max-width: 1120px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 20% 20%, #ffe7c7, #d99a64);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .nav-brand-text {
+      font-size: 13px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+    }
+
+    .nav-center a {
+      text-decoration: none;
+      color: var(--lv-text-muted);
+    }
+
+    .nav-center a.nav-highlight {
+      color: var(--lv-accent);
+      font-weight: 600;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-pill-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fff;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--lv-text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .nav-pill-btn.primary {
+      border-color: transparent;
+      background: #fff;
+      box-shadow: 0 10px 22px rgba(15,23,42,0.12);
+    }
+
+    .nav-pill-btn:hover {
+      border-color: var(--lv-accent);
+      background: #fdf9f3;
+    }
+
+    .nav-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 20% 20%, #ffe7c7, #d99a64);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 720px) {
+      .site-nav-inner {
+        padding: 0 12px;
+        gap: 10px;
+      }
+      .nav-center {
+        display: none;
+      }
+    }
+
+    /***** STORE HEADER *****/
+    .store-shell {
+      margin-top: 18px;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid var(--lv-border);
+      box-shadow: var(--lv-shadow-soft);
+      background: #fdf9f3;
+    }
+
+    .store-banner {
+      position: relative;
+      height: 180px;
+      background: radial-gradient(circle at top left, rgba(201,138,90,0.4), #f5e8d4);
+      overflow: hidden;
+    }
+
+    .store-banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.1), transparent 55%);
+      pointer-events: none;
+    }
+
+    .store-banner-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+    }
+
+    .store-header-inner {
+      padding: 18px 20px 18px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1.6fr) minmax(0, 1.2fr);
+      gap: 18px;
+      background: #fdfaf5;
+    }
+
+    @media (max-width: 900px) {
+      .store-header-inner {
+        grid-template-columns: auto minmax(0,1fr);
+        grid-template-rows: auto auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .store-header-inner {
+        grid-template-columns: minmax(0,1fr);
+      }
+    }
+
+    .store-logo-wrap {
+      margin-top: -60px;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .store-logo-circle {
+      width: 96px;
+      height: 96px;
+      border-radius: 999px;
+      border: 2px solid #fff4e3;
+      background: #f1ddc2;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--lv-text);
+    }
+
+    .store-logo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .store-status-pill {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(201,138,90,0.6);
+      background: #fffbf5;
+      color: var(--lv-accent);
+      white-space: nowrap;
+    }
+
+    .store-status-pill.private {
+      border-color: rgba(220,38,38,0.4);
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .store-main-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .store-name {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0;
+      color: var(--lv-text);
+    }
+
+    .store-tagline {
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      margin: 0;
+    }
+
+    .store-location {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+      margin-top: 4px;
+    }
+
+    .store-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    .store-chip {
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fdf9f3;
+      color: var(--lv-text-muted);
+    }
+
+    .store-values {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .store-value-pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #fbede1;
+      border: 1px solid rgba(201,138,90,0.4);
+      color: var(--lv-text);
+    }
+
+    .store-side {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .side-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .side-label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 10px;
+      color: var(--lv-text-muted);
+    }
+
+    .side-value {
+      font-size: 12px;
+      color: var(--lv-text);
+    }
+
+    .side-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .side-link-pill {
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #ffffff;
+      font-size: 11px;
+      text-decoration: none;
+      color: var(--lv-text);
+    }
+
+    .side-link-pill:hover {
+      border-color: var(--lv-accent);
+      background: #fdf5eb;
+    }
+
+    /***** STORE STATS STRIP *****/
+
+    .store-stats {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (max-width: 720px) {
+      .store-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .stat-chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #fffdf8;
+      border: 1px solid var(--lv-border);
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--lv-text-muted);
+      font-size: 9px;
+    }
+
+    .stat-value {
+      color: var(--lv-text);
+      font-weight: 600;
+    }
+
+    /***** ABOUT & PRODUCTS *****/
+
+    .store-body-wrapper {
+      margin-top: 20px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--lv-text-muted);
+      margin: 0 0 8px;
+    }
+
+    .store-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .store-body {
+        grid-template-columns: minmax(0,1fr);
+      }
+    }
+
+    .card {
+      background: var(--lv-surface);
+      border-radius: var(--lv-radius-lg);
+      border: 1px solid var(--lv-border);
+      padding: 14px 16px 16px;
+      box-shadow: 0 14px 40px rgba(15,23,42,0.06);
+    }
+
+    .card-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--lv-text-muted);
+      margin: 0 0 6px;
+    }
+
+    .card-body-text {
+      font-size: 13px;
+      color: var(--lv-text);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .card-subheading {
+      font-size: 12px;
+      font-weight: 600;
+      margin: 8px 0 4px;
+      color: var(--lv-text);
+    }
+
+    .card-subtext {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      margin-top: 4px;
+    }
+
+    /***** PRODUCT GRID *****/
+
+    .products-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .products-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--lv-text-muted);
+      margin: 0;
+    }
+
+    .products-meta {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (max-width: 720px) {
+      .product-grid {
+        grid-template-columns: minmax(0,1fr);
+      }
+    }
+
+    .product-card {
+      border-radius: 14px;
+      border: 1px solid var(--lv-border);
+      background: #fffdfa;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 45px rgba(15,23,42,0.12);
+      border-color: rgba(201,138,90,0.7);
+    }
+
+    .product-img-wrap {
+      position: relative;
+      padding-top: 60%;
+      background: radial-gradient(circle at top left, #f5e1c7, #f7eee3);
+      overflow: hidden;
+    }
+
+    .product-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-body {
+      padding: 10px 12px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .product-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .product-sub {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+    }
+
+    .product-footer {
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .product-price {
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .product-chip-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 10px;
+      color: var(--lv-text-muted);
+    }
+
+    .product-chip {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fff;
+    }
+
+    .status-message {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+      margin-top: 10px;
+    }
+
+    .status-message.error {
+      color: var(--lv-danger);
+    }
+
+    /***** REVIEWS SECTION *****/
+
+    .reviews-section {
+      margin-top: 18px;
+    }
+
+    .reviews-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .reviews-meta {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+    }
+
+    .reviews-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .reviews-stars {
+      font-size: 16px;
+      color: #fbbf24;
+      letter-spacing: 1px;
+    }
+
+    .reviews-summary-text {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+    }
+
+    .reviews-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .reviews-list {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .reviews-list {
+        grid-template-columns: minmax(0,1fr);
+      }
+    }
+
+    .review-card {
+      border-radius: 14px;
+      border: 1px solid var(--lv-border);
+      background: #fffdfa;
+      padding: 10px 12px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .review-rating {
+      font-size: 13px;
+      color: #fbbf24;
+    }
+
+    .review-title {
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .review-body {
+      font-size: 12px;
+      color: var(--lv-text);
+      line-height: 1.5;
+      max-height: 72px;
+      overflow: hidden;
+    }
+
+    .review-footer {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      margin-top: 4px;
+    }
+
+    .btn-link {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      font-size: 11px;
+      text-decoration: none;
+      color: var(--lv-text);
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-link:hover {
+      border-color: var(--lv-accent);
+      background: #fdf5eb;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- TOP NAV -->
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <div class="nav-left">
+        <div class="nav-logo-circle">Lv</div>
+        <a href="marketplace.html" style="text-decoration:none;">
+          <div class="nav-brand-text">LUMIVUE</div>
+        </a>
+      </div>
+
+      <div class="nav-center">
+        <a href="marketplace.html" class="nav-highlight">Marketplace</a>
+        <a href="marketplace.html">Browse all</a>
+      </div>
+
+      <div class="nav-right">
+        <a href="login.html" class="nav-pill-btn primary" id="navAuthBtn">Sign in / Join</a>
+        <a href="account.html" class="nav-pill-btn">For vendors</a>
+        <div class="nav-avatar" id="navAvatar">LV</div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <!-- STORE HEADER -->
+    <section class="store-shell">
+      <div class="store-banner" id="storeBanner">
+        <img id="storeBannerImg" class="store-banner-img" alt="" style="display:none;" />
+      </div>
+
+      <div class="store-header-inner">
+        <div class="store-logo-wrap">
+          <div class="store-logo-circle">
+            <span id="storeLogoInitials">LV</span>
+            <img id="storeLogoImg" alt="" style="display:none;" />
+          </div>
+          <div class="store-status-pill" id="storeStatusPill">Public store</div>
+        </div>
+
+        <div class="store-main-meta">
+          <h1 class="store-name" id="storeName">LumiVue Store</h1>
+          <p class="store-tagline" id="storeTagline">
+            Curated skincare, candles, and fragrances.
+          </p>
+          <p class="store-location" id="storeLocation">Tucson, AZ · Ships US only</p>
+
+          <div class="store-meta-row">
+            <span class="store-chip" id="chipProcessing">Processing: See product details</span>
+            <span class="store-chip" id="chipShipping">Ships: See policies</span>
+          </div>
+
+          <div class="store-values" id="storeValues"></div>
+        </div>
+
+        <aside class="store-side">
+          <div class="side-row">
+            <span class="side-label">Store handle</span>
+            <span class="side-value" id="storeHandleLabel">@store</span>
+          </div>
+
+          <div>
+            <div class="side-label" style="margin-bottom:2px;">Links</div>
+            <div class="side-links" id="storeLinks"></div>
+          </div>
+
+          <div class="side-row">
+            <span class="side-label">Visibility</span>
+            <span class="side-value" id="visibilityLabel">Public</span>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- STATS STRIP -->
+    <section class="store-stats">
+      <div class="stat-chip">
+        <span class="stat-label">Rating</span>
+        <span class="stat-value" id="statRating">New shop</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Products</span>
+        <span class="stat-value" id="statProducts">0</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Processing</span>
+        <span class="stat-value" id="statProcessing">–</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-label">Ships</span>
+        <span class="stat-value" id="statShips">–</span>
+      </div>
+    </section>
+
+    <!-- BODY (ABOUT + PRODUCTS) -->
+    <section class="store-body-wrapper">
+      <p class="section-label">From this creator</p>
+      <section class="store-body">
+
+        <!-- ABOUT CARD -->
+        <article class="card">
+          <h2 class="card-title">About this shop</h2>
+          <div class="card-body-text" id="storeStory">
+            This shop’s story will appear here once the creator adds it.
+          </div>
+          <p class="card-subheading">What buyers can expect</p>
+          <p class="card-subtext">
+            Sellers can update this story from their store settings. Buyers see this description on every visit,
+            alongside product reviews and policies.
+          </p>
+        </article>
+
+        <!-- PRODUCTS CARD -->
+        <article class="card">
+          <div class="products-header">
+            <h2 class="products-title">Products</h2>
+            <div class="products-meta" id="productsMeta">Loading products…</div>
+          </div>
+
+          <div class="product-grid" id="productGrid"></div>
+          <div class="status-message" id="productsStatus"></div>
+        </article>
+
+      </section>
+    </section>
+
+    <!-- REVIEWS SECTION -->
+    <section class="reviews-section">
+      <article class="card">
+        <div class="reviews-header">
+          <h2 class="card-title">Reviews</h2>
+          <div class="reviews-meta" id="reviewsMeta">Loading reviews…</div>
+        </div>
+
+        <div class="reviews-summary" id="reviewsSummary" style="display:none;">
+          <div class="reviews-stars" id="reviewsStars">★★★★★</div>
+          <div class="reviews-summary-text" id="reviewsSummaryText"></div>
+        </div>
+
+        <div class="reviews-list" id="reviewsList"></div>
+        <div class="status-message" id="reviewsStatus"></div>
+
+        <div style="margin-top:10px; display:flex; justify-content:flex-end;">
+          <a href="reviews.html" id="reviewsLink" class="btn-link">View all reviews</a>
+        </div>
+
+      </article>
+    </section>
+
+  </div>
+
+  <!-- ===== YOUR FIREBASE BLOCK — EXACTLY AS YOU PROVIDED ===== -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+    authDomain: "lumivue-c8fdf.firebaseapp.com",
+    projectId: "lumivue-c8fdf",
+    storageBucket: "lumivue-c8fdf.appspot.com",
+    messagingSenderId: "112402036736",
+    appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+  </script>
+  <!-- ===== END FIREBASE BLOCK ===== -->
+
+  <!-- ===== STORE LOGIC USING COMPAT API ===== -->
+  <script>
+    const storeNameEl = document.getElementById("storeName");
+    const storeTaglineEl = document.getElementById("storeTagline");
+    const storeLocationEl = document.getElementById("storeLocation");
+    const storeStoryEl = document.getElementById("storeStory");
+    const storeHandleLabelEl = document.getElementById("storeHandleLabel");
+    const storeStatusPillEl = document.getElementById("storeStatusPill");
+    const visibilityLabelEl = document.getElementById("visibilityLabel");
+    const chipProcessingEl = document.getElementById("chipProcessing");
+    const chipShippingEl = document.getElementById("chipShipping");
+    const storeValuesEl = document.getElementById("storeValues");
+    const storeLinksEl = document.getElementById("storeLinks");
+    const bannerImgEl = document.getElementById("storeBannerImg");
+    const logoImgEl = document.getElementById("storeLogoImg");
+    const logoInitialsEl = document.getElementById("storeLogoInitials");
+    const productGridEl = document.getElementById("productGrid");
+    const productsMetaEl = document.getElementById("productsMeta");
+    const productsStatusEl = document.getElementById("productsStatus");
+    const navAuthBtn = document.getElementById("navAuthBtn");
+    const navAvatar = document.getElementById("navAvatar");
+
+    const statRatingEl = document.getElementById("statRating");
+    const statProductsEl = document.getElementById("statProducts");
+    const statProcessingEl = document.getElementById("statProcessing");
+    const statShipsEl = document.getElementById("statShips");
+
+    const reviewsMetaEl = document.getElementById("reviewsMeta");
+    const reviewsSummaryEl = document.getElementById("reviewsSummary");
+    const reviewsStarsEl = document.getElementById("reviewsStars");
+    const reviewsSummaryTextEl = document.getElementById("reviewsSummaryText");
+    const reviewsListEl = document.getElementById("reviewsList");
+    const reviewsStatusEl = document.getElementById("reviewsStatus");
+    const reviewsLinkEl = document.getElementById("reviewsLink");
+
+    function getStoreUidFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("uid") || params.get("creator") || params.get("store");
+    }
+
+    function loadLocalUserMeta() {
+      try {
+        const raw = localStorage.getItem("lumiVueUser");
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    }
+
+    function setAvatarInitials(userMeta, user) {
+      let initials = "LV";
+      if (userMeta && userMeta.storeName) {
+        const parts = userMeta.storeName.trim().split(/\s+/);
+        initials = (parts[0]?.[0] || "L") + (parts[1]?.[0] || "V");
+      } else if (user && user.email) {
+        initials = (user.email[0] || "L").toUpperCase();
+      }
+      navAvatar.textContent = initials;
+    }
+
+    function addValuePill(label) {
+      const pill = document.createElement("span");
+      pill.className = "store-value-pill";
+      pill.textContent = label;
+      storeValuesEl.appendChild(pill);
+    }
+
+    function addLinkPill(label, href) {
+      const a = document.createElement("a");
+      a.className = "side-link-pill";
+      a.href = href;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = label;
+      storeLinksEl.appendChild(a);
+    }
+
+    async function loadStoreProfile(uid) {
+      try {
+        const ref = db.collection("creators").doc(uid);
+        const snap = await ref.get();
+
+        if (!snap.exists) {
+          storeNameEl.textContent = "Store not found";
+          storeStoryEl.textContent = "Creator has not set up this store.";
+          return;
+        }
+
+        const data = snap.data();
+
+        storeNameEl.textContent = data.storeName || "Untitled store";
+        storeTaglineEl.textContent = data.tagline || "A creator on LumiVue Marketplace.";
+
+        const city = data.locationCity || "";
+        const state = data.locationState || "";
+        const loc = city && state ? `${city}, ${state}` : city || state || "";
+        const ship = data.shippingRegion ? ` · Ships ${data.shippingRegion}` : "";
+        storeLocationEl.textContent = loc + ship;
+
+        chipProcessingEl.textContent = "Processing: " + (data.processingTime || "See product details");
+        chipShippingEl.textContent = "Ships: " + (data.shippingRegion || "See policies");
+
+        statProcessingEl.textContent = data.processingTime || "–";
+        statShipsEl.textContent = data.shippingRegion || "–";
+
+        storeStoryEl.textContent = data.brandStory || data.bio || "This creator hasn't written their shop story yet.";
+
+        const handle = data.storeHandle || uid.slice(0, 8);
+        storeHandleLabelEl.textContent = "@" + handle;
+
+        const isPublic = data.isPublic !== false;
+        storeStatusPillEl.textContent = isPublic ? "Public store" : "Store hidden";
+        visibilityLabelEl.textContent = isPublic ? "Public" : "Hidden";
+        if (!isPublic) storeStatusPillEl.classList.add("private");
+
+        if (data.bannerUrl) {
+          bannerImgEl.src = data.bannerUrl;
+          bannerImgEl.style.display = "block";
+        }
+
+        if (data.logoUrl) {
+          logoImgEl.src = data.logoUrl;
+          logoImgEl.style.display = "block";
+          logoInitialsEl.style.display = "none";
+        } else {
+          const parts = storeNameEl.textContent.trim().split(/\s+/);
+          const initials =
+            (parts[0]?.[0] || "L").toUpperCase() +
+            (parts[1]?.[0] || "V").toUpperCase();
+          logoInitialsEl.textContent = initials;
+          logoInitialsEl.style.display = "block";
+          logoImgEl.style.display = "none";
+        }
+
+        storeValuesEl.innerHTML = "";
+        if (data.valueCrueltyFree) addValuePill("Cruelty-free");
+        if (data.valueVegan) addValuePill("Vegan");
+        if (data.valueSmallBatch) addValuePill("Small batch");
+        if (data.valueHandmade) addValuePill("Handmade");
+        if (data.valueEcoPackaging) addValuePill("Eco packaging");
+        if (data.valueCleanScents) addValuePill("Clean fragrance focus");
+
+        storeLinksEl.innerHTML = "";
+        if (data.website) addLinkPill("Website", data.website);
+        if (data.instagram) addLinkPill("Instagram", "https://instagram.com/" + data.instagram.replace(/^@/, ""));
+        if (data.tiktok) addLinkPill("TikTok", "https://www.tiktok.com/@" + data.tiktok.replace(/^@/, ""));
+        if (data.youtube) addLinkPill("YouTube", data.youtube);
+
+      } catch (err) {
+        console.error("Profile error:", err);
+      }
+    }
+
+    async function loadStoreProducts(uid) {
+      try {
+        const ref = db.collection("listings").where("ownerId", "==", uid);
+        const snap = await ref.get();
+
+        if (snap.empty) {
+          productsMetaEl.textContent = "0 products";
+          productsStatusEl.textContent = "This creator hasn't added any listings yet.";
+          statProductsEl.textContent = "0";
+          return;
+        }
+
+        let count = 0;
+        snap.forEach((doc) => {
+          const data = doc.data();
+          count++;
+
+          const card = document.createElement("article");
+          card.className = "product-card";
+
+          const imgWrap = document.createElement("div");
+          imgWrap.className = "product-img-wrap";
+
+          if (data.primaryImage) {
+            const img = document.createElement("img");
+            img.className = "product-img";
+            img.src = data.primaryImage;
+            img.alt = data.title || "Product";
+            imgWrap.appendChild(img);
+          }
+
+          const body = document.createElement("div");
+          body.className = "product-body";
+
+          const nameEl = document.createElement("div");
+          nameEl.className = "product-name";
+          nameEl.textContent = data.title || "Untitled listing";
+
+          const subEl = document.createElement("div");
+          subEl.className = "product-sub";
+          subEl.textContent = data.subtitle || data.category || "";
+
+          const footer = document.createElement("div");
+          footer.className = "product-footer";
+
+          const priceEl = document.createElement("div");
+          priceEl.className = "product-price";
+          if (typeof data.price === "number") {
+            priceEl.textContent = "$" + data.price.toFixed(2);
+          } else {
+            priceEl.textContent = data.price ? "$" + data.price : "";
+          }
+
+          const chipRow = document.createElement("div");
+          chipRow.className = "product-chip-row";
+
+          const status = (data.status || "").toLowerCase();
+          if (status) {
+            const chip = document.createElement("span");
+            chip.className = "product-chip";
+            chip.textContent = status === "active" ? "Active" : status;
+            chipRow.appendChild(chip);
+          }
+
+          if (data.valueVegan) {
+            const chip = document.createElement("span");
+            chip.className = "product-chip";
+            chip.textContent = "Vegan";
+            chipRow.appendChild(chip);
+          }
+
+          if (data.valueCrueltyFree) {
+            const chip = document.createElement("span");
+            chip.className = "product-chip";
+            chip.textContent = "Cruelty-free";
+            chipRow.appendChild(chip);
+          }
+
+          footer.appendChild(priceEl);
+          footer.appendChild(chipRow);
+
+          body.appendChild(nameEl);
+          if (subEl.textContent) body.appendChild(subEl);
+          body.appendChild(footer);
+
+          card.appendChild(imgWrap);
+          card.appendChild(body);
+
+          card.addEventListener("click", () => {
+            window.location.href = "product.html?id=" + encodeURIComponent(doc.id);
+          });
+
+          productGridEl.appendChild(card);
+        });
+
+        productsMetaEl.textContent = count + (count === 1 ? " product" : " products");
+        statProductsEl.textContent = count;
+
+      } catch (err) {
+        console.error("Product error:", err);
+        productsStatusEl.textContent = "Could not load products.";
+      }
+    }
+
+    async function loadStoreReviews(uid) {
+      try {
+        const ref = db.collection("reviews").where("storeId", "==", uid);
+        const snap = await ref.get();
+
+        if (snap.empty) {
+          reviewsMetaEl.textContent = "0 reviews";
+          reviewsStatusEl.textContent = "No reviews yet.";
+          statRatingEl.textContent = "New shop";
+          return;
+        }
+
+        let totalRating = 0;
+        let count = 0;
+        const snippets = [];
+
+        snap.forEach((doc) => {
+          const data = doc.data();
+          totalRating += Number(data.rating) || 0;
+          count++;
+
+          if (snippets.length < 3) {
+            snippets.push({
+              rating: data.rating,
+              title: data.title,
+              body: data.body || data.comment,
+              buyer: data.reviewerName || data.buyerName || "Verified buyer"
+            });
+          }
+        });
+
+        const avg = totalRating / count;
+        const rounded = Math.round(avg * 10) / 10;
+
+        statRatingEl.textContent = `${rounded.toFixed(1)} / 5`;
+        reviewsMetaEl.textContent = `${count} reviews`;
+        reviewsSummaryEl.style.display = "flex";
+
+        let starText = "";
+        const fullStars = Math.round(avg);
+        for (let i = 0; i < 5; i++) starText += i < fullStars ? "★" : "☆";
+        reviewsStarsEl.textContent = starText;
+
+        reviewsSummaryTextEl.textContent = `${rounded.toFixed(1)} out of 5 · ${count} reviews`;
+
+        snippets.forEach((rev) => {
+          const card = document.createElement("div");
+          card.className = "review-card";
+
+          const ratingEl = document.createElement("div");
+          ratingEl.className = "review-rating";
+          let stars = "";
+          for (let i = 0; i < 5; i++) stars += i < rev.rating ? "★" : "☆";
+          ratingEl.textContent = stars;
+
+          const titleEl = document.createElement("div");
+          titleEl.className = "review-title";
+          titleEl.textContent = rev.title || "Review";
+
+          const bodyEl = document.createElement("div");
+          bodyEl.className = "review-body";
+          bodyEl.textContent = rev.body;
+
+          const footerEl = document.createElement("div");
+          footerEl.className = "review-footer";
+          footerEl.textContent = rev.buyer;
+
+          card.appendChild(ratingEl);
+          card.appendChild(titleEl);
+          card.appendChild(bodyEl);
+          card.appendChild(footerEl);
+
+          reviewsListEl.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error("Review error:", err);
+      }
+    }
+
+    function bootstrapStore() {
+      const urlUid = getStoreUidFromUrl();
+
+      if (urlUid) {
+        loadStoreProfile(urlUid);
+        loadStoreProducts(urlUid);
+        loadStoreReviews(urlUid);
+
+      } else {
+        auth.onAuthStateChanged((user) => {
+          if (!user) {
+            storeNameEl.textContent = "Store not specified";
+            return;
+          }
+
+          loadStoreProfile(user.uid);
+          loadStoreProducts(user.uid);
+          loadStoreReviews(user.uid);
+        });
+      }
+    }
+
+    auth.onAuthStateChanged((user) => {
+      const meta = loadLocalUserMeta();
+      if (user) {
+        navAuthBtn.textContent = "Dashboard";
+        navAuthBtn.href = "dashboard.html";
+        setAvatarInitials(meta, user);
+      } else {
+        navAuthBtn.textContent = "Sign in / Join";
+        navAuthBtn.href = "login.html";
+        navAvatar.textContent = "LV";
+      }
+    });
+
+    bootstrapStore();
+  </script>
+</body>
+</html>

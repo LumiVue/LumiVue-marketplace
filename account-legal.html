@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LumiVue – Legal business & contact details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    :root {
+      /* neutral latte / cream palette - SAME AS LISTINGS */
+      --lv-bg: #f4f1eb;          /* page background */
+      --lv-surface: #ffffff;     /* card background */
+      --lv-border: #ddd3c6;      /* soft beige border */
+      --lv-border-strong: #ccc0b1;
+      --lv-text: #2c1e19;        /* espresso text */
+      --lv-text-muted: #7a6a5c;  /* softer brown text */
+      --lv-accent: #c98a5a;      /* caramel accent */
+      --lv-accent-soft: #fbedd1; /* very light caramel accent */
+      --lv-radius-lg: 14px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+      --lv-danger: #dc2626;
+      --lv-danger-soft: #fee2e2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #ffffff, var(--lv-bg));
+      color: var(--lv-text);
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP NAV */
+    header {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(0,0,0,.04);
+      background: #faf6f0cc;
+      backdrop-filter: blur(14px);
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: 1120px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-main {
+      font-size: 15px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--lv-text-muted);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--lv-text-muted);
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+    }
+
+    nav a.active {
+      color: var(--lv-text);
+      border-bottom-color: var(--lv-border-strong);
+    }
+
+    .logout {
+      border-left: 1px solid rgba(0,0,0,.08);
+      padding-left: 14px;
+      margin-left: 8px;
+    }
+
+    .logout a {
+      color: var(--lv-danger);
+      font-weight: 500;
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px 48px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--lv-surface);
+      border-radius: var(--lv-radius-lg);
+      border: 1px solid var(--lv-border-strong);
+      padding: 26px 28px 30px;
+      box-shadow: var(--lv-shadow-soft);
+      position: relative;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      margin-bottom: 18px;
+      cursor: pointer;
+      color: var(--lv-text-muted);
+    }
+
+    .back-link span {
+      font-size: 16px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-weight: 800;
+      color: var(--lv-text);
+    }
+
+    p.lead {
+      margin: 0 0 20px;
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      max-width: 540px;
+    }
+
+    /* FORM GRID */
+    form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px 18px;
+    }
+
+    label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--lv-text-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--lv-border);
+      background: #fdf7ef;
+      font-size: 13px;
+      color: var(--lv-text);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(44,30,25,.55);
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      background: #fef9f2;
+      color: var(--lv-text);
+      outline: none;
+      box-shadow: 0 0 0 1px var(--lv-accent);
+      border-color: var(--lv-accent);
+    }
+
+    option {
+      background: #fef9f2;
+      color: var(--lv-text);
+    }
+
+    /* stop blue autofill */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0 1000px #fdf7ef inset !important;
+      -webkit-text-fill-color: #2c1e19 !important;
+      caret-color: #2c1e19;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    /* FOOTER ACTIONS */
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+    }
+
+    .status-pill {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: var(--lv-accent-soft);
+      color: var(--lv-text);
+      min-width: 160px;
+      text-align: center;
+    }
+
+    button {
+      padding: 9px 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(37,25,17,.8);
+      background: #fff7ec;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      cursor: pointer;
+      box-shadow: 0 18px 35px rgba(0,0,0,.18);
+    }
+
+    button:hover:not([disabled]) {
+      background: var(--lv-accent);
+      color: #fff;
+      border-color: var(--lv-accent);
+    }
+
+    button[disabled] {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--lv-radius-lg);
+      background: rgba(244,241,235,.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .loading-overlay.hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-inner,
+      .card {
+        padding: 16px;
+      }
+      form {
+        grid-template-columns: 1fr;
+      }
+      .actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="nav-inner">
+        <div class="brand">
+          <div class="brand-main">LUMIVUE</div>
+          <div class="brand-sub">Marketplace · Vendor account</div>
+        </div>
+        <nav>
+          <a href="marketplace.html">Marketplace</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="listings.html">My listings</a>
+          <span class="logout"><a href="logout.html">Log out</a></span>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="loading-overlay" id="loadingOverlay">
+          Loading account details…
+        </div>
+
+        <div class="back-link" onclick="window.location.href='account.html'">
+          <span>←</span> Back to vendor account
+        </div>
+
+        <h1>Legal business name &amp; contact details</h1>
+        <p class="lead">
+          Vendors will complete this information for invoices, tax documentation, and compliance checks.
+        </p>
+
+        <form id="legalForm">
+          <div class="full">
+            <label for="legalName">Legal business name</label>
+            <input id="legalName" type="text" placeholder="Enter legal business name" />
+          </div>
+
+          <div>
+            <label for="dbaName">Doing business as (optional)</label>
+            <input id="dbaName" type="text" placeholder="Enter brand or shop name" />
+          </div>
+
+          <div>
+            <label for="contactName">Primary contact name</label>
+            <input id="contactName" type="text" placeholder="Enter contact person" />
+          </div>
+
+          <div>
+            <label for="email">Business email</label>
+            <input id="email" type="email" placeholder="Enter business email" />
+          </div>
+
+          <div>
+            <label for="phone">Business phone</label>
+            <input id="phone" type="tel" placeholder="Enter business phone" />
+          </div>
+
+          <div class="full">
+            <label for="address1">Street address</label>
+            <input id="address1" type="text" placeholder="Enter street address" />
+          </div>
+
+          <div>
+            <label for="city">City</label>
+            <input id="city" type="text" placeholder="Enter city" />
+          </div>
+
+          <div>
+            <label for="state">State / region</label>
+            <input id="state" type="text" placeholder="Enter state or region" />
+          </div>
+
+          <div>
+            <label for="postal">Postal code</label>
+            <input id="postal" type="text" placeholder="Enter postal code" />
+          </div>
+
+          <div>
+            <label for="country">Country</label>
+            <select id="country">
+              <option value="">Select country</option>
+              <option>United States</option>
+              <option>Canada</option>
+              <option>United Kingdom</option>
+              <option>Australia</option>
+            </select>
+          </div>
+
+          <div class="full">
+            <label for="notes">Internal notes (optional)</label>
+            <textarea id="notes" placeholder="Optional internal notes for this vendor"></textarea>
+          </div>
+
+          <div class="actions">
+            <span class="hint">
+              This information is required before payouts can be activated.
+            </span>
+
+            <div style="display:flex; gap:10px; align-items:center;">
+              <div class="status-pill" id="saveStatus">Connecting…</div>
+              <button type="button" id="saveButton">Save details</button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- Firebase CDN SDKs (compat, same as login/account) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+
+  <script>
+    // LumiVue Firebase config (same project as login/account)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+    };
+
+    // Initialize Firebase (compat)
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script>
+    (function () {
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const saveBtn = document.getElementById('saveButton');
+      const saveStatus = document.getElementById('saveStatus');
+
+      const legalName    = document.getElementById('legalName');
+      const dbaName      = document.getElementById('dbaName');
+      const contactName  = document.getElementById('contactName');
+      const emailInput   = document.getElementById('email');
+      const phoneInput   = document.getElementById('phone');
+      const address1     = document.getElementById('address1');
+      const cityInput    = document.getElementById('city');
+      const stateInput   = document.getElementById('state');
+      const postalInput  = document.getElementById('postal');
+      const countryInput = document.getElementById('country');
+      const notesInput   = document.getElementById('notes');
+
+      let db = null;
+      let auth = null;
+      let currentUser = null;
+
+      function setStatus(text, tone) {
+        if (!saveStatus) return;
+        saveStatus.textContent = text;
+
+        if (tone === 'error') {
+          saveStatus.style.background = 'var(--lv-danger-soft)';
+          saveStatus.style.borderColor = 'var(--lv-danger)';
+          saveStatus.style.color = '#7c1f1f';
+        } else if (tone === 'success') {
+          saveStatus.style.background = 'var(--lv-accent-soft)';
+          saveStatus.style.borderColor = 'var(--lv-accent)';
+          saveStatus.style.color = '#3f3a2a';
+        } else {
+          saveStatus.style.background = 'var(--lv-accent-soft)';
+          saveStatus.style.borderColor = 'var(--lv-border-strong)';
+          saveStatus.style.color = 'var(--lv-text)';
+        }
+      }
+
+      function showLoading(show) {
+        if (!loadingOverlay) return;
+        loadingOverlay.classList.toggle('hidden', !show);
+      }
+
+      function initFirebasePage() {
+        db = firebase.firestore();
+        auth = firebase.auth();
+
+        auth.onAuthStateChanged(async (user) => {
+          if (!user) {
+            setStatus('Redirecting to sign in…', 'error');
+            const redirect = encodeURIComponent(window.location.pathname);
+            window.location.href = 'login.html?redirect=' + redirect;
+            return;
+          }
+
+          currentUser = user;
+          setStatus('Connected', 'success');
+          await loadExistingData();
+        });
+      }
+
+      async function loadExistingData() {
+        try {
+          showLoading(true);
+          setStatus('Loading…');
+
+          const docRef = db.collection('creators').doc(currentUser.uid);
+          const snap = await docRef.get();
+
+          if (snap.exists) {
+            const data = snap.data() || {};
+
+            legalName.value    = data.legalName    || '';
+            dbaName.value      = data.dbaName      || '';
+            contactName.value  = data.contactName  || '';
+            emailInput.value   = data.email        || '';
+            phoneInput.value   = data.phone        || '';
+            address1.value     = data.address1     || '';
+            cityInput.value    = data.city         || '';
+            stateInput.value   = data.state        || '';
+            postalInput.value  = data.postal       || '';
+            countryInput.value = data.country      || '';
+            notesInput.value   = data.legalNotes   || data.notes || '';
+          }
+
+          setStatus('Loaded');
+        } catch (err) {
+          console.error('Error loading legal info', err);
+          setStatus('Load error', 'error');
+        } finally {
+          showLoading(false);
+        }
+      }
+
+      async function saveLegalInfo() {
+        if (!currentUser) {
+          setStatus('Please sign in again', 'error');
+          return;
+        }
+
+        const legal   = legalName.value.trim();
+        const contact = contactName.value.trim();
+        const email   = emailInput.value.trim();
+
+        if (!legal || !contact || !email) {
+          setStatus('Name, contact & email required', 'error');
+          return;
+        }
+
+        if (!saveBtn) return;
+        saveBtn.disabled = true;
+        setStatus('Saving…');
+
+        try {
+          const docRef = db.collection('creators').doc(currentUser.uid);
+
+          const payload = {
+            legalName:   legal,
+            dbaName:     dbaName.value.trim()      || null,
+            contactName: contact,
+            email:       email,
+            phone:       phoneInput.value.trim()   || null,
+            address1:    address1.value.trim()     || null,
+            city:        cityInput.value.trim()    || null,
+            state:       stateInput.value.trim()   || null,
+            postal:      postalInput.value.trim()  || null,
+            country:     countryInput.value        || null,
+            legalNotes:  notesInput.value.trim()   || null,
+            updatedAt:   firebase.firestore.FieldValue.serverTimestamp(),
+            sections: {
+              legal: { completed: true }
+            }
+          };
+
+          await docRef.set(payload, { merge: true });
+
+          setStatus('Saved', 'success');
+        } catch (err) {
+          console.error('Error saving legal info', err);
+          setStatus('Save error: ' + (err.code || 'unknown'), 'error');
+          alert('Could not save legal details: ' + err.message);
+        } finally {
+          saveBtn.disabled = false;
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        showLoading(true);
+        setStatus('Connecting…');
+        initFirebasePage();
+
+        if (saveBtn) {
+          saveBtn.addEventListener('click', saveLegalInfo);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

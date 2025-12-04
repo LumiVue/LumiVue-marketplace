@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LumiVue – Account Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    :root {
+      /* Latte / Cream luxury palette */
+      --lv-bg: #f4f1eb;            
+      --lv-surface: #ffffff;       
+      --lv-border: #ddd3c6;        
+      --lv-border-strong: #ccc0b1;
+      --lv-text: #2c1e19;          
+      --lv-text-muted: #7a6a5c;    
+      --lv-accent: #c98a5a;        
+      --lv-accent-soft: #fbede1;   
+      --lv-radius-lg: 14px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+      --lv-danger: #dc2626;
+    }
+
+    body {
+      margin: 0;
+      background: var(--lv-bg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--lv-text);
+    }
+
+    /* MAIN SHELL */
+    .lv-account-shell {
+      max-width: 1120px;
+      margin: 2.5rem auto;
+      padding: 2rem;
+      background: var(--lv-surface);
+      border-radius: var(--lv-radius-lg);
+      border: 1px solid var(--lv-border);
+      box-shadow: var(--lv-shadow-soft);
+    }
+
+    .lv-account-header {
+      margin-bottom: 2rem;
+    }
+
+    .lv-account-title {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--lv-text);
+      letter-spacing: 0.03em;
+    }
+
+    .lv-account-subtitle {
+      font-size: 0.92rem;
+      color: var(--lv-text-muted);
+      max-width: 520px;
+      line-height: 1.6;
+      margin-top: 0.35rem;
+    }
+
+    /* GRID */
+    .lv-account-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.3rem;
+    }
+
+    /* CARDS */
+    .lv-account-card {
+      background: var(--lv-surface);
+      border-radius: var(--lv-radius-lg);
+      border: 1px solid var(--lv-border);
+      padding: 1.5rem 1.4rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease;
+    }
+
+    .lv-account-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--lv-accent);
+      background: var(--lv-accent-soft);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+    }
+
+    .lv-account-card-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-account-card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .lv-account-card-text {
+      font-size: 0.85rem;
+      color: var(--lv-text-muted);
+      line-height: 1.5;
+    }
+
+    .lv-account-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.2rem;
+    }
+
+    .lv-account-pill {
+      font-size: 0.72rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      background: var(--lv-accent-soft);
+      border: 1px solid var(--lv-border);
+      color: var(--lv-text-muted);
+    }
+
+    .lv-account-card-arrow {
+      margin-left: auto;
+      font-size: 0.95rem;
+      color: var(--lv-text-muted);
+    }
+
+    /* FOOTER CHIP */
+    .lv-account-chip {
+      margin-top: 1.8rem;
+      font-size: 0.8rem;
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border);
+      background: var(--lv-accent-soft);
+      color: var(--lv-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .lv-account-chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+    }
+
+    @media (max-width: 640px) {
+      .lv-account-shell {
+        margin: 1.2rem 1rem;
+        padding: 1.5rem;
+      }
+      .lv-account-title {
+        font-size: 1.55rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="lv-account-shell">
+    <header class="lv-account-header">
+      <h1 class="lv-account-title">Account Settings</h1>
+      <p class="lv-account-subtitle">
+        Review and manage everything tied to your LumiVue creator account — legal details, payouts, tax information,
+        store policies, branding, shipping settings, and more.
+      </p>
+    </header>
+
+    <section class="lv-account-grid">
+
+      <!-- Business + Branding -->
+      <a href="edit-store.html" class="lv-account-card">
+        <span class="lv-account-card-label">Profile</span>
+        <div class="lv-account-card-title">Business Information & Branding</div>
+        <p class="lv-account-card-text">Store name, business address, logo, banner, and buyer-facing profile details.</p>
+        <div class="lv-account-pill-row">
+          <span class="lv-account-pill">Store name</span>
+          <span class="lv-account-pill">Address</span>
+          <span class="lv-account-pill">Logo</span>
+        </div>
+        <span class="lv-account-card-arrow">›</span>
+      </a>
+
+      <!-- Legal -->
+      <a href="account-legal.html" class="lv-account-card">
+        <span class="lv-account-card-label">Compliance</span>
+        <div class="lv-account-card-title">Legal & Compliance</div>
+        <p class="lv-account-card-text">Entity details, licenses, and business documentation.</p>
+        <div class="lv-account-pill-row">
+          <span class="lv-account-pill">Business entity</span>
+          <span class="lv-account-pill">Licenses</span>
+        </div>
+        <span class="lv-account-card-arrow">›</span>
+      </a>
+
+      <!-- Tax -->
+      <a href="account-tax.html" class="lv-account-card">
+        <span class="lv-account-card-label">Tax</span>
+        <div class="lv-account-card-title">Tax Information</div>
+        <p class="lv-account-card-text">Tax IDs and reporting information, visible only to you and LumiVue compliance.</p>
+        <div class="lv-account-pill-row">
+          <span class="lv-account-pill">EIN</span>
+          <span class="lv-account-pill">Region</span>
+        </div>
+        <span class="lv-account-card-arrow">›</span>
+      </a>
+
+      <!-- Payouts -->
+      <a href="account-payouts.html" class="lv-account-card">
+        <span class="lv-account-card-label">Payouts</span>
+        <div class="lv-account-card-title">Payout & Banking</div>
+        <p class="lv-account-card-text">Banking details and payout schedule settings.</p>
+        <div class="lv-account-pill-row">
+          <span class="lv-account-pill">Bank account</span>
+          <span class="lv-account-pill">Payout schedule</span>
+        </div>
+        <span class="lv-account-card-arrow">›</span>
+      </a>
+
+      <!-- Policies -->
+      <a href="account-policies.html" class="lv-account-card">
+        <span class="lv-account-card-label">Policies</span>
+        <div class="lv-account-card-title">Store Policies</div>
+        <p class="lv-account-card-text">Return rules, cancellations, and customer support guidelines.</p>
+        <div class="lv-account-pill-row">
+          <span class="lv-account-pill">Refunds</span>
+          <span class="lv-account-pill">Processing time</span>
+        </div>
+        <span class="lv-account-card-arrow">›</span>
+      </a>
+
+      <!-- Shipping -->
+      <a href="shipping.html" class="lv-account-card">
+        <span class="lv-account-card-label">Logistics</span>
+        <div class="lv-account-card-title">Shipping & Delivery</div>
+        <p class="lv-account-card-text">Carriers, handling time, and shipping regions.</p>
+        <div class="lv-account-pill-row">
+          <span class="lv-account-pill">Carriers</span>
+          <span class="lv-account-pill">Regions</span>
+        </div>
+        <span class="lv-account-card-arrow">›</span>
+      </a>
+
+      <!-- Google/SEO -->
+      <a href="google-fields.html" class="lv-account-card">
+        <span class="lv-account-card-label">Visibility</span>
+        <div class="lv-account-card-title">Google & SEO Fields</div>
+        <p class="lv-account-card-text">Search visibility details and Google business integration.</p>
+        <div class="lv-account-pill-row">
+          <span class="lv-account-pill">SEO</span>
+          <span class="lv-account-pill">Google fields</span>
+        </div>
+        <span class="lv-account-card-arrow">›</span>
+      </a>
+
+      <!-- Reviews -->
+      <a href="reviews.html" class="lv-account-card">
+        <span class="lv-account-card-label">Support</span>
+        <div class="lv-account-card-title">Reviews & Support</div>
+        <p class="lv-account-card-text">Customer reviews and support settings.</p>
+        <div class="lv-account-pill-row">
+          <span class="lv-account-pill">Support email</span>
+          <span class="lv-account-pill">Response time</span>
+        </div>
+        <span class="lv-account-card-arrow">›</span>
+      </a>
+
+    </section>
+
+    <div class="lv-account-chip">
+      <span class="lv-account-chip-dot"></span>
+      Your settings are organized by section — open any card to edit and review your saved details.
+    </div>
+
+  </main>
+
+  <!-- ===== LUMIVUE · SHARED FIREBASE BLOCK (COMPAT) ===== -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+  <script>
+    // Your LumiVue Firebase config (shared across pages)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.appspot.com",
+      messagingSenderId: "112402036736",
+      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+    };
+
+    // Initialize Firebase (old style – perfect for plain HTML)
+    firebase.initializeApp(firebaseConfig);
+
+    // Optional handles if the page needs them
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+    const storage = firebase.storage();
+  </script>
+  <!-- ===== END LUMIVUE FIREBASE BLOCK ===== -->
+
+  <script>
+    // Auth guard so only logged-in vendors can see this hub
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        const redirect = encodeURIComponent(window.location.pathname);
+        window.location.href = "login.html?redirect=" + redirect;
+      } else {
+        console.log("Account settings loaded for:", user.uid);
+      }
+    });
+  </script>
+
+</body>
+</html>

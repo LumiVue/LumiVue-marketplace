@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LumiVue – Policies, returns & customer support</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root{
+      --lv-bg:#e8dcc7;
+      --lv-surface:#e3ceb2;
+      --lv-border:#c9a07a;
+      --lv-text:#5c3f28;
+      --lv-muted:#7a6a59;
+      --lv-accent:#b8703b;
+      --lv-danger:#c15b4b;
+      --lv-accent-soft:#f3ddc2;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top left,#f3e4ce,#e8dcc7 48%,#ddc8aa);
+      color:var(--lv-text);
+    }
+    .shell{min-height:100vh;display:flex;flex-direction:column;}
+
+    header{
+      height:64px;display:flex;align-items:center;justify-content:center;
+      border-bottom:1px solid rgba(0,0,0,.04);
+      backdrop-filter:blur(16px);background:rgba(232,220,199,.88);
+    }
+    .nav-inner{width:100%;max-width:1120px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+    .brand{display:flex;flex-direction:column;gap:2px;}
+    .brand-main{font-size:15px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--lv-text);}
+    .brand-sub{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lv-muted);}
+    nav{display:flex;align-items:center;gap:16px;font-size:12px;text-transform:uppercase;letter-spacing:.14em;}
+    nav a{text-decoration:none;color:var(--lv-muted);padding-bottom:2px;border-bottom:1px solid transparent;}
+    nav a.active{color:var(--lv-text);border-bottom-color:var(--lv-border);}
+    .logout{border-left:1px solid rgba(0,0,0,.1);padding-left:14px;margin-left:8px;}
+    .logout a{color:var(--lv-danger);font-weight:500;}
+
+    main{flex:1;display:flex;justify-content:center;padding:32px 16px 48px;}
+    .card{
+      width:100%;max-width:1120px;background:rgba(255,255,255,.32);
+      border-radius:22px;border:1px solid rgba(201,160,122,.45);
+      padding:26px 28px 30px;
+      box-shadow:0 22px 60px rgba(115,82,52,.20),0 0 0 1px rgba(255,255,255,.6);
+      backdrop-filter:blur(14px);
+      position:relative;
+    }
+
+    .back-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px;color:var(--lv-muted);cursor:pointer;}
+    .back-link span{font-size:16px;}
+
+    h1{
+      margin:0 0 6px;font-size:22px;text-transform:uppercase;
+      letter-spacing:.1em;font-weight:800;color:#5c3f28;
+    }
+    p.lead{margin:0 0 20px;font-size:13px;color:var(--lv-muted);max-width:540px;}
+
+    form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px;}
+    label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--lv-muted);margin-bottom:4px;display:block;}
+    textarea{
+      width:100%;min-height:90px;resize:vertical;
+      padding:8px 10px;border-radius:8px;border:1px solid rgba(201,160,122,.8);
+      background:#f7e7cf;font-size:13px;color:var(--lv-text);
+    }
+    textarea::placeholder{color:rgba(92,63,40,.6);}
+    textarea:focus{
+      background:#f7e7cf;
+      color:#5c3f28;
+      outline:none;
+      box-shadow:0 0 0 1px rgba(184,112,59,.8);
+    }
+    .full{grid-column:1 / -1;}
+
+    .actions{margin-top:20px;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+    .hint{font-size:11px;color:var(--lv-muted);}
+    button{
+      padding:8px 18px;border-radius:999px;border:1px solid rgba(43,33,24,.7);
+      background:#fff7ec;font-size:11px;text-transform:uppercase;letter-spacing:.16em;cursor:pointer;
+      box-shadow:0 18px 35px rgba(0,0,0,.18);
+    }
+    button:hover:not([disabled]){background:var(--lv-accent);color:#fff;border-color:var(--lv-accent);}
+    button[disabled]{opacity:.6;cursor:default;box-shadow:none;}
+
+    .status-pill{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid var(--lv-border);
+      background:var(--lv-accent-soft);
+      color:var(--lv-text);
+      min-width:160px;
+      text-align:center;
+    }
+
+    .loading-overlay{
+      position:absolute;
+      inset:0;
+      border-radius:22px;
+      background:rgba(243,228,206,.65);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      color:var(--lv-muted);
+      backdrop-filter:blur(4px);
+      pointer-events:none;
+    }
+    .loading-overlay.hidden{display:none;}
+
+    @media(max-width:768px){
+      .nav-inner,.card{padding:16px;}
+      form{grid-template-columns:1fr;}
+      .actions{flex-direction:column;align-items:flex-start;}
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="nav-inner">
+        <div class="brand">
+          <div class="brand-main">LUMIVUE</div>
+          <div class="brand-sub">Marketplace · Vendor account</div>
+        </div>
+        <nav>
+          <a href="marketplace.html">Marketplace</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="listings.html">My listings</a>
+          <span class="logout"><a href="logout.html">Log out</a></span>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="loading-overlay" id="loadingOverlay">
+          Loading policies…
+        </div>
+
+        <div class="back-link" onclick="window.location.href='account.html'">
+          <span>←</span> Back to vendor account
+        </div>
+
+        <h1>Policies, returns &amp; customer support</h1>
+        <p class="lead">
+          Vendors can define the policies shown on their public LumiVue storefront so customers know what to expect.
+        </p>
+
+        <form id="policiesForm">
+          <div class="full">
+            <label for="shippingPolicy">Shipping policy</label>
+            <textarea id="shippingPolicy" placeholder="Describe processing times, carriers, tracking, etc."></textarea>
+          </div>
+
+          <div class="full">
+            <label for="returnPolicy">Return &amp; exchange policy</label>
+            <textarea id="returnPolicy" placeholder="Explain whether returns are accepted and any conditions or time limits."></textarea>
+          </div>
+
+          <div class="full">
+            <label for="cancellationPolicy">Cancellation policy</label>
+            <textarea id="cancellationPolicy" placeholder="Explain when orders can be cancelled or changed."></textarea>
+          </div>
+
+          <div class="full">
+            <label for="supportContact">Customer support contact</label>
+            <textarea id="supportContact" placeholder="Add email address, response time, and support hours."></textarea>
+          </div>
+
+          <div class="full">
+            <label for="otherPolicy">Additional notes (optional)</label>
+            <textarea id="otherPolicy" placeholder="Any extra information you want buyers to see."></textarea>
+          </div>
+
+          <div class="actions">
+            <span class="hint">
+              These policies appear on your public store profile so customers know how you handle orders and support.
+            </span>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="status-pill" id="saveStatus">Connecting…</div>
+              <button type="button" id="saveButton">Save policies</button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== LUMIVUE · SHARED FIREBASE BLOCK (COMPAT) ===== -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+  <script>
+    // Your LumiVue Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.appspot.com",
+      messagingSenderId: "112402036736",
+      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+    };
+
+    // Initialize Firebase (old style – perfect for plain HTML)
+    firebase.initializeApp(firebaseConfig);
+
+    // Optional handles if the page needs them
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+    const storage = firebase.storage();
+  </script>
+  <!-- ===== END LUMIVUE FIREBASE BLOCK ===== -->
+
+  <script>
+    (function () {
+      const loadingOverlay      = document.getElementById('loadingOverlay');
+      const saveBtn             = document.getElementById('saveButton');
+      const saveStatus          = document.getElementById('saveStatus');
+
+      const shippingInput       = document.getElementById('shippingPolicy');
+      const returnInput         = document.getElementById('returnPolicy');
+      const cancellationInput   = document.getElementById('cancellationPolicy');
+      const supportInput        = document.getElementById('supportContact');
+      const otherInput          = document.getElementById('otherPolicy');
+
+      let currentUser = null;
+
+      function setStatus(text, tone) {
+        if (!saveStatus) return;
+        saveStatus.textContent = text;
+
+        if (tone === 'error') {
+          saveStatus.style.background   = '#fee2e2';
+          saveStatus.style.borderColor  = '#dc2626';
+          saveStatus.style.color        = '#7c1f1f';
+        } else if (tone === 'success') {
+          saveStatus.style.background   = 'var(--lv-accent-soft)';
+          saveStatus.style.borderColor  = 'var(--lv-accent)';
+          saveStatus.style.color        = '#3f3a2a';
+        } else {
+          saveStatus.style.background   = 'var(--lv-accent-soft)';
+          saveStatus.style.borderColor  = 'var(--lv-border)';
+          saveStatus.style.color        = 'var(--lv-text)';
+        }
+      }
+
+      function showLoading(show) {
+        if (!loadingOverlay) return;
+        loadingOverlay.classList.toggle('hidden', !show);
+      }
+
+      async function loadExistingData() {
+        try {
+          showLoading(true);
+          setStatus('Loading…');
+
+          const docRef = db.collection('creators').doc(currentUser.uid);
+          const snap   = await docRef.get();
+
+          if (snap.exists) {
+            const data = snap.data() || {};
+
+            shippingInput.value     = data.shippingPolicy      || '';
+            returnInput.value       = data.returnPolicy        || '';
+            cancellationInput.value = data.cancellationPolicy  || '';
+            supportInput.value      = data.supportContact      || '';
+            otherInput.value        = data.otherPolicy         || '';
+          }
+
+          setStatus('Loaded');
+        } catch (err) {
+          console.error('Error loading policies', err);
+          setStatus('Load error', 'error');
+        } finally {
+          showLoading(false);
+        }
+      }
+
+      async function savePolicies() {
+        if (!currentUser) {
+          setStatus('Please sign in again', 'error');
+          return;
+        }
+
+        const shippingVal     = shippingInput.value.trim();
+        const returnVal       = returnInput.value.trim();
+        const cancellationVal = cancellationInput.value.trim();
+        const supportVal      = supportInput.value.trim();
+
+        if (!shippingVal || !returnVal || !cancellationVal || !supportVal) {
+          setStatus('All main policy fields are required', 'error');
+          return;
+        }
+
+        if (!saveBtn) return;
+        saveBtn.disabled = true;
+        setStatus('Saving…');
+
+        try {
+          const docRef = db.collection('creators').doc(currentUser.uid);
+
+          const payload = {
+            shippingPolicy:      shippingVal,
+            returnPolicy:        returnVal,
+            cancellationPolicy:  cancellationVal,
+            supportContact:      supportVal,
+            otherPolicy:         otherInput.value.trim() || null,
+            updatedAt:           firebase.firestore.FieldValue.serverTimestamp(),
+            sections: {
+              policies: { completed: true }
+            }
+          };
+
+          await docRef.set(payload, { merge: true });
+          setStatus('Saved', 'success');
+        } catch (err) {
+          console.error('Error saving policies', err);
+          setStatus('Save error: ' + (err.code || 'unknown'), 'error');
+          alert('Could not save policies: ' + err.message);
+        } finally {
+          saveBtn.disabled = false;
+        }
+      }
+
+      function initFirebasePage() {
+        auth.onAuthStateChanged(async (user) => {
+          if (!user) {
+            setStatus('Redirecting to sign in…', 'error');
+            const redirect = encodeURIComponent(window.location.pathname);
+            window.location.href = 'login.html?redirect=' + redirect;
+            return;
+          }
+
+          currentUser = user;
+          setStatus('Connected', 'success');
+          await loadExistingData();
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        showLoading(true);
+        setStatus('Connecting…');
+        initFirebasePage();
+
+        if (saveBtn) {
+          saveBtn.addEventListener('click', savePolicies);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

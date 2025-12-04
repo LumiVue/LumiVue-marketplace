@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LumiVue – Create Product Listing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Global styles if you have them -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Page-specific styling -->
+  <style>
+    :root {
+      /* soft blue background */
+      --lv-bg: #ddeaf7;
+      --lv-surface: #ffffff;
+      --lv-border: #e5e7eb;
+      --lv-border-strong: #d1d5db;
+      --lv-text: #111827;
+      --lv-text-muted: #6b7280;
+      --lv-accent: #0a84ff;
+      --lv-accent-soft: #e0f0ff;
+      --lv-radius-lg: 14px;
+      --lv-radius-md: 10px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Helvetica Neue", Arial, sans-serif;
+      background: var(--lv-bg);
+      color: var(--lv-text);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Make sure inputs are ALWAYS editable */
+    input,
+    textarea,
+    select {
+      pointer-events: auto !important;
+      user-select: text !important;
+      -webkit-user-select: text !important;
+    }
+
+    .lv-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    .lv-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0.96),
+        rgba(248, 250, 252, 0.98)
+      );
+      border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .lv-header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0.7rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .lv-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .lv-brand-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--lv-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9fafb;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .lv-brand-title {
+      color: var(--lv-accent);
+    }
+
+    .lv-header-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.9rem;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-header-nav a.active {
+      color: var(--lv-accent);
+      font-weight: 600;
+    }
+
+    .lv-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .lv-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: var(--lv-accent);
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    /* BUTTONS */
+    .lv-btn {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 0.4rem 1.05rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: #f9fafb;
+      color: var(--lv-text);
+      transition: background 0.15s ease, box-shadow 0.15s ease,
+        border-color 0.15s ease, transform 0.08s ease;
+    }
+
+    .lv-btn:hover {
+      background: #f3f4f6;
+    }
+
+    .lv-btn:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    .lv-btn-secondary {
+      border-color: var(--lv-border-strong);
+    }
+
+    .lv-btn-primary {
+      background: linear-gradient(135deg, #0a84ff, #2f9bff);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(15, 118, 255, 0.35);
+    }
+
+    .lv-btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--lv-text-muted);
+    }
+
+    /* LAYOUT */
+    .lv-main {
+      flex: 1;
+      max-width: 1120px;
+      margin: 1.5rem auto 2.5rem;
+      padding: 0 1.5rem 2rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.1fr);
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 960px) {
+      .lv-main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* TABS ROW */
+    .lv-tabs {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .lv-tab {
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      color: var(--lv-text-muted);
+      cursor: pointer;
+      transition: background 0.15s ease, box-shadow 0.15s ease,
+        border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .lv-tab:hover {
+      background: rgba(255, 255, 255, 0.7);
+      border-color: var(--lv-border);
+    }
+
+    .lv-tab-active {
+      background: #ffffff;
+      color: var(--lv-text);
+      border-color: var(--lv-border);
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
+    }
+
+    /* CARDS */
+    .lv-card {
+      background: var(--lv-surface);
+      border-radius: var(--lv-radius-lg);
+      border: 1px solid var(--lv-border);
+      box-shadow: var(--lv-shadow-soft);
+      padding: 1.25rem 1.5rem;
+    }
+
+    .lv-card + .lv-card {
+      margin-top: 1rem;
+    }
+
+    .lv-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .lv-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .lv-card-subtitle {
+      font-size: 0.8rem;
+      color: var(--lv-text-muted);
+      margin-top: 0.1rem;
+    }
+
+    .lv-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-top: 0.25rem;
+    }
+
+    /* FORM */
+    .lv-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .lv-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .lv-label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-label-pill {
+      font-size: 0.75rem;
+      color: var(--lv-text-muted);
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border);
+      background: #f9fafb;
+    }
+
+    .lv-input,
+    .lv-textarea,
+    .lv-select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 0.55rem 0.75rem;
+      font-size: 0.9rem;
+      outline: none;
+      background: #ffffff;
+      color: var(--lv-text);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease;
+    }
+
+    .lv-input:focus,
+    .lv-textarea:focus,
+    .lv-select:focus {
+      border-color: var(--lv-accent);
+      box-shadow: 0 0 0 1px var(--lv-accent-soft);
+      background: #ffffff;
+    }
+
+    .lv-textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    .lv-help {
+      font-size: 0.75rem;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-inline-fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 720px) {
+      .lv-inline-fields {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* MEDIA */
+    .lv-media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .lv-media-tile {
+      position: relative;
+      border-radius: var(--lv-radius-md);
+      border: 1px dashed var(--lv-border-strong);
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 130px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .lv-media-tile.primary {
+      border-style: solid;
+      border-color: var(--lv-accent);
+      background: var(--lv-accent-soft);
+    }
+
+    .lv-media-label {
+      font-size: 0.8rem;
+      color: var(--lv-text-muted);
+      text-align: center;
+      padding: 0 0.5rem;
+      white-space: pre-line;
+    }
+
+    .lv-media-primary-tag {
+      position: absolute;
+      top: 0.45rem;
+      left: 0.45rem;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .lv-media-preview {
+      position: absolute;
+      inset: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+
+    .lv-media-remove {
+      position: absolute;
+      top: 0.35rem;
+      right: 0.35rem;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      background: rgba(17, 24, 39, 0.7);
+      color: #f9fafb;
+      padding: 0.15rem 0.4rem;
+      cursor: pointer;
+    }
+
+    .lv-gallery-previews {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+    }
+
+    .lv-gallery-tile {
+      position: relative;
+      border-radius: 10px;
+      border: 1px solid var(--lv-border-strong);
+      overflow: hidden;
+      height: 90px;
+    }
+
+    .lv-gallery-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .lv-gallery-remove {
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      font-size: 0.7rem;
+      border-radius: 999px;
+      background: rgba(17, 24, 39, 0.75);
+      color: #f9fafb;
+      padding: 0.1rem 0.35rem;
+      cursor: pointer;
+    }
+
+    /* TOGGLES */
+    .lv-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 0.25rem;
+    }
+
+    .lv-toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+    }
+
+    .lv-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .lv-toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #d1d5db;
+      border-radius: 999px;
+      transition: 0.2s;
+    }
+
+    .lv-toggle-slider::before {
+      content: "";
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      top: 3px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      transition: 0.2s;
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.5);
+    }
+
+    .lv-toggle input:checked + .lv-toggle-slider {
+      background-color: var(--lv-accent);
+    }
+
+    .lv-toggle input:checked + .lv-toggle-slider::before {
+      transform: translateX(18px);
+    }
+
+    .lv-pill {
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid var(--lv-border);
+      background: #f9fafb;
+    }
+
+    .lv-pill-success {
+      color: #059669;
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.06);
+    }
+
+    .lv-summary-section + .lv-summary-section {
+      margin-top: 1rem;
+    }
+
+    .lv-summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      padding: 0.35rem 0;
+    }
+
+    .lv-summary-label {
+      color: var(--lv-text-muted);
+    }
+
+    /* Preview product card */
+    .lv-preview-card {
+      border-radius: 16px;
+      background: linear-gradient(145deg, #f9fafb, #e5edf7);
+      padding: 0.75rem;
+      display: flex;
+      gap: 0.65rem;
+      align-items: center;
+    }
+
+    .lv-preview-image-wrap {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .lv-preview-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .lv-preview-main {
+      flex: 1;
+    }
+
+    .lv-preview-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .lv-preview-subtitle {
+      font-size: 0.78rem;
+      color: var(--lv-text-muted);
+      margin-top: 0.1rem;
+    }
+
+    .lv-preview-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.35rem;
+      gap: 0.5rem;
+    }
+
+    .lv-preview-price {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .lv-preview-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      justify-content: flex-end;
+    }
+
+    .lv-badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border);
+      background: #f9fafb;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-badge-status-active {
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.06);
+      color: #059669;
+    }
+
+    .lv-badge-status-draft {
+      border-color: rgba(251, 191, 36, 0.4);
+      background: rgba(254, 243, 199, 0.6);
+      color: #92400e;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="lv-shell">
+    <!-- HEADER -->
+    <header class="lv-header">
+      <div class="lv-header-inner">
+        <div class="lv-brand">
+          <div class="lv-brand-badge">Lv</div>
+          <div class="lv-brand-title">LumiVue Marketplace</div>
+        </div>
+
+        <nav class="lv-header-nav">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="listings.html">My products</a>
+          <a href="create-listing.html" class="active">Create listing</a>
+          <a href="orders.html">Orders</a>
+          <a href="listings.html">Listings</a>
+        </nav>
+
+        <div class="lv-header-actions">
+          <button class="lv-btn lv-btn-ghost" type="button" id="saveDraftBtn">
+            Save draft
+          </button>
+          <button class="lv-btn lv-btn-secondary" type="button" id="discardBtn">
+            Discard
+          </button>
+          <button class="lv-btn lv-btn-primary" type="button" id="publishBtn">
+            Publish product
+          </button>
+          <span class="lv-avatar" id="avatarInitial">M</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="lv-main">
+      <!-- TABS -->
+      <div class="lv-tabs">
+        <button class="lv-tab lv-tab-active" data-target="#section-details">
+          Details
+        </button>
+        <button class="lv-tab" data-target="#section-media">Media</button>
+        <button class="lv-tab" data-target="#section-pricing">Pricing</button>
+        <button class="lv-tab" data-target="#section-inventory">Inventory</button>
+        <button class="lv-tab" data-target="#section-shipping">Shipping</button>
+        <button class="lv-tab" data-target="#section-google">Google fields</button>
+        <button class="lv-tab" data-target="#section-seo">SEO</button>
+        <button class="lv-tab" data-target="#section-review-settings">
+          Reviews
+        </button>
+      </div>
+
+      <!-- LEFT COLUMN – PRODUCT FORM -->
+      <section>
+        <!-- PRODUCT DETAILS -->
+        <div class="lv-card" id="section-details">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Product details</div>
+              <p class="lv-card-subtitle">
+                Core information your buyers see on your product page.
+              </p>
+            </div>
+          </div>
+
+          <div class="lv-card-body">
+            <div class="lv-field">
+              <div class="lv-label-row">
+                <label class="lv-label" for="productTitle">Title</label>
+              </div>
+              <input
+                id="productTitle"
+                class="lv-input"
+                type="text"
+                placeholder="Crème de Lumière"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="lv-field">
+              <div class="lv-label-row">
+                <label class="lv-label" for="productSubtitle">
+                  Short subtitle (optional)
+                </label>
+                <span class="lv-label-pill">Shows in product cards</span>
+              </div>
+              <input
+                id="productSubtitle"
+                class="lv-input"
+                type="text"
+                placeholder="Radiance-restoring moisturizing cream"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="lv-field">
+              <div class="lv-label-row">
+                <label class="lv-label" for="productDescription">
+                  Description
+                </label>
+              </div>
+              <textarea
+                id="productDescription"
+                class="lv-textarea"
+                placeholder="Describe your formula, benefits, texture, key ingredients, and how to use."
+              ></textarea>
+              <p class="lv-help">
+                This is the long description area for your product story.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- MEDIA -->
+        <div class="lv-card" id="section-media">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Media</div>
+              <p class="lv-card-subtitle">
+                1 display photo, up to 19 additional photos, and 1 video (30 seconds).
+              </p>
+            </div>
+            <span class="lv-label-pill">Display · Gallery · Video</span>
+          </div>
+
+          <div class="lv-card-body">
+            <div class="lv-media-grid">
+              <!-- Display image -->
+              <div class="lv-media-tile primary" id="featuredTile">
+                <span class="lv-media-primary-tag">Display</span>
+                <span class="lv-media-label" id="featuredLabel">
+Click to upload main product photo
+1200 × 1200 recommended
+                </span>
+                <img
+                  id="featuredPreview"
+                  class="lv-media-preview"
+                  style="display:none;"
+                  alt="Featured preview"
+                />
+                <span
+                  id="featuredRemove"
+                  class="lv-media-remove"
+                  style="display:none;"
+                >
+                  ✕
+                </span>
+                <input
+                  id="featuredImage"
+                  type="file"
+                  accept="image/*"
+                  style="display:none;"
+                />
+              </div>
+
+              <!-- Add gallery button -->
+              <div class="lv-media-tile" id="galleryTile">
+                <span class="lv-media-label" id="galleryLabel">
+Add gallery photos
+Up to 19 additional images
+                </span>
+                <input
+                  id="galleryImages"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  style="display:none;"
+                />
+              </div>
+
+              <!-- Video tile -->
+              <div class="lv-media-tile" id="videoTile">
+                <span class="lv-media-label" id="videoLabel">
+Add product video
+Up to 30 seconds
+                </span>
+                <video
+                  id="videoPreview"
+                  class="lv-media-preview"
+                  style="display:none;"
+                  loop
+                ></video>
+                <span
+                  id="videoRemove"
+                  class="lv-media-remove"
+                  style="display:none;"
+                >
+                  ✕
+                </span>
+                <input
+                  id="productVideo"
+                  type="file"
+                  accept="video/*"
+                  style="display:none;"
+                />
+              </div>
+            </div>
+
+            <!-- Gallery thumbnails -->
+            <div class="lv-gallery-previews" id="galleryPreviewContainer"></div>
+
+            <p class="lv-help">
+              Media is local preview in this browser. When connected to your backend,
+              files will upload to LumiVue Storage.
+            </p>
+          </div>
+        </div>
+
+        <!-- PRICING -->
+        <div class="lv-card" id="section-pricing">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Pricing</div>
+              <p class="lv-card-subtitle">
+                Set your price and optional compare-at price.
+              </p>
+            </div>
+          </div>
+
+          <div class="lv-card-body">
+            <div class="lv-inline-fields">
+              <div class="lv-field">
+                <label class="lv-label" for="price">Price</label>
+                <div style="display:flex;align-items:center;gap:0.35rem;">
+                  <span
+                    style="font-size:0.9rem;color:var(--lv-text-muted);padding:0.45rem 0.55rem;border-radius:10px;border:1px solid var(--lv-border-strong);background:#f9fafb;"
+                    >$</span
+                  >
+                  <input
+                    id="price"
+                    class="lv-input"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    placeholder="45.00"
+                    style="flex:1;"
+                  />
+                </div>
+              </div>
+
+              <div class="lv-field">
+                <label class="lv-label" for="compareAt">Compare-at price</label>
+                <input
+                  id="compareAt"
+                  class="lv-input"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="Optional"
+                />
+                <p class="lv-help">
+                  Shows a “was” price when higher than the main price.
+                </p>
+              </div>
+            </div>
+
+            <div class="lv-inline-fields">
+              <div class="lv-field">
+                <label class="lv-label" for="costPerItem">Cost per item</label>
+                <input
+                  id="costPerItem"
+                  class="lv-input"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="Optional"
+                />
+                <p class="lv-help">
+                  Private info used for profit calculations.
+                </p>
+              </div>
+
+              <div class="lv-field">
+                <label class="lv-label" for="currency">Currency</label>
+                <select id="currency" class="lv-select">
+                  <option value="USD">USD – US Dollar</option>
+                  <option value="CAD">CAD – Canadian Dollar</option>
+                  <option value="EUR">EUR – Euro</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INVENTORY -->
+        <div class="lv-card" id="section-inventory">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Inventory</div>
+              <p class="lv-card-subtitle">
+                Track stock levels and SKUs for this product.
+              </p>
+            </div>
+          </div>
+
+          <div class="lv-card-body">
+            <div class="lv-inline-fields">
+              <div class="lv-field">
+                <label class="lv-label" for="sku">SKU (optional)</label>
+                <input
+                  id="sku"
+                  class="lv-input"
+                  type="text"
+                  placeholder="CML-902"
+                />
+              </div>
+
+              <div class="lv-field">
+                <label class="lv-label" for="barcode">Barcode (optional)</label>
+                <input
+                  id="barcode"
+                  class="lv-input"
+                  type="text"
+                  placeholder="552001789334"
+                />
+              </div>
+            </div>
+
+            <div class="lv-toggle-row">
+              <div>
+                <div class="lv-label">Track quantity</div>
+                <p class="lv-help">
+                  When turned on, LumiVue will reduce stock as orders are placed.
+                </p>
+              </div>
+              <label class="lv-toggle">
+                <input id="trackInventory" type="checkbox" checked />
+                <span class="lv-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div id="inventoryQuantityFields" class="lv-inline-fields">
+              <div class="lv-field">
+                <label class="lv-label" for="inventoryLocation">
+                  Location
+                </label>
+                <input
+                  id="inventoryLocation"
+                  class="lv-input"
+                  type="text"
+                  placeholder="Main warehouse"
+                />
+              </div>
+
+              <div class="lv-field">
+                <label class="lv-label" for="inventoryAvailable">
+                  Available
+                </label>
+                <input
+                  id="inventoryAvailable"
+                  class="lv-input"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="10"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SHIPPING -->
+        <div class="lv-card" id="section-shipping">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Shipping</div>
+              <p class="lv-card-subtitle">
+                Required if you ship a physical product.
+              </p>
+            </div>
+          </div>
+
+          <div class="lv-card-body">
+            <div class="lv-toggle-row">
+              <div>
+                <div class="lv-label">Physical product</div>
+                <p class="lv-help">
+                  Turn off for digital items or services.
+                </p>
+              </div>
+              <label class="lv-toggle">
+                <input id="isPhysical" type="checkbox" checked />
+                <span class="lv-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div id="shippingFields">
+              <div class="lv-inline-fields">
+                <div class="lv-field">
+                  <label class="lv-label" for="packagePreset">Package</label>
+                  <select id="packagePreset" class="lv-select">
+                    <option>Store default – Sample box</option>
+                    <option>Small parcel</option>
+                    <option>Medium parcel</option>
+                    <option>Custom</option>
+                  </select>
+                </div>
+
+                <div class="lv-field">
+                  <label class="lv-label" for="productWeight">
+                    Product weight
+                  </label>
+                  <div
+                    style="display:flex;align-items:center;gap:0.35rem;max-width:220px;"
+                  >
+                    <input
+                      id="productWeight"
+                      class="lv-input"
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      placeholder="1.1"
+                      style="flex:1;"
+                    />
+                    <select
+                      id="weightUnit"
+                      class="lv-select"
+                      style="width:80px;"
+                    >
+                      <option value="lb">lb</option>
+                      <option value="oz">oz</option>
+                      <option value="kg">kg</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="lv-inline-fields">
+                <div class="lv-field">
+                  <label class="lv-label" for="countryOfOrigin">
+                    Country of origin
+                  </label>
+                  <input
+                    id="countryOfOrigin"
+                    class="lv-input"
+                    type="text"
+                    placeholder="US"
+                  />
+                </div>
+
+                <div class="lv-field">
+                  <label class="lv-label" for="hsCode">HS Code</label>
+                  <input
+                    id="hsCode"
+                    class="lv-input"
+                    type="text"
+                    placeholder="3304.99"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GOOGLE / VARIANT METAFIELDS -->
+        <div class="lv-card" id="section-google">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Variant metafields (Google)</div>
+              <p class="lv-card-subtitle">
+                Optional Google fields for ads and shopping feeds.
+              </p>
+            </div>
+          </div>
+
+          <div class="lv-card-body">
+            <div class="lv-inline-fields">
+              <div class="lv-field">
+                <label class="lv-label" for="googleAge">
+                  Google: Age Group
+                </label>
+                <input
+                  id="googleAge"
+                  class="lv-input"
+                  type="text"
+                  placeholder="Adult"
+                />
+              </div>
+
+              <div class="lv-field">
+                <label class="lv-label" for="googleCondition">
+                  Google: Condition
+                </label>
+                <input
+                  id="googleCondition"
+                  class="lv-input"
+                  type="text"
+                  placeholder="Brand New"
+                />
+              </div>
+            </div>
+
+            <div class="lv-inline-fields">
+              <div class="lv-field">
+                <label class="lv-label" for="googleGender">
+                  Google: Gender
+                </label>
+                <input
+                  id="googleGender"
+                  class="lv-input"
+                  type="text"
+                  placeholder="Unisex"
+                />
+              </div>
+
+              <div class="lv-field">
+                <label class="lv-label" for="googleMpn">
+                  Google: MPN
+                </label>
+                <input
+                  id="googleMpn"
+                  class="lv-input"
+                  type="text"
+                  placeholder="LP-002"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO & TAGS -->
+        <div class="lv-card" id="section-seo">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Search engine listing</div>
+              <p class="lv-card-subtitle">
+                Control how your product appears in search results.
+              </p>
+            </div>
+          </div>
+
+          <div class="lv-card-body">
+            <div class="lv-field">
+              <label class="lv-label" for="seoTitle">Page title</label>
+              <input
+                id="seoTitle"
+                class="lv-input"
+                type="text"
+                placeholder="Crème de Lumière – Hydrating Face Cream | La Perj"
+              />
+            </div>
+
+            <div class="lv-field">
+              <label class="lv-label" for="seoDescription">
+                Meta description
+              </label>
+              <textarea
+                id="seoDescription"
+                class="lv-textarea"
+                style="min-height:90px;"
+                placeholder="A silky, weightless moisturizing cream created to flood the skin with lasting hydration and a radiant, supple glow..."
+              ></textarea>
+            </div>
+
+            <div class="lv-field">
+              <div class="lv-label-row">
+                <span class="lv-label">Tags</span>
+                <span class="lv-label-pill">For filters &amp; search</span>
+              </div>
+              <input
+                id="tags"
+                class="lv-input"
+                type="text"
+                placeholder="hydrating, face cream, hyaluronic acid, vegan, cruelty free"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- REVIEW SETTINGS (CUSTOMER REVIEWS) -->
+        <div class="lv-card" id="section-review-settings">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Customer reviews</div>
+              <p class="lv-card-subtitle">
+                Control how reviews appear on this product.
+              </p>
+            </div>
+          </div>
+          <div class="lv-card-body">
+            <div class="lv-toggle-row">
+              <div>
+                <div class="lv-label">Allow customer reviews</div>
+                <p class="lv-help">
+                  When turned on, verified customers can leave star ratings and comments.
+                </p>
+              </div>
+              <label class="lv-toggle">
+                <input id="allowReviews" type="checkbox" checked />
+                <span class="lv-toggle-slider"></span>
+              </label>
+            </div>
+
+            <div class="lv-field">
+              <label class="lv-label" for="reviewsNotes">
+                Internal notes (optional)
+              </label>
+              <textarea
+                id="reviewsNotes"
+                class="lv-textarea"
+                style="min-height:80px;"
+                placeholder="Example: highlight texture, fragrance, or results in the review prompt."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN – SUMMARY / ORGANIZATION -->
+      <aside>
+        <div class="lv-card lv-summary-section" id="section-status">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Status &amp; visibility</div>
+              <p class="lv-card-subtitle">
+                Control whether this listing is draft or active in your marketplace.
+              </p>
+            </div>
+          </div>
+
+          <div class="lv-card-body">
+            <div class="lv-field">
+              <label class="lv-label" for="productStatus">Status</label>
+              <select id="productStatus" class="lv-select">
+                <option value="draft">Draft</option>
+                <option value="active">Active</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="lv-card lv-summary-section">
+          <div class="lv-card-header">
+            <div>
+              <div class="lv-card-title">Product organization</div>
+            </div>
+          </div>
+
+          <div class="lv-card-body">
+            <div class="lv-field">
+              <label class="lv-label" for="productType">Type</label>
+              <input
+                id="productType"
+                class="lv-input"
+                type="text"
+                placeholder="Skincare"
+              />
+            </div>
+
+            <div class="lv-field">
+              <label class="lv-label" for="productVendor">Vendor</label>
+              <input
+                id="productVendor"
+                class="lv-input"
+                type="text"
+                placeholder="La Perj"
+              />
+            </div>
+
+            <div class="lv-field">
+              <label class="lv-label" for="collections">Collections</label>
+              <input
+                id="collections"
+                class="lv-input"
+                type="text"
+                placeholder="Lumière Collection, Holiday Sets"
+              />
+              <p class="lv-help">
+                Later this can turn into a dropdown connected to vendor collections.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lv-card lv-summary-section" id="section-review">
+          <div class="lv-card-header">
+            <div class="lv-card-title">Preview</div>
+          </div>
+          <div class="lv-card-body">
+            <div id="previewEmpty" class="lv-help" style="margin-bottom:0.75rem;">
+              Click <strong>Preview product</strong> or <strong>Publish product</strong>
+              to see how this item will appear in your LumiVue marketplace.
+            </div>
+
+            <div
+              id="previewProduct"
+              class="lv-preview-card"
+              style="display:none;margin-bottom:0.75rem;"
+            >
+              <div class="lv-preview-image-wrap">
+                <img
+                  id="previewImage"
+                  class="lv-preview-image"
+                  alt="Preview image"
+                />
+              </div>
+              <div class="lv-preview-main">
+                <div class="lv-preview-title" id="previewTitle">
+                  Product title
+                </div>
+                <div class="lv-preview-subtitle" id="previewSubtitle">
+                  Short subtitle
+                </div>
+                <div class="lv-preview-meta">
+                  <div>
+                    <div
+                      style="font-size:0.78rem;color:var(--lv-text-muted);margin-bottom:0.1rem;"
+                      id="previewVendorType"
+                    >
+                      Vendor · Type
+                    </div>
+                    <div class="lv-preview-price" id="previewPrice">$0.00</div>
+                  </div>
+                  <div class="lv-preview-tags">
+                    <span
+                      class="lv-badge lv-badge-status-draft"
+                      id="previewStatusBadge"
+                    >
+                      Draft
+                    </span>
+                    <span class="lv-badge" id="previewCatalogBadge">
+                      Online marketplace
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="lv-btn lv-btn-secondary"
+              style="width:100%;"
+              id="previewBtn"
+            >
+              View product preview
+            </button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- BEHAVIOR FOR INPUTS + MEDIA PREVIEW + TABS + PREVIEW/PUBLISH -->
+  <script type="module">
+    /***** Firebase setup (CDN modular) *****/
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      serverTimestamp,
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665",
+    };
+
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      auth = getAuth(app);
+      console.log("Firebase initialized for LumiVue");
+
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          alert("Your session has ended. Please log in again to create a listing.");
+          window.location.href = "login.html";
+          return;
+        }
+        currentUser = user;
+        console.log("Create-listing user:", user.uid);
+
+        const avatarInitial = document.getElementById("avatarInitial");
+        if (avatarInitial) {
+          const letter =
+            (user.displayName && user.displayName[0]) ||
+            (user.email && user.email[0]) ||
+            "M";
+          avatarInitial.textContent = letter.toUpperCase();
+        }
+
+        const vendorInput = document.getElementById("productVendor");
+        if (vendorInput && !vendorInput.value) {
+          if (user.displayName) {
+            vendorInput.value = user.displayName;
+          } else if (user.email) {
+            vendorInput.value = user.email.split("@")[0];
+          }
+        }
+      });
+    } catch (err) {
+      console.error("Firebase init error", err);
+    }
+
+    /***** UI LOGIC *****/
+
+    // Ensure fields are editable
+    document.querySelectorAll("input, textarea, select").forEach((el) => {
+      el.disabled = false;
+      el.readOnly = false;
+    });
+
+    // Toggles
+    const isPhysicalCheckbox = document.getElementById("isPhysical");
+    const shippingFields = document.getElementById("shippingFields");
+    const trackInventoryCheckbox = document.getElementById("trackInventory");
+    const inventoryQuantityFields = document.getElementById(
+      "inventoryQuantityFields"
+    );
+
+    function syncShippingVisibility() {
+      if (!shippingFields) return;
+      shippingFields.style.display = isPhysicalCheckbox.checked
+        ? "block"
+        : "none";
+    }
+
+    function syncInventoryVisibility() {
+      if (!inventoryQuantityFields) return;
+      inventoryQuantityFields.style.display = trackInventoryCheckbox.checked
+        ? "grid"
+        : "none";
+    }
+
+    if (isPhysicalCheckbox) {
+      isPhysicalCheckbox.addEventListener("change", syncShippingVisibility);
+      syncShippingVisibility();
+    }
+
+    if (trackInventoryCheckbox) {
+      trackInventoryCheckbox.addEventListener("change", syncInventoryVisibility);
+      syncInventoryVisibility();
+    }
+
+    // Simple toast helper
+    function toast(msg) {
+      alert(msg);
+    }
+
+    // MEDIA HANDLERS
+    const featuredTile = document.getElementById("featuredTile");
+    const galleryTile = document.getElementById("galleryTile");
+    const videoTile = document.getElementById("videoTile");
+
+    const featuredInput = document.getElementById("featuredImage");
+    const galleryInput = document.getElementById("galleryImages");
+    const videoInput = document.getElementById("productVideo");
+
+    const featuredPreview = document.getElementById("featuredPreview");
+    const featuredRemove = document.getElementById("featuredRemove");
+    const featuredLabel = document.getElementById("featuredLabel");
+
+    const galleryLabel = document.getElementById("galleryLabel");
+    const galleryPreviewContainer = document.getElementById(
+      "galleryPreviewContainer"
+    );
+
+    const videoPreview = document.getElementById("videoPreview");
+    const videoRemove = document.getElementById("videoRemove");
+    const videoLabel = document.getElementById("videoLabel");
+
+    function attachMediaHandlers() {
+      // Featured image – 1 only
+      if (featuredTile && featuredInput) {
+        featuredTile.addEventListener("click", () => {
+          featuredInput.click();
+        });
+
+        featuredInput.addEventListener("change", () => {
+          const file = featuredInput.files && featuredInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            featuredPreview.src = e.target.result;
+            featuredPreview.style.display = "block";
+            featuredLabel.style.display = "none";
+            featuredRemove.style.display = "inline-flex";
+          };
+          reader.readAsDataURL(file);
+        });
+
+        featuredRemove.addEventListener("click", (e) => {
+          e.stopPropagation();
+          featuredInput.value = "";
+          featuredPreview.src = "";
+          featuredPreview.style.display = "none";
+          featuredLabel.style.display = "block";
+          featuredRemove.style.display = "none";
+        });
+      }
+
+      // Gallery images – up to 19
+      const galleryState = []; // {file, url}
+
+      function updateGalleryLabel() {
+        const count = galleryState.length;
+        if (count === 0) {
+          galleryLabel.textContent =
+            "Add gallery photos\nUp to 19 additional images";
+        } else {
+          galleryLabel.textContent =
+            count +
+            " photo" +
+            (count > 1 ? "s selected (max 19)" : " selected (max 19)");
+        }
+      }
+
+      function renderGallery() {
+        galleryPreviewContainer.innerHTML = "";
+        galleryState.forEach((item, index) => {
+          const tile = document.createElement("div");
+          tile.className = "lv-gallery-tile";
+
+          const img = document.createElement("img");
+          img.className = "lv-gallery-img";
+          img.src = item.url;
+          img.alt = "Gallery image " + (index + 1);
+
+          const remove = document.createElement("span");
+          remove.className = "lv-gallery-remove";
+          remove.textContent = "✕";
+          remove.addEventListener("click", () => {
+            URL.revokeObjectURL(item.url);
+            galleryState.splice(index, 1);
+            renderGallery();
+            updateGalleryLabel();
+          });
+
+          tile.appendChild(img);
+          tile.appendChild(remove);
+          galleryPreviewContainer.appendChild(tile);
+        });
+
+        updateGalleryLabel();
+      }
+
+      if (galleryTile && galleryInput) {
+        galleryTile.addEventListener("click", () => {
+          galleryInput.click();
+        });
+
+        galleryInput.addEventListener("change", () => {
+          const files = Array.from(galleryInput.files || []);
+          if (!files.length) return;
+
+          const remaining = 19 - galleryState.length;
+          const usable = files.slice(0, remaining);
+
+          usable.forEach((file) => {
+            const url = URL.createObjectURL(file);
+            galleryState.push({ file, url });
+          });
+
+          if (files.length > usable.length) {
+            toast(
+              "You selected more than 19 images. Only the first 19 are used in this listing."
+            );
+          }
+
+          renderGallery();
+        });
+      }
+
+      // Video – 1 file (UI only, with sound)
+      if (videoTile && videoInput) {
+        videoTile.addEventListener("click", () => {
+          videoInput.click();
+        });
+
+        videoInput.addEventListener("change", () => {
+          const file = videoInput.files && videoInput.files[0];
+          if (!file) return;
+
+          const url = URL.createObjectURL(file);
+          videoPreview.src = url;
+          videoPreview.style.display = "block";
+          videoLabel.style.display = "none";
+          videoRemove.style.display = "inline-flex";
+
+          // Try to play; if the browser blocks it, user can tap to play
+          videoPreview.play().catch(() => {});
+        });
+
+        videoPreview.addEventListener("click", () => {
+          if (videoPreview.paused) {
+            videoPreview.play().catch(() => {});
+          } else {
+            videoPreview.pause();
+          }
+        });
+
+        videoRemove.addEventListener("click", (e) => {
+          e.stopPropagation();
+          videoInput.value = "";
+          videoPreview.pause();
+          videoPreview.src = "";
+          videoPreview.style.display = "none";
+          videoLabel.style.display = "block";
+          videoRemove.style.display = "none";
+        });
+      }
+    }
+
+    // Collect form data
+    function getVal(id) {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : "";
+    }
+
+    function getFormData() {
+      const tagsRaw = getVal("tags");
+      const tags =
+        tagsRaw.length > 0
+          ? tagsRaw.split(",").map((t) => t.trim()).filter(Boolean)
+          : [];
+
+      return {
+        title: getVal("productTitle"),
+        subtitle: getVal("productSubtitle"),
+        description: getVal("productDescription"),
+        price: getVal("price"),
+        compareAt: getVal("compareAt"),
+        costPerItem: getVal("costPerItem"),
+        currency: getVal("currency") || "USD",
+        type: getVal("productType"),
+        vendor: getVal("productVendor"),
+        collections: getVal("collections"),
+        status: document.getElementById("productStatus")?.value || "draft",
+        tags,
+      };
+    }
+
+    // PREVIEW RENDERING
+    function renderPreview(data) {
+      const empty = document.getElementById("previewEmpty");
+      const card = document.getElementById("previewProduct");
+      if (!empty || !card) return;
+
+      if (!data || !data.title) {
+        empty.style.display = "block";
+        card.style.display = "none";
+        return;
+      }
+
+      empty.style.display = "none";
+      card.style.display = "flex";
+
+      const titleEl = document.getElementById("previewTitle");
+      const subtitleEl = document.getElementById("previewSubtitle");
+      const vendorTypeEl = document.getElementById("previewVendorType");
+      const priceEl = document.getElementById("previewPrice");
+      const statusBadge = document.getElementById("previewStatusBadge");
+      const catalogBadge = document.getElementById("previewCatalogBadge");
+      const imgEl = document.getElementById("previewImage");
+
+      if (titleEl) titleEl.textContent = data.title || "Untitled product";
+      if (subtitleEl)
+        subtitleEl.textContent = data.subtitle || "Add a short subtitle.";
+      if (vendorTypeEl) {
+        const vendor = data.vendor || "Vendor";
+        const type = data.type || "Category";
+        vendorTypeEl.textContent = vendor + " · " + type;
+      }
+      if (priceEl) {
+        const priceNumber = parseFloat(data.price || "0") || 0;
+        priceEl.textContent =
+          (data.currency || "USD") === "USD"
+            ? "$" + priceNumber.toFixed(2)
+            : priceNumber.toFixed(2) + " " + (data.currency || "");
+      }
+
+      if (statusBadge) {
+        statusBadge.textContent =
+          data.status === "active" ? "Active" : "Draft";
+        statusBadge.classList.remove(
+          "lv-badge-status-active",
+          "lv-badge-status-draft"
+        );
+        statusBadge.classList.add(
+          data.status === "active"
+            ? "lv-badge-status-active"
+            : "lv-badge-status-draft"
+        );
+      }
+
+      if (catalogBadge) {
+        catalogBadge.textContent = "Online marketplace";
+      }
+
+      const featuredPreviewImg = document.getElementById("featuredPreview");
+      if (imgEl && featuredPreviewImg && featuredPreviewImg.src) {
+        imgEl.src = featuredPreviewImg.src;
+        imgEl.style.display = "block";
+      } else if (imgEl) {
+        imgEl.style.display = "none";
+      }
+    }
+
+    // Save product locally (draft or active)
+    function saveProduct(status) {
+      const data = getFormData();
+      if (!data.title) {
+        toast("Please add a product title before saving or publishing.");
+        return null;
+      }
+      data.status = status;
+      data.localSavedAt = new Date().toISOString();
+
+      const statusSelect = document.getElementById("productStatus");
+      if (statusSelect) statusSelect.value = status;
+
+      try {
+        const key = "lumivueProducts";
+        const existing = JSON.parse(localStorage.getItem(key) || "[]");
+        const id = Date.now();
+        existing.push({ id, ...data });
+        localStorage.setItem(key, JSON.stringify(existing));
+      } catch (e) {
+        console.error("Local save failed", e);
+      }
+
+      return data;
+    }
+
+    // BUTTON HANDLERS (save / discard / publish / preview)
+    function attachButtonHandlers() {
+      const saveDraftBtn = document.getElementById("saveDraftBtn");
+      const discardBtn = document.getElementById("discardBtn");
+      const publishBtn = document.getElementById("publishBtn");
+      const previewBtn = document.getElementById("previewBtn");
+      const statusSelect = document.getElementById("productStatus");
+
+      if (saveDraftBtn) {
+        saveDraftBtn.addEventListener("click", () => {
+          const data = saveProduct("draft");
+          if (data) {
+            renderPreview(data);
+            toast(
+              "Draft saved in this browser. When the backend is connected, this will save to your LumiVue account."
+            );
+          }
+        });
+      }
+
+      if (discardBtn) {
+        discardBtn.addEventListener("click", () => {
+          if (
+            !confirm(
+              "Clear all fields for this product? This only resets the form in this browser."
+            )
+          ) {
+            return;
+          }
+          document
+            .querySelectorAll(
+              "input.lv-input, textarea.lv-textarea, select.lv-select"
+            )
+            .forEach((el) => {
+              if (el.type === "checkbox" || el.type === "radio") return;
+              if (el.tagName.toLowerCase() === "select") {
+                el.selectedIndex = 0;
+              } else {
+                el.value = "";
+              }
+            });
+          const featuredPreviewImg = document.getElementById("featuredPreview");
+          const featuredLabelEl = document.getElementById("featuredLabel");
+          const featuredRemoveEl = document.getElementById("featuredRemove");
+          if (featuredPreviewImg && featuredLabelEl && featuredRemoveEl) {
+            featuredPreviewImg.src = "";
+            featuredPreviewImg.style.display = "none";
+            featuredLabelEl.style.display = "block";
+            featuredRemoveEl.style.display = "none";
+          }
+          const galleryPreviewContainerEl =
+            document.getElementById("galleryPreviewContainer");
+          if (galleryPreviewContainerEl)
+            galleryPreviewContainerEl.innerHTML = "";
+          const videoPreviewEl = document.getElementById("videoPreview");
+          const videoLabelEl = document.getElementById("videoLabel");
+          const videoRemoveEl = document.getElementById("videoRemove");
+          if (videoPreviewEl && videoLabelEl && videoRemoveEl) {
+            videoPreviewEl.pause();
+            videoPreviewEl.src = "";
+            videoPreviewEl.style.display = "none";
+            videoLabelEl.style.display = "block";
+            videoRemoveEl.style.display = "none";
+          }
+          renderPreview(null);
+          toast("Form cleared.");
+        });
+      }
+
+      if (publishBtn) {
+        publishBtn.addEventListener("click", async () => {
+          const data = saveProduct("active");
+          if (!data) return;
+
+          renderPreview(data);
+
+          if (!db) {
+            toast(
+              "Product published locally as ACTIVE, but the live database is not connected."
+            );
+            return;
+          }
+
+          if (!currentUser) {
+            toast(
+              "Your session is missing. Please log in again before publishing."
+            );
+            window.location.href = "login.html";
+            return;
+          }
+
+          try {
+            const payload = {
+              ...data,
+              creatorId: currentUser.uid,
+              creatorEmail: currentUser.email || "",
+              createdAt: serverTimestamp(),
+            };
+
+            // Save to top-level 'listings' collection
+            const docRef = await addDoc(
+              collection(db, "listings"),
+              payload
+            );
+            console.log("Listing saved with id", docRef.id);
+            toast("Product published as ACTIVE and saved to your LumiVue listings.");
+          } catch (err) {
+            console.error("Error saving listing", err);
+            toast(
+              "Product saved locally, but there was an error saving to the live database: " +
+                (err && err.message ? err.message : "unknown error")
+            );
+          }
+        });
+      }
+
+      if (previewBtn) {
+        previewBtn.addEventListener("click", () => {
+          const data = getFormData();
+          renderPreview(data);
+        });
+      }
+
+      if (statusSelect) {
+        statusSelect.addEventListener("change", () => {
+          const data = getFormData();
+          data.status = statusSelect.value || "draft";
+          renderPreview(data);
+        });
+      }
+    }
+
+    // TABS – smooth scroll
+    function attachTabs() {
+      const tabs = document.querySelectorAll(".lv-tab");
+      if (!tabs.length) return;
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const targetSelector = tab.getAttribute("data-target");
+          if (targetSelector) {
+            const section = document.querySelector(targetSelector);
+            if (section) {
+              section.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }
+          }
+          tabs.forEach((t) => t.classList.remove("lv-tab-active"));
+          tab.classList.add("lv-tab-active");
+        });
+      });
+    }
+
+    // INIT
+    document.addEventListener("DOMContentLoaded", () => {
+      attachMediaHandlers();
+      attachButtonHandlers();
+      attachTabs();
+      // Initial preview state
+      renderPreview(null);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LumiVue – Tax forms & marketplace agreements</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    :root{
+      --lv-bg:#f4f1eb;
+      --lv-surface:#ffffff;
+      --lv-border:#ddd3c6;
+      --lv-border-strong:#ccc0b1;
+      --lv-text:#2c1e19;
+      --lv-text-muted:#7a6a5c;
+      --lv-accent:#c98a5a;
+      --lv-accent-soft:#fbede1;
+      --lv-radius-lg:14px;
+      --lv-shadow-soft:0 24px 60px rgba(15,23,42,.18);
+      --lv-danger:#dc2626;
+      --lv-danger-soft:#fee2e2;
+    }
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top left,#f3e4ce,#e8dcc7 48%,#ddc8aa);
+      color:var(--lv-text);
+    }
+    .shell{min-height:100vh;display:flex;flex-direction:column;}
+
+    header{
+      height:64px;display:flex;align-items:center;justify-content:center;
+      border-bottom:1px solid rgba(0,0,0,.04);
+      backdrop-filter:blur(16px);background:rgba(232,220,199,.88);
+    }
+    .nav-inner{
+      width:100%;max-width:1120px;padding:0 24px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .brand{display:flex;flex-direction:column;gap:2px;}
+    .brand-main{
+      font-size:15px;letter-spacing:.22em;text-transform:uppercase;
+      font-weight:600;color:var(--lv-text);
+    }
+    .brand-sub{
+      font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+      color:var(--lv-text-muted);
+    }
+    nav{
+      display:flex;align-items:center;gap:16px;
+      font-size:12px;text-transform:uppercase;letter-spacing:.14em;
+    }
+    nav a{
+      text-decoration:none;color:var(--lv-text-muted);
+      padding-bottom:2px;border-bottom:1px solid transparent;
+    }
+    nav a.active{color:var(--lv-text);border-bottom-color:var(--lv-border);}
+    .logout{border-left:1px solid rgba(0,0,0,.1);padding-left:14px;margin-left:8px;}
+    .logout a{color:var(--lv-danger);font-weight:500;}
+
+    main{flex:1;display:flex;justify-content:center;padding:32px 16px 48px;}
+    .card{
+      width:100%;max-width:1120px;background:rgba(255,255,255,.32);
+      border-radius:22px;border:1px solid rgba(201,160,122,.45);
+      padding:26px 28px 30px;
+      box-shadow:0 22px 60px rgba(115,82,52,.20),0 0 0 1px rgba(255,255,255,.6);
+      backdrop-filter:blur(14px);
+      position:relative;
+    }
+
+    .back-link{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:11px;text-transform:uppercase;letter-spacing:.14em;
+      margin-bottom:18px;color:var(--lv-text-muted);cursor:pointer;
+    }
+    .back-link span{font-size:16px;}
+
+    h1{
+      margin:0 0 6px;font-size:22px;text-transform:uppercase;
+      letter-spacing:.1em;font-weight:800;color:#5c3f28;
+    }
+    p.lead{
+      margin:0 0 20px;font-size:13px;
+      color:var(--lv-text-muted);max-width:540px;
+    }
+
+    form{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px 18px;
+    }
+    label{
+      font-size:12px;text-transform:uppercase;letter-spacing:.12em;
+      color:var(--lv-text-muted);margin-bottom:4px;display:block;
+    }
+    input,select,textarea{
+      width:100%;padding:8px 10px;border-radius:8px;
+      border:1px solid rgba(201,160,122,.8);
+      background:#f7e7cf;font-size:13px;color:var(--lv-text);
+    }
+    textarea{min-height:70px;resize:vertical;}
+    .full{grid-column:1 / -1;}
+
+    .actions{
+      margin-top:20px;display:flex;
+      justify-content:space-between;align-items:center;gap:16px;
+    }
+    .hint{font-size:11px;color:var(--lv-text-muted);}
+    button{
+      padding:8px 18px;border-radius:999px;border:1px solid rgba(43,33,24,.7);
+      background:#fff7ec;font-size:11px;text-transform:uppercase;
+      letter-spacing:.16em;cursor:pointer;
+      box-shadow:0 18px 35px rgba(0,0,0,.18);
+    }
+    button:hover:not([disabled]){
+      background:var(--lv-accent);color:#fff;border-color:var(--lv-accent);
+    }
+    button[disabled]{opacity:.6;cursor:default;box-shadow:none;}
+
+    .status-pill{
+      font-size:11px;text-transform:uppercase;letter-spacing:.14em;
+      padding:6px 12px;border-radius:999px;
+      border:1px solid var(--lv-border-strong);
+      background:var(--lv-accent-soft);color:var(--lv-text);
+      min-width:160px;text-align:center;
+    }
+
+    .loading-overlay{
+      position:absolute;inset:0;border-radius:22px;
+      background:rgba(244,241,235,.65);
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;color:var(--lv-text-muted);
+      backdrop-filter:blur(4px);pointer-events:none;
+    }
+    .loading-overlay.hidden{display:none;}
+
+    @media(max-width:768px){
+      .nav-inner,.card{padding:16px;}
+      form{grid-template-columns:1fr;}
+      .actions{flex-direction:column;align-items:flex-start;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <div class="nav-inner">
+        <div class="brand">
+          <div class="brand-main">LUMIVUE</div>
+          <div class="brand-sub">Marketplace · Vendor account</div>
+        </div>
+        <nav>
+          <a href="marketplace.html">Marketplace</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="listings.html">My listings</a>
+          <span class="logout"><a href="logout.html">Log out</a></span>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="loading-overlay" id="loadingOverlay">
+          Loading tax details…
+        </div>
+
+        <div class="back-link" onclick="window.location.href='account.html'">
+          <span>←</span> Back to vendor account
+        </div>
+
+        <h1>Tax forms &amp; marketplace agreements</h1>
+        <p class="lead">
+          Vendors will provide the tax information required for their region and agree to the LumiVue marketplace terms.
+        </p>
+
+        <form id="taxForm">
+          <div>
+            <label for="taxType">Tax entity type</label>
+            <select id="taxType">
+              <option value="">Select type</option>
+              <option>Individual / sole proprietor</option>
+              <option>Single-member LLC</option>
+              <option>LLC – Partnership</option>
+              <option>Corporation</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="tin">Tax ID</label>
+            <input id="tin" type="text" placeholder="Enter SSN / EIN / tax ID" />
+          </div>
+
+          <div class="full">
+            <label for="country">Tax country / region</label>
+            <select id="country">
+              <option value="">Select country or region</option>
+              <option>United States</option>
+              <option>Canada</option>
+              <option>United Kingdom</option>
+              <option>Australia</option>
+            </select>
+          </div>
+
+          <div class="full">
+            <label for="formType">Form type</label>
+            <select id="formType">
+              <option value="">Select form type</option>
+              <option>W-9</option>
+              <option>W-8BEN</option>
+              <option>W-8BEN-E</option>
+            </select>
+          </div>
+
+          <div class="full">
+            <label for="agreement">Marketplace agreement notes</label>
+            <textarea id="agreement" placeholder="Vendor can add any agreement notes or reference here."></textarea>
+          </div>
+
+          <div class="full">
+            <label>
+              <input type="checkbox" id="taxConfirm" />
+              I confirm the information is accurate and I agree to the LumiVue marketplace terms.
+            </label>
+          </div>
+
+          <div class="actions">
+            <span class="hint">
+              This information is stored securely for compliance and will be used when generating tax documents.
+            </span>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="status-pill" id="saveStatus">Connecting…</div>
+              <button type="button" id="saveButton">Save tax details</button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== LUMIVUE · SHARED FIREBASE BLOCK (COMPAT 10.14.1) ===== -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.appspot.com",
+      messagingSenderId: "112402036736",
+      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+    const storage = firebase.storage();
+  </script>
+  <!-- ===== END LUMIVUE FIREBASE BLOCK ===== -->
+
+  <script>
+    (function () {
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const saveBtn        = document.getElementById('saveButton');
+      const saveStatus     = document.getElementById('saveStatus');
+
+      const taxTypeInput   = document.getElementById('taxType');
+      const tinInput       = document.getElementById('tin');
+      const countryInput   = document.getElementById('country');
+      const formTypeInput  = document.getElementById('formType');
+      const agreementInput = document.getElementById('agreement');
+      const confirmInput   = document.getElementById('taxConfirm');
+
+      let currentUser = null;
+
+      function setStatus(text,tone){
+        saveStatus.textContent = text;
+        if(tone==='error'){
+          saveStatus.style.background='#fee2e2';
+          saveStatus.style.borderColor='#dc2626';
+          saveStatus.style.color='#7c1f1f';
+        } else if(tone==='success'){
+          saveStatus.style.background='var(--lv-accent-soft)';
+          saveStatus.style.borderColor='var(--lv-accent)';
+          saveStatus.style.color='#3f3a2a';
+        } else {
+          saveStatus.style.background='var(--lv-accent-soft)';
+          saveStatus.style.borderColor='var(--lv-border)';
+          saveStatus.style.color='var(--lv-text)';
+        }
+      }
+
+      function showLoading(show){
+        loadingOverlay.classList.toggle('hidden',!show);
+      }
+
+      async function loadExistingData(){
+        try{
+          showLoading(true);
+          setStatus('Loading…');
+
+          const docRef = db.collection('creators').doc(currentUser.uid);
+          const snap   = await docRef.get();
+
+          if(snap.exists){
+            const data = snap.data() || {};
+            taxTypeInput.value  = data.taxType      || '';
+            tinInput.value      = data.tin          || '';
+            countryInput.value  = data.taxCountry   || '';
+            formTypeInput.value = data.formType     || '';
+            agreementInput.value = data.agreementNotes || '';
+            if(typeof data.taxConfirmed === 'boolean'){
+              confirmInput.checked = data.taxConfirmed;
+            }
+          }
+
+          setStatus('Loaded');
+        } catch(err){
+          console.error('Error loading tax info',err);
+          setStatus('Load error','error');
+        } finally{
+          showLoading(false);
+        }
+      }
+
+      async function saveTaxInfo(){
+        if(!currentUser){
+          setStatus('Please sign in again','error');
+          return;
+        }
+
+        const taxType  = taxTypeInput.value.trim();
+        const tin      = tinInput.value.trim();
+        const country  = countryInput.value.trim();
+        const formType = formTypeInput.value.trim();
+        const agreed   = confirmInput.checked;
+
+        if(!taxType || !tin || !country || !formType || !agreed){
+          setStatus('All fields + agreement required','error');
+          return;
+        }
+
+        saveBtn.disabled = true;
+        setStatus('Saving…');
+
+        try{
+          const docRef = db.collection('creators').doc(currentUser.uid);
+
+          const payload = {
+            taxType,
+            tin,
+            taxCountry:country,
+            formType,
+            agreementNotes:agreementInput.value.trim() || null,
+            taxConfirmed:true,
+            updatedAt:firebase.firestore.FieldValue.serverTimestamp(),
+            sections:{tax:{completed:true}}
+          };
+
+          await docRef.set(payload,{merge:true});
+          setStatus('Saved','success');
+        } catch(err){
+          console.error('Error saving tax info',err);
+          setStatus('Save error','error');
+          alert('Could not save tax details: '+err.message);
+        } finally{
+          saveBtn.disabled = false;
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded',()=>{
+        showLoading(true);
+        setStatus('Connecting…');
+
+        auth.onAuthStateChanged(async (user)=>{
+          if(!user){
+            const redirect = encodeURIComponent(window.location.pathname);
+            window.location.href='login.html?redirect='+redirect;
+            return;
+          }
+
+          currentUser = user;
+          setStatus('Connected','success');
+          await loadExistingData();
+        });
+
+        saveBtn.addEventListener('click',saveTaxInfo);
+      });
+    })();
+  </script>
+
+</body>
+</html>

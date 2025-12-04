@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Start Listing · LumiVue Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Helvetica Neue", Arial, sans-serif;
+      background: #020617;
+      color: #F5F3EE;
+    }
+
+    .auth-page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px 40px;
+    }
+
+    @media (max-width: 640px) {
+      .auth-page {
+        padding: 0 16px 32px;
+      }
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 26px 0 18px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand-lockup {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: #F5F3EE;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .brand-lockup span {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #C6A574;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      font-size: 13px;
+      color: #e5e7eb;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(198,165,116,0.45);
+      background: transparent;
+      transition: all 0.16s ease;
+    }
+
+    .nav-btn:hover {
+      border-color: rgba(198,165,116,0.9);
+      color: #C6A574;
+    }
+
+    .auth-card {
+      background: radial-gradient(
+        circle at top left,
+        rgba(198,165,116,0.30),
+        #0F2235 55%,
+        #020617 100%
+      );
+      border-radius: 26px;
+      padding: 24px 26px 22px;
+      border: 1px solid rgba(198,165,116,0.78);
+      box-shadow: 0 26px 70px rgba(0,0,0,0.9);
+      margin-bottom: 26px;
+      max-width: 620px;
+    }
+
+    .auth-tag {
+      display: inline-flex;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(148,163,184,0.8);
+      color: #e5e7eb;
+      margin-bottom: 12px;
+    }
+
+    .auth-title {
+      font-size: 22px;
+      font-weight: 750;
+      color: #F5F3EE;
+      margin-bottom: 6px;
+    }
+
+    .auth-subline {
+      font-size: 13px;
+      color: #e2e8f0;
+      margin-bottom: 14px;
+      max-width: 540px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+    }
+
+    @media (max-width: 720px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 12px;
+      color: #F5F3EE;
+    }
+
+    input,
+    textarea {
+      border-radius: 11px;
+      border: 1px solid rgba(148,163,184,0.8);
+      background: rgba(15,23,42,0.96);
+      padding: 8px 10px;
+      font-size: 13px;
+      color: #e5e7eb;
+      outline: none;
+      transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #6b7280;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: rgba(198,165,116,0.95);
+      box-shadow: 0 0 0 1px rgba(198,165,116,0.85);
+      background: rgba(15,23,42,1);
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .btn-row {
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      appearance: none;
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #F5E0B2, #C6A574, #AF8F5E);
+      color: #0b1120;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.9);
+      transition:
+        background 150ms ease,
+        transform 120ms ease,
+        box-shadow 150ms ease;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #E4C98B, #B99257, #8C6B3D);
+      transform: translateY(-1px);
+      box-shadow: 0 22px 55px rgba(0,0,0,0.95);
+    }
+
+    #status {
+      margin-top: 10px;
+      font-size: 12px;
+      min-height: 18px;
+      color: #9ca3af;
+    }
+
+    #status.error {
+      color: #fecaca;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-shell auth-page">
+    <header class="top-nav">
+      <div class="brand-lockup">
+        LumiVue <span>Marketplace</span>
+      </div>
+      <nav class="nav-actions">
+        <a href="marketplace.html" class="nav-btn">Marketplace</a>
+        <a href="login.html" class="nav-btn">Creator login</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="auth-card">
+        <div class="auth-tag">Start listing</div>
+        <h1 class="auth-title">Create your creator account</h1>
+        <p class="auth-subline">
+          Set up your LumiVue creator profile with the email you’ll use for your store.
+          You can refine your store details later from the dashboard.
+        </p>
+
+        <form id="signupForm">
+          <div class="field">
+            <label for="ownerName">Your name</label>
+            <input type="text" id="ownerName" autocomplete="name" required />
+          </div>
+
+          <div class="field">
+            <label for="email">Creator email</label>
+            <input type="email" id="email" autocomplete="email" required />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Choose a secure password"
+              autocomplete="new-password"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="publicEmail">Public contact email</label>
+            <input
+              type="email"
+              id="publicEmail"
+              placeholder="Shown on your store page"
+            />
+          </div>
+
+          <div class="field">
+            <label for="storeName">Store name</label>
+            <input
+              type="text"
+              id="storeName"
+              placeholder="Your brand or shop name"
+            />
+          </div>
+
+          <div class="field full">
+            <label for="bio">Short store bio</label>
+            <textarea
+              id="bio"
+              placeholder="Tell buyers what you create and what your line is about."
+            ></textarea>
+          </div>
+
+          <div class="field full">
+            <div class="btn-row">
+              <button type="submit" class="btn-primary">Create creator account</button>
+              <a href="login.html" class="nav-btn">Already have an account?</a>
+            </div>
+          </div>
+        </form>
+
+        <div id="status"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ORIGINAL MODULE FIREBASE AUTH + FIRESTORE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const form = document.getElementById("signupForm");
+    const statusEl = document.getElementById("status");
+
+    function setStatus(msg, isError = false) {
+      statusEl.textContent = msg || "";
+      statusEl.className = isError ? "error" : "";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setStatus("Creating your creator profile…");
+
+      const ownerName = document.getElementById("ownerName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const storeName = document.getElementById("storeName").value.trim();
+      const publicEmail = document.getElementById("publicEmail").value.trim();
+      const bio = document.getElementById("bio").value.trim();
+
+      if (!ownerName || !email || !password) {
+        setStatus("Name, email, and password are required.", true);
+        return;
+      }
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        const user = cred.user;
+        const uid = user.uid;
+
+        const creatorRef = doc(db, "creators", uid);
+        await setDoc(
+          creatorRef,
+          {
+            ownerName,
+            email,
+            storeName: storeName || ownerName + " Store",
+            publicEmail: publicEmail || email,
+            bio: bio || "",
+            isPublic: false,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+
+        const localUser = {
+          uid,
+          email,
+          storeName: storeName || ownerName + " Store"
+        };
+        localStorage.setItem("lumiVueUser", JSON.stringify(localUser));
+
+        setStatus("Creator account created. Redirecting to your dashboard…");
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 800);
+      } catch (err) {
+        console.error("Error creating creator profile:", err);
+
+        if (err.code === "auth/email-already-in-use") {
+          setStatus("This email already has an account. Try logging in instead.", true);
+        } else {
+          setStatus("Could not create creator profile: " + err.message, true);
+        }
+      }
+    });
+  </script>
+
+  <!-- ========================================================== -->
+  <!-- ✅ ADDED: LUMIVUE SHARED FIREBASE COMPAT BLOCK (NO CHANGES) -->
+  <!-- ========================================================== -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+  <script>
+    const firebaseConfigCompat = {
+      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.appspot.com",
+      messagingSenderId: "112402036736",
+      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+    };
+
+    firebase.initializeApp(firebaseConfigCompat);
+    const authCompat = firebase.auth();
+    const dbCompat = firebase.firestore();
+    const storageCompat = firebase.storage();
+  </script>
+  <!-- ========================================================== -->
+
+</body>
+</html>

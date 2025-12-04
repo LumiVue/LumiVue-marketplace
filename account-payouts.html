@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LumiVue – Vendor Account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    :root {
+      --lv-bg: #e8dcc7;
+      --lv-surface: #e3ceb2;
+      --lv-border: #c9a07a;
+      --lv-text: #5c3f28;
+      --lv-muted: #7a6a59;
+      --lv-accent: #b8703b;
+      --lv-accent-soft: #f3ddc2;
+      --lv-danger: #c15b4b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #f3e4ce, #e8dcc7 48%, #ddc8aa);
+      color: var(--lv-text);
+    }
+
+    .lv-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lv-top-nav {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      backdrop-filter: blur(16px);
+      background: rgba(232,220,199,.88);
+    }
+
+    .lv-top-nav-inner {
+      width: 100%;
+      max-width: 1120px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .lv-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .lv-brand-main {
+      font-size: 15px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .lv-brand-sub {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--lv-muted);
+    }
+
+    .lv-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+
+    .lv-nav-links a {
+      text-decoration: none;
+      color: var(--lv-muted);
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .lv-nav-active {
+      color: var(--lv-text) !important;
+      border-bottom-color: var(--lv-border) !important;
+    }
+
+    .lv-nav-logout {
+      border-left: 1px solid rgba(0,0,0,.1);
+      padding-left: 14px;
+      margin-left: 8px;
+    }
+
+    .lv-nav-logout a {
+      color: var(--lv-danger);
+      font-weight: 500;
+    }
+
+    .lv-main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px 48px;
+    }
+
+    .lv-main-inner {
+      width: 100%;
+      max-width: 1120px;
+      background: rgba(255,255,255,.32);
+      border-radius: 22px;
+      border: 1px solid rgba(201,160,122,.45);
+      padding: 26px 28px 30px;
+      box-shadow:
+        0 22px 60px rgba(115,82,52,.20),
+        0 0 0 1px rgba(255,255,255,.6);
+      backdrop-filter: blur(14px);
+    }
+
+    .lv-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .lv-header-title {
+      margin: 0 0 6px;
+      font-size: 22px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #5c3f28;
+    }
+
+    .lv-header-sub {
+      margin: 0;
+      font-size: 13px;
+      color: var(--lv-muted);
+      max-width: 520px;
+      line-height: 1.5;
+    }
+
+    .lv-status-pill {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      padding: 5px 14px;
+      border-radius: 999px;
+      background: #fef6f3;
+      border: 1px solid rgba(184,121,63,.4);
+      color: #b8793f;
+      white-space: nowrap;
+      width: auto;
+      max-width: max-content;
+      text-align: center;
+    }
+
+    .lv-progress {
+      margin-bottom: 22px;
+    }
+
+    .lv-progress-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--lv-muted);
+      margin-bottom: 8px;
+    }
+
+    .lv-progress-bar-outer {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: #f4e2c6;
+      overflow: hidden;
+    }
+
+    .lv-progress-bar-inner {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg,#b8703b,#d39b53,#f1d6b5);
+      transition: width .3s ease;
+    }
+
+    .lv-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 840px) {
+      .lv-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lv-card {
+      position: relative;
+      padding: 18px 18px 16px;
+      background: var(--lv-surface);
+      border-radius: 18px;
+      border: 1px solid var(--lv-border);
+      box-shadow: 0 16px 38px rgba(0,0,0,.04);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition:
+        transform .16s ease,
+        box-shadow .16s ease,
+        border-color .16s ease,
+        background .16s ease;
+    }
+
+    .lv-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 50px rgba(0,0,0,.12);
+      border-color: var(--lv-accent);
+      background: #f1ddc2;
+    }
+
+    .lv-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .lv-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #5c3f28;
+    }
+
+    .lv-card-status {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(184,121,63,.45);
+      background: #fef7ea;
+      color: #b8793f;
+      white-space: nowrap;
+    }
+
+    .lv-card-body {
+      font-size: 12px;
+      color: var(--lv-muted);
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    .lv-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .lv-card-note {
+      font-size: 11px;
+      color: var(--lv-muted);
+      opacity: .95;
+    }
+
+    .lv-card-manage {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(43,33,24,.6);
+      background: rgba(255,255,255,.7);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .lv-card:hover .lv-card-manage {
+      background: var(--lv-accent);
+      color: #fff;
+      border-color: var(--lv-accent);
+    }
+
+    .lv-footer-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--lv-muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .lv-top-nav-inner,
+      .lv-main-inner {
+        padding: 16px;
+      }
+      .lv-top-nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        height: auto;
+      }
+      .lv-nav-links {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .lv-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .lv-status-pill {
+        align-self: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="lv-shell">
+    <header class="lv-top-nav">
+      <div class="lv-top-nav-inner">
+        <div class="lv-brand">
+          <div class="lv-brand-main">LUMIVUE</div>
+          <div class="lv-brand-sub">Marketplace · Vendor account</div>
+        </div>
+
+        <nav class="lv-nav-links">
+          <a href="marketplace.html">Marketplace</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="listings.html">Listings</a>
+          <span class="lv-nav-logout">
+            <a href="logout.html">Log out</a>
+          </span>
+        </nav>
+      </div>
+    </header>
+
+    <main class="lv-main">
+      <section class="lv-main-inner">
+        <div class="lv-header">
+          <div>
+            <h1 class="lv-header-title">Vendor account</h1>
+            <p class="lv-header-sub">
+              Complete these steps to activate payouts and go live. While your
+              account is under review, you can still create products, publish
+              listings, and refine your storefront.
+            </p>
+          </div>
+          <span class="lv-status-pill" id="overallStatusPill">Status: Not approved yet</span>
+        </div>
+
+        <div class="lv-progress">
+          <div class="lv-progress-label-row">
+            <span>Onboarding completion</span>
+            <span id="onboardingPercent">0%</span>
+          </div>
+          <div class="lv-progress-bar-outer">
+            <div class="lv-progress-bar-inner" id="onboardingBar"></div>
+          </div>
+        </div>
+
+        <div class="lv-grid">
+          <article class="lv-card" onclick="goTo('account-legal.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Legal business name &amp; contact details</div>
+              <div class="lv-card-status" id="status-legal">Not started</div>
+            </div>
+            <div class="lv-card-body">
+              Add your legal business name, primary contact, and full billing address so we can generate invoices and compliance documents.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Required before payouts can be activated.</span>
+              <button type="button"
+                      class="lv-card-manage"
+                      onclick="goTo('account-legal.html')">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <article class="lv-card" onclick="goTo('account-tax.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Tax forms &amp; marketplace agreements</div>
+              <div class="lv-card-status" id="status-tax">Not started</div>
+            </div>
+            <div class="lv-card-body">
+              Upload W-9 / W-8 forms, complete ID verification, and confirm LumiVue marketplace agreements for your region.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Helps keep payouts compliant and secure.</span>
+              <button type="button"
+                      class="lv-card-manage"
+                      onclick="goTo('account-tax.html')">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <article class="lv-card" onclick="goTo('account-payouts.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Bank account &amp; payout schedule</div>
+              <div class="lv-card-status" id="status-payouts">Not started</div>
+            </div>
+            <div class="lv-card-body">
+              Connect the payout bank account where you want to receive funds, choose a schedule, and review your deposit summary.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Encrypted and never shared with buyers.</span>
+              <button type="button"
+                      class="lv-card-manage"
+                      onclick="goTo('account-payouts.html')">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <article class="lv-card" onclick="goTo('edit-store.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Storefront name, branding &amp; first listing</div>
+              <div class="lv-card-status" id="status-storefront">Not started</div>
+            </div>
+            <div class="lv-card-body">
+              Choose your storefront name, upload brand visuals, and publish at least one hero listing so shoppers can discover your work.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">You can edit your brand at any time.</span>
+              <button type="button"
+                      class="lv-card-manage"
+                      onclick="goTo('edit-store.html')">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <article class="lv-card" onclick="goTo('shipping.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Shipping methods &amp; delivery promises</div>
+              <div class="lv-card-status" id="status-shipping">Not started</div>
+            </div>
+            <div class="lv-card-body">
+              Configure carriers, handling times, and delivery expectations so customers know exactly how and when orders will arrive.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Applies to all listings by default.</span>
+              <button type="button"
+                      class="lv-card-manage"
+                      onclick="goTo('shipping.html')">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <article class="lv-card" onclick="goTo('account-policies.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Policies, returns &amp; customer support</div>
+              <div class="lv-card-status" id="status-policies">Not started</div>
+            </div>
+            <div class="lv-card-body">
+              Define your return, exchange, and customer support policies so shoppers feel confident buying from your LumiVue storefront.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Shown on your public store profile.</span>
+              <button type="button"
+                      class="lv-card-manage"
+                      onclick="goTo('account-policies.html')">
+                Manage
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <p class="lv-footer-note">
+          You can return to these steps at any time. Once all required sections are completed and reviewed, your account will be approved and payouts will be activated. Until then, you can still create drafts and refine your listings.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== LUMIVUE · SHARED FIREBASE BLOCK (COMPAT) ===== -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+  <script>
+    // Your LumiVue Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.appspot.com",
+      messagingSenderId: "112402036736",
+      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+    };
+
+    // Initialize Firebase (old style – perfect for plain HTML)
+    firebase.initializeApp(firebaseConfig);
+
+    // Optional handles if the page needs them
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+  </script>
+  <!-- ===== END LUMIVUE FIREBASE BLOCK ===== -->
+
+  <script>
+    function goTo(path) {
+      window.location.href = path;
+    }
+
+    (function () {
+      const onboardingBar    = document.getElementById('onboardingBar');
+      const onboardingLabel  = document.getElementById('onboardingPercent');
+      const overallStatus    = document.getElementById('overallStatusPill');
+
+      const sectionStatusEls = {
+        legal:      document.getElementById('status-legal'),
+        tax:        document.getElementById('status-tax'),
+        payouts:    document.getElementById('status-payouts'),
+        storefront: document.getElementById('status-storefront'),
+        shipping:   document.getElementById('status-shipping'),
+        policies:   document.getElementById('status-policies')
+      };
+
+      let currentUser = null;
+
+      function setSectionStatus(el, isDone) {
+        if (!el) return;
+        el.textContent = isDone ? 'Completed' : 'Not started';
+      }
+
+      function updateFromCreatorDoc(data) {
+        const sections = ['legal','tax','payouts','storefront','shipping','policies'];
+        let completedCount = 0;
+
+        sections.forEach((key) => {
+          const info = data && data.sections && data.sections[key];
+          const done = info && info.completed === true;
+          if (done) completedCount++;
+          setSectionStatus(sectionStatusEls[key], done);
+        });
+
+        const percent = Math.round((completedCount / sections.length) * 100);
+
+        if (onboardingBar) {
+          onboardingBar.style.width = percent + '%';
+        }
+        if (onboardingLabel) {
+          onboardingLabel.textContent = percent + '%';
+        }
+
+        if (overallStatus) {
+          if (percent === 100) {
+            overallStatus.textContent = 'Status: Ready for approval';
+          } else if (percent > 0) {
+            overallStatus.textContent = 'Status: In progress';
+          } else {
+            overallStatus.textContent = 'Status: Not approved yet';
+          }
+        }
+      }
+
+      function initFirebasePage() {
+        auth.onAuthStateChanged(async (user) => {
+          console.log("auth state on account-payouts.html:", user ? user.uid : null);
+
+          if (!user) {
+            const redirect = encodeURIComponent(window.location.pathname);
+            window.location.href = 'login.html?redirect=' + redirect;
+            return;
+          }
+
+          currentUser = user;
+
+          try {
+            const docRef = db.collection('creators').doc(user.uid);
+            const snap = await docRef.get();
+            if (snap.exists) {
+              updateFromCreatorDoc(snap.data() || {});
+            } else {
+              updateFromCreatorDoc({});
+            }
+          } catch (err) {
+            console.error('Error loading vendor account overview', err);
+          }
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', initFirebasePage);
+    })();
+  </script>
+</body>
+</html>
