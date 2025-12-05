@@ -443,6 +443,119 @@
       transform: none;
       outline: none;
     }
+    /* === GLOBAL LV BUTTON FAMILY — MATCHING THE LV BUBBLE === */
+.lv-btn-flat,
+.lv-hero-search-btn,
+.lv-chip,
+.lv-chip.primary,
+.lv-btn-text,
+.lv-btn-soft {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;                /* Same as LV bubble */
+    padding: 0 18px;             /* Balanced pill shape */
+    border-radius: 50px;
+    background: #e6d8c7;         /* Same warm beige as LV */
+    color: var(--lv-text);
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid var(--lv-border-strong);
+    box-shadow: none !important;
+    transition: none !important;
+    cursor: pointer;
+}
+
+/* === Remove hover popups from ALL buttons === */
+.lv-btn-flat:hover,
+.lv-btn-soft:hover,
+.lv-btn-text:hover,
+.lv-hero-search-btn:hover,
+.lv-chip:hover {
+    background: #e6d8c7 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* === LV BUBBLE (unchanged) === */
+.lv-logo-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #e6d8c7;
+    color: var(--lv-text);
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid var(--lv-border-strong);
+    box-shadow: none !important;
+    transition: none !important;
+}
+
+/* === PRODUCT "View product" BUTTONS === */
+.lv-btn-ghost,
+.lv-card-footer button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    padding: 0 18px;
+    border-radius: 50px;
+    background: #e6d8c7;
+    border: 1px solid var(--lv-border-strong);
+    color: var(--lv-text);
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: none !important;
+}
+
+/* === SEARCH BUTTON === */
+.lv-hero-search-btn {
+    height: 34px;
+}
+
+/* === CATEGORY CHIPS (Skincare, Cosmetics, etc.) === */
+.lv-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    padding: 0 14px;
+    border-radius: 50px;
+    background: #e6d8c7 !important;
+    border: 1px solid var(--lv-border-strong);
+    color: var(--lv-text);
+    font-weight: 600;
+    font-size: 13px;
+    box-shadow: none !important;
+}
+
+/* === SPECIAL BLUE PRIMARY CHIP FIX === */
+.lv-chip.primary {
+    background: #e6d8c7 !important;
+    color: var(--lv-text) !important;
+    border: 1px solid var(--lv-border-strong);
+}
+
+/* === REMOVE UNDERLINE FROM NAV LINKS === */
+.lv-nav a {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    font-weight: 400 !important;   /* Makes Marketplace match Browse all */
+}
+
+.lv-nav a:hover,
+.lv-nav a:active,
+.lv-nav a:focus {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    outline: none !important;
+}
+
+    
   </style>
 </head>
 
@@ -455,15 +568,6 @@
           <span class="lv-logo-text">LUMIVUE</span>
         </div>
 
-        <nav class="lv-nav">
-          <a href="#">Marketplace</a>
-          <a href="#">Browse all</a>
-        </nav>
-
-        <div class="lv-header-actions">
-          <button class="lv-btn-text" type="button">Sign in / Join</button>
-          <button class="lv-btn-soft" type="button">For vendors</button>
-        </div>
       </div>
     </header>
 
@@ -517,7 +621,7 @@
             <p class="lv-card-subtitle">Radiance-restoring face cream with niacinamide.</p>
             <div class="lv-card-meta">
               <span class="lv-pill">Skincare</span>
-              <span class="lv-price">$45</span>
+              <span class="lv-price">$45.00</span>
             </div>
             <div class="lv-card-footer">
               <button class="lv-btn-ghost" type="button">View product</button>
@@ -842,6 +946,29 @@
       </p>
     </footer>
   </div>
+  
+  <!-- Firebase SDK - required for Auth, Firestore, Storage -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMyoY8qYPr5KolzqnIEtE4sHl1b83iAQ8",
+        authDomain: "lumivue-c8fdf.firebaseapp.com",
+        projectId: "lumivue-c8fdf",
+        storageBucket: "lumivue-c8fdf.appspot.com",
+        messagingSenderId: "112402036736",
+        appId: "1:112402036736:web:bfbbe98b02ea5484803d65"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+</script>
 </body>
 </html>
+
 
