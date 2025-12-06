@@ -2,362 +2,773 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LumiVue – Vendor Account</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bank account & payouts · LumiVue Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <link rel="stylesheet" href="styles.css" />
 
   <style>
     :root {
-      --lv-bg: #e8dcc7;
-      --lv-surface: #e3ceb2;
-      --lv-border: #c9a07a;
-      --lv-text: #5c3f28;
-      --lv-muted: #7a6a59;
-      --lv-accent: #b8703b;
-      --lv-accent-soft: #f3ddc2;
-      --lv-danger: #c15b4b;
+      /* same palette as landing page */
+      --lv-bg: #f4f1eb;
+      --lv-surface: #ffffff;
+      --lv-border: #ddd3c6;
+      --lv-border-strong: #ccc0b1;
+      --lv-text: #2c1e19;       /* espresso */
+      --lv-text-muted: #7a6a5c;
+      --lv-accent: #c98a5a;
+      --lv-accent-soft: #fbede1;
+      --lv-radius-lg: 14px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+      --lv-danger: #dc2626;
+      --lv-bubble-bg: #f8ebd9;
+      --lv-button-bg: #e1c8a6;  /* brownish pill buttons like landing page */
     }
-
-    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #f3e4ce, #e8dcc7 48%, #ddc8aa);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Helvetica Neue", Arial, sans-serif;
+      background: var(--lv-bg);
       color: var(--lv-text);
     }
 
-    .lv-shell { min-height: 100vh; display: flex; flex-direction: column; }
-
-    .lv-top-nav {
-      height: 64px; display: flex; align-items: center; justify-content: center;
-      border-bottom: 1px solid rgba(0,0,0,0.04);
-      backdrop-filter: blur(16px);
-      background: rgba(232,220,199,.88);
+    .page-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px 24px 40px;
     }
 
-    .lv-top-nav-inner {
-      width: 100%; max-width: 1120px; padding: 0 24px;
-      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    .auth-page {
+      max-width: 1120px;
+      margin: 0 auto;
     }
 
-    .lv-brand { display: flex; flex-direction: column; gap: 2px; }
+    /* TOP BAR – match landing page family */
 
-    .lv-brand-main {
-      font-size: 15px; letter-spacing: .22em; text-transform: uppercase;
-      font-weight: 600; color: var(--lv-text);
+    .site-header {
+      padding-bottom: 8px;
+      margin-bottom: 18px;
     }
 
-    .lv-brand-sub {
-      font-size: 11px; text-transform: uppercase; letter-spacing: .16em;
-      color: var(--lv-muted);
+    .site-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
-    .lv-nav-links {
-      display: flex; align-items: center; gap: 16px;
-      font-size: 12px; text-transform: uppercase; letter-spacing: .14em;
+    .brand-stack-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .lv-nav-links a {
-      text-decoration: none; color: var(--lv-muted);
-      padding-bottom: 2px; border-bottom: 1px solid transparent;
+    .lv-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: #d0b596;
+      border: 1px solid #b89a77;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text);
     }
 
-    .lv-nav-active { color: var(--lv-text); border-bottom-color: var(--lv-border); }
+    .brand-wordmark {
+      font-size: 13px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--lv-text);
+    }
 
-    .lv-nav-logout { border-left: 1px solid rgba(0,0,0,.1); padding-left: 14px; margin-left: 8px; }
+    .site-header-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
 
-    .lv-nav-logout a { color: var(--lv-danger); font-weight: 500; }
+    .nav-pill-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
-    .lv-main { flex: 1; display: flex; justify-content: center; padding: 32px 16px 48px; }
+    .nav-pill {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 6px 16px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      background: var(--lv-button-bg);
+      color: var(--lv-text);
+      cursor: pointer;
+    }
 
-    .lv-main-inner {
-      width: 100%; max-width: 1120px;
-      background: rgba(255,255,255,.32);
+    .nav-pill:hover {
+      background: var(--lv-button-bg); /* no pop-up */
+    }
+
+    /* HEADER CARD */
+
+    .account-header-card {
+      background: var(--lv-surface);
       border-radius: 22px;
-      border: 1px solid rgba(201,160,122,.45);
-      padding: 26px 28px 30px;
-      box-shadow: 0 22px 60px rgba(115,82,52,.20), 0 0 0 1px rgba(255,255,255,.6);
-      backdrop-filter: blur(14px);
+      padding: 22px 22px 18px;
+      box-shadow: var(--lv-shadow-soft);
+      border: 1px solid var(--lv-border);
+      margin-bottom: 18px;
     }
 
-    .lv-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
-
-    .lv-header-title {
-      margin: 0 0 6px; font-size: 22px; letter-spacing: .1em;
-      text-transform: uppercase; font-weight: 800; color: #5c3f28;
+    .account-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
-    .lv-header-sub { margin: 0; font-size: 13px; color: var(--lv-muted); max-width: 520px; line-height: 1.5; }
-
-    .lv-status-pill {
-      display: inline-block; margin-top: 4px;
-      font-size: 10px; text-transform: uppercase; letter-spacing: .16em;
-      padding: 5px 14px; border-radius: 999px;
-      background: #fef6f3; border: 1px solid rgba(184,121,63,.4);
-      color: #b8793f; white-space: nowrap;
+    .account-title-block h1 {
+      font-size: 22px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin: 0 0 6px;
+      color: var(--lv-text);
     }
 
-    .lv-progress { margin-bottom: 22px; }
-
-    .lv-progress-label-row {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 11px; text-transform: uppercase; letter-spacing: .14em;
-      color: var(--lv-muted); margin-bottom: 8px;
+    .account-title-block p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      max-width: 520px;
     }
 
-    .lv-progress-bar-outer {
-      width: 100%; height: 7px; border-radius: 999px;
-      background: #f4e2c6; overflow: hidden;
+    .status-pill {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 6px 14px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--lv-bubble-bg);
+      color: var(--lv-text);
+      white-space: nowrap;
     }
 
-    .lv-progress-bar-inner {
-      height: 100%; width: 0%; border-radius: 999px;
-      background: linear-gradient(90deg,#b8703b,#d39b53,#f1d6b5);
-      transition: width .3s ease;
+    .account-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
     }
 
-    .lv-grid {
-      display: grid; gap: 14px;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      margin-bottom: 12px;
+    .progress-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
     }
 
-    @media (max-width: 840px) { .lv-grid { grid-template-columns: 1fr; } }
-
-    .lv-card {
-      padding: 18px; background: var(--lv-surface);
-      border-radius: 18px; border: 1px solid var(--lv-border);
-      box-shadow: 0 16px 38px rgba(0,0,0,.04);
-      cursor: pointer; display: flex; flex-direction: column;
-      gap: 8px; transition: .16s ease;
+    .progress-track {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: #e5ddd0;
+      overflow: hidden;
     }
 
-    .lv-card:hover { transform: translateY(-3px); background: #f1ddc2; border-color: var(--lv-accent); }
-
-    .lv-card-title { font-size: 15px; font-weight: 700; color: #5c3f28; }
-
-    .lv-card-status {
-      font-size: 11px; text-transform: uppercase; letter-spacing: .14em;
-      padding: 4px 8px; border-radius: 999px;
-      border: 1px solid rgba(184,121,63,.45); background: #fef7ea; color: #b8793f;
+    .progress-fill {
+      width: 68%;
+      height: 100%;
+      background: linear-gradient(90deg, #c98a5a, #fbbf24);
     }
 
-    .lv-card-body { font-size: 12px; color: var(--lv-muted); line-height: 1.6; }
-
-    .lv-card-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-
-    .lv-card-manage {
-      padding: 7px 12px; font-size: 11px; text-transform: uppercase;
-      border-radius: 999px; border: 1px solid rgba(43,33,24,.6);
-      background: rgba(255,255,255,.7); cursor: pointer;
+    .progress-value {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      white-space: nowrap;
     }
 
-    .lv-card:hover .lv-card-manage { background: var(--lv-accent); color: #fff; border-color: var(--lv-accent); }
+    /* PAYOUT FORM CARD */
 
+    .section-card {
+      background: var(--lv-surface);
+      border-radius: 22px;
+      padding: 22px 22px 20px;
+      border: 1px solid var(--lv-border);
+      box-shadow: var(--lv-shadow-soft);
+      margin-bottom: 20px;
+    }
+
+    .section-header {
+      margin-bottom: 14px;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin: 0 0 4px;
+      color: var(--lv-text);
+    }
+
+    .section-subline {
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      margin: 0;
+      max-width: 620px;
+    }
+
+    form.payout-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .field-group-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+      margin-bottom: 6px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .field-row.single {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--lv-text-muted);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fdf6eb;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--lv-text); /* espresso text */
+      outline: none;
+      transition:
+        border-color 120ms ease,
+        background 120ms ease;
+    }
+
+    .field textarea {
+      border-radius: 18px;
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #b2a391;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: #c6a574;
+      background: #fffaf2;
+    }
+
+    .helper-text {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      margin-top: 2px;
+    }
+
+    .payout-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .payout-requirement {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      max-width: 260px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      appearance: none;
+      border-radius: 999px;
+      padding: 7px 18px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--lv-border-strong);
+      cursor: pointer;
+      background: var(--lv-button-bg);
+      color: var(--lv-text);     /* espresso */
+      box-shadow: none;          /* no pop-up */
+    }
+
+    .btn-primary:hover {
+      background: var(--lv-button-bg);
+    }
+
+    #status {
+      margin-top: 8px;
+      font-size: 12px;
+      min-height: 18px;
+      color: var(--lv-text-muted);
+    }
+
+    #status.error {
+      color: #b91c1c;
+    }
+
+    @media (max-width: 768px) {
+      .page-shell {
+        padding: 14px 16px 30px;
+      }
+
+      .site-header-inner {
+        align-items: flex-start;
+      }
+
+      .field-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .account-header-card {
+        padding: 18px 16px 16px;
+      }
+
+      .section-card {
+        padding: 18px 16px 18px;
+      }
+    }
   </style>
 </head>
-
 <body>
-  <div class="lv-shell">
-
-    <!-- TOP NAV -->
-    <header class="lv-top-nav">
-      <div class="lv-top-nav-inner">
-        <div class="lv-brand">
-          <div class="lv-brand-main">LUMIVUE</div>
-          <div class="lv-brand-sub">Marketplace · Vendor account</div>
+  <div class="page-shell auth-page">
+    <!-- TOP BAR -->
+    <header class="site-header">
+      <div class="site-header-inner">
+        <div class="brand-stack-left">
+          <div class="lv-badge">LV</div>
+          <div class="brand-wordmark">LUMIVUE</div>
         </div>
 
-        <nav class="lv-nav-links">
-          <a href="marketplace.html">Marketplace</a>
-          <a href="dashboard.html">Dashboard</a>
-          <a href="listings.html">Listings</a>
-          <span class="lv-nav-logout"><a href="logout.html">Log out</a></span>
-        </nav>
+        <div class="site-header-nav">
+          <div class="nav-pill-group">
+            <a href="marketplace.html" class="nav-pill">Marketplace</a>
+            <a href="dashboard.html" class="nav-pill">Dashboard</a>
+            <a href="listings.html" class="nav-pill">Listings</a>
+            <a href="logout.html" class="nav-pill">Log out</a>
+          </div>
+        </div>
       </div>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <main class="lv-main">
-      <section class="lv-main-inner">
-        
-        <!-- Header -->
-        <div class="lv-header">
-          <div>
-            <h1 class="lv-header-title">Vendor account</h1>
-            <p class="lv-header-sub">
-              Complete these steps to activate payouts and go live.
-            </p>
+    <!-- Vendor account header -->
+    <section class="account-header-card">
+      <div class="account-header-top">
+        <div class="account-title-block">
+          <h1>VENDOR ACCOUNT</h1>
+          <p>
+            Complete these steps to activate payouts and go live. While your account is under review,
+            you can still create products, publish listings, and refine your storefront.
+          </p>
+        </div>
+        <div class="status-pill">STATUS: IN REVIEW</div>
+      </div>
+
+      <div class="account-progress-row">
+        <div class="progress-label">ONBOARDING COMPLETION</div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="progress-value">67%</div>
+      </div>
+    </section>
+
+    <!-- Bank account & payout schedule form -->
+    <section class="section-card">
+      <div class="section-header">
+        <div class="section-eyebrow">PAYOUT SETUP</div>
+        <h2 class="section-title">Bank account & payout schedule</h2>
+        <p class="section-subline">
+          Connect the payout bank account where you want to receive funds, confirm your legal details,
+          and choose how often LumiVue should send payouts.
+        </p>
+      </div>
+
+      <form id="payoutForm" class="payout-form">
+        <!-- Legal business & contact -->
+        <div>
+          <div class="field-group-label">Legal business name & contact details</div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="legalName">Legal business name</label>
+              <input id="legalName" name="legalName" type="text" />
+            </div>
           </div>
-          <span class="lv-status-pill" id="overallStatusPill">Status: Not approved yet</span>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="dba">Doing business as (optional)</label>
+              <input id="dba" name="dba" type="text" />
+            </div>
+            <div class="field">
+              <label for="primaryContact">Primary contact name</label>
+              <input id="primaryContact" name="primaryContact" type="text" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="businessEmail">Business email</label>
+              <input id="businessEmail" name="businessEmail" type="email" />
+            </div>
+            <div class="field">
+              <label for="businessPhone">Business phone</label>
+              <input id="businessPhone" name="businessPhone" type="tel" />
+            </div>
+          </div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="streetAddress">Street address</label>
+              <input id="streetAddress" name="streetAddress" type="text" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="city">City</label>
+              <input id="city" name="city" type="text" />
+            </div>
+            <div class="field">
+              <label for="state">State / Region</label>
+              <input id="state" name="state" type="text" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="postalCode">Postal code</label>
+              <input id="postalCode" name="postalCode" type="text" />
+            </div>
+            <div class="field">
+              <label for="country">Country</label>
+              <select id="country" name="country">
+                <option value="">Select country</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="GB">United Kingdom</option>
+                <option value="AU">Australia</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="internalNotes">Internal notes (optional)</label>
+              <textarea id="internalNotes" name="internalNotes" placeholder="Optional internal notes for this vendor"></textarea>
+            </div>
+          </div>
         </div>
 
-        <!-- Progress Bar -->
-        <div class="lv-progress">
-          <div class="lv-progress-label-row">
-            <span>Onboarding completion</span>
-            <span id="onboardingPercent">0%</span>
+        <!-- Bank details -->
+        <div>
+          <div class="field-group-label">Bank account details</div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="bankName">Bank name</label>
+              <input id="bankName" name="bankName" type="text" />
+            </div>
+            <div class="field">
+              <label for="accountHolder">Account holder name</label>
+              <input id="accountHolder" name="accountHolder" type="text" />
+            </div>
           </div>
-          <div class="lv-progress-bar-outer">
-            <div class="lv-progress-bar-inner" id="onboardingBar"></div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="routingNumber">Routing number</label>
+              <input id="routingNumber" name="routingNumber" type="text" inputmode="numeric" />
+              <div class="helper-text">U.S. banks only. For international payouts, your provider will use IBAN/SWIFT instead.</div>
+            </div>
+            <div class="field">
+              <label for="accountNumber">Account number</label>
+              <input id="accountNumber" name="accountNumber" type="password" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="accountNumberConfirm">Confirm account number</label>
+              <input id="accountNumberConfirm" name="accountNumberConfirm" type="password" inputmode="numeric" />
+            </div>
+            <div class="field">
+              <label for="accountType">Account type</label>
+              <select id="accountType" name="accountType">
+                <option value="">Select type</option>
+                <option value="checking">Checking</option>
+                <option value="savings">Savings</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <!-- Grid -->
-        <div class="lv-grid">
-          
-          <article class="lv-card" onclick="goTo('account-legal.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Legal business name & contact details</div>
-              <div class="lv-card-status" id="status-legal">Not started</div>
-            </div>
-            <div class="lv-card-body">Add legal name, contact person, and full billing address.</div>
-            <div class="lv-card-footer">
-              <span class="lv-card-note">Required before payouts.</span>
-              <button class="lv-card-manage">Manage</button>
-            </div>
-          </article>
+        <!-- Payout settings -->
+        <div>
+          <div class="field-group-label">Payout schedule</div>
 
-          <article class="lv-card" onclick="goTo('account-tax.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Tax forms & agreements</div>
-              <div class="lv-card-status" id="status-tax">Not started</div>
+          <div class="field-row">
+            <div class="field">
+              <label for="payoutFrequency">Payout frequency</label>
+              <select id="payoutFrequency" name="payoutFrequency">
+                <option value="daily">Daily</option>
+                <option value="weekly" selected>Weekly</option>
+                <option value="biweekly">Every 2 weeks</option>
+                <option value="monthly">Monthly</option>
+              </select>
             </div>
-            <div class="lv-card-body">Upload W-9/W-8 forms and confirm marketplace agreements.</div>
-            <div class="lv-card-footer">
-              <button class="lv-card-manage">Manage</button>
+            <div class="field">
+              <label for="payoutDay">Preferred payout day</label>
+              <select id="payoutDay" name="payoutDay">
+                <option value="">Any day</option>
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+              </select>
             </div>
-          </article>
+          </div>
 
-          <article class="lv-card" onclick="goTo('account-payouts.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Bank account & payout schedule</div>
-              <div class="lv-card-status" id="status-payouts">Not started</div>
+          <div class="field-row">
+            <div class="field">
+              <label for="minPayout">Minimum payout threshold (USD)</label>
+              <input id="minPayout" name="minPayout" type="number" min="0" step="1" />
+              <div class="helper-text">LumiVue will hold balances under this amount until the next payout.</div>
             </div>
-            <div class="lv-card-body">Connect the bank account you want to receive funds into.</div>
-            <div class="lv-card-footer">
-              <button class="lv-card-manage">Manage</button>
+            <div class="field">
+              <label for="currency">Payout currency</label>
+              <select id="currency" name="currency">
+                <option value="USD" selected>USD – U.S. Dollar</option>
+                <option value="CAD">CAD – Canadian Dollar</option>
+                <option value="GBP">GBP – British Pound</option>
+                <option value="EUR">EUR – Euro</option>
+              </select>
             </div>
-          </article>
-
-          <article class="lv-card" onclick="goTo('edit-store.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Storefront & branding</div>
-              <div class="lv-card-status" id="status-storefront">Not started</div>
-            </div>
-            <div class="lv-card-body">Choose storefront name and branding.</div>
-            <div class="lv-card-footer">
-              <button class="lv-card-manage">Manage</button>
-            </div>
-          </article>
-
-          <article class="lv-card" onclick="goTo('shipping.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Shipping methods</div>
-              <div class="lv-card-status" id="status-shipping">Not started</div>
-            </div>
-            <div class="lv-card-body">Configure carriers & delivery times.</div>
-            <div class="lv-card-footer">
-              <button class="lv-card-manage">Manage</button>
-            </div>
-          </article>
-
-          <article class="lv-card" onclick="goTo('account-policies.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Policies & customer support</div>
-              <div class="lv-card-status" id="status-policies">Not started</div>
-            </div>
-            <div class="lv-card-body">Define return & customer support policies.</div>
-            <div class="lv-card-footer">
-              <button class="lv-card-manage">Manage</button>
-            </div>
-          </article>
-
+          </div>
         </div>
 
-      </section>
-    </main>
+        <div class="payout-footer-row">
+          <p class="payout-requirement">
+            This information is required before payouts can be activated. Your banking details are encrypted and
+            never shared with buyers.
+          </p>
+          <div class="btn-row">
+            <button type="submit" class="btn-primary">Save payout details</button>
+            <!-- 🔹 back to account overview now points to account.html -->
+            <a href="account.html" class="nav-pill">Back to account overview</a>
+          </div>
+        </div>
 
+        <div id="status"></div>
+      </form>
+    </section>
   </div>
 
-  <!-- FIREBASE SDK – required for Auth, Firestore, Storage -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+  <!-- REAL saving with Firebase Auth + Firestore -->
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
       authDomain: "lumivue-c8fdf.firebaseapp.com",
       projectId: "lumivue-c8fdf",
-      storageBucket:"lumivue-c8fdf.firebasestorage.app",
-      messagingSenderId: "112402036736",
-      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    const form = document.getElementById("payoutForm");
+    const statusEl = document.getElementById("status");
 
-    function goTo(path) { window.location.href = path; }
+    let currentUser = null;
 
-    (function () {
-      const onboardingBar    = document.getElementById('onboardingBar');
-      const onboardingLabel  = document.getElementById('onboardingPercent');
-      const overallStatus    = document.getElementById('overallStatusPill');
+    function setStatus(msg, isError = false) {
+      if (!statusEl) return;
+      statusEl.textContent = msg || "";
+      statusEl.className = isError ? "error" : "";
+    }
 
-      const sectionStatusEls = {
-        legal:      document.getElementById('status-legal'),
-        tax:        document.getElementById('status-tax'),
-        payouts:    document.getElementById('status-payouts'),
-        storefront: document.getElementById('status-storefront'),
-        shipping:   document.getElementById('status-shipping'),
-        policies:   document.getElementById('status-policies')
-      };
+    function fillForm(data) {
+      if (!data) return;
+      const fields = [
+        "legalName", "dba", "primaryContact", "businessEmail",
+        "businessPhone", "streetAddress", "city", "state",
+        "postalCode", "country", "internalNotes",
+        "bankName", "accountHolder", "routingNumber",
+        "accountNumber", "accountType", "payoutFrequency",
+        "payoutDay", "minPayout", "currency"
+      ];
+      fields.forEach((key) => {
+        if (form[key] && data[key] != null) {
+          form[key].value = data[key];
+        }
+      });
+    }
 
-      function setSectionStatus(el, done) {
-        el.textContent = done ? "Completed" : "Not started";
+    // Watch auth so we know which document to use
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+
+      if (!user) {
+        setStatus("Please sign in on your account page before saving payout details.", true);
+        return;
       }
 
-      function updateFromCreatorDoc(data) {
-        const keys = ["legal", "tax", "payouts", "storefront", "shipping", "policies"];
-        let completed = 0;
+      setStatus("");
 
-        keys.forEach(key => {
-          const section = data?.sections?.[key]?.completed;
-          if (section) completed++;
-          setSectionStatus(sectionStatusEls[key], section);
-        });
-
-        const percent = Math.round((completed / keys.length) * 100);
-
-        onboardingBar.style.width = percent + "%";
-        onboardingLabel.textContent = percent + "%";
-
-        if (percent === 100) overallStatus.textContent = "Status: Ready for approval";
-        else if (percent > 0) overallStatus.textContent = "Status: In progress";
-        else overallStatus.textContent = "Status: Not approved yet";
+      // Try to load existing payout profile
+      try {
+        const ref = doc(db, "payoutProfiles", user.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          fillForm(snap.data());
+        }
+      } catch (err) {
+        console.error("Error loading payout profile", err);
+        // Don't block page if load fails
       }
+    });
 
-      auth.onAuthStateChanged(async user => {
-        if (!user) {
-          window.location.href = "login.html?redirect=" + encodeURIComponent(window.location.pathname);
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!currentUser) {
+          setStatus("Please sign in first, then save payout details again.", true);
+          return;
+        }
+
+        const data = {
+          legalName: form.legalName.value.trim(),
+          dba: form.dba.value.trim(),
+          primaryContact: form.primaryContact.value.trim(),
+          businessEmail: form.businessEmail.value.trim(),
+          businessPhone: form.businessPhone.value.trim(),
+          streetAddress: form.streetAddress.value.trim(),
+          city: form.city.value.trim(),
+          state: form.state.value.trim(),
+          postalCode: form.postalCode.value.trim(),
+          country: form.country.value,
+          internalNotes: form.internalNotes.value.trim(),
+          bankName: form.bankName.value.trim(),
+          accountHolder: form.accountHolder.value.trim(),
+          routingNumber: form.routingNumber.value.trim(),
+          accountNumber: form.accountNumber.value.trim(),
+          accountNumberConfirm: form.accountNumberConfirm.value.trim(),
+          accountType: form.accountType.value,
+          payoutFrequency: form.payoutFrequency.value,
+          payoutDay: form.payoutDay.value,
+          minPayout: form.minPayout.value,
+          currency: form.currency.value,
+          updatedAt: serverTimestamp()
+        };
+
+        if (data.accountNumber && data.accountNumberConfirm &&
+            data.accountNumber !== data.accountNumberConfirm) {
+          setStatus("Account numbers do not match.", true);
           return;
         }
 
         try {
-          const doc = await db.collection("creators").doc(user.uid).get();
-          updateFromCreatorDoc(doc.exists ? doc.data() : {});
+          setStatus("Saving payout details…");
+
+          const ref = doc(db, "payoutProfiles", currentUser.uid);
+          await setDoc(ref, data, { merge: true });
+
+          setStatus("Payout details saved.");
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 700);
         } catch (err) {
-          console.error("Error:", err);
+          console.error("Error saving payout details", err);
+          const code = err.code || "";
+          setStatus(
+            code
+              ? `Could not save payout details (${code}). Check Firestore rules in the console.`
+              : "Could not save payout details. Check Firestore settings.",
+            true
+          );
         }
       });
-    })();
-
+    }
   </script>
 </body>
 </html>
-
