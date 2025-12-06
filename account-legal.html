@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Bank account & payouts · LumiVue Marketplace</title>
+  <title>Marketplace agreements & legal · LumiVue Marketplace</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <link rel="stylesheet" href="styles.css" />
@@ -22,7 +22,7 @@
       --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
       --lv-danger: #dc2626;
       --lv-bubble-bg: #f8ebd9;
-      --lv-button-bg: #e1c8a6;  /* brownish pill buttons like landing page */
+      --lv-button-bg: #e1c8a6;  /* pill buttons like landing page */
     }
 
     body {
@@ -44,7 +44,7 @@
       margin: 0 auto;
     }
 
-    /* TOP BAR – match landing page family */
+    /* ───── TOP BAR – MATCH LANDING PAGE ───── */
 
     .site-header {
       padding-bottom: 8px;
@@ -55,11 +55,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 18px;
       flex-wrap: wrap;
     }
 
-    .brand-stack-left {
+    .brand-left {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -88,38 +88,51 @@
       color: var(--lv-text);
     }
 
-    .site-header-nav {
+    .header-center-nav {
       display: flex;
-      align-items: center;
       gap: 18px;
-      flex-wrap: wrap;
+      align-items: center;
+      font-size: 13px;
+      color: var(--lv-text);
       margin-left: auto;
+      margin-right: auto;
     }
 
-    .nav-pill-group {
+    .header-center-nav a {
+      text-decoration: none;
+      color: var(--lv-text);
+    }
+
+    .header-center-nav a:hover {
+      color: var(--lv-text); /* no hover change */
+    }
+
+    .header-right {
       display: flex;
       gap: 8px;
+      align-items: center;
       flex-wrap: wrap;
     }
 
-    .nav-pill {
+    .header-pill {
       border-radius: 999px;
       border: 1px solid var(--lv-border-strong);
-      padding: 6px 16px;
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
+      padding: 7px 18px;
+      font-size: 12px;
+      font-weight: 500;
       text-decoration: none;
       background: var(--lv-button-bg);
       color: var(--lv-text);
       cursor: pointer;
+      box-shadow: none;
     }
 
-    .nav-pill:hover {
-      background: var(--lv-button-bg); /* no pop-up */
+    .header-pill:hover {
+      background: var(--lv-button-bg); /* no pop-up, no change */
+      color: var(--lv-text);
     }
 
-    /* HEADER CARD */
+    /* ───── ACCOUNT HEADER CARD ───── */
 
     .account-header-card {
       background: var(--lv-surface);
@@ -190,7 +203,7 @@
     }
 
     .progress-fill {
-      width: 68%;
+      width: 67%;
       height: 100%;
       background: linear-gradient(90deg, #c98a5a, #fbbf24);
     }
@@ -201,7 +214,7 @@
       white-space: nowrap;
     }
 
-    /* PAYOUT FORM CARD */
+    /* ───── MAIN SECTION CARD ───── */
 
     .section-card {
       background: var(--lv-surface);
@@ -240,7 +253,7 @@
       max-width: 620px;
     }
 
-    form.payout-form {
+    form.legal-form {
       display: flex;
       flex-direction: column;
       gap: 18px;
@@ -318,7 +331,25 @@
       margin-top: 2px;
     }
 
-    .payout-footer-row {
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      margin-top: 3px;
+    }
+
+    .checkbox-row label {
+      font-size: 12px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--lv-text);
+    }
+
+    .legal-footer-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -327,7 +358,7 @@
       margin-top: 10px;
     }
 
-    .payout-requirement {
+    .legal-requirement {
       font-size: 11px;
       color: var(--lv-text-muted);
       max-width: 260px;
@@ -340,7 +371,12 @@
       align-items: center;
     }
 
+    /* SHARED BUTTON STYLE – BOTH BUTTONS SAME COLOR, NO HOVER POPUP */
+
     .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       appearance: none;
       border-radius: 999px;
       padding: 7px 18px;
@@ -351,10 +387,15 @@
       background: var(--lv-button-bg);
       color: var(--lv-text);     /* espresso */
       box-shadow: none;          /* no pop-up */
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: none;
     }
 
     .btn-primary:hover {
-      background: var(--lv-button-bg);
+      background: var(--lv-button-bg); /* no change */
+      color: var(--lv-text);
+      box-shadow: none;
     }
 
     #status {
@@ -377,6 +418,11 @@
         align-items: flex-start;
       }
 
+      .header-center-nav {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
       .field-row {
         grid-template-columns: minmax(0, 1fr);
       }
@@ -393,21 +439,22 @@
 </head>
 <body>
   <div class="page-shell auth-page">
-    <!-- TOP BAR -->
+    <!-- TOP BAR matching landing page -->
     <header class="site-header">
       <div class="site-header-inner">
-        <div class="brand-stack-left">
+        <div class="brand-left">
           <div class="lv-badge">LV</div>
           <div class="brand-wordmark">LUMIVUE</div>
         </div>
 
-        <div class="site-header-nav">
-          <div class="nav-pill-group">
-            <a href="marketplace.html" class="nav-pill">Marketplace</a>
-            <a href="dashboard.html" class="nav-pill">Dashboard</a>
-            <a href="listings.html" class="nav-pill">Listings</a>
-            <a href="logout.html" class="nav-pill">Log out</a>
-          </div>
+        <nav class="header-center-nav">
+          <a href="marketplace.html">Marketplace</a>
+          <a href="browse.html">Browse all</a>
+        </nav>
+
+        <div class="header-right">
+          <a href="login.html" class="header-pill">Sign in / Join</a>
+          <a href="signup.html" class="header-pill">For vendors</a>
         </div>
       </div>
     </header>
@@ -418,8 +465,8 @@
         <div class="account-title-block">
           <h1>VENDOR ACCOUNT</h1>
           <p>
-            Complete these steps to activate payouts and go live. While your account is under review,
-            you can still create products, publish listings, and refine your storefront.
+            Review and confirm the legal agreements, marketplace terms, and customer-facing policies
+            that apply to your LumiVue storefront.
           </p>
         </div>
         <div class="status-pill">STATUS: IN REVIEW</div>
@@ -434,77 +481,36 @@
       </div>
     </section>
 
-    <!-- Bank account & payout schedule form -->
+    <!-- Legal agreements form -->
     <section class="section-card">
       <div class="section-header">
-        <div class="section-eyebrow">PAYOUT SETUP</div>
-        <h2 class="section-title">Bank account & payout schedule</h2>
+        <div class="section-eyebrow">MARKETPLACE AGREEMENTS</div>
+        <h2 class="section-title">Legal forms & policies</h2>
         <p class="section-subline">
-          Connect the payout bank account where you want to receive funds, confirm your legal details,
-          and choose how often LumiVue should send payouts.
+          Confirm the legal name that appears on invoices, and add links or summaries for your
+          returns, exchanges, and customer support policies.
         </p>
       </div>
 
-      <form id="payoutForm" class="payout-form">
-        <!-- Legal business & contact -->
+      <form id="legalForm" class="legal-form">
+        <!-- Legal identity -->
         <div>
-          <div class="field-group-label">Legal business name & contact details</div>
+          <div class="field-group-label">Legal identity</div>
 
           <div class="field-row single">
             <div class="field">
               <label for="legalName">Legal business name</label>
               <input id="legalName" name="legalName" type="text" />
+              <div class="helper-text">
+                This should match your tax documents (for example, W-9 or W-8 forms).
+              </div>
             </div>
           </div>
 
           <div class="field-row">
             <div class="field">
-              <label for="dba">Doing business as (optional)</label>
-              <input id="dba" name="dba" type="text" />
-            </div>
-            <div class="field">
-              <label for="primaryContact">Primary contact name</label>
-              <input id="primaryContact" name="primaryContact" type="text" />
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="businessEmail">Business email</label>
-              <input id="businessEmail" name="businessEmail" type="email" />
-            </div>
-            <div class="field">
-              <label for="businessPhone">Business phone</label>
-              <input id="businessPhone" name="businessPhone" type="tel" />
-            </div>
-          </div>
-
-          <div class="field-row single">
-            <div class="field">
-              <label for="streetAddress">Street address</label>
-              <input id="streetAddress" name="streetAddress" type="text" />
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="city">City</label>
-              <input id="city" name="city" type="text" />
-            </div>
-            <div class="field">
-              <label for="state">State / Region</label>
-              <input id="state" name="state" type="text" />
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="postalCode">Postal code</label>
-              <input id="postalCode" name="postalCode" type="text" />
-            </div>
-            <div class="field">
-              <label for="country">Country</label>
-              <select id="country" name="country">
+              <label for="taxCountry">Tax country / region</label>
+              <select id="taxCountry" name="taxCountry">
                 <option value="">Select country</option>
                 <option value="US">United States</option>
                 <option value="CA">Canada</option>
@@ -512,113 +518,78 @@
                 <option value="AU">Australia</option>
               </select>
             </div>
+            <div class="field">
+              <label for="taxId">Tax ID (optional)</label>
+              <input id="taxId" name="taxId" type="text" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Policy details -->
+        <div>
+          <div class="field-group-label">Storefront policies</div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="returnsPolicy">Returns & exchanges</label>
+              <textarea
+                id="returnsPolicy"
+                name="returnsPolicy"
+                placeholder="Describe how customers can request a return, exchange, or refund."
+              ></textarea>
+            </div>
           </div>
 
           <div class="field-row single">
             <div class="field">
-              <label for="internalNotes">Internal notes (optional)</label>
-              <textarea id="internalNotes" name="internalNotes" placeholder="Optional internal notes for this vendor"></textarea>
+              <label for="shippingPolicy">Shipping & delivery</label>
+              <textarea
+                id="shippingPolicy"
+                name="shippingPolicy"
+                placeholder="Describe your shipping regions, delivery timeframes, and any important notes."
+              ></textarea>
             </div>
+          </div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="supportPolicy">Customer support</label>
+              <textarea
+                id="supportPolicy"
+                name="supportPolicy"
+                placeholder="How shoppers can contact you and how quickly you usually respond."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="legalNotes">Internal notes (optional)</label>
+              <textarea
+                id="legalNotes"
+                name="legalNotes"
+                placeholder="Optional internal notes about your legal or policy setup."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="checkbox-row">
+            <input type="checkbox" id="agreementsAccepted" name="agreementsAccepted" />
+            <label for="agreementsAccepted">
+              I confirm that this information is accurate to the best of my knowledge and that I will keep it updated
+              if my legal name or policies change.
+            </label>
           </div>
         </div>
 
-        <!-- Bank details -->
-        <div>
-          <div class="field-group-label">Bank account details</div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="bankName">Bank name</label>
-              <input id="bankName" name="bankName" type="text" />
-            </div>
-            <div class="field">
-              <label for="accountHolder">Account holder name</label>
-              <input id="accountHolder" name="accountHolder" type="text" />
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="routingNumber">Routing number</label>
-              <input id="routingNumber" name="routingNumber" type="text" inputmode="numeric" />
-              <div class="helper-text">U.S. banks only. For international payouts, your provider will use IBAN/SWIFT instead.</div>
-            </div>
-            <div class="field">
-              <label for="accountNumber">Account number</label>
-              <input id="accountNumber" name="accountNumber" type="password" inputmode="numeric" />
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="accountNumberConfirm">Confirm account number</label>
-              <input id="accountNumberConfirm" name="accountNumberConfirm" type="password" inputmode="numeric" />
-            </div>
-            <div class="field">
-              <label for="accountType">Account type</label>
-              <select id="accountType" name="accountType">
-                <option value="">Select type</option>
-                <option value="checking">Checking</option>
-                <option value="savings">Savings</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Payout settings -->
-        <div>
-          <div class="field-group-label">Payout schedule</div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="payoutFrequency">Payout frequency</label>
-              <select id="payoutFrequency" name="payoutFrequency">
-                <option value="daily">Daily</option>
-                <option value="weekly" selected>Weekly</option>
-                <option value="biweekly">Every 2 weeks</option>
-                <option value="monthly">Monthly</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="payoutDay">Preferred payout day</label>
-              <select id="payoutDay" name="payoutDay">
-                <option value="">Any day</option>
-                <option value="monday">Monday</option>
-                <option value="tuesday">Tuesday</option>
-                <option value="wednesday">Wednesday</option>
-                <option value="thursday">Thursday</option>
-                <option value="friday">Friday</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="minPayout">Minimum payout threshold (USD)</label>
-              <input id="minPayout" name="minPayout" type="number" min="0" step="1" />
-              <div class="helper-text">LumiVue will hold balances under this amount until the next payout.</div>
-            </div>
-            <div class="field">
-              <label for="currency">Payout currency</label>
-              <select id="currency" name="currency">
-                <option value="USD" selected>USD – U.S. Dollar</option>
-                <option value="CAD">CAD – Canadian Dollar</option>
-                <option value="GBP">GBP – British Pound</option>
-                <option value="EUR">EUR – Euro</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="payout-footer-row">
-          <p class="payout-requirement">
-            This information is required before payouts can be activated. Your banking details are encrypted and
-            never shared with buyers.
+        <div class="legal-footer-row">
+          <p class="legal-requirement">
+            These agreements and policies are required before your account can be approved and shown to buyers.
           </p>
           <div class="btn-row">
-            <button type="submit" class="btn-primary">Save payout details</button>
-            <!-- 🔹 back to account overview now points to account.html -->
-            <a href="account.html" class="nav-pill">Back to account overview</a>
+            <button type="submit" class="btn-primary">Save legal details</button>
+            <!-- SAME COLOR & STYLE AS SAVE BUTTON -->
+            <a href="account.html" class="btn-primary">Back to account overview</a>
           </div>
         </div>
 
@@ -627,7 +598,7 @@
     </section>
   </div>
 
-  <!-- REAL saving with Firebase Auth + Firestore -->
+  <!-- Firebase: real saving into creators/{uid}.legalProfile -->
   <script type="module">
     import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import {
@@ -637,8 +608,8 @@
     import {
       getFirestore,
       doc,
-      setDoc,
       getDoc,
+      setDoc,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
@@ -655,9 +626,8 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const form = document.getElementById("payoutForm");
+    const form = document.getElementById("legalForm");
     const statusEl = document.getElementById("status");
-
     let currentUser = null;
 
     function setStatus(msg, isError = false) {
@@ -666,44 +636,52 @@
       statusEl.className = isError ? "error" : "";
     }
 
-    function fillForm(data) {
+    function fillFormFromData(data) {
       if (!data) return;
+
       const fields = [
-        "legalName", "dba", "primaryContact", "businessEmail",
-        "businessPhone", "streetAddress", "city", "state",
-        "postalCode", "country", "internalNotes",
-        "bankName", "accountHolder", "routingNumber",
-        "accountNumber", "accountType", "payoutFrequency",
-        "payoutDay", "minPayout", "currency"
+        "legalName",
+        "taxCountry",
+        "taxId",
+        "returnsPolicy",
+        "shippingPolicy",
+        "supportPolicy",
+        "legalNotes"
       ];
+
       fields.forEach((key) => {
         if (form[key] && data[key] != null) {
           form[key].value = data[key];
         }
       });
+
+      if (data.agreementsAccepted) {
+        form.agreementsAccepted.checked = true;
+      }
     }
 
-    // Watch auth so we know which document to use
+    // Load existing legal profile once user is known
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
 
       if (!user) {
-        setStatus("Please sign in on your account page before saving payout details.", true);
+        setStatus("Please sign in on your account page before saving legal details.", true);
         return;
       }
 
       setStatus("");
 
-      // Try to load existing payout profile
       try {
-        const ref = doc(db, "payoutProfiles", user.uid);
+        const ref = doc(db, "creators", user.uid);
         const snap = await getDoc(ref);
         if (snap.exists()) {
-          fillForm(snap.data());
+          const docData = snap.data();
+          const legalProfile = docData.legalProfile || null;
+          fillFormFromData(legalProfile);
         }
       } catch (err) {
-        console.error("Error loading payout profile", err);
-        // Don't block page if load fails
+        console.error("Error loading legal profile", err);
+        // don't block page on load error
       }
     });
 
@@ -712,58 +690,55 @@
         e.preventDefault();
 
         if (!currentUser) {
-          setStatus("Please sign in first, then save payout details again.", true);
+          setStatus("Please sign in first, then save legal details again.", true);
           return;
         }
 
-        const data = {
+        const legalProfile = {
           legalName: form.legalName.value.trim(),
-          dba: form.dba.value.trim(),
-          primaryContact: form.primaryContact.value.trim(),
-          businessEmail: form.businessEmail.value.trim(),
-          businessPhone: form.businessPhone.value.trim(),
-          streetAddress: form.streetAddress.value.trim(),
-          city: form.city.value.trim(),
-          state: form.state.value.trim(),
-          postalCode: form.postalCode.value.trim(),
-          country: form.country.value,
-          internalNotes: form.internalNotes.value.trim(),
-          bankName: form.bankName.value.trim(),
-          accountHolder: form.accountHolder.value.trim(),
-          routingNumber: form.routingNumber.value.trim(),
-          accountNumber: form.accountNumber.value.trim(),
-          accountNumberConfirm: form.accountNumberConfirm.value.trim(),
-          accountType: form.accountType.value,
-          payoutFrequency: form.payoutFrequency.value,
-          payoutDay: form.payoutDay.value,
-          minPayout: form.minPayout.value,
-          currency: form.currency.value,
+          taxCountry: form.taxCountry.value,
+          taxId: form.taxId.value.trim(),
+          returnsPolicy: form.returnsPolicy.value.trim(),
+          shippingPolicy: form.shippingPolicy.value.trim(),
+          supportPolicy: form.supportPolicy.value.trim(),
+          legalNotes: form.legalNotes.value.trim(),
+          agreementsAccepted: form.agreementsAccepted.checked,
           updatedAt: serverTimestamp()
         };
 
-        if (data.accountNumber && data.accountNumberConfirm &&
-            data.accountNumber !== data.accountNumberConfirm) {
-          setStatus("Account numbers do not match.", true);
+        if (!legalProfile.legalName) {
+          setStatus("Please enter your legal business name.", true);
+          return;
+        }
+
+        if (!legalProfile.agreementsAccepted) {
+          setStatus("Please confirm the checkbox to accept these agreements.", true);
           return;
         }
 
         try {
-          setStatus("Saving payout details…");
+          setStatus("Saving legal details…");
 
-          const ref = doc(db, "payoutProfiles", currentUser.uid);
-          await setDoc(ref, data, { merge: true });
+          const ref = doc(db, "creators", currentUser.uid);
+          await setDoc(
+            ref,
+            { legalProfile },
+            { merge: true }
+          );
 
-          setStatus("Payout details saved.");
+          setStatus("Legal details saved.");
+
+          // Redirect back to overview after a short pause
           setTimeout(() => {
-            window.location.href = "dashboard.html";
+            window.location.href = "account.html";
           }, 700);
         } catch (err) {
-          console.error("Error saving payout details", err);
+          console.error("Error saving legal details", err);
           const code = err.code || "";
           setStatus(
             code
-              ? `Could not save payout details (${code}). Check Firestore rules in the console.`
-              : "Could not save payout details. Check Firestore settings.",
+              ? `Could not save legal details (${code}). Check Firestore rules in the console.`
+              : "Could not save legal details. Check Firestore settings.",
             true
           );
         }
