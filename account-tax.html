@@ -2,360 +2,598 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LumiVue – Policies, returns & customer support</title>
+  <title>LumiVue – Tax forms & marketplace agreements</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css" />
+
   <style>
-    :root{
-      --lv-bg:#e8dcc7;
-      --lv-surface:#e3ceb2;
-      --lv-border:#c9a07a;
-      --lv-text:#5c3f28;
-      --lv-muted:#7a6a59;
-      --lv-accent:#b8703b;
-      --lv-danger:#c15b4b;
-      --lv-accent-soft:#f3ddc2;
-    }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:radial-gradient(circle at top left,#f3e4ce,#e8dcc7 48%,#ddc8aa);
-      color:var(--lv-text);
-    }
-    .shell{min-height:100vh;display:flex;flex-direction:column;}
-
-    header{
-      height:64px;display:flex;align-items:center;justify-content:center;
-      border-bottom:1px solid rgba(0,0,0,.04);
-      backdrop-filter:blur(16px);background:rgba(232,220,199,.88);
-    }
-    .nav-inner{width:100%;max-width:1120px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
-    .brand{display:flex;flex-direction:column;gap:2px;}
-    .brand-main{font-size:15px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--lv-text);}
-    .brand-sub{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lv-muted);}
-    nav{display:flex;align-items:center;gap:16px;font-size:12px;text-transform:uppercase;letter-spacing:.14em;}
-    nav a{text-decoration:none;color:var(--lv-muted);padding-bottom:2px;border-bottom:1px solid transparent;}
-    nav a.active{color:var(--lv-text);border-bottom-color:var(--lv-border);}
-    .logout{border-left:1px solid rgba(0,0,0,.1);padding-left:14px;margin-left:8px;}
-    .logout a{color:var(--lv-danger);font-weight:500;}
-
-    main{flex:1;display:flex;justify-content:center;padding:32px 16px 48px;}
-    .card{
-      width:100%;max-width:1120px;background:rgba(255,255,255,.32);
-      border-radius:22px;border:1px solid rgba(201,160,122,.45);
-      padding:26px 28px 30px;
-      box-shadow:0 22px 60px rgba(115,82,52,.20),0 0 0 1px rgba(255,255,255,.6);
-      backdrop-filter:blur(14px);
-      position:relative;
+    :root {
+      /* Same palette as landing page */
+      --lv-bg: #f4f1eb;
+      --lv-surface: #ffffff;
+      --lv-border: #ddd3c6;
+      --lv-border-strong: #ccc0b1;
+      --lv-text: #2c1e19;          /* espresso */
+      --lv-text-muted: #7a6a5c;
+      --lv-accent: #c98a5a;
+      --lv-accent-soft: #fbede1;
+      --lv-radius-lg: 14px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+      --lv-button-bg: #e1c8a6;     /* beige pills like Marketplace button */
+      --lv-danger: #dc2626;
+      --lv-danger-soft: #fee2e2;
     }
 
-    .back-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:18px;color:var(--lv-muted);cursor:pointer;}
-    .back-link span{font-size:16px;}
-
-    h1{
-      margin:0 0 6px;font-size:22px;text-transform:uppercase;
-      letter-spacing:.1em;font-weight:800;color:#5c3f28;
-    }
-    p.lead{margin:0 0 20px;font-size:13px;color:var(--lv-muted);max-width:540px;}
-
-    form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px;}
-    label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--lv-muted);margin-bottom:4px;display:block;}
-    textarea{
-      width:100%;min-height:90px;resize:vertical;
-      padding:8px 10px;border-radius:8px;border:1px solid rgba(201,160,122,.8);
-      background:#f7e7cf;font-size:13px;color:var(--lv-text);
-    }
-    textarea::placeholder{color:rgba(92,63,40,.6);}
-    textarea:focus{
-      background:#f7e7cf;
-      color:#5c3f28;
-      outline:none;
-      box-shadow:0 0 0 1px rgba(184,112,59,.8);
-    }
-    .full{grid-column:1 / -1;}
-
-    .actions{margin-top:20px;display:flex;justify-content:space-between;align-items:center;gap:16px;}
-    .hint{font-size:11px;color:var(--lv-muted);}
-    button{
-      padding:8px 18px;border-radius:999px;border:1px solid rgba(43,33,24,.7);
-      background:#fff7ec;font-size:11px;text-transform:uppercase;letter-spacing:.16em;cursor:pointer;
-      box-shadow:0 18px 35px rgba(0,0,0,.18);
-    }
-    button:hover:not([disabled]){background:var(--lv-accent);color:#fff;border-color:var(--lv-accent);}
-    button[disabled]{opacity:.6;cursor:default;box-shadow:none;}
-
-    .status-pill{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      padding:6px 12px;
-      border-radius:999px;
-      border:1px solid var(--lv-border);
-      background:var(--lv-accent-soft);
-      color:var(--lv-text);
-      min-width:160px;
-      text-align:center;
+    * {
+      box-sizing: border-box;
     }
 
-    .loading-overlay{
-      position:absolute;
-      inset:0;
-      border-radius:22px;
-      background:rgba(243,228,206,.65);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:13px;
-      color:var(--lv-muted);
-      backdrop-filter:blur(4px);
-      pointer-events:none;
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Helvetica Neue", Arial, sans-serif;
+      background: var(--lv-bg);
+      color: var(--lv-text);
     }
-    .loading-overlay.hidden{display:none;}
 
-    @media(max-width:768px){
-      .nav-inner,.card{padding:16px;}
-      form{grid-template-columns:1fr;}
-      .actions{flex-direction:column;align-items:flex-start;}
+    .page-shell {
+      max-width: 100%;              /* full width */
+      margin: 0 auto;
+      padding: 18px 24px 40px;
+    }
+
+    .auth-page {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    /* TOP BAR – same LV header + pills as other pages */
+
+    .site-header {
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    .site-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-stack-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lv-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: #d0b596;
+      border: 1px solid #b89a77;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text);
+    }
+
+    .brand-wordmark {
+      font-size: 13px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--lv-text);
+    }
+
+    .site-header-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .nav-pill-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-pill {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 6px 16px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      background: var(--lv-button-bg);
+      color: var(--lv-text);
+      cursor: pointer;
+    }
+
+    .nav-pill:hover {
+      background: var(--lv-button-bg); /* no hover pop-up */
+    }
+
+    /* MAIN CARD */
+
+    .tax-card {
+      background: var(--lv-surface);
+      border-radius: 22px;
+      padding: 22px 22px 20px;
+      border: 1px solid var(--lv-border);
+      box-shadow: var(--lv-shadow-soft);
+      position: relative;
+      max-width: 1440px;            /* wider card */
+      margin: 0 auto;               /* centered */
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 18px;
+      color: var(--lv-text-muted);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .back-link span {
+      font-size: 16px;
+    }
+
+    .tax-header-block h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--lv-text);
+    }
+
+    .tax-header-block p.lead {
+      margin: 0 0 20px;
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      max-width: 540px;
+      line-height: 1.6;
+    }
+
+    /* FORM */
+
+    form#taxForm {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px 18px;
+    }
+
+    .full-row {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--lv-text-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fdf6eb;
+      font-size: 13px;
+      color: var(--lv-text);
+      outline: none;
+      transition: border-color 120ms ease, background 120ms ease;
+    }
+
+    textarea {
+      border-radius: 18px;
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #b2a391;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #c6a574;
+      background: #fffaf2;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+    }
+
+    /* FOOTER / BUTTONS */
+
+    .actions-row {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      max-width: 320px;
+      line-height: 1.5;
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      appearance: none;
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border: 1px solid var(--lv-border-strong);
+      cursor: pointer;
+      background: var(--lv-button-bg);
+      color: var(--lv-text);
+      box-shadow: none; /* no pop-up */
+    }
+
+    .btn-primary:hover {
+      background: var(--lv-button-bg); /* no hover pop-up */
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .status-pill {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: var(--lv-accent-soft);
+      color: var(--lv-text);
+      min-width: 150px;
+      text-align: center;
+    }
+
+    .status-pill.error {
+      background: var(--lv-danger-soft);
+      border-color: var(--lv-danger);
+      color: #7c1f1f;
+    }
+
+    .status-pill.ok {
+      background: var(--lv-accent-soft);
+      border-color: var(--lv-accent);
+      color: #3f3a2a;
+    }
+
+    /* LOADING OVERLAY */
+
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      background: rgba(244, 241, 235, 0.72);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .loading-overlay.hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .page-shell {
+        padding: 14px 16px 30px;
+      }
+
+      form#taxForm {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .actions-row {
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="shell">
-    <header>
-      <div class="nav-inner">
-        <div class="brand">
-          <div class="brand-main">LUMIVUE</div>
-          <div class="brand-sub">Marketplace · Vendor account</div>
+  <div class="page-shell auth-page">
+    <!-- TOP BAR -->
+    <header class="site-header">
+      <div class="site-header-inner">
+        <div class="brand-stack-left">
+          <div class="lv-badge">LV</div>
+          <div class="brand-wordmark">LUMIVUE</div>
         </div>
-        <nav>
-          <a href="marketplace.html">Marketplace</a>
-          <a href="dashboard.html">Dashboard</a>
-          <a href="listings.html">My listings</a>
-          <span class="logout"><a href="logout.html">Log out</a></span>
-        </nav>
+
+        <div class="site-header-nav">
+          <div class="nav-pill-group">
+            <a href="marketplace.html" class="nav-pill">Marketplace</a>
+            <a href="dashboard.html" class="nav-pill">Dashboard</a>
+            <a href="listings.html" class="nav-pill">Listings</a>
+            <a href="logout.html" class="nav-pill">Log out</a>
+          </div>
+        </div>
       </div>
     </header>
 
-    <main>
-      <section class="card">
-        <div class="loading-overlay" id="loadingOverlay">
-          Loading policies…
-        </div>
+    <!-- TAX CARD -->
+    <section class="tax-card">
+      <div class="loading-overlay hidden" id="loadingOverlay">
+        Loading tax details…
+      </div>
 
-        <div class="back-link" onclick="window.location.href='account.html'">
-          <span>←</span> Back to vendor account
-        </div>
+      <a href="account.html" class="back-link">
+        <span>←</span> Back to vendor account
+      </a>
 
-        <h1>Policies, returns &amp; customer support</h1>
+      <div class="tax-header-block">
+        <h1>Tax forms &amp; marketplace agreements</h1>
         <p class="lead">
-          Vendors can define the policies shown on their public LumiVue storefront so customers know what to expect.
+          Vendors will provide the tax information required for their region and agree to the LumiVue
+          marketplace terms.
         </p>
+      </div>
 
-        <form id="policiesForm">
-          <div class="full">
-            <label for="shippingPolicy">Shipping policy</label>
-            <textarea id="shippingPolicy" placeholder="Describe processing times, carriers, tracking, etc."></textarea>
-          </div>
+      <form id="taxForm">
+        <div>
+          <label for="taxType">Tax entity type</label>
+          <select id="taxType" name="taxType">
+            <option value="">Select type</option>
+            <option>Individual / sole proprietor</option>
+            <option>Single-member LLC</option>
+            <option>LLC – Partnership</option>
+            <option>Corporation</option>
+          </select>
+        </div>
 
-          <div class="full">
-            <label for="returnPolicy">Return &amp; exchange policy</label>
-            <textarea id="returnPolicy" placeholder="Explain whether returns are accepted and any conditions or time limits."></textarea>
-          </div>
+        <div>
+          <label for="tin">Tax ID</label>
+          <input id="tin" name="tin" type="text" placeholder="Enter SSN / EIN / tax ID" />
+        </div>
 
-          <div class="full">
-            <label for="cancellationPolicy">Cancellation policy</label>
-            <textarea id="cancellationPolicy" placeholder="Explain when orders can be cancelled or changed."></textarea>
-          </div>
+        <div class="full-row">
+          <label for="country">Tax country / region</label>
+          <select id="country" name="country">
+            <option value="">Select country or region</option>
+            <option>United States</option>
+            <option>Canada</option>
+            <option>United Kingdom</option>
+            <option>Australia</option>
+          </select>
+        </div>
 
-          <div class="full">
-            <label for="supportContact">Customer support contact</label>
-            <textarea id="supportContact" placeholder="Add email address, response time, and support hours."></textarea>
-          </div>
+        <div class="full-row">
+          <label for="formType">Form type</label>
+          <select id="formType" name="formType">
+            <option value="">Select form type</option>
+            <option>W-9</option>
+            <option>W-8BEN</option>
+            <option>W-8BEN-E</option>
+          </select>
+        </div>
 
-          <div class="full">
-            <label for="otherPolicy">Additional notes (optional)</label>
-            <textarea id="otherPolicy" placeholder="Any extra information you want buyers to see."></textarea>
-          </div>
+        <div class="full-row">
+          <label for="agreement">Marketplace agreement notes</label>
+          <textarea
+            id="agreement"
+            name="agreement"
+            placeholder="Vendor can add any agreement notes or reference here."
+          ></textarea>
+        </div>
 
-          <div class="actions">
-            <span class="hint">
-              These policies appear on your public store profile so customers know how you handle orders and support.
-            </span>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="status-pill" id="saveStatus">Connecting…</div>
-              <button type="button" id="saveButton">Save policies</button>
-            </div>
+        <div class="full-row">
+          <label class="checkbox-row">
+            <input type="checkbox" id="taxConfirm" name="taxConfirm" />
+            I confirm the information is accurate and I agree to the LumiVue marketplace terms.
+          </label>
+        </div>
+
+        <div class="actions-row">
+          <p class="hint">
+            This information is stored securely for compliance and will be used when generating tax documents.
+          </p>
+          <div class="btn-row">
+            <div id="saveStatus" class="status-pill">Not signed in</div>
+            <button type="submit" id="saveButton" class="btn-primary">
+              Save tax details
+            </button>
           </div>
-        </form>
-      </section>
-    </main>
+        </div>
+      </form>
+    </section>
   </div>
 
-  <!-- ===== LUMIVUE · SHARED FIREBASE BLOCK (COMPAT) ===== -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+  <!-- Firebase (modular) -->
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-  <script>
-    // Your LumiVue Firebase config
     const firebaseConfig = {
-      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
       authDomain: "lumivue-c8fdf.firebaseapp.com",
       projectId: "lumivue-c8fdf",
-      storageBucket:"lumivue-c8fdf.firebasestorage.app",
-      messagingSenderId: "112402036736",
-      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
     };
 
-    // Initialize Firebase (old style – perfect for plain HTML)
-    firebase.initializeApp(firebaseConfig);
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Optional handles if the page needs them
-    const auth    = firebase.auth();
-    const db      = firebase.firestore();
-    const storage = firebase.storage();
-  </script>
-  <!-- ===== END LUMIVUE FIREBASE BLOCK ===== -->
+    const form = document.getElementById("taxForm");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const saveStatus = document.getElementById("saveStatus");
+    const saveButton = document.getElementById("saveButton");
 
-  <script>
-    (function () {
-      const loadingOverlay      = document.getElementById('loadingOverlay');
-      const saveBtn             = document.getElementById('saveButton');
-      const saveStatus          = document.getElementById('saveStatus');
+    let currentUser = null;
 
-      const shippingInput       = document.getElementById('shippingPolicy');
-      const returnInput         = document.getElementById('returnPolicy');
-      const cancellationInput   = document.getElementById('cancellationPolicy');
-      const supportInput        = document.getElementById('supportContact');
-      const otherInput          = document.getElementById('otherPolicy');
-
-      let currentUser = null;
-
-      function setStatus(text, tone) {
-        if (!saveStatus) return;
-        saveStatus.textContent = text;
-
-        if (tone === 'error') {
-          saveStatus.style.background   = '#fee2e2';
-          saveStatus.style.borderColor  = '#dc2626';
-          saveStatus.style.color        = '#7c1f1f';
-        } else if (tone === 'success') {
-          saveStatus.style.background   = 'var(--lv-accent-soft)';
-          saveStatus.style.borderColor  = 'var(--lv-accent)';
-          saveStatus.style.color        = '#3f3a2a';
-        } else {
-          saveStatus.style.background   = 'var(--lv-accent-soft)';
-          saveStatus.style.borderColor  = 'var(--lv-border)';
-          saveStatus.style.color        = 'var(--lv-text)';
-        }
+    function setStatus(text, tone = "") {
+      if (!saveStatus) return;
+      saveStatus.textContent = text || "";
+      saveStatus.className = "status-pill";
+      if (tone === "error") {
+        saveStatus.classList.add("error");
+      } else if (tone === "ok") {
+        saveStatus.classList.add("ok");
       }
+    }
 
-      function showLoading(show) {
-        if (!loadingOverlay) return;
-        loadingOverlay.classList.toggle('hidden', !show);
-      }
+    function showLoading(show) {
+      if (!loadingOverlay) return;
+      loadingOverlay.classList.toggle("hidden", !show);
+    }
 
-      async function loadExistingData() {
-        try {
-          showLoading(true);
-          setStatus('Loading…');
-
-          const docRef = db.collection('creators').doc(currentUser.uid);
-          const snap   = await docRef.get();
-
-          if (snap.exists) {
-            const data = snap.data() || {};
-
-            shippingInput.value     = data.shippingPolicy      || '';
-            returnInput.value       = data.returnPolicy        || '';
-            cancellationInput.value = data.cancellationPolicy  || '';
-            supportInput.value      = data.supportContact      || '';
-            otherInput.value        = data.otherPolicy         || '';
-          }
-
-          setStatus('Loaded');
-        } catch (err) {
-          console.error('Error loading policies', err);
-          setStatus('Load error', 'error');
-        } finally {
-          showLoading(false);
-        }
-      }
-
-      async function savePolicies() {
-        if (!currentUser) {
-          setStatus('Please sign in again', 'error');
-          return;
-        }
-
-        const shippingVal     = shippingInput.value.trim();
-        const returnVal       = returnInput.value.trim();
-        const cancellationVal = cancellationInput.value.trim();
-        const supportVal      = supportInput.value.trim();
-
-        if (!shippingVal || !returnVal || !cancellationVal || !supportVal) {
-          setStatus('All main policy fields are required', 'error');
-          return;
-        }
-
-        if (!saveBtn) return;
-        saveBtn.disabled = true;
-        setStatus('Saving…');
-
-        try {
-          const docRef = db.collection('creators').doc(currentUser.uid);
-
-          const payload = {
-            shippingPolicy:      shippingVal,
-            returnPolicy:        returnVal,
-            cancellationPolicy:  cancellationVal,
-            supportContact:      supportVal,
-            otherPolicy:         otherInput.value.trim() || null,
-            updatedAt:           firebase.firestore.FieldValue.serverTimestamp(),
-            sections: {
-              tax: { completed: true }
-            }
-          };
-
-          await docRef.set(payload, { merge: true });
-          setStatus('Saved', 'success');
-        } catch (err) {
-          console.error('Error saving policies', err);
-          setStatus('Save error: ' + (err.code || 'unknown'), 'error');
-          alert('Could not save policies: ' + err.message);
-        } finally {
-          saveBtn.disabled = false;
-        }
-      }
-
-      function initFirebasePage() {
-        auth.onAuthStateChanged(async (user) => {
-          if (!user) {
-            setStatus('Redirecting to sign in…', 'error');
-            const redirect = encodeURIComponent(window.location.pathname);
-            window.location.href = 'login.html?redirect=' + redirect;
-            return;
-          }
-
-          currentUser = user;
-          setStatus('Connected', 'success');
-          await loadExistingData();
-        });
-      }
-
-      document.addEventListener('DOMContentLoaded', () => {
+    async function loadExisting() {
+      if (!currentUser) return;
+      try {
         showLoading(true);
-        setStatus('Connecting…');
-        initFirebasePage();
+        setStatus("Loading…");
+        const ref = doc(db, "creators", currentUser.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          const data = snap.data() || {};
+          if (form.taxType) form.taxType.value = data.taxType || "";
+          if (form.tin) form.tin.value = data.tin || "";
+          if (form.country) form.country.value = data.taxCountry || "";
+          if (form.formType) form.formType.value = data.formType || "";
+          if (form.agreement) form.agreement.value = data.agreementNotes || "";
+          if (form.taxConfirm && typeof data.taxConfirmed === "boolean") {
+            form.taxConfirm.checked = data.taxConfirmed;
+          }
+        }
+        setStatus("Loaded", "ok");
+      } catch (err) {
+        console.error("Error loading tax info", err);
+        setStatus("Load error", "error");
+      } finally {
+        showLoading(false);
+      }
+    }
 
-        if (saveBtn) {
-          saveBtn.addEventListener('click', savePolicies);
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      if (!user) {
+        setStatus("Not signed in", "error");
+        return;
+      }
+      setStatus("Connected", "ok");
+      await loadExisting();
+    });
+
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!currentUser) {
+          setStatus("Please sign in to save", "error");
+          return;
+        }
+
+        const taxType = form.taxType.value.trim();
+        const tin = form.tin.value.trim();
+        const country = form.country.value.trim();
+        const formType = form.formType.value.trim();
+        const agreementNotes = form.agreement.value.trim();
+        const taxConfirmed = form.taxConfirm.checked;
+
+        if (!taxType || !tin || !country || !formType || !taxConfirmed) {
+          setStatus("All fields + agreement required", "error");
+          return;
+        }
+
+        saveButton.disabled = true;
+        setStatus("Saving…");
+
+        try {
+          const ref = doc(db, "creators", currentUser.uid);
+          await setDoc(
+            ref,
+            {
+              taxType,
+              tin,
+              taxCountry: country,
+              formType,
+              agreementNotes: agreementNotes || null,
+              taxConfirmed: true,
+              updatedAt: serverTimestamp(),
+              sections: { tax: { completed: true } }
+            },
+            { merge: true }
+          );
+          setStatus("Saved", "ok");
+        } catch (err) {
+          console.error("Error saving tax info", err);
+          setStatus("Save error", "error");
+          alert("Could not save tax details: " + (err.message || err));
+        } finally {
+          saveButton.disabled = false;
         }
       });
-    })();
+    }
   </script>
 </body>
 </html>
-
