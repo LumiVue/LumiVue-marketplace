@@ -2,282 +2,646 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LumiVue – Legal business & contact details</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bank account & payouts · LumiVue Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <link rel="stylesheet" href="styles.css" />
 
   <style>
     :root {
+      /* same palette as landing page */
       --lv-bg: #f4f1eb;
       --lv-surface: #ffffff;
       --lv-border: #ddd3c6;
       --lv-border-strong: #ccc0b1;
-      --lv-text: #2c1e19;
+      --lv-text: #2c1e19;       /* espresso */
       --lv-text-muted: #7a6a5c;
       --lv-accent: #c98a5a;
-      --lv-accent-soft: #fbedd1;
+      --lv-accent-soft: #fbede1;
       --lv-radius-lg: 14px;
       --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
       --lv-danger: #dc2626;
-      --lv-danger-soft: #fee2e2;
+      --lv-bubble-bg: #f8ebd9;
+      --lv-button-bg: #e1c8a6;  /* brownish pill buttons like landing page */
     }
-
-    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #ffffff, var(--lv-bg));
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Helvetica Neue", Arial, sans-serif;
+      background: var(--lv-bg);
       color: var(--lv-text);
     }
 
-    .shell { min-height: 100vh; display: flex; flex-direction: column; }
-
-    header {
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid rgba(0,0,0,.04);
-      background: #faf6f0cc;
-      backdrop-filter: blur(14px);
+    .page-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px 24px 40px;
     }
 
-    .nav-inner {
-      width: 100%;
+    .auth-page {
       max-width: 1120px;
-      padding: 0 24px;
+      margin: 0 auto;
+    }
+
+    /* TOP BAR – match landing page family */
+
+    .site-header {
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    .site-header-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
-    .brand { display: flex; flex-direction: column; gap: 2px; }
-    .brand-main {
-      font-size: 15px;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--lv-text);
-    }
-    .brand-sub {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      color: var(--lv-text-muted);
-    }
-
-    nav { display: flex; align-items: center; gap: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: .14em; }
-    nav a { text-decoration: none; color: var(--lv-text-muted); padding-bottom: 2px; border-bottom: 1px solid transparent; }
-    nav a.active { color: var(--lv-text); border-bottom-color: var(--lv-border-strong); }
-
-    .logout { border-left: 1px solid rgba(0,0,0,.08); padding-left: 14px; margin-left: 8px; }
-    .logout a { color: var(--lv-danger); font-weight: 500; }
-
-    main { flex: 1; display: flex; justify-content: center; padding: 32px 16px 48px; }
-
-    .card {
-      width: 100%;
-      max-width: 1120px;
-      background: var(--lv-surface);
-      border-radius: var(--lv-radius-lg);
-      border: 1px solid var(--lv-border-strong);
-      padding: 26px 28px 30px;
-      box-shadow: var(--lv-shadow-soft);
-      position: relative;
-    }
-
-    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .14em; margin-bottom: 18px; cursor: pointer; color: var(--lv-text-muted); }
-    .back-link span { font-size: 16px; }
-
-    h1 { margin: 0 0 6px; font-size: 22px; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; color: var(--lv-text); }
-
-    p.lead { margin: 0 0 20px; font-size: 13px; color: var(--lv-text-muted); max-width: 540px; }
-
-    form {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px 18px;
-    }
-
-    label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--lv-text-muted);
-      margin-bottom: 4px;
-      display: block;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid var(--lv-border);
-      background: #fdf7ef;
-      font-size: 13px;
-      color: var(--lv-text);
-    }
-
-    textarea { min-height: 70px; resize: vertical; }
-
-    .full { grid-column: 1 / -1; }
-
-    .actions { margin-top: 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-
-    .hint { font-size: 11px; color: var(--lv-text-muted); }
-
-    .status-pill {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--lv-border-strong);
-      background: var(--lv-accent-soft);
-      color: var(--lv-text);
-      min-width: 160px;
-      text-align: center;
-    }
-
-    .loading-overlay {
-      position: absolute;
-      inset: 0;
-      border-radius: var(--lv-radius-lg);
-      background: rgba(244,241,235,.65);
+    .brand-stack-left {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      color: var(--lv-text-muted);
-      backdrop-filter: blur(4px);
-      pointer-events: none;
+      gap: 10px;
     }
 
-    .loading-overlay.hidden { display: none; }
+    .lv-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: #d0b596;
+      border: 1px solid #b89a77;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text);
+    }
+
+    .brand-wordmark {
+      font-size: 13px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--lv-text);
+    }
+
+    .site-header-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .nav-pill-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-pill {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 6px 16px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      background: var(--lv-button-bg);
+      color: var(--lv-text);
+      cursor: pointer;
+    }
+
+    .nav-pill:hover {
+      background: var(--lv-button-bg); /* no pop-up */
+    }
+
+    /* HEADER CARD */
+
+    .account-header-card {
+      background: var(--lv-surface);
+      border-radius: 22px;
+      padding: 22px 22px 18px;
+      box-shadow: var(--lv-shadow-soft);
+      border: 1px solid var(--lv-border);
+      margin-bottom: 18px;
+    }
+
+    .account-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .account-title-block h1 {
+      font-size: 22px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin: 0 0 6px;
+      color: var(--lv-text);
+    }
+
+    .account-title-block p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      max-width: 520px;
+    }
+
+    .status-pill {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 6px 14px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--lv-bubble-bg);
+      color: var(--lv-text);
+      white-space: nowrap;
+    }
+
+    .account-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .progress-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: #e5ddd0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 68%;
+      height: 100%;
+      background: linear-gradient(90deg, #c98a5a, #fbbf24);
+    }
+
+    .progress-value {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      white-space: nowrap;
+    }
+
+    /* PAYOUT FORM CARD */
+
+    .section-card {
+      background: var(--lv-surface);
+      border-radius: 22px;
+      padding: 22px 22px 20px;
+      border: 1px solid var(--lv-border);
+      box-shadow: var(--lv-shadow-soft);
+      margin-bottom: 20px;
+    }
+
+    .section-header {
+      margin-bottom: 14px;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin: 0 0 4px;
+      color: var(--lv-text);
+    }
+
+    .section-subline {
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      margin: 0;
+      max-width: 620px;
+    }
+
+    form.payout-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .field-group-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+      margin-bottom: 6px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .field-row.single {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--lv-text-muted);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fdf6eb;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--lv-text); /* espresso text */
+      outline: none;
+      transition:
+        border-color 120ms ease,
+        background 120ms ease;
+    }
+
+    .field textarea {
+      border-radius: 18px;
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #b2a391;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: #c6a574;
+      background: #fffaf2;
+    }
+
+    .helper-text {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      margin-top: 2px;
+    }
+
+    .payout-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .payout-requirement {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      max-width: 260px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      appearance: none;
+      border-radius: 999px;
+      padding: 7px 18px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--lv-border-strong);
+      cursor: pointer;
+      background: var(--lv-button-bg);
+      color: var(--lv-text);     /* espresso */
+      box-shadow: none;          /* no pop-up */
+    }
+
+    .btn-primary:hover {
+      background: var(--lv-button-bg);
+    }
+
+    #status {
+      margin-top: 8px;
+      font-size: 12px;
+      min-height: 18px;
+      color: var(--lv-text-muted);
+    }
+
+    #status.error {
+      color: #b91c1c;
+    }
 
     @media (max-width: 768px) {
-      .nav-inner, .card { padding: 16px; }
-      form { grid-template-columns: 1fr; }
-      .actions { flex-direction: column; align-items: flex-start; }
+      .page-shell {
+        padding: 14px 16px 30px;
+      }
+
+      .site-header-inner {
+        align-items: flex-start;
+      }
+
+      .field-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .account-header-card {
+        padding: 18px 16px 16px;
+      }
+
+      .section-card {
+        padding: 18px 16px 18px;
+      }
     }
   </style>
 </head>
-
 <body>
-  <div class="shell">
-    <header>
-      <div class="nav-inner">
-        <div class="brand">
-          <div class="brand-main">LUMIVUE</div>
-          <div class="brand-sub">Marketplace · Vendor account</div>
+  <div class="page-shell auth-page">
+    <!-- TOP BAR -->
+    <header class="site-header">
+      <div class="site-header-inner">
+        <div class="brand-stack-left">
+          <div class="lv-badge">LV</div>
+          <div class="brand-wordmark">LUMIVUE</div>
         </div>
-        <nav>
-          <a href="marketplace.html">Marketplace</a>
-          <a href="dashboard.html">Dashboard</a>
-          <a href="listings.html">My listings</a>
-          <span class="logout"><a href="logout.html">Log out</a></span>
-        </nav>
+
+        <div class="site-header-nav">
+          <div class="nav-pill-group">
+            <a href="marketplace.html" class="nav-pill">Marketplace</a>
+            <a href="dashboard.html" class="nav-pill">Dashboard</a>
+            <a href="listings.html" class="nav-pill">Listings</a>
+            <a href="logout.html" class="nav-pill">Log out</a>
+          </div>
+        </div>
       </div>
     </header>
 
-    <main>
-      <section class="card">
-        <div class="loading-overlay hidden" id="loadingOverlay">
-          Loading account details…
+    <!-- Vendor account header -->
+    <section class="account-header-card">
+      <div class="account-header-top">
+        <div class="account-title-block">
+          <h1>VENDOR ACCOUNT</h1>
+          <p>
+            Complete these steps to activate payouts and go live. While your account is under review,
+            you can still create products, publish listings, and refine your storefront.
+          </p>
         </div>
+        <div class="status-pill">STATUS: IN REVIEW</div>
+      </div>
 
-        <div class="back-link" onclick="window.location.href='account.html'">
-          <span>←</span> Back to vendor account
+      <div class="account-progress-row">
+        <div class="progress-label">ONBOARDING COMPLETION</div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
         </div>
+        <div class="progress-value">67%</div>
+      </div>
+    </section>
 
-        <h1>Legal business name &amp; contact details</h1>
-        <p class="lead">
-          Vendors will complete this information for invoices, tax documentation, and compliance checks.
+    <!-- Bank account & payout schedule form -->
+    <section class="section-card">
+      <div class="section-header">
+        <div class="section-eyebrow">PAYOUT SETUP</div>
+        <h2 class="section-title">Bank account & payout schedule</h2>
+        <p class="section-subline">
+          Connect the payout bank account where you want to receive funds, confirm your legal details,
+          and choose how often LumiVue should send payouts.
         </p>
+      </div>
 
-        <form id="legalForm">
-          <div class="full">
-            <label for="legalName">Legal business name</label>
-            <input id="legalName" type="text" />
-          </div>
+      <form id="payoutForm" class="payout-form">
+        <!-- Legal business & contact -->
+        <div>
+          <div class="field-group-label">Legal business name & contact details</div>
 
-          <div>
-            <label for="dbaName">Doing business as (optional)</label>
-            <input id="dbaName" type="text" />
-          </div>
-
-          <div>
-            <label for="contactName">Primary contact name</label>
-            <input id="contactName" type="text" />
-          </div>
-
-          <div>
-            <label for="email">Business email</label>
-            <input id="email" type="email" />
-          </div>
-
-          <div>
-            <label for="phone">Business phone</label>
-            <input id="phone" type="tel" />
-          </div>
-
-          <div class="full">
-            <label for="address1">Street address</label>
-            <input id="address1" type="text" />
-          </div>
-
-          <div>
-            <label for="city">City</label>
-            <input id="city" type="text" />
-          </div>
-
-          <div>
-            <label for="state">State</label>
-            <input id="state" type="text" />
-          </div>
-
-          <div>
-            <label for="postal">Postal code</label>
-            <input id="postal" type="text" />
-          </div>
-
-          <div>
-            <label for="country">Country</label>
-            <select id="country">
-              <option value="">Select</option>
-              <option>United States</option>
-              <option>Canada</option>
-              <option>United Kingdom</option>
-              <option>Australia</option>
-            </select>
-          </div>
-
-          <div class="full">
-            <label for="notes">Internal notes</label>
-            <textarea id="notes"></textarea>
-          </div>
-
-          <div class="actions">
-            <span class="hint">Required before payouts can be activated.</span>
-
-            <div style="display:flex; gap:10px; align-items:center;">
-              <div class="status-pill" id="saveStatus">Connecting…</div>
-              <button type="button" id="saveButton">Save details</button>
+          <div class="field-row single">
+            <div class="field">
+              <label for="legalName">Legal business name</label>
+              <input id="legalName" name="legalName" type="text" />
             </div>
           </div>
-        </form>
-      </section>
-    </main>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="dba">Doing business as (optional)</label>
+              <input id="dba" name="dba" type="text" />
+            </div>
+            <div class="field">
+              <label for="primaryContact">Primary contact name</label>
+              <input id="primaryContact" name="primaryContact" type="text" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="businessEmail">Business email</label>
+              <input id="businessEmail" name="businessEmail" type="email" />
+            </div>
+            <div class="field">
+              <label for="businessPhone">Business phone</label>
+              <input id="businessPhone" name="businessPhone" type="tel" />
+            </div>
+          </div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="streetAddress">Street address</label>
+              <input id="streetAddress" name="streetAddress" type="text" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="city">City</label>
+              <input id="city" name="city" type="text" />
+            </div>
+            <div class="field">
+              <label for="state">State / Region</label>
+              <input id="state" name="state" type="text" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="postalCode">Postal code</label>
+              <input id="postalCode" name="postalCode" type="text" />
+            </div>
+            <div class="field">
+              <label for="country">Country</label>
+              <select id="country" name="country">
+                <option value="">Select country</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="GB">United Kingdom</option>
+                <option value="AU">Australia</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="internalNotes">Internal notes (optional)</label>
+              <textarea id="internalNotes" name="internalNotes" placeholder="Optional internal notes for this vendor"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank details -->
+        <div>
+          <div class="field-group-label">Bank account details</div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="bankName">Bank name</label>
+              <input id="bankName" name="bankName" type="text" />
+            </div>
+            <div class="field">
+              <label for="accountHolder">Account holder name</label>
+              <input id="accountHolder" name="accountHolder" type="text" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="routingNumber">Routing number</label>
+              <input id="routingNumber" name="routingNumber" type="text" inputmode="numeric" />
+              <div class="helper-text">U.S. banks only. For international payouts, your provider will use IBAN/SWIFT instead.</div>
+            </div>
+            <div class="field">
+              <label for="accountNumber">Account number</label>
+              <input id="accountNumber" name="accountNumber" type="password" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="accountNumberConfirm">Confirm account number</label>
+              <input id="accountNumberConfirm" name="accountNumberConfirm" type="password" inputmode="numeric" />
+            </div>
+            <div class="field">
+              <label for="accountType">Account type</label>
+              <select id="accountType" name="accountType">
+                <option value="">Select type</option>
+                <option value="checking">Checking</option>
+                <option value="savings">Savings</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payout settings -->
+        <div>
+          <div class="field-group-label">Payout schedule</div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="payoutFrequency">Payout frequency</label>
+              <select id="payoutFrequency" name="payoutFrequency">
+                <option value="daily">Daily</option>
+                <option value="weekly" selected>Weekly</option>
+                <option value="biweekly">Every 2 weeks</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="payoutDay">Preferred payout day</label>
+              <select id="payoutDay" name="payoutDay">
+                <option value="">Any day</option>
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="minPayout">Minimum payout threshold (USD)</label>
+              <input id="minPayout" name="minPayout" type="number" min="0" step="1" />
+              <div class="helper-text">LumiVue will hold balances under this amount until the next payout.</div>
+            </div>
+            <div class="field">
+              <label for="currency">Payout currency</label>
+              <select id="currency" name="currency">
+                <option value="USD" selected>USD – U.S. Dollar</option>
+                <option value="CAD">CAD – Canadian Dollar</option>
+                <option value="GBP">GBP – British Pound</option>
+                <option value="EUR">EUR – Euro</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="payout-footer-row">
+          <p class="payout-requirement">
+            This information is required before payouts can be activated. Your banking details are encrypted and
+            never shared with buyers.
+          </p>
+          <div class="btn-row">
+            <button type="submit" class="btn-primary">Save payout details</button>
+            <!-- 🔹 back to account overview now points to account.html -->
+            <a href="account.html" class="nav-pill">Back to account overview</a>
+          </div>
+        </div>
+
+        <div id="status"></div>
+      </form>
+    </section>
   </div>
 
-  <!-- ✔ UPDATED FIREBASE (compat 10.13.1) — WORKS ON GITHUB -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-storage-compat.js"></script>
+  <!-- REAL saving with Firebase Auth + Firestore -->
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
       authDomain: "lumivue-c8fdf.firebaseapp.com",
@@ -287,131 +651,124 @@
       appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
     };
 
-    firebase.initializeApp(firebaseConfig);
-  </script>
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  <script>
-    (function () {
-      const loadingOverlay = document.getElementById('loadingOverlay');
-      const saveBtn = document.getElementById('saveButton');
-      const saveStatus = document.getElementById('saveStatus');
+    const form = document.getElementById("payoutForm");
+    const statusEl = document.getElementById("status");
 
-      const legalName = document.getElementById('legalName');
-      const dbaName = document.getElementById('dbaName');
-      const contactName = document.getElementById('contactName');
-      const emailInput = document.getElementById('email');
-      const phoneInput = document.getElementById('phone');
-      const address1 = document.getElementById('address1');
-      const cityInput = document.getElementById('city');
-      const stateInput = document.getElementById('state');
-      const postalInput = document.getElementById('postal');
-      const countryInput = document.getElementById('country');
-      const notesInput = document.getElementById('notes');
+    let currentUser = null;
 
-      let db = firebase.firestore();
-      let auth = firebase.auth();
-      let currentUser = null;
+    function setStatus(msg, isError = false) {
+      if (!statusEl) return;
+      statusEl.textContent = msg || "";
+      statusEl.className = isError ? "error" : "";
+    }
 
-      function setStatus(text, tone) {
-        saveStatus.textContent = text;
-
-        if (tone === 'error') {
-          saveStatus.style.background = 'var(--lv-danger-soft)';
-          saveStatus.style.borderColor = 'var(--lv-danger)';
-          saveStatus.style.color = '#7c1f1f';
-        } else if (tone === 'success') {
-          saveStatus.style.background = 'var(--lv-accent-soft)';
-          saveStatus.style.borderColor = 'var(--lv-accent)';
-          saveStatus.style.color = '#3f3a2a';
-        } else {
-          saveStatus.style.background = 'var(--lv-accent-soft)';
-          saveStatus.style.borderColor = 'var(--lv-border-strong)';
-          saveStatus.style.color = 'var(--lv-text)';
+    function fillForm(data) {
+      if (!data) return;
+      const fields = [
+        "legalName", "dba", "primaryContact", "businessEmail",
+        "businessPhone", "streetAddress", "city", "state",
+        "postalCode", "country", "internalNotes",
+        "bankName", "accountHolder", "routingNumber",
+        "accountNumber", "accountType", "payoutFrequency",
+        "payoutDay", "minPayout", "currency"
+      ];
+      fields.forEach((key) => {
+        if (form[key] && data[key] != null) {
+          form[key].value = data[key];
         }
+      });
+    }
+
+    // Watch auth so we know which document to use
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+
+      if (!user) {
+        setStatus("Please sign in on your account page before saving payout details.", true);
+        return;
       }
 
-      function showLoading(show) {
-        loadingOverlay.classList.toggle('hidden', !show);
-      }
+      setStatus("");
 
-      auth.onAuthStateChanged(async (user) => {
-        if (!user) {
-          setStatus('Redirecting…', 'error');
-          window.location.href = 'login.html';
+      // Try to load existing payout profile
+      try {
+        const ref = doc(db, "payoutProfiles", user.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          fillForm(snap.data());
+        }
+      } catch (err) {
+        console.error("Error loading payout profile", err);
+        // Don't block page if load fails
+      }
+    });
+
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!currentUser) {
+          setStatus("Please sign in first, then save payout details again.", true);
           return;
         }
 
-        currentUser = user;
-        setStatus('Connected', 'success');
-        loadExistingData();
-      });
+        const data = {
+          legalName: form.legalName.value.trim(),
+          dba: form.dba.value.trim(),
+          primaryContact: form.primaryContact.value.trim(),
+          businessEmail: form.businessEmail.value.trim(),
+          businessPhone: form.businessPhone.value.trim(),
+          streetAddress: form.streetAddress.value.trim(),
+          city: form.city.value.trim(),
+          state: form.state.value.trim(),
+          postalCode: form.postalCode.value.trim(),
+          country: form.country.value,
+          internalNotes: form.internalNotes.value.trim(),
+          bankName: form.bankName.value.trim(),
+          accountHolder: form.accountHolder.value.trim(),
+          routingNumber: form.routingNumber.value.trim(),
+          accountNumber: form.accountNumber.value.trim(),
+          accountNumberConfirm: form.accountNumberConfirm.value.trim(),
+          accountType: form.accountType.value,
+          payoutFrequency: form.payoutFrequency.value,
+          payoutDay: form.payoutDay.value,
+          minPayout: form.minPayout.value,
+          currency: form.currency.value,
+          updatedAt: serverTimestamp()
+        };
 
-      async function loadExistingData() {
-        showLoading(true);
-        setStatus('Loading…');
-
-        const docRef = db.collection('creators').doc(currentUser.uid);
-        const snap = await docRef.get();
-
-        if (snap.exists) {
-          const data = snap.data() || {};
-
-          legalName.value = data.legalName || '';
-          dbaName.value = data.dbaName || '';
-          contactName.value = data.contactName || '';
-          emailInput.value = data.email || '';
-          phoneInput.value = data.phone || '';
-          address1.value = data.address1 || '';
-          cityInput.value = data.city || '';
-          stateInput.value = data.state || '';
-          postalInput.value = data.postal || '';
-          countryInput.value = data.country || '';
-          notesInput.value = data.legalNotes || data.notes || '';
+        if (data.accountNumber && data.accountNumberConfirm &&
+            data.accountNumber !== data.accountNumberConfirm) {
+          setStatus("Account numbers do not match.", true);
+          return;
         }
-
-        setStatus('Loaded');
-        showLoading(false);
-      }
-
-      async function saveLegalInfo() {
-        if (!currentUser) return;
-
-        saveBtn.disabled = true;
-        setStatus('Saving…');
 
         try {
-          const payload = {
-            legalName: legalName.value.trim(),
-            dbaName: dbaName.value.trim() || null,
-            contactName: contactName.value.trim(),
-            email: emailInput.value.trim(),
-            phone: phoneInput.value.trim() || null,
-            address1: address1.value.trim() || null,
-            city: cityInput.value.trim() || null,
-            state: stateInput.value.trim() || null,
-            postal: postalInput.value.trim() || null,
-            country: countryInput.value || null,
-            legalNotes: notesInput.value.trim() || null,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            sections: { legal: { completed: true } }
-          };
+          setStatus("Saving payout details…");
 
-          await db.collection('creators').doc(currentUser.uid).set(payload, { merge: true });
+          const ref = doc(db, "payoutProfiles", currentUser.uid);
+          await setDoc(ref, data, { merge: true });
 
-          setStatus('Saved', 'success');
+          setStatus("Payout details saved.");
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 700);
         } catch (err) {
-          console.error(err);
-          setStatus('Save error', 'error');
-          alert('Could not save details: ' + err.message);
-        } finally {
-          saveBtn.disabled = false;
+          console.error("Error saving payout details", err);
+          const code = err.code || "";
+          setStatus(
+            code
+              ? `Could not save payout details (${code}). Check Firestore rules in the console.`
+              : "Could not save payout details. Check Firestore settings.",
+            true
+          );
         }
-      }
-
-      saveBtn.addEventListener('click', saveLegalInfo);
-    })();
+      });
+    }
   </script>
-
 </body>
 </html>
-
