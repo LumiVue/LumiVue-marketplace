@@ -2,29 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LumiVue – Vendor Account</title>
+  <title>LumiVue – Vendor Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Global stylesheet -->
   <link rel="stylesheet" href="styles.css" />
 
   <style>
-    :root {
-      --lv-bg: #e8dcc7;
-      --lv-surface: #e3ceb2;
-      --lv-border: #c9a07a;
-      --lv-text: #5c3f28;  /* espresso */
-      --lv-muted: #7a6a59;
-      --lv-accent: #b8703b;
-      --lv-accent-soft: #f3ddc2;
-      --lv-danger: #c15b4b;
+    :root{
+      /* LumiVue latte / espresso system – same as create-listing */
+      --lv-bg:#f4f1eb;
+      --lv-surface:#ffffff;
+      --lv-border:#e6d7c6;
+      --lv-border-strong:#d9c6b3;
+      --lv-text:#2c1e19;          /* espresso */
+      --lv-text-muted:#7a6a5c;
+      --lv-pill:#e3ceb2;          /* beige pill */
+      --lv-pill-border:#c9a07a;   /* caramel outline */
+      --lv-accent-soft:#fbf3e7;
+      --lv-shadow-soft:0 24px 60px rgba(15,23,42,.08);
+      --lv-radius-lg:14px;
+      --lv-radius-md:10px;
+
+      --lv-danger:#c15b4b;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #f3e4ce, #e8dcc7 48%, #ddc8aa);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background: var(--lv-bg);
       color: var(--lv-text);
     }
 
@@ -34,512 +44,781 @@
       flex-direction: column;
     }
 
-    /* TOP NAV */
-    .lv-top-nav {
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid rgba(0,0,0,0.04);
-      backdrop-filter: blur(16px);
-      background: rgba(232,220,199,.88);
+    /* HEADER – match create-listing */
+    .lv-header {
+      padding: 12px 24px 6px;
+      background: var(--lv-bg);
     }
 
-    .lv-top-nav-inner {
-      width: 100%;
+    .lv-header-inner {
       max-width: 1120px;
-      padding: 0 24px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
+      gap: 16px;
     }
 
     .lv-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lv-logo-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(44,30,25,.28);
+      background: radial-gradient(circle at 30% 0%, #fdf7ef 0, #e4c6a3 55%, #c79f74 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      color: var(--lv-text);
+      text-transform: uppercase;
+    }
+
+    .lv-brand-text {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .lv-brand-main {
-      font-size: 15px;
-      letter-spacing: .22em;
+    .lv-brand-title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: .18em;
       text-transform: uppercase;
+    }
+
+    .lv-brand-subtitle {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* TEXT NAV – like create-listing */
+    .lv-top-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+    }
+
+    .lv-top-nav a {
+      position: relative;
+      padding: 2px 0 4px;
+      text-decoration: none;
+      color: var(--lv-text-muted);
+      font-weight: 400;
+    }
+
+    .lv-top-nav a.lv-nav-active {
+      color: var(--lv-text);
+      font-weight: 500;
+    }
+
+    .lv-top-nav a.lv-nav-active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--lv-text);
+      border-radius: 999px;
+    }
+
+    /* round M avatar – like screenshot 2 */
+    .lv-user-pill {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(44,30,25,.28);
+      background: radial-gradient(circle at 30% 0%, #fdf7ef 0, #e4c6a3 55%, #c79f74 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
       font-weight: 600;
       color: var(--lv-text);
     }
 
-    .lv-brand-sub {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      color: var(--lv-muted);
+    .lv-user-pill span {
+      letter-spacing: .08em;
     }
 
-    .lv-nav-links {
+    .lv-main-wrap {
+      flex: 1;
+      padding: 0 24px 32px;
+    }
+
+    .lv-main {
+      max-width: 1120px;
+      margin: 0 auto 40px;
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.1fr);
+      gap: 22px;
+      align-items: flex-start;
+    }
+
+    .lv-page-title-row {
+      max-width: 1120px;
+      margin: 4px auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .lv-page-title-block h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .lv-page-title-block p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-page-actions {
       display: flex;
       align-items: center;
-      gap: 16px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
+      gap: 8px;
     }
 
-    .lv-nav-links a {
-      text-decoration: none;
-      color: var(--lv-muted);
-      padding-bottom: 2px;
-      border-bottom: 1px solid transparent;
+    /* BUTTONS – same beige pills, espresso text */
+    .lv-btn {
+      border-radius: 999px;
+      border: 1px solid var(--lv-pill-border);
+      background: var(--lv-pill);
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--lv-text);   /* espresso text */
     }
 
-    .lv-nav-active {
-      color: var(--lv-text) !important;
-      border-bottom-color: var(--lv-border) !important;
-    }
-
-    .lv-nav-logout {
-      border-left: 1px solid rgba(0,0,0,.1);
-      padding-left: 14px;
-      margin-left: 8px;
-    }
-
-    .lv-nav-logout a {
-      color: var(--lv-danger);
+    .lv-btn-primary {
+      box-shadow: 0 14px 32px rgba(44,30,25,.18);
       font-weight: 500;
     }
 
-    /* MAIN */
-    .lv-main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      padding: 32px 16px 48px;
+    .lv-btn:hover {
+      background: #f0ddc8;
     }
 
-    .lv-main-inner {
-      width: 100%;
-      max-width: 1120px;
-      background: rgba(255,255,255,.32);
-      border-radius: 22px;
-      border: 1px solid rgba(201,160,122,.45);
-      padding: 26px 28px 30px;
-      box-shadow:
-        0 22px 60px rgba(115,82,52,.20),
-        0 0 0 1px rgba(255,255,255,.6);
-      backdrop-filter: blur(14px);
-    }
-
-    /* HEADER */
-    .lv-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-
-    .lv-header-title {
-      margin: 0 0 6px;
-      font-size: 22px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      font-weight: 800;
-      color: #5c3f28; /* espresso */
-    }
-
-    .lv-header-sub {
-      margin: 0;
-      font-size: 13px;
-      color: var(--lv-muted);
-      max-width: 520px;
-      line-height: 1.5;
-    }
-
-    .lv-status-pill {
-      display: inline-block;
-      margin-top: 4px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      padding: 5px 14px;
-      border-radius: 999px;
-      background: #fef6f3;
-      border: 1px solid rgba(184,121,63,.4);
-      color: #b8793f;
-      white-space: nowrap;
-      width: auto;
-      max-width: max-content;
-      text-align: center;
-    }
-
-    /* PROGRESS */
-    .lv-progress {
-      margin-bottom: 22px;
-    }
-
-    .lv-progress-label-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      color: var(--lv-muted);
-      margin-bottom: 8px;
-    }
-
-    .lv-progress-bar-outer {
-      width: 100%;
-      height: 7px;
-      border-radius: 999px;
-      background: #f4e2c6;
-      overflow: hidden;
-    }
-
-    .lv-progress-bar-inner {
-      height: 100%;
-      width: 0%;
-      border-radius: 999px;
-      background: linear-gradient(90deg,#b8703b,#d39b53,#f1d6b5);
-      transition: width .3s ease;
-    }
-
-    /* GRID */
-    .lv-grid {
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(2,minmax(0,1fr));
-      margin-bottom: 12px;
-    }
-
-    @media (max-width: 840px) {
-      .lv-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* CARDS */
-    .lv-card {
-      position: relative;
-      padding: 18px 18px 16px;
+    .lv-card,
+    .lv-panel {
       background: var(--lv-surface);
-      border-radius: 18px;
+      border-radius: var(--lv-radius-lg);
       border: 1px solid var(--lv-border);
-      box-shadow: 0 16px 38px rgba(0,0,0,.04);
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      transition:
-        transform .16s ease,
-        box-shadow .16s ease,
-        border-color .16s ease,
-        background .16s ease;
-    }
-
-    .lv-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 22px 50px rgba(0,0,0,.12);
-      border-color: var(--lv-accent);
-      background: #f1ddc2;
+      box-shadow: var(--lv-shadow-soft);
+      padding: 16px 18px;
     }
 
     .lv-card-header {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
       gap: 10px;
     }
 
-    .lv-card-title {
+    .lv-card-header h2 {
+      margin: 0;
       font-size: 15px;
-      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .lv-card-header span {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+    }
+
+    /* store performance metrics */
+    .lv-metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .lv-metric-card {
+      background: #fbf1e3;
+      border-radius: var(--lv-radius-md);
+      border: 1px solid var(--lv-border-strong);
+      padding: 10px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .lv-metric-label {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .lv-metric-value {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .lv-metric-sub {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
       margin-bottom: 4px;
-      color: #5c3f28; /* espresso */
+    }
+
+    .lv-chip {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: var(--lv-accent-soft);
+      font-size: 12px;
+      padding: 6px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: var(--lv-text);
+      cursor: pointer;
+    }
+
+    .lv-chip span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-section-label {
+      margin: 14px 0 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-activity-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .lv-activity-item {
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fbf1e3;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .lv-activity-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .lv-activity-main strong {
+      font-size: 13px;
+    }
+
+    .lv-activity-meta {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-activity-tag {
+      align-self: flex-start;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(184,112,59,.06);
+      border: 1px solid rgba(184,112,59,.4);
+      color: var(--lv-text);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    /* ONBOARDING PANEL (right column) */
+    .lv-onboarding-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .lv-onboarding-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .lv-status-pill {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: var(--lv-accent-soft);
+      color: var(--lv-text);
+      white-space: nowrap;
+    }
+
+    .lv-onboarding-bar-wrap {
+      margin-bottom: 12px;
+    }
+
+    .lv-onboarding-bar-shell {
+      position: relative;
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #f1e4d6;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .lv-onboarding-bar-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg,#c79f74,#aa7a4a);
+      transition: width .25s ease-out;
+    }
+
+    .lv-onboarding-meta {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .lv-onboarding-meta span {
+      white-space: nowrap;
+    }
+
+    /* cards grid */
+    .lv-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .lv-card-title {
+      font-size: 13px;
+      font-weight: 600;
     }
 
     .lv-card-status {
       font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(184,121,63,.45);
-      background: #fef7ea;
-      color: #b8793f;
+      color: var(--lv-text-muted);
       white-space: nowrap;
     }
 
     .lv-card-body {
       font-size: 12px;
-      color: var(--lv-muted);
-      line-height: 1.6;
-      margin-bottom: 6px;
+      color: var(--lv-text);
+      margin-bottom: 8px;
     }
 
     .lv-card-footer {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-top: 4px;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--lv-text-muted);
     }
 
     .lv-card-note {
-      font-size: 11px;
-      color: var(--lv-muted);
-      opacity: .95;
+      flex: 1;
     }
 
     .lv-card-manage {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      padding: 7px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(43,33,24,.6);
-      background: rgba(255,255,255,.7);
+      border: 1px solid var(--lv-pill-border);
+      background: var(--lv-pill);
+      padding: 5px 11px;
+      font-size: 12px;
       cursor: pointer;
+      color: var(--lv-text);
       white-space: nowrap;
     }
 
-    .lv-card:hover .lv-card-manage {
-      background: var(--lv-accent);
-      color: #fff;
-      border-color: var(--lv-accent);
+    .lv-card-manage:hover {
+      background: #f0ddc8;
     }
 
     .lv-footer-note {
       margin-top: 10px;
       font-size: 11px;
-      color: var(--lv-muted);
-      line-height: 1.5;
+      color: var(--lv-text-muted);
     }
 
-    @media (max-width: 768px) {
-      .lv-top-nav-inner,
-      .lv-main-inner {
-        padding: 16px;
-      }
-      .lv-top-nav-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-        height: auto;
-      }
-      .lv-nav-links {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-      .lv-header {
+    /* Responsive just for this page */
+    @media (max-width: 900px) {
+      .lv-header-inner {
         flex-direction: column;
         align-items: flex-start;
       }
-      .lv-status-pill {
-        align-self: flex-start;
+
+      .lv-main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .lv-page-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .lv-metrics-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .lv-metrics-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .lv-main-wrap {
+        padding: 0 16px 24px;
       }
     }
   </style>
 </head>
-
 <body>
   <div class="lv-shell">
-    <!-- TOP NAV -->
-    <header class="lv-top-nav">
-      <div class="lv-top-nav-inner">
+    <!-- Header -->
+    <header class="lv-header">
+      <div class="lv-header-inner">
         <div class="lv-brand">
-          <div class="lv-brand-main">LUMIVUE</div>
-          <div class="lv-brand-sub">Marketplace · Vendor account</div>
+          <div class="lv-logo-badge">LV</div>
+          <div class="lv-brand-text">
+            <div class="lv-brand-title">LUMIVUE</div>
+            <div class="lv-brand-subtitle">Creator dashboard · Marketplace studio</div>
+          </div>
         </div>
 
-        <nav class="lv-nav-links">
-          <a href="marketplace.html">Marketplace</a>
-          <a href="dashboard.html" class="lv-nav-active">Dashboard</a>
-          <a href="listings.html">Listings</a>
-          <span class="lv-nav-logout">
-            <a href="logout.html">Log out</a>
-          </span>
-        </nav>
+        <div class="lv-header-right">
+          <nav class="lv-top-nav">
+            <a href="dashboard.html" class="lv-nav-active">Dashboard</a>
+            <a href="listings.html">Listings</a>
+            <a href="create-listing.html">Create listing</a>
+            <a href="edit-store.html">Storefront</a>
+            <a href="account-payout.html">Payouts</a>
+            <a href="account-legal.html">Legal</a>
+          </nav>
+
+          <div class="lv-user-pill">
+            <span>M</span>
+          </div>
+        </div>
       </div>
     </header>
 
-    <!-- MAIN -->
-    <main class="lv-main">
-      <section class="lv-main-inner">
-        <!-- header + status -->
-        <div class="lv-header">
-          <div>
-            <h1 class="lv-header-title">Vendor account</h1>
-            <p class="lv-header-sub">
-              Complete these steps to activate payouts and go live. While your
-              account is under review, you can still create products, publish
-              listings, and refine your storefront.
-            </p>
-          </div>
-          <span class="lv-status-pill" id="overallStatusPill">Status: Not approved yet</span>
+    <!-- Page title / actions -->
+    <div class="lv-main-wrap">
+      <div class="lv-page-title-row">
+        <div class="lv-page-title-block">
+          <h1>Vendor dashboard</h1>
+          <p>Track your LumiVue storefront, listings, and revenue at a glance.</p>
         </div>
-
-        <!-- progress -->
-        <div class="lv-progress">
-          <div class="lv-progress-label-row">
-            <span>Onboarding completion</span>
-            <span id="onboardingPercent">0%</span>
-          </div>
-          <div class="lv-progress-bar-outer">
-            <div class="lv-progress-bar-inner" id="onboardingBar"></div>
-          </div>
+        <div class="lv-page-actions">
+          <button class="lv-btn" onclick="goTo('edit-store.html')">
+            Edit store
+          </button>
+          <button class="lv-btn lv-btn-primary" onclick="goTo('create-listing.html')">
+            + New listing
+          </button>
         </div>
+      </div>
 
-        <!-- cards -->
-        <div class="lv-grid">
-          <!-- Legal -->
-          <article class="lv-card" onclick="goTo('account-legal.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Legal business name &amp; contact details</div>
-              <div class="lv-card-status" id="status-legal">Not started</div>
-            </div>
-            <div class="lv-card-body">
-              Add your legal business name, primary contact, and full billing address so we can generate invoices and compliance documents.
-            </div>
-            <div class="lv-card-footer">
-              <span class="lv-card-note">Required before payouts can be activated.</span>
-              <button type="button"
-                      class="lv-card-manage"
-                      onclick="goTo('account-legal.html')">
-                Manage
-              </button>
-            </div>
-          </article>
+      <!-- Main grid -->
+      <main class="lv-main">
+        <!-- LEFT COLUMN – performance + quick actions -->
+        <section class="lv-card">
+          <div class="lv-card-header">
+            <h2>Store performance</h2>
+            <span>Last 30 days (sample numbers – can connect to data later)</span>
+          </div>
 
-          <!-- Tax -->
-          <article class="lv-card" onclick="goTo('account-tax.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Tax forms &amp; marketplace agreements</div>
-              <div class="lv-card-status" id="status-tax">Not started</div>
+          <!-- Metrics -->
+          <div class="lv-metrics-row">
+            <div class="lv-metric-card">
+              <div class="lv-metric-label">Views</div>
+              <div class="lv-metric-value">1,248</div>
+              <div class="lv-metric-sub">Across all active listings</div>
             </div>
-            <div class="lv-card-body">
-              Upload W-9 / W-8 forms, complete ID verification, and confirm LumiVue marketplace agreements for your region.
+            <div class="lv-metric-card">
+              <div class="lv-metric-label">Favorites</div>
+              <div class="lv-metric-value">87</div>
+              <div class="lv-metric-sub">Shoppers saving your products</div>
             </div>
-            <div class="lv-card-footer">
-              <span class="lv-card-note">Helps keep payouts compliant and secure.</span>
-              <button type="button"
-                      class="lv-card-manage"
-                      onclick="goTo('account-tax.html')">
-                Manage
-              </button>
+            <div class="lv-metric-card">
+              <div class="lv-metric-label">Orders</div>
+              <div class="lv-metric-value">32</div>
+              <div class="lv-metric-sub">Completed in this period</div>
             </div>
-          </article>
+            <div class="lv-metric-card">
+              <div class="lv-metric-label">Estimated revenue</div>
+              <div class="lv-metric-value">$2.4k</div>
+              <div class="lv-metric-sub">Before LumiVue fees</div>
+            </div>
+          </div>
 
-          <!-- Bank -->
-          <article class="lv-card" onclick="goTo('account-payouts.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Bank account &amp; payout schedule</div>
-              <div class="lv-card-status" id="status-payouts">Not started</div>
-            </div>
-            <div class="lv-card-body">
-              Connect the payout bank account where you want to receive funds, choose a schedule, and review your deposit summary.
-            </div>
-            <div class="lv-card-footer">
-              <span class="lv-card-note">Encrypted and never shared with buyers.</span>
-              <button type="button"
-                      class="lv-card-manage"
-                      onclick="goTo('account-payouts.html')">
-                Manage
-              </button>
-            </div>
-          </article>
+          <!-- Quick actions -->
+          <div class="lv-section-label">Quick actions</div>
+          <div class="lv-quick-actions">
+            <a href="create-listing.html" class="lv-chip">
+              <span>Listing</span>
+              Create a new product
+            </a>
+            <a href="listings.html" class="lv-chip">
+              <span>Catalog</span>
+              Manage all listings
+            </a>
+            <a href="edit-store.html" class="lv-chip">
+              <span>Storefront</span>
+              Update banner &amp; brand story
+            </a>
+            <a href="account-payout.html" class="lv-chip">
+              <span>Payouts</span>
+              Confirm bank &amp; schedule
+            </a>
+          </div>
 
-          <!-- Storefront -->
-          <article class="lv-card" onclick="goTo('edit-store.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Storefront name, branding &amp; first listing</div>
-              <div class="lv-card-status" id="status-storefront">Not started</div>
-            </div>
-            <div class="lv-card-body">
-              Choose your storefront name, upload brand visuals, and publish at least one hero listing so shoppers can discover your work.
-            </div>
-            <div class="lv-card-footer">
-              <span class="lv-card-note">You can edit your brand at any time.</span>
-              <button type="button"
-                      class="lv-card-manage"
-                      onclick="goTo('edit-store.html')">
-                Manage
-              </button>
-            </div>
-          </article>
+          <!-- Recent activity -->
+          <div class="lv-section-label">Recent activity</div>
+          <ul class="lv-activity-list">
+            <li class="lv-activity-item">
+              <div class="lv-activity-main">
+                <strong>“Crème de Lumière” approved</strong>
+                <div class="lv-activity-meta">Your new moisturizer listing is now live on LumiVue.</div>
+              </div>
+              <div class="lv-activity-tag">Listing live</div>
+            </li>
+            <li class="lv-activity-item">
+              <div class="lv-activity-main">
+                <strong>3 new favorites</strong>
+                <div class="lv-activity-meta">Serum Lumière · Le Lait Coco · Lumière Toner</div>
+              </div>
+              <div class="lv-activity-tag">Engagement</div>
+            </li>
+            <li class="lv-activity-item">
+              <div class="lv-activity-main">
+                <strong>Payout queued</strong>
+                <div class="lv-activity-meta">Next deposit scheduled based on your payout settings.</div>
+              </div>
+              <div class="lv-activity-tag">Payout</div>
+            </li>
+          </ul>
+        </section>
 
-          <!-- Shipping -->
-          <article class="lv-card" onclick="goTo('shipping.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Shipping methods &amp; delivery promises</div>
-              <div class="lv-card-status" id="status-shipping">Not started</div>
-            </div>
-            <div class="lv-card-body">
-              Configure carriers, handling times, and delivery expectations so customers know exactly how and when orders will arrive.
-            </div>
-            <div class="lv-card-footer">
-              <span class="lv-card-note">Applies to all listings by default.</span>
-              <button type="button"
-                      class="lv-card-manage"
-                      onclick="goTo('shipping.html')">
-                Manage
-              </button>
-            </div>
-          </article>
+        <!-- RIGHT COLUMN – onboarding cards wired to other pages -->
+        <aside class="lv-panel">
+          <div class="lv-onboarding-header">
+            <div class="lv-onboarding-title">Account onboarding</div>
+            <div class="lv-status-pill" id="overallStatusPill">Status: Not approved yet</div>
+          </div>
 
-          <!-- Policies -->
-          <article class="lv-card" onclick="goTo('account-policies.html')">
-            <div class="lv-card-header">
-              <div class="lv-card-title">Policies, returns &amp; customer support</div>
-              <div class="lv-card-status" id="status-policies">Not started</div>
+          <div class="lv-onboarding-bar-wrap">
+            <div class="lv-onboarding-bar-shell">
+              <div class="lv-onboarding-bar-fill" id="onboardingBar"></div>
             </div>
-            <div class="lv-card-body">
-              Define your return, exchange, and customer support policies so shoppers feel confident buying from your LumiVue storefront.
+            <div class="lv-onboarding-meta">
+              <span id="onboardingPercent">0%</span>
+              <span>Complete all required sections to activate payouts.</span>
             </div>
-            <div class="lv-card-footer">
-              <span class="lv-card-note">Shown on your public store profile.</span>
-              <button type="button"
-                      class="lv-card-manage"
-                      onclick="goTo('account-policies.html')">
-                Manage
-              </button>
-            </div>
-          </article>
-        </div>
+          </div>
 
-        <p class="lv-footer-note">
-          You can return to these steps at any time. Once all required sections are completed and reviewed, your account will be approved and payouts will be activated. Until then, you can still create drafts and refine your listings.
-        </p>
-      </section>
-    </main>
+          <!-- cards -->
+          <div class="lv-grid">
+            <!-- Legal -->
+            <article class="lv-card" onclick="goTo('account-legal.html')">
+              <div class="lv-card-header">
+                <div class="lv-card-title">Legal business name &amp; contact details</div>
+                <div class="lv-card-status" id="status-legal">Not started</div>
+              </div>
+              <div class="lv-card-body">
+                Add your legal business name, primary contact, and full billing address so we can generate invoices and compliance documents.
+              </div>
+              <div class="lv-card-footer">
+                <span class="lv-card-note">Required before payouts can be activated.</span>
+                <button type="button"
+                        class="lv-card-manage"
+                        onclick="goTo('account-legal.html'); event.stopPropagation();">
+                  Manage
+                </button>
+              </div>
+            </article>
+
+            <!-- Tax -->
+            <article class="lv-card" onclick="goTo('account-tax.html')">
+              <div class="lv-card-header">
+                <div class="lv-card-title">Tax forms &amp; marketplace agreements</div>
+                <div class="lv-card-status" id="status-tax">Not started</div>
+              </div>
+              <div class="lv-card-body">
+                Upload W-9 / W-8 forms, complete ID verification, and confirm LumiVue marketplace agreements for your region.
+              </div>
+              <div class="lv-card-footer">
+                <span class="lv-card-note">Helps keep payouts compliant and secure.</span>
+                <button type="button"
+                        class="lv-card-manage"
+                        onclick="goTo('account-tax.html'); event.stopPropagation();">
+                  Manage
+                </button>
+              </div>
+            </article>
+
+            <!-- Bank -->
+            <article class="lv-card" onclick="goTo('account-payout.html')">
+              <div class="lv-card-header">
+                <div class="lv-card-title">Bank account &amp; payout schedule</div>
+                <div class="lv-card-status" id="status-payouts">Not started</div>
+              </div>
+              <div class="lv-card-body">
+                Connect the payout bank account where you want to receive funds, choose a schedule, and review your deposit summary.
+              </div>
+              <div class="lv-card-footer">
+                <span class="lv-card-note">Encrypted and never shared with buyers.</span>
+                <button type="button"
+                        class="lv-card-manage"
+                        onclick="goTo('account-payout.html'); event.stopPropagation();">
+                  Manage
+                </button>
+              </div>
+            </article>
+
+            <!-- Storefront -->
+            <article class="lv-card" onclick="goTo('edit-store.html')">
+              <div class="lv-card-header">
+                <div class="lv-card-title">Storefront name, branding &amp; first listing</div>
+                <div class="lv-card-status" id="status-storefront">Not started</div>
+              </div>
+              <div class="lv-card-body">
+                Choose your storefront name, upload brand visuals, and publish at least one hero listing so shoppers can discover your work.
+              </div>
+              <div class="lv-card-footer">
+                <span class="lv-card-note">You can edit your brand at any time.</span>
+                <button type="button"
+                        class="lv-card-manage"
+                        onclick="goTo('edit-store.html'); event.stopPropagation();">
+                  Manage
+                </button>
+              </div>
+            </article>
+
+            <!-- Shipping -->
+            <article class="lv-card" onclick="goTo('shipping.html')">
+              <div class="lv-card-header">
+                <div class="lv-card-title">Shipping methods &amp; delivery promises</div>
+                <div class="lv-card-status" id="status-shipping">Not started</div>
+              </div>
+              <div class="lv-card-body">
+                Configure carriers, handling times, and delivery expectations so customers know exactly how and when orders will arrive.
+              </div>
+              <div class="lv-card-footer">
+                <span class="lv-card-note">Applies to all listings by default.</span>
+                <button type="button"
+                        class="lv-card-manage"
+                        onclick="goTo('shipping.html'); event.stopPropagation();">
+                  Manage
+                </button>
+              </div>
+            </article>
+
+            <!-- Policies -->
+            <article class="lv-card" onclick="goTo('account-policies.html')">
+              <div class="lv-card-header">
+                <div class="lv-card-title">Policies, returns &amp; customer support</div>
+                <div class="lv-card-status" id="status-policies">Not started</div>
+              </div>
+              <div class="lv-card-body">
+                Define your return, exchange, and customer support policies so shoppers feel confident buying from your LumiVue storefront.
+              </div>
+              <div class="lv-card-footer">
+                <span class="lv-card-note">Shown on your public store profile.</span>
+                <button type="button"
+                        class="lv-card-manage"
+                        onclick="goTo('account-policies.html'); event.stopPropagation();">
+                  Manage
+                </button>
+              </div>
+            </article>
+          </div>
+
+          <p class="lv-footer-note">
+            You can return to these steps at any time. Once all required sections are completed and reviewed, your account will be approved and payouts will be activated. Until then, you can still create drafts and refine your listings.
+          </p>
+        </aside>
+      </main>
+    </div>
   </div>
 
-  <!-- ===== LUMIVUE · SHARED FIREBASE BLOCK (COMPAT) ===== -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+  <!-- Firebase CDN SDKs (compat, same pattern as login.html) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 
   <script>
-    // Your LumiVue Firebase config (shared across pages)
+    // LumiVue Firebase config (same project as login.html)
     const firebaseConfig = {
-      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
       authDomain: "lumivue-c8fdf.firebaseapp.com",
       projectId: "lumivue-c8fdf",
-      storageBucket:"lumivue-c8fdf.firebasestorage.app",
-      messagingSenderId: "112402036736",
-      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
     };
 
+    // Initialize Firebase (compat)
     firebase.initializeApp(firebaseConfig);
 
-    const auth    = firebase.auth();
-    const db      = firebase.firestore();
-    const storage = firebase.storage();
+    // shared handles
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
   </script>
-  <!-- ===== END LUMIVUE FIREBASE BLOCK ===== -->
 
   <script>
+    // Simple navigation helper used by the cards and buttons
     function goTo(path) {
       window.location.href = path;
     }
@@ -625,4 +904,3 @@
   </script>
 </body>
 </html>
-
