@@ -81,11 +81,12 @@
       gap: 10px;
     }
 
+    /* Flat brand pill buttons (top-right, etc.) */
     .lv-pill {
       padding: 6px 14px;
       border-radius: 999px;
-      border: 1px solid var(--lv-border, #ddd3c6);
-      background: #fff8f0;
+      border: 1px solid var(--lv-pill-border, #c9a07a);
+      background: var(--lv-pill, #e3ceb2);
       font-size: 11px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
@@ -95,6 +96,22 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      /* keep completely flat */
+      transform: none !important;
+      box-shadow: none !important;
+      filter: none !important;
+      transition: none !important;
+    }
+
+    .lv-pill:hover,
+    .lv-pill:focus,
+    .lv-pill:active {
+      background: var(--lv-pill, #e3ceb2);
+      color: var(--lv-text, #2c1e19);
+      transform: none !important;
+      box-shadow: none !important;
+      filter: none !important;
+      transition: none !important;
     }
 
     .lv-user-avatar {
@@ -238,30 +255,62 @@
       color: rgba(0, 0, 0, 0.35);
     }
 
+    /* Primary pill button (keep brand color, make flat) */
     .lv-btn-primary {
       padding: 8px 18px;
       border-radius: 999px;
-      border: none;
+      border: 1px solid var(--lv-pill-border, #c9a07a);
       cursor: pointer;
-      background: var(--accent-gold, #facc6b);
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
-      color: #1f2933;
+      background: var(--lv-pill, #e3ceb2);
+      color: var(--lv-text, #2c1e19);
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      box-shadow: none !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none !important;
     }
 
+    .lv-btn-primary:hover,
+    .lv-btn-primary:focus,
+    .lv-btn-primary:active {
+      background: var(--lv-pill, #e3ceb2);
+      color: var(--lv-text, #2c1e19);
+      box-shadow: none !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none !important;
+    }
+
+    /* Ghost-style buttons (Save store profile, View my store, Add category) */
     .lv-btn-ghost {
       padding: 8px 16px;
       border-radius: 999px;
-      border: 1px solid var(--lv-border, #ddd3c6);
-      background: #ffffff;
+      border: 1px solid var(--lv-pill-border, #c9a07a);
+      background: var(--lv-pill, #e3ceb2);
       color: var(--lv-text, #2c1e19);
       font-size: 13px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
+      /* keep completely flat */
+      box-shadow: none !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none !important;
+    }
+
+    .lv-btn-ghost:hover,
+    .lv-btn-ghost:focus,
+    .lv-btn-ghost:active {
+      background: var(--lv-pill, #e3ceb2);
+      color: var(--lv-text, #2c1e19);
+      box-shadow: none !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none !important;
     }
 
     .status-line {
@@ -406,7 +455,7 @@
 
         <div class="field">
           <label for="storeName">Store name</label>
-          <input id="storeName" class="lv-input" placeholder="La Perj Studio" />
+          <input id="storeName" class="lv-input" placeholder="La Perj" />
         </div>
 
         <div class="field">
@@ -450,11 +499,11 @@
 
       <div class="media-row">
 
-        <!-- Banner -->
+        <!-- Banner (also used as logo image in store) -->
         <div class="field">
-          <label for="bannerFile">Banner image</label>
+          <label for="bannerFile">Banner / logo image</label>
           <input id="bannerFile" type="file" accept="image/*" class="lv-input" />
-          <small>Large photo displayed across the top of your store.</small>
+          <small>This photo is used as your store banner and logo preview.</small>
 
           <div class="banner-preview" id="bannerPreview">
             <div class="banner-placeholder" id="bannerPlaceholder">Store banner preview</div>
@@ -602,82 +651,84 @@
   </section>
 </div>
 
-<!-- ===== LUMIVUE · SHARED FIREBASE BLOCK (COMPAT) ===== -->
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+<!-- FIREBASE LOGIC -->
+<script type="module">
+  import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
 
-<script>
-  // LumiVue Firebase config – SAME as your other fixed pages
   const firebaseConfig = {
-    apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
+    apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
     authDomain: "lumivue-c8fdf.firebaseapp.com",
     projectId: "lumivue-c8fdf",
-    storageBucket:"lumivue-c8fdf.firebasestorage.app",
-    messagingSenderId: "112402036736",
-    appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
+    storageBucket: "lumivue-c8fdf.firebasestorage.app",
+    messagingSenderId: "120420036736",
+    appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
   };
 
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
+  const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
-  const auth    = firebase.auth();
-  const db      = firebase.firestore();
-  const storage = firebase.storage();
-</script>
-<!-- ===== END LUMIVUE FIREBASE BLOCK ===== -->
+  const storeNameInput = document.getElementById("storeName");
+  const taglineInput = document.getElementById("tagline");
+  const locationInput = document.getElementById("location");
+  const shippingNoteInput = document.getElementById("shippingNote");
+  const brandStoryInput = document.getElementById("brandStory");
 
-<script>
-  // Grab DOM elements
-  const storeNameInput       = document.getElementById("storeName");
-  const taglineInput         = document.getElementById("tagline");
-  const locationInput        = document.getElementById("location");
-  const shippingNoteInput    = document.getElementById("shippingNote");
-  const brandStoryInput      = document.getElementById("brandStory");
+  const bannerFileInput = document.getElementById("bannerFile");
+  const bannerPreview = document.getElementById("bannerPreview");
+  const bannerPlaceholder = document.getElementById("bannerPlaceholder");
 
-  const bannerFileInput      = document.getElementById("bannerFile");
-  const bannerPreview        = document.getElementById("bannerPreview");
-  const bannerPlaceholder    = document.getElementById("bannerPlaceholder");
+  const videoInput = document.getElementById("storeVideo");
+  const videoPreview = document.getElementById("videoPreview");
+  const videoInfo = document.getElementById("videoInfo");
 
-  const videoInput           = document.getElementById("storeVideo");
-  const videoPreview         = document.getElementById("videoPreview");
-  const videoInfo            = document.getElementById("videoInfo");
-
-  const storePublicCheckbox  = document.getElementById("storePublic");
-  const socialShopInput      = document.getElementById("socialShop");
+  const storePublicCheckbox = document.getElementById("storePublic");
+  const socialShopInput = document.getElementById("socialShop");
   const socialInstagramInput = document.getElementById("socialInstagram");
-  const socialTiktokInput    = document.getElementById("socialTiktok");
-  const socialYoutubeInput   = document.getElementById("socialYoutube");
+  const socialTiktokInput = document.getElementById("socialTiktok");
+  const socialYoutubeInput = document.getElementById("socialYoutube");
 
-  const valueCrueltyFree     = document.getElementById("valueCrueltyFree");
-  const valueVegan           = document.getElementById("valueVegan");
-  const valueSmallBatch      = document.getElementById("valueSmallBatch");
-  const valueHandmade        = document.getElementById("valueHandmade");
-  const valueEco             = document.getElementById("valueEco");
-  const valueCleanFragrance  = document.getElementById("valueCleanFragrance");
+  const valueCrueltyFree = document.getElementById("valueCrueltyFree");
+  const valueVegan = document.getElementById("valueVegan");
+  const valueSmallBatch = document.getElementById("valueSmallBatch");
+  const valueHandmade = document.getElementById("valueHandmade");
+  const valueEco = document.getElementById("valueEco");
+  const valueCleanFragrance = document.getElementById("valueCleanFragrance");
 
-  const saveBtn              = document.getElementById("saveBtn");
-  const viewStoreBtn         = document.getElementById("viewStoreBtn");
-  const statusLine           = document.getElementById("statusLine");
-  const logoutBtn            = document.getElementById("logoutBtn");
+  const saveBtn = document.getElementById("saveBtn");
+  const viewStoreBtn = document.getElementById("viewStoreBtn");
+  const statusLine = document.getElementById("statusLine");
+  const logoutBtn = document.getElementById("logoutBtn");
 
   // Categories elements
   const newCategoryNameInput = document.getElementById("newCategoryName");
-  const addCategoryBtn       = document.getElementById("addCategoryBtn");
-  const categoriesList       = document.getElementById("categoriesList");
-  const categoriesEmpty      = document.getElementById("categoriesEmpty");
+  const addCategoryBtn = document.getElementById("addCategoryBtn");
+  const categoriesList = document.getElementById("categoriesList");
+  const categoriesEmpty = document.getElementById("categoriesEmpty");
 
   let currentUser = null;
 
-  function setStatus(msg, type) {
+  function setStatus(msg, type = "") {
     statusLine.innerHTML = "";
     if (!msg) return;
 
     const pill = document.createElement("span");
     pill.classList.add("status-pill");
-    if (type === "error")   pill.classList.add("error");
+    if (type === "error") pill.classList.add("error");
     if (type === "success") pill.classList.add("success");
 
     const text = document.createElement("span");
@@ -690,9 +741,8 @@
   function previewBanner(url) {
     bannerPreview.innerHTML = "";
     if (!url) {
-      // show placeholder
-      bannerPlaceholder.style.display = "flex";
       bannerPreview.appendChild(bannerPlaceholder);
+      bannerPlaceholder.style.display = "flex";
       return;
     }
     const img = document.createElement("img");
@@ -705,62 +755,58 @@
   function previewVideo(url) {
     if (!url) {
       videoPreview.style.display = "none";
-      videoInfo.style.display    = "none";
+      videoInfo.style.display = "none";
       return;
     }
-    videoPreview.src            = url;
-    videoPreview.style.display  = "block";
-    videoInfo.style.display     = "block";
+    videoPreview.src = url;
+    videoPreview.style.display = "block";
+    videoInfo.style.display = "block";
   }
 
   function getSelectedBrandValues() {
     const values = [];
-    if (valueCrueltyFree.checked)    values.push(valueCrueltyFree.value);
-    if (valueVegan.checked)          values.push(valueVegan.value);
-    if (valueSmallBatch.checked)     values.push(valueSmallBatch.value);
-    if (valueHandmade.checked)       values.push(valueHandmade.value);
-    if (valueEco.checked)            values.push(valueEco.value);
+    if (valueCrueltyFree.checked) values.push(valueCrueltyFree.value);
+    if (valueVegan.checked) values.push(valueVegan.value);
+    if (valueSmallBatch.checked) values.push(valueSmallBatch.value);
+    if (valueHandmade.checked) values.push(valueHandmade.value);
+    if (valueEco.checked) values.push(valueEco.value);
     if (valueCleanFragrance.checked) values.push(valueCleanFragrance.value);
     return values;
   }
 
   function applyBrandValues(values) {
     if (!Array.isArray(values)) return;
-    valueCrueltyFree.checked    = values.includes(valueCrueltyFree.value);
-    valueVegan.checked          = values.includes(valueVegan.value);
-    valueSmallBatch.checked     = values.includes(valueSmallBatch.value);
-    valueHandmade.checked       = values.includes(valueHandmade.value);
-    valueEco.checked            = values.includes(valueEco.value);
+    valueCrueltyFree.checked = values.includes(valueCrueltyFree.value);
+    valueVegan.checked = values.includes(valueVegan.value);
+    valueSmallBatch.checked = values.includes(valueSmallBatch.value);
+    valueHandmade.checked = values.includes(valueHandmade.value);
+    valueEco.checked = values.includes(valueEco.value);
     valueCleanFragrance.checked = values.includes(valueCleanFragrance.value);
   }
 
   async function loadProfile(user) {
     try {
-      const profileRef = db
-        .collection("stores")
-        .doc(user.uid)
-        .collection("profile")
-        .doc("main");
+      const profileRef = doc(db, "stores", user.uid, "profile", "main");
+      const snap = await getDoc(profileRef);
 
-      const snap = await profileRef.get();
-
-      if (snap.exists) {
-        const data = snap.data() || {};
-        storeNameInput.value    = data.storeName    || "";
-        taglineInput.value      = data.tagline      || "";
-        locationInput.value     = data.location     || "";
+      if (snap.exists()) {
+        const data = snap.data();
+        storeNameInput.value = data.storeName || "";
+        taglineInput.value = data.tagline || "";
+        locationInput.value = data.location || "";
         shippingNoteInput.value = data.shippingNote || "";
-        brandStoryInput.value   = data.brandStory   || "";
+        brandStoryInput.value = data.brandStory || "";
 
-        previewBanner(data.bannerImageUrl || "");
-        previewVideo(data.storeVideoUrl   || "");
+        // Use bannerImageUrl or storeLogoUrl for the banner preview
+        previewBanner(data.bannerImageUrl || data.storeLogoUrl || "");
+        previewVideo(data.storeVideoUrl || "");
 
         storePublicCheckbox.checked = !!data.storePublic;
 
-        socialShopInput.value      = data.socialShop      || "";
+        socialShopInput.value = data.socialShop || "";
         socialInstagramInput.value = data.socialInstagram || "";
-        socialTiktokInput.value    = data.socialTiktok    || "";
-        socialYoutubeInput.value   = data.socialYoutube   || "";
+        socialTiktokInput.value = data.socialTiktok || "";
+        socialYoutubeInput.value = data.socialYoutube || "";
 
         applyBrandValues(data.brandValues || []);
       } else {
@@ -768,129 +814,130 @@
         previewVideo("");
       }
     } catch (err) {
-      console.error("Error loading profile", err);
+      console.error(err);
       setStatus("Could not load your store profile.", "error");
     }
   }
 
-  // Vendor guard: require a creators doc
   async function ensureVendor(user) {
     try {
-      const creatorRef = db.collection("creators").doc(user.uid);
-      const snap = await creatorRef.get();
-      if (!snap.exists) {
+      const creatorRef = doc(db, "creators", user.uid);
+      const snap = await getDoc(creatorRef);
+
+      if (!snap.exists()) {
         window.location.href = "account.html";
         return false;
       }
       return true;
     } catch (err) {
-      console.error("ensureVendor error", err);
+      console.error(err);
       setStatus("We couldn’t verify your creator account.", "error");
       return false;
     }
   }
 
+  // make uploads non-blocking so profile can still save
   async function saveProfile(user) {
-    try {
-      setStatus("Saving…");
+    setStatus("Saving…");
 
-      const profileRef = db
-        .collection("stores")
-        .doc(user.uid)
-        .collection("profile")
-        .doc("main");
+    const profileRef = doc(db, "stores", user.uid, "profile", "main");
+    const data = {
+      storeName: storeNameInput.value.trim(),
+      tagline: taglineInput.value.trim(),
+      location: locationInput.value.trim(),
+      shippingNote: shippingNoteInput.value.trim(),
+      brandStory: brandStoryInput.value.trim(),
+      storePublic: storePublicCheckbox.checked,
+      socialShop: socialShopInput.value.trim(),
+      socialInstagram: socialInstagramInput.value.trim(),
+      socialTiktok: socialTiktokInput.value.trim(),
+      socialYoutube: socialYoutubeInput.value.trim(),
+      brandValues: getSelectedBrandValues(),
+      updatedAt: new Date().toISOString()
+    };
 
-      const data = {
-        storeName:    (storeNameInput.value    || "").trim(),
-        tagline:      (taglineInput.value      || "").trim(),
-        location:     (locationInput.value     || "").trim(),
-        shippingNote: (shippingNoteInput.value || "").trim(),
-        brandStory:   (brandStoryInput.value   || "").trim(),
-        storePublic:  storePublicCheckbox.checked,
-        socialShop:      (socialShopInput.value      || "").trim(),
-        socialInstagram: (socialInstagramInput.value || "").trim(),
-        socialTiktok:    (socialTiktokInput.value    || "").trim(),
-        socialYoutube:   (socialYoutubeInput.value   || "").trim(),
-        brandValues:  getSelectedBrandValues(),
-        updatedAt:    new Date().toISOString()
-      };
-
-      // Banner upload
-      if (bannerFileInput.files[0]) {
-        const file      = bannerFileInput.files[0];
-        const bannerRef = storage
-          .ref()
-          .child(`creator-banners/${user.uid}/${Date.now()}-${file.name}`);
-
-        await bannerRef.put(file);
-        const url = await bannerRef.getDownloadURL();
-        data.bannerImageUrl = url;
+    // Banner upload (used for banner + logo)
+    if (bannerFileInput.files[0]) {
+      try {
+        const file = bannerFileInput.files[0];
+        const safeName = `${Date.now()}-${file.name}`;
+        // ✅ Path now matches Storage rules: listingImages/{userId}/{fileName}
+        const bannerRef = ref(storage, `listingImages/${user.uid}/store-banner-${safeName}`);
+        await uploadBytes(bannerRef, file);
+        const url = await getDownloadURL(bannerRef);
+        data.bannerImageUrl = url;   // hero fallback image
+        data.storeLogoUrl = url;     // logo circle in store.html
         previewBanner(url);
+      } catch (err) {
+        console.error("Banner upload failed", err);
+        setStatus("Banner image could not be uploaded.", "error");
       }
+    }
 
-      // Video upload
-      if (videoInput.files[0]) {
-        const file     = videoInput.files[0];
-        const videoRef = storage
-          .ref()
-          .child(`listing-videos/${user.uid}/${Date.now()}-${file.name}`);
-
-        await videoRef.put(file);
-        const url = await videoRef.getDownloadURL();
+    // Video upload (intro video for hero)
+    if (videoInput.files[0]) {
+      try {
+        const file = videoInput.files[0];
+        const safeName = `${Date.now()}-${file.name}`;
+        // ✅ Path now matches Storage rules: listingVideos/{userId}/{fileName}
+        const videoRef = ref(storage, `listingVideos/${user.uid}/store-intro-${safeName}`);
+        await uploadBytes(videoRef, file);
+        const url = await getDownloadURL(videoRef);
         data.storeVideoUrl = url;
         previewVideo(url);
+      } catch (err) {
+        console.error("Video upload failed", err);
+        setStatus("Intro video could not be uploaded.", "error");
       }
+    }
 
-      // Save profile
-      await profileRef.set(data, { merge: true });
+    try {
+      // Save store profile
+      await setDoc(profileRef, data, { merge: true });
 
-      // Mirror into creators doc for dashboard/use
-      const creatorRef = db.collection("creators").doc(user.uid);
-      await creatorRef.set(
+      // Also update the creators doc so dashboard can show storeName + visibility
+      const creatorRef = doc(db, "creators", user.uid);
+      await setDoc(
+        creatorRef,
         {
           storeName: data.storeName || "",
           isPublic: !!data.storePublic,
           ownerName: user.displayName || "",
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          storeLogoUrl: data.storeLogoUrl || null,
+          updatedAt: serverTimestamp()
         },
         { merge: true }
       );
 
       setStatus("Profile saved", "success");
     } catch (err) {
-      console.error("saveProfile error", err);
+      console.error(err);
       setStatus("Could not save profile.", "error");
     }
   }
 
-  // Load seller categories
+  // Load seller's categories from Firestore
   async function loadCategories(user) {
     if (!categoriesList || !categoriesEmpty) return;
-
     categoriesList.innerHTML = "";
     categoriesEmpty.style.display = "block";
-    categoriesEmpty.textContent   = "Loading categories…";
+    categoriesEmpty.textContent = "Loading categories…";
 
     try {
-      const colRef = db
-        .collection("stores")
-        .doc(user.uid)
-        .collection("categories");
-
-      const snap = await colRef.get();
+      const colRef = collection(db, "stores", user.uid, "categories");
+      const snap = await getDocs(colRef);
 
       if (snap.empty) {
         categoriesEmpty.style.display = "block";
-        categoriesEmpty.textContent   = "You haven’t created any categories yet.";
+        categoriesEmpty.textContent = "You haven’t created any categories yet.";
         return;
       }
 
       categoriesEmpty.style.display = "none";
 
       snap.forEach((docSnap) => {
-        const data = docSnap.data() || {};
+        const data = docSnap.data();
         const name = data.name || "Untitled";
-
         const chip = document.createElement("div");
         chip.className = "lv-category-chip";
         chip.innerHTML = `
@@ -899,29 +946,28 @@
         `;
         categoriesList.appendChild(chip);
       });
+
     } catch (err) {
       console.error("Error loading categories", err);
       categoriesEmpty.style.display = "block";
-      categoriesEmpty.textContent   = "Could not load categories.";
+      categoriesEmpty.textContent = "Could not load categories.";
     }
   }
 
+  // Add a category for this seller
   async function addCategory() {
     if (!currentUser || !newCategoryNameInput) return;
-    const name = (newCategoryNameInput.value || "").trim();
+    const name = newCategoryNameInput.value.trim();
     if (!name) return;
 
     try {
       setStatus("Adding category…");
 
-      await db
-        .collection("stores")
-        .doc(currentUser.uid)
-        .collection("categories")
-        .add({
-          name,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+      const colRef = collection(db, "stores", currentUser.uid, "categories");
+      await addDoc(colRef, {
+        name,
+        createdAt: serverTimestamp()
+      });
 
       newCategoryNameInput.value = "";
       await loadCategories(currentUser);
@@ -932,20 +978,16 @@
     }
   }
 
+  // Delete a category
   async function deleteCategory(catId) {
     if (!currentUser || !catId) return;
-    const ok = window.confirm("Remove this category from your shop?");
+    const ok = confirm("Remove this category from your shop?");
     if (!ok) return;
 
     try {
       setStatus("Removing category…");
-      await db
-        .collection("stores")
-        .doc(currentUser.uid)
-        .collection("categories")
-        .doc(catId)
-        .delete();
-
+      const catRef = doc(db, "stores", currentUser.uid, "categories", catId);
+      await deleteDoc(catRef);
       await loadCategories(currentUser);
       setStatus("Category removed", "success");
     } catch (err) {
@@ -954,10 +996,9 @@
     }
   }
 
-  // Auth guard + init
-  auth.onAuthStateChanged(async (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (!user) {
-      window.location.href = "login.html";
+      setStatus("You’re not signed in. Store changes will save once you’re logged in.", "error");
       return;
     }
 
@@ -970,59 +1011,52 @@
     await loadCategories(user);
 
     if (saveBtn) {
-      saveBtn.onclick = function () {
-        saveProfile(user);
-      };
+      saveBtn.onclick = () => saveProfile(user);
     }
 
     if (viewStoreBtn) {
-      viewStoreBtn.onclick = function () {
-        window.location.href = "store.html?uid=" + encodeURIComponent(user.uid);
-      };
+      viewStoreBtn.onclick = () =>
+        window.location.href = `store.html?uid=${encodeURIComponent(user.uid)}`;
     }
   });
 
-  // Local previews
   if (bannerFileInput) {
-    bannerFileInput.addEventListener("change", function () {
+    bannerFileInput.addEventListener("change", () => {
       const file = bannerFileInput.files[0];
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = function (e) {
-        previewBanner(e.target.result);
-      };
+      reader.onload = (e) => previewBanner(e.target.result);
       reader.readAsDataURL(file);
     });
   }
 
   if (videoInput) {
-    videoInput.addEventListener("change", function () {
+    videoInput.addEventListener("change", () => {
       const file = videoInput.files[0];
       if (!file) return;
-      const url  = URL.createObjectURL(file);
-      videoPreview.src           = url;
+
+      const url = URL.createObjectURL(file);
+      videoPreview.src = url;
       videoPreview.style.display = "block";
-      videoInfo.style.display    = "block";
+      videoInfo.style.display = "block";
     });
   }
 
-  // Logout
   if (logoutBtn) {
-    logoutBtn.addEventListener("click", function () {
-      auth.signOut().then(function () {
-        window.location.href = "index.html";
-      });
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
     });
   }
 
-  // Category UI events
+  // Wire category UI events
   if (addCategoryBtn) {
     addCategoryBtn.addEventListener("click", addCategory);
   }
 
   if (categoriesList) {
-    categoriesList.addEventListener("click", function (e) {
+    categoriesList.addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-cat-id]");
       if (!btn) return;
       const catId = btn.getAttribute("data-cat-id");
@@ -1033,4 +1067,3 @@
 
 </body>
 </html>
-
