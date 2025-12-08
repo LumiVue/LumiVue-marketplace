@@ -9,14 +9,20 @@
 
   <style>
     :root {
-      --lv-bg: #e8dcc7;
-      --lv-surface: #e3ceb2;
-      --lv-border: #c9a07a;
-      --lv-text: #5c3f28;  /* espresso */
-      --lv-muted: #7a6a59;
-      --lv-accent: #b8703b;
-      --lv-accent-soft: #f3ddc2;
-      --lv-danger: #c15b4b;
+      /* same palette as landing page */
+      --lv-bg: #f4f1eb;
+      --lv-surface: #ffffff;
+      --lv-border: #ddd3c6;
+      --lv-border-strong: #ccc0b1;
+      --lv-text: #2c1e19; /* espresso */
+      --lv-text-muted: #7a6a5c;
+      --lv-accent: #c98a5a;
+      --lv-accent-soft: #fbede1;
+      --lv-radius-lg: 14px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+      --lv-danger: #dc2626;
+      /* bubble / button beige (same as LV bubble on landing page) */
+      --lv-bubble-bg: #e6d8c7;
     }
 
     * { box-sizing: border-box; }
@@ -24,7 +30,7 @@
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #f3e4ce, #e8dcc7 48%, #ddc8aa);
+      background: var(--lv-bg);
       color: var(--lv-text);
     }
 
@@ -32,6 +38,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      background: var(--lv-bg);
     }
 
     /* TOP NAV */
@@ -42,7 +49,7 @@
       justify-content: center;
       border-bottom: 1px solid rgba(0,0,0,0.04);
       backdrop-filter: blur(16px);
-      background: rgba(232,220,199,.88);
+      background: rgba(244, 241, 235, 0.98);
     }
 
     .lv-top-nav-inner {
@@ -58,14 +65,36 @@
     .lv-brand {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 4px;
     }
 
-    .lv-brand-main {
-      font-size: 15px;
-      letter-spacing: .22em;
+    /* LV bubble + wordmark – same as landing page */
+    .lv-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lv-logo-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: var(--lv-bubble-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--lv-text);
+      border: 1px solid var(--lv-border-strong);
+      box-shadow: none;
+    }
+
+    .lv-logo-text {
+      font-size: 14px;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      font-weight: 600;
       color: var(--lv-text);
     }
 
@@ -73,7 +102,7 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: .16em;
-      color: var(--lv-muted);
+      color: var(--lv-text-muted);
     }
 
     .lv-nav-links {
@@ -87,9 +116,18 @@
 
     .lv-nav-links a {
       text-decoration: none;
-      color: var(--lv-muted);
+      color: var(--lv-text-muted);
       padding-bottom: 2px;
       border-bottom: 1px solid transparent;
+    }
+
+    .lv-nav-links a:hover,
+    .lv-nav-links a:active,
+    .lv-nav-links a:focus {
+      color: var(--lv-text-muted);
+      border-bottom-color: transparent;
+      text-decoration: none;
+      outline: none;
     }
 
     .lv-nav-active {
@@ -119,14 +157,11 @@
     .lv-main-inner {
       width: 100%;
       max-width: 1120px;
-      background: rgba(255,255,255,.32);
+      background: var(--lv-surface);
       border-radius: 22px;
-      border: 1px solid rgba(201,160,122,.45);
+      border: 1px solid var(--lv-border);
       padding: 26px 28px 30px;
-      box-shadow:
-        0 22px 60px rgba(115,82,52,.20),
-        0 0 0 1px rgba(255,255,255,.6);
-      backdrop-filter: blur(14px);
+      box-shadow: var(--lv-shadow-soft);
     }
 
     /* HEADER */
@@ -144,32 +179,60 @@
       letter-spacing: .1em;
       text-transform: uppercase;
       font-weight: 800;
-      color: #5c3f28; /* espresso */
+      color: var(--lv-text);
     }
 
     .lv-header-sub {
       margin: 0;
       font-size: 13px;
-      color: var(--lv-muted);
+      color: var(--lv-text-muted);
       max-width: 520px;
       line-height: 1.5;
     }
 
-    .lv-status-pill {
-      display: inline-block;
-      margin-top: 4px;
-      font-size: 10px;
+    /* Pill-style buttons: Status, COMPLETED, NOT STARTED, Manage
+       all share the same size, color and shape */
+    .lv-pill,
+    .lv-status-pill,
+    .lv-card-status,
+    .lv-card-manage {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 34px;          /* same height */
+      padding: 0 22px;
+      min-width: 130px;      /* <<< SAME WIDTH for COMPLETED + MANAGE */
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: var(--lv-bubble-bg);
+      color: var(--lv-text);
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: .16em;
-      padding: 5px 14px;
-      border-radius: 999px;
-      background: #fef6f3;
-      border: 1px solid rgba(184,121,63,.4);
-      color: #b8793f;
+      box-shadow: none;
+      cursor: default;
       white-space: nowrap;
-      width: auto;
-      max-width: max-content;
-      text-align: center;
+    }
+
+    .lv-card-manage {
+      cursor: pointer;
+    }
+
+    /* remove hover changes for all these pills */
+    .lv-status-pill:hover,
+    .lv-card-status:hover,
+    .lv-card-manage:hover,
+    .lv-status-pill:active,
+    .lv-card-status:active,
+    .lv-card-manage:active,
+    .lv-status-pill:focus,
+    .lv-card-status:focus,
+    .lv-card-manage:focus {
+      background: var(--lv-bubble-bg);
+      color: var(--lv-text);
+      box-shadow: none;
+      outline: none;
+      transform: none;
     }
 
     /* PROGRESS */
@@ -184,7 +247,7 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: .14em;
-      color: var(--lv-muted);
+      color: var(--lv-text-muted);
       margin-bottom: 8px;
     }
 
@@ -200,7 +263,7 @@
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      background: linear-gradient(90deg,#b8703b,#d39b53,#f1d6b5);
+      background: linear-gradient(90deg,#c98a5a,#d8a86d,#f1d6b5);
       transition: width .3s ease;
     }
 
@@ -230,23 +293,22 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      transition:
-        transform .16s ease,
-        box-shadow .16s ease,
-        border-color .16s ease,
-        background .16s ease;
+      transition: none; /* no hover animation */
     }
 
-    .lv-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 22px 50px rgba(0,0,0,.12);
-      border-color: var(--lv-accent);
-      background: #f1ddc2;
+    .lv-card:hover,
+    .lv-card:active,
+    .lv-card:focus {
+      background: var(--lv-surface);
+      border-color: var(--lv-border);
+      box-shadow: 0 16px 38px rgba(0,0,0,.04);
+      transform: none;
+      outline: none;
     }
 
     .lv-card-header {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
       gap: 10px;
     }
@@ -255,24 +317,12 @@
       font-size: 15px;
       font-weight: 700;
       margin-bottom: 4px;
-      color: #5c3f28; /* espresso */
-    }
-
-    .lv-card-status {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(184,121,63,.45);
-      background: #fef7ea;
-      color: #b8793f;
-      white-space: nowrap;
+      color: var(--lv-text);
     }
 
     .lv-card-body {
       font-size: 12px;
-      color: var(--lv-muted);
+      color: var(--lv-text-muted);
       line-height: 1.6;
       margin-bottom: 6px;
     }
@@ -287,32 +337,14 @@
 
     .lv-card-note {
       font-size: 11px;
-      color: var(--lv-muted);
+      color: var(--lv-text-muted);
       opacity: .95;
-    }
-
-    .lv-card-manage {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(43,33,24,.6);
-      background: rgba(255,255,255,.7);
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .lv-card:hover .lv-card-manage {
-      background: var(--lv-accent);
-      color: #fff;
-      border-color: var(--lv-accent);
     }
 
     .lv-footer-note {
       margin-top: 10px;
       font-size: 11px;
-      color: var(--lv-muted);
+      color: var(--lv-text-muted);
       line-height: 1.5;
     }
 
@@ -348,7 +380,10 @@
     <header class="lv-top-nav">
       <div class="lv-top-nav-inner">
         <div class="lv-brand">
-          <div class="lv-brand-main">LUMIVUE</div>
+          <div class="lv-logo-wrap">
+            <div class="lv-logo-circle">LV</div>
+            <span class="lv-logo-text">LUMIVUE</span>
+          </div>
           <div class="lv-brand-sub">Marketplace · Vendor account</div>
         </div>
 
@@ -376,7 +411,7 @@
               listings, and refine your storefront.
             </p>
           </div>
-          <span class="lv-status-pill" id="overallStatusPill">Status: Not approved yet</span>
+          <span class="lv-status-pill lv-pill" id="overallStatusPill">Status: Not approved yet</span>
         </div>
 
         <!-- progress -->
@@ -396,7 +431,7 @@
           <article class="lv-card" onclick="goTo('account-legal.html')">
             <div class="lv-card-header">
               <div class="lv-card-title">Legal business name &amp; contact details</div>
-              <div class="lv-card-status" id="status-legal">Not started</div>
+              <div class="lv-card-status lv-pill" id="status-legal">Completed</div>
             </div>
             <div class="lv-card-body">
               Add your legal business name, primary contact, and full billing address so we can generate invoices and compliance documents.
@@ -404,7 +439,7 @@
             <div class="lv-card-footer">
               <span class="lv-card-note">Required before payouts can be activated.</span>
               <button type="button"
-                      class="lv-card-manage"
+                      class="lv-card-manage lv-pill"
                       onclick="goTo('account-legal.html')">
                 Manage
               </button>
@@ -415,7 +450,7 @@
           <article class="lv-card" onclick="goTo('account-tax.html')">
             <div class="lv-card-header">
               <div class="lv-card-title">Tax forms &amp; marketplace agreements</div>
-              <div class="lv-card-status" id="status-tax">Not started</div>
+              <div class="lv-card-status lv-pill" id="status-tax">Completed</div>
             </div>
             <div class="lv-card-body">
               Upload W-9 / W-8 forms, complete ID verification, and confirm LumiVue marketplace agreements for your region.
@@ -423,7 +458,7 @@
             <div class="lv-card-footer">
               <span class="lv-card-note">Helps keep payouts compliant and secure.</span>
               <button type="button"
-                      class="lv-card-manage"
+                      class="lv-card-manage lv-pill"
                       onclick="goTo('account-tax.html')">
                 Manage
               </button>
@@ -434,7 +469,7 @@
           <article class="lv-card" onclick="goTo('account-payouts.html')">
             <div class="lv-card-header">
               <div class="lv-card-title">Bank account &amp; payout schedule</div>
-              <div class="lv-card-status" id="status-payouts">Not started</div>
+              <div class="lv-card-status lv-pill" id="status-payouts">Completed</div>
             </div>
             <div class="lv-card-body">
               Connect the payout bank account where you want to receive funds, choose a schedule, and review your deposit summary.
@@ -442,7 +477,7 @@
             <div class="lv-card-footer">
               <span class="lv-card-note">Encrypted and never shared with buyers.</span>
               <button type="button"
-                      class="lv-card-manage"
+                      class="lv-card-manage lv-pill"
                       onclick="goTo('account-payouts.html')">
                 Manage
               </button>
@@ -453,7 +488,7 @@
           <article class="lv-card" onclick="goTo('edit-store.html')">
             <div class="lv-card-header">
               <div class="lv-card-title">Storefront name, branding &amp; first listing</div>
-              <div class="lv-card-status" id="status-storefront">Not started</div>
+              <div class="lv-card-status lv-pill" id="status-storefront">Not started</div>
             </div>
             <div class="lv-card-body">
               Choose your storefront name, upload brand visuals, and publish at least one hero listing so shoppers can discover your work.
@@ -461,7 +496,7 @@
             <div class="lv-card-footer">
               <span class="lv-card-note">You can edit your brand at any time.</span>
               <button type="button"
-                      class="lv-card-manage"
+                      class="lv-card-manage lv-pill"
                       onclick="goTo('edit-store.html')">
                 Manage
               </button>
@@ -472,7 +507,7 @@
           <article class="lv-card" onclick="goTo('shipping.html')">
             <div class="lv-card-header">
               <div class="lv-card-title">Shipping methods &amp; delivery promises</div>
-              <div class="lv-card-status" id="status-shipping">Not started</div>
+              <div class="lv-card-status lv-pill" id="status-shipping">Not started</div>
             </div>
             <div class="lv-card-body">
               Configure carriers, handling times, and delivery expectations so customers know exactly how and when orders will arrive.
@@ -480,7 +515,7 @@
             <div class="lv-card-footer">
               <span class="lv-card-note">Applies to all listings by default.</span>
               <button type="button"
-                      class="lv-card-manage"
+                      class="lv-card-manage lv-pill"
                       onclick="goTo('shipping.html')">
                 Manage
               </button>
@@ -491,7 +526,7 @@
           <article class="lv-card" onclick="goTo('account-policies.html')">
             <div class="lv-card-header">
               <div class="lv-card-title">Policies, returns &amp; customer support</div>
-              <div class="lv-card-status" id="status-policies">Not started</div>
+              <div class="lv-card-status lv-pill" id="status-policies">Completed</div>
             </div>
             <div class="lv-card-body">
               Define your return, exchange, and customer support policies so shoppers feel confident buying from your LumiVue storefront.
@@ -499,7 +534,7 @@
             <div class="lv-card-footer">
               <span class="lv-card-note">Shown on your public store profile.</span>
               <button type="button"
-                      class="lv-card-manage"
+                      class="lv-card-manage lv-pill"
                       onclick="goTo('account-policies.html')">
                 Manage
               </button>
@@ -526,7 +561,7 @@
       apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
       authDomain: "lumivue-c8fdf.firebaseapp.com",
       projectId: "lumivue-c8fdf",
-      storageBucket:"lumivue-c8fdf.firebasestorage.app",
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
       messagingSenderId: "120420036736",
       appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
     };
@@ -560,11 +595,7 @@
 
       function setSectionStatus(el, isDone) {
         if (!el) return;
-        if (isDone) {
-          el.textContent = 'Completed';
-        } else {
-          el.textContent = 'Not started';
-        }
+        el.textContent = isDone ? 'Completed' : 'Not started';
       }
 
       function updateFromCreatorDoc(data) {
@@ -604,7 +635,6 @@
 
         auth.onAuthStateChanged(async (user) => {
           if (!user) {
-            // not signed in → go to login
             const redirect = encodeURIComponent(window.location.pathname);
             window.location.href = 'login.html?redirect=' + redirect;
             return;
@@ -622,7 +652,6 @@
             }
           } catch (err) {
             console.error('Error loading vendor account overview', err);
-            // fallback: keep defaults (0%, "Not started")
           }
         });
       }
@@ -632,4 +661,3 @@
   </script>
 </body>
 </html>
-
