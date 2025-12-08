@@ -17,7 +17,7 @@
       --lv-accent: #c98a5a;
       --lv-accent-soft: #fbede1;
       --lv-radius-lg: 18px;
-      --lv-shadow-soft: 0 30px 80px rgba(15, 23, 42, 0.22); /* richer soft shadow */
+      --lv-shadow-soft: 0 30px 80px rgba(15, 23, 42, 0.22);
       --lv-hero-latte: #f1ddc2;
     }
 
@@ -38,9 +38,9 @@
       padding: 0 24px;
     }
 
-    /***** TOP NAV – THIS IS THE VENDOR'S WEBSITE HEADER *****/
+    /***** TOP NAV ******/
     .site-nav {
-      height: 72px; /* slightly thicker */
+      height: 72px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -49,7 +49,7 @@
       position: sticky;
       top: 0;
       z-index: 40;
-      box-shadow: 0 10px 30px rgba(15,23,42,0.08); /* subtle nav shadow */
+      box-shadow: 0 10px 30px rgba(15,23,42,0.08);
     }
 
     .site-nav-inner {
@@ -163,22 +163,28 @@
       }
     }
 
-    /***** HERO VIDEO – NO TEXT OVERLAY *****/
+    /***** HERO VIDEO (UPDATED BACKGROUND) ******/
     .store-hero {
       margin-top: 28px;
       border-radius: 32px;
       overflow: hidden;
       position: relative;
-      box-shadow: var(--lv-shadow-soft); /* subtle but strong hero shadow */
-      background: var(--lv-hero-latte);
-      height: 360px; /* cinematic strip */
-      border: 1px solid var(--lv-border-strong); /* NEW: card frame */
+      box-shadow: var(--lv-shadow-soft);
+
+      /* ★ NEW PREMIUM LATTE BACKGROUND ★ */
+      background: linear-gradient(
+        to bottom right,
+        #e8d4b8,
+        #f4e7d3
+      );
+
+      height: 360px;
+      border: 1px solid var(--lv-border-strong);
     }
 
     .store-hero-media {
       position: absolute;
       inset: 0;
-      background: var(--lv-hero-latte);
       overflow: hidden;
     }
 
@@ -191,14 +197,14 @@
       object-fit: cover;
     }
 
-    /***** FEATURED PRODUCT GRID – ONLY THING BELOW HERO *****/
+    /***** PRODUCT GRID *****/
     .featured-section {
-      margin-top: 56px; /* more spacing under hero */
+      margin-top: 56px;
     }
 
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr)); /* FIVE CARDS PER ROW */
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 18px;
     }
 
@@ -206,7 +212,7 @@
       border-radius: 18px;
       border: 1px solid var(--lv-border);
       background: #fffdfa;
-      box-shadow: 0 22px 55px rgba(15,23,42,0.18); /* slightly richer card shadow */
+      box-shadow: 0 22px 55px rgba(15,23,42,0.18);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -220,10 +226,6 @@
       border-color: rgba(201,138,90,0.7);
     }
 
-    .product-card.placeholder {
-      cursor: default;
-    }
-
     .product-card.placeholder:hover {
       transform: none;
       box-shadow: 0 22px 55px rgba(15,23,42,0.18);
@@ -232,7 +234,7 @@
 
     .product-img-wrap {
       position: relative;
-      padding-top: 100%; /* square */
+      padding-top: 100%;
       background: radial-gradient(circle at top left, #f5e1c7, #f7eee3);
       overflow: hidden;
     }
@@ -326,7 +328,7 @@
 </head>
 
 <body>
-  <!-- TOP NAV: LUMIVUE + STORE TABS (BUYER FACING ONLY) -->
+  <!-- TOP NAV -->
   <nav class="site-nav">
     <div class="site-nav-inner">
       <div class="nav-left">
@@ -344,14 +346,13 @@
       </div>
 
       <div class="nav-right">
-        <!-- Vendor logo (initials) shown here -->
         <div class="nav-avatar" id="navAvatar">LV</div>
       </div>
     </div>
   </nav>
 
   <div class="page">
-    <!-- HERO VIDEO ONLY -->
+    <!-- HERO VIDEO -->
     <section class="store-hero" id="videoSection">
       <div class="store-hero-media">
         <video
@@ -367,14 +368,14 @@
       </div>
     </section>
 
-    <!-- FEATURED PRODUCT CARDS ONLY -->
+    <!-- PRODUCT GRID -->
     <section class="featured-section">
       <div class="product-grid" id="productGrid"></div>
       <div class="status-message" id="productsStatus"></div>
     </section>
   </div>
 
-  <!-- FIREBASE CONFIG (unchanged) -->
+  <!-- FIREBASE -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -399,7 +400,7 @@
 
   <!-- STORE LOGIC -->
   <script>
-    const PLACEHOLDER_MIN = 20; // show at least 20 card slots (5 x 4)
+    const PLACEHOLDER_MIN = 20;
 
     const bannerImgEl = document.getElementById("storeBannerImg");
     const bannerVideoEl = document.getElementById("storeBannerVideo");
@@ -414,7 +415,6 @@
     const navReviewsLink = document.getElementById("navReviewsLink");
     const navFaqLink = document.getElementById("navFaqLink");
 
-    // ---------- HELPERS ----------
     function getStoreUidFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get("uid") || params.get("creator") || params.get("store");
@@ -496,7 +496,6 @@
     }
 
     function wireTopLinks(uid) {
-      // All top nav buttons go to a separate info page.
       const base = "store-info.html?uid=" + encodeURIComponent(uid);
 
       if (navCategoriesLink) navCategoriesLink.href = base + "#categories";
@@ -507,7 +506,6 @@
       if (navFaqLink) navFaqLink.href = base + "#faq";
     }
 
-    // ---------- LOAD PROFILE (FOR HERO + AVATAR) ----------
     async function loadStoreProfile(uid, currentUser) {
       try {
         const profileRef = db
@@ -532,7 +530,6 @@
         const storeName = data.storeName || data.brandName || null;
         setAvatarInitials(storeName, currentUser);
 
-        // Hero media
         const videoUrl = data.storeVideoUrl;
         const bannerUrl =
           data.bannerImageUrl ||
@@ -558,7 +555,6 @@
       }
     }
 
-    // ---------- LOAD PRODUCTS (FOR FEATURED GRID) ----------
     async function loadStoreProducts(uid) {
       try {
         const ref = db.collection("listings").where("ownerId", "==", uid);
@@ -568,7 +564,6 @@
         productsStatusEl.textContent = "";
 
         if (snap.empty) {
-          // Show 20 placeholder cards so vendors see layout
           renderPlaceholders(PLACEHOLDER_MIN);
           productsStatusEl.textContent =
             "No products have been added yet. Use create-listing.html to add your first product.";
@@ -667,7 +662,6 @@
           productGridEl.appendChild(card);
         });
 
-        // If fewer than 20 products, pad with placeholders so grid shows 20 slots
         if (count < PLACEHOLDER_MIN) {
           renderPlaceholders(PLACEHOLDER_MIN - count);
         }
@@ -677,7 +671,6 @@
       }
     }
 
-    // ---------- BOOTSTRAP ----------
     function bootstrapStore() {
       const urlUid = getStoreUidFromUrl();
 
