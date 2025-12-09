@@ -24,7 +24,6 @@
     }
 
     html{scroll-behavior:smooth}
-
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -76,15 +75,15 @@
     }
     @media (max-width:960px){.lv-main{grid-template-columns:1fr}}
 
-    /* SECTION CHIPS — smaller + clickable */
+    /* SECTION CHIPS */
     .chips{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 2px}
     .chip{
       display:inline-block;
       background:var(--lv-pill); color:var(--lv-text);
       border:1px solid var(--lv-pill-border);
       border-radius:999px;
-      padding:5px 9px;               /* reduced size */
-      font-size:10.5px;              /* reduced size */
+      padding:5px 9px;
+      font-size:10.5px;
       text-transform:uppercase; letter-spacing:.16em;
       line-height:1;
     }
@@ -569,6 +568,9 @@ Up to 30 seconds</span>
     const featuredRemove=document.getElementById("featuredRemove");
     const featuredLabel=document.getElementById("featuredLabel");
 
+    // EXPOSE featured file input so Firebase module script can upload it
+    window.lumivueFeaturedInput = featuredInput;
+
     const galleryTile=document.getElementById("galleryTile");
     const galleryInput=document.getElementById("galleryImages");
     const galleryLabel=document.getElementById("galleryLabel");
@@ -595,7 +597,7 @@ Up to 30 seconds</span>
           URL.revokeObjectURL(url);
           resolve(dataURL);
         };
-        v.onerror=()=>{URL.revokeObjectURL(url); reject();}
+        v.onerror=()=>{URL.revokeObjectURL(url); reject();};
       });
     }
 
@@ -620,7 +622,7 @@ Up to 30 seconds</span>
         const tile=document.createElement("div");tile.className="lv-gallery-tile";
         const img=document.createElement("img");img.className="lv-gallery-img";img.src=item.url;
         const rm=document.createElement("span");rm.className="lv-gallery-remove";rm.textContent="✕";
-        rm.onclick=()=>{URL.revokeObjectURL(item.url);galleryState.splice(i,1);renderGallery();updateGalleryLabel()};
+        rm.onclick=()=>{URL.revokeObjectURL(item.url);galleryState.splice(i,1);renderGallery();updateGalleryLabel();};
         tile.append(img,rm);galleryPreviewContainer.appendChild(tile);
       });
     }
@@ -644,7 +646,7 @@ Up to 30 seconds</span>
       videoRemove.style.display="inline-flex";
       videoPreview.play().catch(()=>{});
     });
-    videoPreview?.addEventListener("click",()=>{videoPreview.paused?videoPreview.play().catch(()=>{}):videoPreview.pause()});
+    videoPreview?.addEventListener("click",()=>{videoPreview.paused?videoPreview.play().catch(()=>{}):videoPreview.pause();});
     videoRemove?.addEventListener("click",e=>{
       e.stopPropagation(); videoInput.value=""; videoPreview.pause(); videoPreview.src=""; videoPreview.style.display="none"; videoLabel.style.display="block"; videoRemove.style.display="none";
     });
@@ -717,6 +719,7 @@ Up to 30 seconds</span>
     import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
@@ -730,13 +733,13 @@ Up to 30 seconds</span>
     const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const storage = getStorage(app);
 
-    // Page stays visible; just log auth state.
     onAuthStateChanged(auth, (user) => {
       console.log("Create listing – user:", user ? user.uid : "not signed in");
     });
 
-    // Publish → save to Firestore, then redirect to product.html?id=DOCID
+    // Publish → upload featured image (if any), save to Firestore, then go to product.html
     const publishBtn = document.getElementById("publishBtnTop");
     if (publishBtn) {
       publishBtn.addEventListener("click", async () => {
@@ -746,16 +749,29 @@ Up to 30 seconds</span>
             alert("Please add a product title and price before publishing.");
             return;
           }
+
+          // OPTIONAL featured photo upload
+          let imageUrl = null;
+          const fileInput = window.lumivueFeaturedInput;
+          if (fileInput && fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const path = `listing-images/${Date.now()}_${file.name}`;
+            const imgRef = sRef(storage, path);
+            const snap = await uploadBytes(imgRef, file);
+            imageUrl = await getDownloadURL(snap.ref);
+          }
+
           const payload = {
             ...data,
             status: "active",
             createdAt: serverTimestamp(),
-            // simple normalized fields helpful for listings
-            priceNumber: parseFloat(data.price || "0") || 0
+            priceNumber: parseFloat(data.price || "0") || 0,
+            imageUrl: imageUrl || null
           };
+
           const ref = await addDoc(collection(db, "listings"), payload);
 
-          // Redirect to the product page
+          // Redirect to the product page (cards will pull from this collection)
           window.location.href = `product.html?id=${encodeURIComponent(ref.id)}`;
         } catch (err) {
           console.error("Publish error:", err);
