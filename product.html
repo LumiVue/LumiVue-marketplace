@@ -2,172 +2,653 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Product · LumiVue Marketplace</title>
+  <title>Products · LumiVue Marketplace</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Shared bold beauty theme -->
+  <!-- Shared LumiVue theme -->
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Stripe.js (for Checkout) -->
-  <script src="https://js.stripe.com/v3/"></script>
+  <!-- Stripe.js (for future Checkout) -->
+  <script src="https://js.stripe.com/v3"></script>
 
   <style>
-    /* ALL OF YOUR ORIGINAL CSS — UNTOUCHED */
+    :root {
+      /* LumiVue latte / espresso system – same as create-listing / dashboard */
+      --lv-bg: #f4f1eb;          /* page background */
+      --lv-surface: #ffffff;     /* card background */
+      --lv-border: #e6d7c6;      /* soft beige border */
+      --lv-border-strong: #d9c6b3;
+      --lv-text: #2c1e19;        /* espresso */
+      --lv-text-muted: #7a6a5c;  /* softer brown text */
+      --lv-pill: #e3ceb2;        /* beige pill */
+      --lv-pill-border: #c9a07a; /* caramel outline */
+      --lv-accent-soft: #fbf3e7; /* very light caramel accent */
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.08);
+      --lv-radius-lg: 18px;
+      --lv-radius-md: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--lv-bg);
+      color: var(--lv-text);
+    }
+
     .product-page {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px 40px;
+      max-width: 1120px;
+      margin: 0 auto 60px;
+      padding: 18px 24px 40px;
+      box-sizing: border-box;
     }
-    @media (max-width: 640px) {
-      .product-page { padding: 0 16px 32px; }
-    }
-    .product-header {
+
+    /* TOP BAR – BUYER VIEW (no dashboard button) */
+    .product-top-nav {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin: 26px 0 18px;
-      gap: 10px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
     }
-    .product-brand {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 0.20em;
-      text-transform: uppercase;
-      color: #14202A;
+
+    .product-brand-lockup {
       display: flex;
-      align-items: baseline;
-      gap: 6px;
+      align-items: center;
+      gap: 10px;
     }
-    .product-brand span {
-      font-size: 18px;
+
+    .product-logo-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #c98a5a, #a66626);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #C6A574;
+      color: #fdf7ef;
+      box-shadow: 0 0 0 1px rgba(201, 160, 122, 0.7);
     }
-    .product-nav-links {
+
+    .product-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .product-brand-name {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .product-brand-sub {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+    }
+
+    .product-top-links {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    /* ENTIRE PRODUCT PAGE STYLES UNCHANGED */
-    .product-shell {
-      background: radial-gradient(circle at top left, rgba(198,165,116,0.30), #0F2235 55%, #020617 100%);
-      border-radius: 24px;
-      padding: 22px 22px 20px;
-      border: 1px solid rgba(198,165,116,0.78);
-      box-shadow: 0 26px 70px rgba(0,0,0,0.9);
+    /* MAIN SHOP LAYOUT – SIDEBAR + CONTENT */
+    .shop-layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr);
+      grid-template-columns: 240px minmax(0, 1fr);
       gap: 22px;
-      position: relative;
-      overflow: hidden;
-    }
-    .product-shell::after {
-      content: "";
-      position: absolute;
-      right: -70px;
-      top: -80px;
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(198,165,116,0.65), transparent 70%);
-      opacity: 0.9;
-      pointer-events: none;
+      align-items: flex-start;
     }
 
-    /* ALL REMAINING CSS IS THE SAME — NOT REPEATING FOR LENGTH */
+    @media (max-width: 880px) {
+      .shop-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* SIDEBAR CATEGORIES – Etsy style */
+    .category-sidebar {
+      background: var(--lv-surface);
+      border-radius: 22px;
+      border: 1px solid var(--lv-border);
+      box-shadow: var(--lv-shadow-soft);
+      padding: 18px 16px 16px;
+      box-sizing: border-box;
+    }
+
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+      margin-bottom: 10px;
+    }
+
+    .category-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .category-item {
+      margin-bottom: 4px;
+    }
+
+    .category-button {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: transparent;
+      padding: 7px 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      color: var(--lv-text);
+      box-sizing: border-box;
+    }
+
+    .category-button:hover {
+      background: var(--lv-accent-soft);
+    }
+
+    .category-button.is-active {
+      background: var(--lv-pill);
+      border-color: var(--lv-pill-border);
+      font-weight: 600;
+    }
+
+    .category-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .category-count {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+      margin-left: 8px;
+    }
+
+    /* MAIN CONTENT AREA */
+    .shop-main {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .shop-header-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .shop-heading {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+    }
+
+    .shop-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--lv-text-muted);
+    }
+
+    .shop-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fbf3e7;
+      font-size: 12px;
+    }
+
+    .section-subheading {
+      margin: 6px 0 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    /* PRODUCT GRID & CARDS (matches store look) */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    @media (max-width: 1024px) {
+      .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .product-card {
+      border-radius: 18px;
+      border: 1px solid var(--lv-border);
+      background: #fffdfa;
+      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 26px 65px rgba(15, 23, 42, 0.22);
+      border-color: rgba(201, 138, 90, 0.7);
+    }
+
+    .product-img-wrap {
+      position: relative;
+      padding-top: 100%;
+      background: radial-gradient(circle at top left, #f5e1c7, #f7eee3);
+      overflow: hidden;
+    }
+
+    .product-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-body {
+      padding: 9px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .product-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .product-sub {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+    }
+
+    .product-footer {
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+
+    .product-price {
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .product-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-size: 9px;
+      color: var(--lv-text-muted);
+    }
+
+    .product-chip {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fff;
+    }
+
+    .empty-message {
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      margin-top: 4px;
+    }
   </style>
 </head>
 
 <body>
   <div class="product-page">
-    <!-- HEADER -->
-    <header class="product-header">
-      <div class="product-brand">LUMI<span>VUE</span></div>
-      <div class="product-nav-links">
+    <!-- TOP NAV (buyer) -->
+    <header class="product-top-nav">
+      <div class="product-brand-lockup">
+        <div class="product-logo-circle">LV</div>
+        <div class="product-brand-text">
+          <div class="product-brand-name">LUMIVUE</div>
+          <div class="product-brand-sub">Creator products · Storefront view</div>
+        </div>
+      </div>
+
+      <div class="product-top-links">
         <a href="marketplace.html" class="nav-btn">Marketplace</a>
-        <a href="store.html" class="nav-btn">My store</a>
-        <a href="dashboard.html" class="nav-btn primary">Creator dashboard</a>
+        <a href="store.html" class="nav-btn primary">Storefront</a>
       </div>
     </header>
 
-    <!-- PRODUCT CONTENT -->
-    <main class="product-shell">
-      <!-- LEFT -->
-      <section class="media-card">
-        <div class="media-label">Product preview</div>
-        <div id="mediaFrame" class="media-frame">
-          <div class="media-placeholder">PRODUCT IMAGE / MEDIA</div>
-        </div>
-        <p class="media-note">
-          Add strong product photography or short video clips to help buyers experience your texture,
-          packaging, and brand before they ever check out.
-        </p>
-      </section>
+    <!-- MAIN SHOP LAYOUT -->
+    <div class="shop-layout">
+      <!-- LEFT: CATEGORIES LIKE ETSY -->
+      <aside class="category-sidebar">
+        <div class="sidebar-title">Categories</div>
+        <ul class="category-list" id="categoryList"></ul>
+      </aside>
 
-      <!-- RIGHT -->
-      <section class="details-card">
-        <div class="pill-row">
-          <span id="categoryPill" class="pill pill-category" style="display:none;"></span>
-          <span id="statusPill" class="pill pill-status" style="display:none;"></span>
-          <span id="datePill" class="pill pill-date" style="display:none;"></span>
-        </div>
-
-        <h1 id="productTitle" class="product-title-main">Loading product…</h1>
-
-        <div class="price-row">
-          <div id="productPrice" class="price-main"></div>
-          <div id="priceNote" class="price-note"></div>
-        </div>
-
-        <div class="store-line">
-          From <span id="storeName" class="store-name">LumiVue creator</span>
-          <div id="storeTagline" class="store-subline">
-            Independent beauty brand using LumiVue to showcase their products.
+      <!-- RIGHT: FEATURED + ALL ITEMS -->
+      <section class="shop-main">
+        <!-- FEATURED -->
+        <div class="shop-header-row">
+          <h2 class="shop-heading">Featured items</h2>
+          <div class="shop-controls">
+            <span class="shop-pill">Price: Any price</span>
+            <span class="shop-pill">Sort: Relevance</span>
           </div>
         </div>
 
-        <div class="divider"></div>
+        <div class="product-grid" id="featuredGrid"></div>
 
-        <div>
-          <div class="section-label">Product details</div>
-          <div id="productDescription" class="description">
-            The full product description will appear here once the listing has loaded.
-          </div>
+        <!-- ALL ITEMS / FILTERED ITEMS -->
+        <h3 class="section-subheading" id="itemsHeading">All items</h3>
+        <div class="product-grid" id="allGrid"></div>
+        <div class="empty-message" id="emptyMessage" style="display:none;">
+          No products found in this category yet. Try another category or check back soon.
         </div>
-
-        <div class="meta-grid">
-          <div><div class="meta-label">Category</div><div id="metaCategory" class="meta-value">—</div></div>
-          <div><div class="meta-label">Listing status</div><div id="metaStatus" class="meta-value">—</div></div>
-          <div><div class="meta-label">Date added</div><div id="metaCreated" class="meta-value">—</div></div>
-        </div>
-
-        <div class="actions-row">
-          <button id="buyButton" type="button" class="btn btn-primary">Buy now</button>
-          <a href="marketplace.html" class="btn btn-secondary">Back to marketplace</a>
-          <a href="store.html" class="btn btn-primary">View creator store</a>
-        </div>
-
-        <div id="status" class="status-banner"></div>
       </section>
-    </main>
+    </div>
   </div>
 
-  <!-- ORIGINAL FIREBASE 10 MODULE SCRIPT (UNCHANGED) -->
+  <!-- SIMPLE DEMO DATA + FILTERING (NO LOGIN, NO REDIRECTS) -->
+  <script>
+    const ITEMS = [
+      {
+        id: "glow-moisturizer",
+        title: "Glow Face Moisturizer Niacinamide + Peptides",
+        subtitle: "Lightweight daily cream · 50 ml",
+        price: 29.95,
+        category: "Face Moisturizers",
+        featured: true,
+        chips: ["Moisturizers", "Bestseller"],
+        imageUrl: "https://images.pexels.com/photos/6690881/pexels-photo-6690881.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        id: "calm-balm",
+        title: "Calm Oil Cleansing Balm · Oil to Milk",
+        subtitle: "Gentle melt-away balm",
+        price: 33.95,
+        category: "Face Cleansers",
+        featured: true,
+        chips: ["Cleansers", "Balm to milk"],
+        imageUrl: "https://images.pexels.com/photos/4841423/pexels-photo-4841423.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        id: "glow-drops",
+        title: "Frankincense Glow Face Drops",
+        subtitle: "Radiance serum · 30 ml",
+        price: 29.95,
+        category: "Face Serums",
+        featured: true,
+        chips: ["Serums", "Brightening"],
+        imageUrl: "https://images.pexels.com/photos/10825668/pexels-photo-10825668.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        id: "retinol-serum",
+        title: "2.5% Retinol Booster Serum",
+        subtitle: "Night treatment · 30 ml",
+        price: 35.95,
+        category: "Face Serums",
+        featured: true,
+        chips: ["Serums", "Night"],
+        imageUrl: "https://images.pexels.com/photos/17150052/pexels-photo-17150052.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        id: "jelly-cream",
+        title: "Face Quench Jelly Cream",
+        subtitle: "Water-gel moisturizer",
+        price: 24.95,
+        category: "Face Moisturizers",
+        chips: ["Hydrating"],
+        imageUrl: "https://images.pexels.com/photos/6690879/pexels-photo-6690879.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        id: "multi-masker",
+        title: "The Multitasker Moisturizer",
+        subtitle: "Exfoliating + hydrating cream",
+        price: 27.95,
+        category: "Face Moisturizers",
+        chips: ["Multi-use"],
+        imageUrl: "https://images.pexels.com/photos/6690198/pexels-photo-6690198.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        id: "plant-oil-1",
+        title: "Blackcurrant Seed Oil Cold-Pressed",
+        subtitle: "Carrier oil · 1 oz",
+        price: 18.95,
+        category: "Plant Oils (Carrier Oil)",
+        chips: ["Plant oils"],
+        imageUrl: "https://images.pexels.com/photos/7704476/pexels-photo-7704476.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        id: "plant-oil-2",
+        title: "Golden Fig Seed Oil Cold-Pressed",
+        subtitle: "Carrier oil · 1 oz",
+        price: 16.95,
+        category: "Plant Oils (Carrier Oil)",
+        chips: ["Plant oils"],
+        imageUrl: "https://images.pexels.com/photos/17150052/pexels-photo-17150052.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        id: "body-cream",
+        title: "Velvet Body Butter · Cocoa + Vanilla",
+        subtitle: "Whipped body moisturizer",
+        price: 23.95,
+        category: "Body Products",
+        chips: ["Body care"],
+        imageUrl: "https://images.pexels.com/photos/6690881/pexels-photo-6690881.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        id: "toner",
+        title: "Lumière Toner · Hydrating Mist",
+        subtitle: "Refresh + prep",
+        price: 19.95,
+        category: "Toners",
+        chips: ["Mist"],
+        imageUrl: "https://images.pexels.com/photos/13516796/pexels-photo-13516796.jpeg?auto=compress&cs=tinysrgb&w=800"
+      }
+    ];
+
+    const featuredGrid = document.getElementById("featuredGrid");
+    const allGrid = document.getElementById("allGrid");
+    const categoryListEl = document.getElementById("categoryList");
+    const itemsHeadingEl = document.getElementById("itemsHeading");
+    const emptyMessageEl = document.getElementById("emptyMessage");
+
+    function createProductCard(item) {
+      const card = document.createElement("article");
+      card.className = "product-card";
+
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "product-img-wrap";
+      const img = document.createElement("img");
+      img.className = "product-img";
+      img.src = item.imageUrl;
+      img.alt = item.title || "Product";
+      imgWrap.appendChild(img);
+
+      const body = document.createElement("div");
+      body.className = "product-body";
+
+      const name = document.createElement("div");
+      name.className = "product-name";
+      name.textContent = item.title || "Untitled listing";
+
+      const sub = document.createElement("div");
+      sub.className = "product-sub";
+      sub.textContent = item.subtitle || "";
+
+      const footer = document.createElement("div");
+      footer.className = "product-footer";
+
+      const price = document.createElement("div");
+      price.className = "product-price";
+      if (typeof item.price === "number") {
+        price.textContent = "$" + item.price.toFixed(2);
+      } else if (item.price) {
+        price.textContent = "$" + item.price;
+      }
+
+      const chipRow = document.createElement("div");
+      chipRow.className = "product-chip-row";
+      if (Array.isArray(item.chips)) {
+        item.chips.forEach((chipText) => {
+          const chip = document.createElement("span");
+          chip.className = "product-chip";
+          chip.textContent = chipText;
+          chipRow.appendChild(chip);
+        });
+      }
+
+      footer.appendChild(price);
+      footer.appendChild(chipRow);
+
+      body.appendChild(name);
+      if (sub.textContent) body.appendChild(sub);
+      body.appendChild(footer);
+
+      card.appendChild(imgWrap);
+      card.appendChild(body);
+
+      card.addEventListener("click", () => {
+        // Later, this can deep-link to a single product view if you want.
+        console.log("Clicked product:", item.id);
+      });
+
+      return card;
+    }
+
+    function renderFeatured() {
+      featuredGrid.innerHTML = "";
+      ITEMS.filter(i => i.featured).forEach(item => {
+        featuredGrid.appendChild(createProductCard(item));
+      });
+    }
+
+    function renderAll(category) {
+      allGrid.innerHTML = "";
+      let filtered = ITEMS;
+      if (category && category !== "all") {
+        filtered = ITEMS.filter(i => i.category === category);
+      }
+      filtered.forEach(item => {
+        allGrid.appendChild(createProductCard(item));
+      });
+
+      if (category === "all") {
+        itemsHeadingEl.textContent = "All items";
+      } else {
+        itemsHeadingEl.textContent = category || "All items";
+      }
+
+      if (filtered.length === 0) {
+        emptyMessageEl.style.display = "block";
+      } else {
+        emptyMessageEl.style.display = "none";
+      }
+    }
+
+    function buildCategorySidebar() {
+      const counts = {};
+      ITEMS.forEach(item => {
+        counts[item.category] = (counts[item.category] || 0) + 1;
+      });
+      const total = ITEMS.length;
+
+      categoryListEl.innerHTML = "";
+
+      // "All" row
+      const allLi = document.createElement("li");
+      allLi.className = "category-item";
+      const allBtn = document.createElement("button");
+      allBtn.type = "button";
+      allBtn.className = "category-button is-active";
+      allBtn.dataset.category = "all";
+
+      const allName = document.createElement("span");
+      allName.className = "category-name";
+      allName.textContent = "All";
+      const allCount = document.createElement("span");
+      allCount.className = "category-count";
+      allCount.textContent = total;
+
+      allBtn.appendChild(allName);
+      allBtn.appendChild(allCount);
+      allLi.appendChild(allBtn);
+      categoryListEl.appendChild(allLi);
+
+      // Individual categories
+      Object.keys(counts).sort().forEach(cat => {
+        const li = document.createElement("li");
+        li.className = "category-item";
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "category-button";
+        btn.dataset.category = cat;
+
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "category-name";
+        nameSpan.textContent = cat;
+        const countSpan = document.createElement("span");
+        countSpan.className = "category-count";
+        countSpan.textContent = counts[cat];
+
+        btn.appendChild(nameSpan);
+        btn.appendChild(countSpan);
+        li.appendChild(btn);
+        categoryListEl.appendChild(li);
+      });
+
+      // Click handling
+      categoryListEl.addEventListener("click", (e) => {
+        const btn = e.target.closest(".category-button");
+        if (!btn) return;
+        const cat = btn.dataset.category;
+
+        document.querySelectorAll(".category-button").forEach(b =>
+          b.classList.toggle("is-active", b === btn)
+        );
+        renderAll(cat);
+      });
+    }
+
+    function bootstrapShop() {
+      renderFeatured();
+      buildCategorySidebar();
+      renderAll("all");
+    }
+
+    bootstrapShop();
+  </script>
+
+  <!-- OPTIONAL: Firebase init (passive, no auth / redirects) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      collection,
-      getDocs,
-      query,
-      orderBy,
-      limit
-    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
@@ -178,42 +659,8 @@
       appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    /* YOUR ENTIRE ORIGINAL PRODUCT LOADING JS — UNCHANGED */
-    /* NOT REPEATED HERE TO SAVE SPACE */
-
-    loadProduct();
+    initializeApp(firebaseConfig);
+    // This does not gate the page; it's ready for future Firestore wiring.
   </script>
-
-  <!-- ============================================= -->
-  <!-- ✅ ADDED: LUMIVUE SHARED FIREBASE COMPAT BLOCK -->
-  <!-- ============================================= -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
-
-  <script>
-    const firebaseConfigCompat = {
-      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
-      authDomain: "lumivue-c8fdf.firebaseapp.com",
-      projectId: "lumivue-c8fdf",
-      storageBucket: "lumivue-c8fdf.appspot.com",
-      messagingSenderId: "112402036736",
-      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
-    };
-
-    firebase.initializeApp(firebaseConfigCompat);
-
-    const auth = firebase.auth();
-    const dbCompat = firebase.firestore();
-    const storage = firebase.storage();
-  </script>
-  <!-- ============================================= -->
-  <!-- END SHARED BLOCK -->
-  <!-- ============================================= -->
-
 </body>
 </html>
