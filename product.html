@@ -13,258 +13,326 @@
 
   <style>
     :root {
-      /* LumiVue latte / espresso system – same as create-listing / dashboard */
-      --lv-bg: #f4f1eb;          /* page background */
-      --lv-surface: #ffffff;     /* card background */
-      --lv-border: #e6d7c6;      /* soft beige border */
+      --lv-bg: #f4f1eb;
+      --lv-surface: #ffffff;
+      --lv-border: #e6d7c6;
       --lv-border-strong: #d9c6b3;
-      --lv-text: #2c1e19;        /* espresso */
-      --lv-text-muted: #7a6a5c;  /* softer brown text */
-      --lv-pill: #e3ceb2;        /* beige pill */
-      --lv-pill-border: #c9a07a; /* caramel outline */
-      --lv-accent-soft: #fbf3e7; /* very light caramel accent */
-      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.08);
+      --lv-text: #2c1e19;
+      --lv-text-muted: #7a6a5c;
+      --lv-pill: #e3ceb2;
+      --lv-pill-soft: #f6e6d6;
+      --lv-accent: #c98a5a;
+      --lv-accent-soft: #fbede1;
       --lv-radius-lg: 18px;
-      --lv-radius-md: 10px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--lv-bg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #f7eee4 0, #f4f1eb 38%, #f2ebe3 100%);
       color: var(--lv-text);
     }
 
-    .product-page {
-      max-width: 1120px;
-      margin: 0 auto 60px;
-      padding: 18px 24px 40px;
-      box-sizing: border-box;
+    .lv-page-shell {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0 30px 72px;
     }
 
-    /* TOP BAR – BUYER VIEW (no dashboard button) */
-    .product-top-nav {
+    /* === TOP BAR (thin LV bar) === */
+
+    .lv-topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 22px;
+      padding: 16px 0 10px;
+      border-bottom: 1px solid var(--lv-border);
+      background: #f7f1e8;
     }
 
-    .product-brand-lockup {
+    .lv-topbar-left {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .product-logo-circle {
-      width: 30px;
-      height: 30px;
+    .lv-bubble {
+      width: 32px;
+      height: 32px;
       border-radius: 999px;
-      background: linear-gradient(135deg, #c98a5a, #a66626);
+      /* darker caramel so the mark is stronger */
+      background: #c98a5a;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
-      font-weight: 700;
-      color: #fdf7ef;
-      box-shadow: 0 0 0 1px rgba(201, 160, 122, 0.7);
+      font-weight: 600;
+      font-size: 14px;
+      color: #fff;
+      letter-spacing: 0.04em;
     }
 
-    .product-brand-text {
+    .lv-brand-text {
       display: flex;
       flex-direction: column;
-      gap: 3px;
     }
 
-    .product-brand-name {
+    .lv-brand-name {
       font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
     }
 
-    .product-brand-sub {
-      font-size: 12px;
+    .lv-brand-subtitle {
+      font-size: 11px;
       color: var(--lv-text-muted);
+      margin-top: 2px;
     }
 
-    .product-top-links {
+    .lv-topbar-right {
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
     }
 
-    /* MAIN SHOP LAYOUT – SIDEBAR + CONTENT */
-    .shop-layout {
+    .lv-top-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--lv-border);
+      background: #f9f2ea;
+      color: var(--lv-text-muted);
+      cursor: pointer;
+      box-shadow: none;
+      transform: none;
+      transition: background-color 130ms ease, border-color 130ms ease, color 130ms ease;
+    }
+
+    .lv-top-pill:hover {
+      background: #f6e6d6;
+      border-color: var(--lv-border-strong);
+      color: var(--lv-text);
+    }
+
+    .lv-top-pill--primary {
+      background: var(--lv-accent);
+      border-color: var(--lv-accent);
+      color: #ffffff;
+    }
+
+    .lv-top-pill--primary:hover {
+      background: #b9784b;
+      border-color: #b9784b;
+      color: #ffffff;
+    }
+
+    /* === LAYOUT === */
+
+    .lv-layout {
       display: grid;
-      grid-template-columns: 240px minmax(0, 1fr);
-      gap: 22px;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
       align-items: flex-start;
+      margin-top: 24px;
     }
 
-    @media (max-width: 880px) {
-      .shop-layout {
+    @media (max-width: 1200px) {
+      .lv-layout {
         grid-template-columns: minmax(0, 1fr);
       }
     }
 
-    /* SIDEBAR CATEGORIES – Etsy style */
-    .category-sidebar {
+    /* === CATEGORIES CARD === */
+
+    .lv-card {
       background: var(--lv-surface);
-      border-radius: 22px;
-      border: 1px solid var(--lv-border);
+      border-radius: 24px;
+      border: 1px solid rgba(233, 216, 197, 0.8);
       box-shadow: var(--lv-shadow-soft);
-      padding: 18px 16px 16px;
-      box-sizing: border-box;
     }
 
-    .sidebar-title {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--lv-text-muted);
-      margin-bottom: 10px;
+    .lv-card--categories {
+      padding: 18px 18px 16px;
+      position: sticky;
+      top: 20px;
     }
 
-    .category-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .category-item {
-      margin-bottom: 4px;
-    }
-
-    .category-button {
-      width: 100%;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      background: transparent;
-      padding: 7px 12px;
-      font-size: 13px;
+    .lv-card-header-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      cursor: pointer;
-      color: var(--lv-text);
-      box-sizing: border-box;
+      margin-bottom: 10px;
     }
 
-    .category-button:hover {
-      background: var(--lv-accent-soft);
-    }
-
-    .category-button.is-active {
-      background: var(--lv-pill);
-      border-color: var(--lv-pill-border);
-      font-weight: 600;
-    }
-
-    .category-name {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .category-count {
-      font-size: 12px;
-      color: var(--lv-text-muted);
-      margin-left: 8px;
-    }
-
-    /* MAIN CONTENT AREA */
-    .shop-main {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .shop-header-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .shop-heading {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: 0.16em;
+    .lv-label-pill {
+      font-size: 11px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--lv-text-muted);
     }
 
-    .shop-controls {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      font-size: 12px;
-      color: var(--lv-text-muted);
-    }
-
-    .shop-pill {
-      padding: 6px 12px;
+    .lv-pill-count {
+      min-width: 26px;
+      text-align: center;
+      padding: 4px 0;
       border-radius: 999px;
-      border: 1px solid var(--lv-border-strong);
-      background: #fbf3e7;
-      font-size: 12px;
-    }
-
-    .section-subheading {
-      margin: 6px 0 4px;
-      font-size: 14px;
-      font-weight: 600;
+      background: var(--lv-pill-soft);
+      font-size: 11px;
       color: var(--lv-text);
     }
 
-    /* PRODUCT GRID & CARDS (matches store look) */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+    .lv-category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .lv-category-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background-color 130ms ease, color 130ms ease;
+    }
+
+    .lv-category-row span {
+      font-size: 13px;
+    }
+
+    .lv-category-row .lv-count {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-category-row--active {
+      background: #f6e6d6;
+      color: var(--lv-text);
+    }
+
+    .lv-category-row:not(.lv-category-row--active):hover {
+      background: #f9f2ea;
+      color: var(--lv-text);
+    }
+
+    /* === PRODUCTS COLUMN === */
+
+    .lv-products-column {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+    }
+
+    .lv-section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
       gap: 16px;
     }
 
-    @media (max-width: 1024px) {
-      .product-grid {
+    .lv-section-title {
+      font-size: 18px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .lv-section-sub {
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      margin-top: 4px;
+    }
+
+    /* === 5-COLUMN GRIDS (Featured + All items) === */
+
+    .lv-featured-row,
+    .lv-products-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    @media (max-width: 1400px) {
+      .lv-featured-row,
+      .lv-products-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .lv-featured-row,
+      .lv-products-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 720px) {
-      .product-grid {
+    @media (max-width: 800px) {
+      .lv-featured-row,
+      .lv-products-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    .product-card {
-      border-radius: 18px;
-      border: 1px solid var(--lv-border);
-      background: #fffdfa;
-      box-shadow: 0 22px 55px rgba(15, 23, 42, 0.18);
-      overflow: hidden;
+    @media (max-width: 520px) {
+      .lv-featured-row,
+      .lv-products-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .lv-all-items-block {
+      margin-top: 8px;
+    }
+
+    .lv-all-items-title {
+      font-size: 14px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin: 0 0 12px 0;
+      color: var(--lv-text-muted);
+    }
+
+    /* === PRODUCT CARD === */
+
+    .lv-product-card {
+      background: var(--lv-surface);
+      border-radius: 22px;
+      border: 1px solid rgba(233, 216, 197, 0.9);
+      box-shadow: var(--lv-shadow-soft);
+      padding: 8px 8px 12px;
       display: flex;
       flex-direction: column;
-      cursor: pointer;
-      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+      gap: 8px;
+      transition: border-color 130ms ease, background-color 130ms ease;
     }
 
-    .product-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 26px 65px rgba(15, 23, 42, 0.22);
-      border-color: rgba(201, 138, 90, 0.7);
+    .lv-product-card:hover {
+      border-color: var(--lv-border-strong);
+      background: #fdf8f3;
     }
 
-    .product-img-wrap {
-      position: relative;
-      padding-top: 100%;
-      background: radial-gradient(circle at top left, #f5e1c7, #f7eee3);
+    .lv-product-media {
+      width: 100%;
+      padding-top: 68%;
+      border-radius: 18px;
       overflow: hidden;
+      position: relative;
+      background-color: #f6e6d6;
     }
 
-    .product-img {
+    .lv-product-media img {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -272,395 +340,538 @@
       object-fit: cover;
     }
 
-    .product-body {
-      padding: 9px 10px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .product-name {
-      font-size: 12px;
+    .lv-product-title {
+      font-size: 13px;
       font-weight: 600;
-      color: var(--lv-text);
+      line-height: 1.35;
+      margin-top: 2px;
     }
 
-    .product-sub {
+    .lv-product-sub {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+      line-height: 1.4;
+    }
+
+    .lv-product-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-top: 2px;
+    }
+
+    .lv-price {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .lv-unit {
       font-size: 11px;
       color: var(--lv-text-muted);
     }
 
-    .product-footer {
-      margin-top: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-    }
-
-    .product-price {
-      font-weight: 600;
-      color: var(--lv-text);
-    }
-
-    .product-chip-row {
+    .lv-tag-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
-      font-size: 9px;
-      color: var(--lv-text-muted);
-    }
-
-    .product-chip {
-      padding: 2px 6px;
-      border-radius: 999px;
-      border: 1px solid var(--lv-border-strong);
-      background: #fff;
-    }
-
-    .empty-message {
-      font-size: 13px;
-      color: var(--lv-text-muted);
+      gap: 6px;
       margin-top: 4px;
+    }
+
+    .lv-mini-pill {
+      padding: 3px 7px;
+      border-radius: 999px;
+      font-size: 10px;
+      background: #f6e6d6;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-cta-row {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .lv-btn-primary,
+    .lv-btn-ghost {
+      flex: 1;
+      font-size: 11px;
+      padding: 7px 9px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background-color 130ms ease, color 130ms ease, border-color 130ms ease;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .lv-btn-primary {
+      background: var(--lv-accent);
+      color: #fff;
+      border-color: var(--lv-accent);
+    }
+
+    .lv-btn-primary:hover {
+      background: #b9784b;
+      border-color: #b9784b;
+    }
+
+    .lv-btn-ghost {
+      background: #f9f2ea;
+      color: var(--lv-text);
+      border-color: var(--lv-border);
+    }
+
+    .lv-btn-ghost:hover {
+      background: #f6e1ce;
+      border-color: #f1d0b3;
     }
   </style>
 </head>
-
 <body>
-  <div class="product-page">
-    <!-- TOP NAV (buyer) -->
-    <header class="product-top-nav">
-      <div class="product-brand-lockup">
-        <div class="product-logo-circle">LV</div>
-        <div class="product-brand-text">
-          <div class="product-brand-name">LUMIVUE</div>
-          <div class="product-brand-sub">Creator products · Storefront view</div>
+  <div class="lv-page-shell">
+    <!-- TOP BAR -->
+    <header class="lv-topbar">
+      <div class="lv-topbar-left">
+        <div class="lv-bubble">LV</div>
+        <div class="lv-brand-text">
+          <div class="lv-brand-name">LUMIVUE</div>
+          <div class="lv-brand-subtitle">Creator products · Storefront view</div>
         </div>
       </div>
-
-      <div class="product-top-links">
-        <a href="marketplace.html" class="nav-btn">Marketplace</a>
-        <a href="store.html" class="nav-btn primary">Storefront</a>
+      <div class="lv-topbar-right">
+        <button class="lv-top-pill" type="button" onclick="window.location.href='marketplace.html'">Marketplace</button>
+        <button class="lv-top-pill lv-top-pill--primary" type="button" onclick="window.location.href='store.html'">Storefront</button>
       </div>
     </header>
 
-    <!-- MAIN SHOP LAYOUT -->
-    <div class="shop-layout">
-      <!-- LEFT: CATEGORIES LIKE ETSY -->
-      <aside class="category-sidebar">
-        <div class="sidebar-title">Categories</div>
-        <ul class="category-list" id="categoryList"></ul>
+    <!-- MAIN LAYOUT -->
+    <main class="lv-layout">
+      <!-- CATEGORIES -->
+      <aside class="lv-card lv-card--categories">
+        <div class="lv-card-header-row">
+          <div class="lv-label-pill">Categories</div>
+          <!-- total products = 10 -->
+          <div class="lv-pill-count">10</div>
+        </div>
+
+        <div class="lv-category-list">
+          <div class="lv-category-row lv-category-row--active" data-category="All">
+            <span>All</span>
+            <span class="lv-count">10</span>
+          </div>
+          <div class="lv-category-row" data-category="Body Products">
+            <span>Body Products</span>
+            <span class="lv-count">1</span>
+          </div>
+          <div class="lv-category-row" data-category="Face Cleansers">
+            <span>Face Cleansers</span>
+            <span class="lv-count">2</span>
+          </div>
+          <div class="lv-category-row" data-category="Face Moisturizers">
+            <span>Face Moisturizers</span>
+            <span class="lv-count">2</span>
+          </div>
+          <div class="lv-category-row" data-category="Face Serums">
+            <span>Face Serums</span>
+            <span class="lv-count">3</span>
+          </div>
+          <div class="lv-category-row" data-category="Toners & Mists">
+            <span>Toners &amp; Mists</span>
+            <span class="lv-count">2</span>
+          </div>
+        </div>
       </aside>
 
-      <!-- RIGHT: FEATURED + ALL ITEMS -->
-      <section class="shop-main">
-        <!-- FEATURED -->
-        <div class="shop-header-row">
-          <h2 class="shop-heading">Featured items</h2>
-          <div class="shop-controls">
-            <span class="shop-pill">Price: Any price</span>
-            <span class="shop-pill">Sort: Relevance</span>
+      <!-- PRODUCTS COLUMN -->
+      <section class="lv-products-column" id="products-anchor">
+        <!-- FEATURED (row of 5) -->
+        <div class="lv-section-header">
+          <div>
+            <h2 class="lv-section-title">Featured Products</h2>
+            <p class="lv-section-sub">
+              Curated hero products from this creator’s LumiVue storefront.
+            </p>
           </div>
         </div>
 
-        <div class="product-grid" id="featuredGrid"></div>
+        <div class="lv-featured-row">
+          <!-- 1: Face Moisturizer -->
+          <article class="lv-product-card" data-category="Face Moisturizers">
+            <div class="lv-product-media">
+              <img
+                src="https://images.pexels.com/photos/28481891/pexels-photo-28481891.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                alt="Glow Face Moisturizer" />
+            </div>
+            <div class="lv-product-title">Glow Face Moisturizer · Niacinamide + Peptides</div>
+            <div class="lv-product-sub">Lightweight daily cream for soft, luminous skin.</div>
+            <div class="lv-product-price-row">
+              <span class="lv-price">$23.95</span>
+              <span class="lv-unit">50 ml · 1.7 fl oz</span>
+            </div>
+            <div class="lv-tag-row">
+              <span class="lv-mini-pill">Moisturizer</span>
+              <span class="lv-mini-pill">Niacinamide</span>
+              <span class="lv-mini-pill">Peptides</span>
+            </div>
+            <div class="lv-cta-row">
+              <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+              <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+            </div>
+          </article>
 
-        <!-- ALL ITEMS / FILTERED ITEMS -->
-        <h3 class="section-subheading" id="itemsHeading">All items</h3>
-        <div class="product-grid" id="allGrid"></div>
-        <div class="empty-message" id="emptyMessage" style="display:none;">
-          No products found in this category yet. Try another category or check back soon.
+          <!-- 2: Face Cleanser -->
+          <article class="lv-product-card" data-category="Face Cleansers">
+            <div class="lv-product-media">
+              <img
+                src="https://images.pexels.com/photos/29022724/pexels-photo-29022724.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                alt="Calm Oil Cleansing Balm" />
+            </div>
+            <div class="lv-product-title">Calm Oil Cleansing Balm · Oil to Milk</div>
+            <div class="lv-product-sub">Gentle melt-away balm for sunscreen &amp; makeup.</div>
+            <div class="lv-product-price-row">
+              <span class="lv-price">$19.15</span>
+              <span class="lv-unit">100 ml · 3.4 fl oz</span>
+            </div>
+            <div class="lv-tag-row">
+              <span class="lv-mini-pill">Cleanser</span>
+              <span class="lv-mini-pill">Oil to milk</span>
+            </div>
+            <div class="lv-cta-row">
+              <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+              <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+            </div>
+          </article>
+
+          <!-- 3: Face Serum -->
+          <article class="lv-product-card" data-category="Face Serums">
+            <div class="lv-product-media">
+              <img
+                src="https://images.pexels.com/photos/10825674/pexels-photo-10825674.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                alt="Frankincense Glow Face Drops" />
+            </div>
+            <div class="lv-product-title">Frankincense Glow Face Drops · Radiance Serum</div>
+            <div class="lv-product-sub">Concentrated treatment with botanical oils.</div>
+            <div class="lv-product-price-row">
+              <span class="lv-price">$25.85</span>
+              <span class="lv-unit">30 ml · 1 fl oz</span>
+            </div>
+            <div class="lv-tag-row">
+              <span class="lv-mini-pill">Serum</span>
+              <span class="lv-mini-pill">Radiance</span>
+            </div>
+            <div class="lv-cta-row">
+              <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+              <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+            </div>
+          </article>
+
+          <!-- 4: Face Serum -->
+          <article class="lv-product-card" data-category="Face Serums">
+            <div class="lv-product-media">
+              <img
+                src="https://images.pexels.com/photos/2256108/pexels-photo-2256108.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                alt="2.5% Retinol Booster Serum" />
+            </div>
+            <div class="lv-product-title">2.5% Retinol Booster Serum · Night Treatment</div>
+            <div class="lv-product-sub">Targeted overnight serum for smoother texture.</div>
+            <div class="lv-product-price-row">
+              <span class="lv-price">$31.95</span>
+              <span class="lv-unit">30 ml · 1 fl oz</span>
+            </div>
+            <div class="lv-tag-row">
+              <span class="lv-mini-pill">Serum</span>
+              <span class="lv-mini-pill">Retinol</span>
+              <span class="lv-mini-pill">Night</span>
+            </div>
+            <div class="lv-cta-row">
+              <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+              <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+            </div>
+          </article>
+
+          <!-- 5: Toner -->
+          <article class="lv-product-card" data-category="Toners & Mists">
+            <div class="lv-product-media">
+              <img
+                src="https://images.pexels.com/photos/17783855/pexels-photo-17783855.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                alt="Rose Water Balancing Toner" />
+            </div>
+            <div class="lv-product-title">Rose Water Balancing Toner · Calming Mist</div>
+            <div class="lv-product-sub">A fine rosewater mist to rebalance and refresh skin.</div>
+            <div class="lv-product-price-row">
+              <span class="lv-price">$18.50</span>
+              <span class="lv-unit">100 ml · 3.4 fl oz</span>
+            </div>
+            <div class="lv-tag-row">
+              <span class="lv-mini-pill">Toner</span>
+              <span class="lv-mini-pill">Rose</span>
+              <span class="lv-mini-pill">Calming</span>
+            </div>
+            <div class="lv-cta-row">
+              <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+              <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+            </div>
+          </article>
+        </div>
+
+        <!-- ALL ITEMS (second row of 5) -->
+        <div class="lv-all-items-block">
+          <h3 class="lv-all-items-title">All items</h3>
+          <div class="lv-products-grid">
+            <!-- 6: Face Moisturizer -->
+            <article class="lv-product-card" data-category="Face Moisturizers">
+              <div class="lv-product-media">
+                <img
+                  src="https://images.pexels.com/photos/7317087/pexels-photo-7317087.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  alt="Ceramide Barrier Cream" />
+              </div>
+              <div class="lv-product-title">Ceramide Barrier Cream · Repair Moisturizer</div>
+              <div class="lv-product-sub">Rich cream that cushions and strengthens the skin barrier.</div>
+              <div class="lv-product-price-row">
+                <span class="lv-price">$27.00</span>
+                <span class="lv-unit">50 ml · 1.7 fl oz</span>
+              </div>
+              <div class="lv-tag-row">
+                <span class="lv-mini-pill">Moisturizer</span>
+                <span class="lv-mini-pill">Ceramides</span>
+                <span class="lv-mini-pill">Barrier</span>
+              </div>
+              <div class="lv-cta-row">
+                <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+                <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+              </div>
+            </article>
+
+            <!-- 7: Face Serum -->
+            <article class="lv-product-card" data-category="Face Serums">
+              <div class="lv-product-media">
+                <img
+                  src="https://images.pexels.com/photos/30835429/pexels-photo-30835429.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  alt="Vitamin C Brightening Serum" />
+              </div>
+              <div class="lv-product-title">Vitamin C Brightening Serum · Day Concentrate</div>
+              <div class="lv-product-sub">Daily vitamin C serum for a softer, more radiant tone.</div>
+              <div class="lv-product-price-row">
+                <span class="lv-price">$29.75</span>
+                <span class="lv-unit">30 ml · 1 fl oz</span>
+              </div>
+              <div class="lv-tag-row">
+                <span class="lv-mini-pill">Serum</span>
+                <span class="lv-mini-pill">Vitamin C</span>
+                <span class="lv-mini-pill">Brightening</span>
+              </div>
+              <div class="lv-cta-row">
+                <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+                <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+              </div>
+            </article>
+
+            <!-- 8: Face Cleanser -->
+            <article class="lv-product-card" data-category="Face Cleansers">
+              <div class="lv-product-media">
+                <img
+                  src="https://images.pexels.com/photos/11074378/pexels-photo-11074378.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  alt="Cloud Foam Gel Cleanser" />
+              </div>
+              <div class="lv-product-title">Cloud Foam Gel Cleanser · Gentle Lather</div>
+              <div class="lv-product-sub">Cushiony gel that foams into a cloud-soft face wash.</div>
+              <div class="lv-product-price-row">
+                <span class="lv-price">$21.40</span>
+                <span class="lv-unit">120 ml · 4 fl oz</span>
+              </div>
+              <div class="lv-tag-row">
+                <span class="lv-mini-pill">Cleanser</span>
+                <span class="lv-mini-pill">Gentle</span>
+              </div>
+              <div class="lv-cta-row">
+                <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+                <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+              </div>
+            </article>
+
+            <!-- 9: Body Product -->
+            <article class="lv-product-card" data-category="Body Products">
+              <div class="lv-product-media">
+                <img
+                  src="https://images.pexels.com/photos/29675496/pexels-photo-29675496.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  alt="Botanical Body Oil" />
+              </div>
+              <div class="lv-product-title">Botanical Body Oil · Neroli &amp; Vanilla</div>
+              <div class="lv-product-sub">Silky body oil infused with cold-pressed plant extracts.</div>
+              <div class="lv-product-price-row">
+                <span class="lv-price">$34.00</span>
+                <span class="lv-unit">100 ml · 3.4 fl oz</span>
+              </div>
+              <div class="lv-tag-row">
+                <span class="lv-mini-pill">Body</span>
+                <span class="lv-mini-pill">Neroli</span>
+                <span class="lv-mini-pill">Vanilla</span>
+              </div>
+              <div class="lv-cta-row">
+                <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+                <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+              </div>
+            </article>
+
+            <!-- 10: Mist -->
+            <article class="lv-product-card" data-category="Toners & Mists">
+              <div class="lv-product-media">
+                <img
+                  src="https://images.pexels.com/photos/27041091/pexels-photo-27041091.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  alt="Hydrating Mist Essence" />
+              </div>
+              <div class="lv-product-title">Hydrating Mist Essence · Dewy Finish</div>
+              <div class="lv-product-sub">Lightweight essence-mist that adds instant dew and comfort.</div>
+              <div class="lv-product-price-row">
+                <span class="lv-price">$22.10</span>
+                <span class="lv-unit">80 ml · 2.7 fl oz</span>
+              </div>
+              <div class="lv-tag-row">
+                <span class="lv-mini-pill">Mist</span>
+                <span class="lv-mini-pill">Hydrating</span>
+              </div>
+              <div class="lv-cta-row">
+                <button type="button" class="lv-btn-primary" onclick="window.location.href='listing.html'">Add to bag</button>
+                <button type="button" class="lv-btn-ghost" onclick="window.location.href='create-listing.html'">View details</button>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
-    </div>
+    </main>
   </div>
 
-  <!-- SIMPLE DEMO DATA + FILTERING (NO LOGIN, NO REDIRECTS) -->
+  <!-- JS: category filter + scroll -->
   <script>
-    const ITEMS = [
-      {
-        id: "glow-moisturizer",
-        title: "Glow Face Moisturizer Niacinamide + Peptides",
-        subtitle: "Lightweight daily cream · 50 ml",
-        price: 29.95,
-        category: "Face Moisturizers",
-        featured: true,
-        chips: ["Moisturizers", "Bestseller"],
-        imageUrl: "https://images.pexels.com/photos/6690881/pexels-photo-6690881.jpeg?auto=compress&cs=tinysrgb&w=800"
-      },
-      {
-        id: "calm-balm",
-        title: "Calm Oil Cleansing Balm · Oil to Milk",
-        subtitle: "Gentle melt-away balm",
-        price: 33.95,
-        category: "Face Cleansers",
-        featured: true,
-        chips: ["Cleansers", "Balm to milk"],
-        imageUrl: "https://images.pexels.com/photos/4841423/pexels-photo-4841423.jpeg?auto=compress&cs=tinysrgb&w=800"
-      },
-      {
-        id: "glow-drops",
-        title: "Frankincense Glow Face Drops",
-        subtitle: "Radiance serum · 30 ml",
-        price: 29.95,
-        category: "Face Serums",
-        featured: true,
-        chips: ["Serums", "Brightening"],
-        imageUrl: "https://images.pexels.com/photos/10825668/pexels-photo-10825668.jpeg?auto=compress&cs=tinysrgb&w=800"
-      },
-      {
-        id: "retinol-serum",
-        title: "2.5% Retinol Booster Serum",
-        subtitle: "Night treatment · 30 ml",
-        price: 35.95,
-        category: "Face Serums",
-        featured: true,
-        chips: ["Serums", "Night"],
-        imageUrl: "https://images.pexels.com/photos/17150052/pexels-photo-17150052.jpeg?auto=compress&cs=tinysrgb&w=800"
-      },
-      {
-        id: "jelly-cream",
-        title: "Face Quench Jelly Cream",
-        subtitle: "Water-gel moisturizer",
-        price: 24.95,
-        category: "Face Moisturizers",
-        chips: ["Hydrating"],
-        imageUrl: "https://images.pexels.com/photos/6690879/pexels-photo-6690879.jpeg?auto=compress&cs=tinysrgb&w=800"
-      },
-      {
-        id: "multi-masker",
-        title: "The Multitasker Moisturizer",
-        subtitle: "Exfoliating + hydrating cream",
-        price: 27.95,
-        category: "Face Moisturizers",
-        chips: ["Multi-use"],
-        imageUrl: "https://images.pexels.com/photos/6690198/pexels-photo-6690198.jpeg?auto=compress&cs=tinysrgb&w=800"
-      },
-      {
-        id: "plant-oil-1",
-        title: "Blackcurrant Seed Oil Cold-Pressed",
-        subtitle: "Carrier oil · 1 oz",
-        price: 18.95,
-        category: "Plant Oils (Carrier Oil)",
-        chips: ["Plant oils"],
-        imageUrl: "https://images.pexels.com/photos/7704476/pexels-photo-7704476.jpeg?auto=compress&cs=tinysrgb&w=800"
-      },
-      {
-        id: "plant-oil-2",
-        title: "Golden Fig Seed Oil Cold-Pressed",
-        subtitle: "Carrier oil · 1 oz",
-        price: 16.95,
-        category: "Plant Oils (Carrier Oil)",
-        chips: ["Plant oils"],
-        imageUrl: "https://images.pexels.com/photos/17150052/pexels-photo-17150052.jpeg?auto=compress&cs=tinysrgb&w=800"
-      },
-      {
-        id: "body-cream",
-        title: "Velvet Body Butter · Cocoa + Vanilla",
-        subtitle: "Whipped body moisturizer",
-        price: 23.95,
-        category: "Body Products",
-        chips: ["Body care"],
-        imageUrl: "https://images.pexels.com/photos/6690881/pexels-photo-6690881.jpeg?auto=compress&cs=tinysrgb&w=800"
-      },
-      {
-        id: "toner",
-        title: "Lumière Toner · Hydrating Mist",
-        subtitle: "Refresh + prep",
-        price: 19.95,
-        category: "Toners",
-        chips: ["Mist"],
-        imageUrl: "https://images.pexels.com/photos/13516796/pexels-photo-13516796.jpeg?auto=compress&cs=tinysrgb&w=800"
-      }
-    ];
+    document.addEventListener('DOMContentLoaded', function () {
+      const categoryRows = document.querySelectorAll('.lv-category-row');
+      const productsAnchor = document.getElementById('products-anchor');
+      const productCards = document.querySelectorAll('.lv-product-card');
 
-    const featuredGrid = document.getElementById("featuredGrid");
-    const allGrid = document.getElementById("allGrid");
-    const categoryListEl = document.getElementById("categoryList");
-    const itemsHeadingEl = document.getElementById("itemsHeading");
-    const emptyMessageEl = document.getElementById("emptyMessage");
-
-    function createProductCard(item) {
-      const card = document.createElement("article");
-      card.className = "product-card";
-
-      const imgWrap = document.createElement("div");
-      imgWrap.className = "product-img-wrap";
-      const img = document.createElement("img");
-      img.className = "product-img";
-      img.src = item.imageUrl;
-      img.alt = item.title || "Product";
-      imgWrap.appendChild(img);
-
-      const body = document.createElement("div");
-      body.className = "product-body";
-
-      const name = document.createElement("div");
-      name.className = "product-name";
-      name.textContent = item.title || "Untitled listing";
-
-      const sub = document.createElement("div");
-      sub.className = "product-sub";
-      sub.textContent = item.subtitle || "";
-
-      const footer = document.createElement("div");
-      footer.className = "product-footer";
-
-      const price = document.createElement("div");
-      price.className = "product-price";
-      if (typeof item.price === "number") {
-        price.textContent = "$" + item.price.toFixed(2);
-      } else if (item.price) {
-        price.textContent = "$" + item.price;
-      }
-
-      const chipRow = document.createElement("div");
-      chipRow.className = "product-chip-row";
-      if (Array.isArray(item.chips)) {
-        item.chips.forEach((chipText) => {
-          const chip = document.createElement("span");
-          chip.className = "product-chip";
-          chip.textContent = chipText;
-          chipRow.appendChild(chip);
+      function applyFilter(filterLabel) {
+        productCards.forEach(card => {
+          const cardCategory = card.getAttribute('data-category') || '';
+          if (filterLabel === 'All') {
+            card.style.display = '';
+          } else {
+            card.style.display = (cardCategory === filterLabel) ? '' : 'none';
+          }
         });
       }
 
-      footer.appendChild(price);
-      footer.appendChild(chipRow);
+      if (categoryRows.length && productsAnchor) {
+        categoryRows.forEach(row => {
+          row.addEventListener('click', function () {
+            categoryRows.forEach(r => r.classList.remove('lv-category-row--active'));
+            row.classList.add('lv-category-row--active');
 
-      body.appendChild(name);
-      if (sub.textContent) body.appendChild(sub);
-      body.appendChild(footer);
-
-      card.appendChild(imgWrap);
-      card.appendChild(body);
-
-      card.addEventListener("click", () => {
-        // Later, this can deep-link to a single product view if you want.
-        console.log("Clicked product:", item.id);
-      });
-
-      return card;
-    }
-
-    function renderFeatured() {
-      featuredGrid.innerHTML = "";
-      ITEMS.filter(i => i.featured).forEach(item => {
-        featuredGrid.appendChild(createProductCard(item));
-      });
-    }
-
-    function renderAll(category) {
-      allGrid.innerHTML = "";
-      let filtered = ITEMS;
-      if (category && category !== "all") {
-        filtered = ITEMS.filter(i => i.category === category);
-      }
-      filtered.forEach(item => {
-        allGrid.appendChild(createProductCard(item));
-      });
-
-      if (category === "all") {
-        itemsHeadingEl.textContent = "All items";
-      } else {
-        itemsHeadingEl.textContent = category || "All items";
+            const filter = row.getAttribute('data-category') || 'All';
+            applyFilter(filter);
+            productsAnchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        });
       }
 
-      if (filtered.length === 0) {
-        emptyMessageEl.style.display = "block";
-      } else {
-        emptyMessageEl.style.display = "none";
-      }
-    }
-
-    function buildCategorySidebar() {
-      const counts = {};
-      ITEMS.forEach(item => {
-        counts[item.category] = (counts[item.category] || 0) + 1;
-      });
-      const total = ITEMS.length;
-
-      categoryListEl.innerHTML = "";
-
-      // "All" row
-      const allLi = document.createElement("li");
-      allLi.className = "category-item";
-      const allBtn = document.createElement("button");
-      allBtn.type = "button";
-      allBtn.className = "category-button is-active";
-      allBtn.dataset.category = "all";
-
-      const allName = document.createElement("span");
-      allName.className = "category-name";
-      allName.textContent = "All";
-      const allCount = document.createElement("span");
-      allCount.className = "category-count";
-      allCount.textContent = total;
-
-      allBtn.appendChild(allName);
-      allBtn.appendChild(allCount);
-      allLi.appendChild(allBtn);
-      categoryListEl.appendChild(allLi);
-
-      // Individual categories
-      Object.keys(counts).sort().forEach(cat => {
-        const li = document.createElement("li");
-        li.className = "category-item";
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "category-button";
-        btn.dataset.category = cat;
-
-        const nameSpan = document.createElement("span");
-        nameSpan.className = "category-name";
-        nameSpan.textContent = cat;
-        const countSpan = document.createElement("span");
-        countSpan.className = "category-count";
-        countSpan.textContent = counts[cat];
-
-        btn.appendChild(nameSpan);
-        btn.appendChild(countSpan);
-        li.appendChild(btn);
-        categoryListEl.appendChild(li);
-      });
-
-      // Click handling
-      categoryListEl.addEventListener("click", (e) => {
-        const btn = e.target.closest(".category-button");
-        if (!btn) return;
-        const cat = btn.dataset.category;
-
-        document.querySelectorAll(".category-button").forEach(b =>
-          b.classList.toggle("is-active", b === btn)
-        );
-        renderAll(cat);
-      });
-    }
-
-    function bootstrapShop() {
-      renderFeatured();
-      buildCategorySidebar();
-      renderAll("all");
-    }
-
-    bootstrapShop();
+      applyFilter('All');
+    });
   </script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const db = firebase.firestore();
+  const productsGrid = document.querySelector(".lv-products-grid");
+  const featuredRow = document.querySelector(".lv-featured-row");
+  const categoryList = document.querySelector(".lv-category-list");
+  const pillCount = document.querySelector(".lv-pill-count");
 
-  <!-- OPTIONAL: Firebase init (passive, no auth / redirects) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  try {
+    // Get all listings for this vendor
+    const snapshot = await db.collection("listings").get();
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
-      authDomain: "lumivue-c8fdf.firebaseapp.com",
-      projectId: "lumivue-c8fdf",
-      storageBucket: "lumivue-c8fdf.firebasestorage.app",
-      messagingSenderId: "120420036736",
-      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
-    };
+    // If NO listings exist -> keep YOUR demo cards visible
+    if (snapshot.empty) {
+      console.log("No listings yet — showing demo template cards.");
+      return;
+    }
 
-    initializeApp(firebaseConfig);
-    // This does not gate the page; it's ready for future Firestore wiring.
-  </script>
+    // Listings exist → REMOVE demo cards
+    productsGrid.innerHTML = "";
+    featuredRow.innerHTML = "";
+
+    const categoryCounts = {};
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+
+      // Count categories
+      if (!categoryCounts[data.productType]) {
+        categoryCounts[data.productType] = 1;
+      } else {
+        categoryCounts[data.productType]++;
+      }
+
+      // Build card HTML with your EXACT design
+      const card = `
+      <article class="lv-product-card" data-category="${data.productType}">
+        <div class="lv-product-media">
+          <img src="${data.images?.[0] || ''}" alt="${data.title}" />
+        </div>
+
+        <div class="lv-product-title">${data.title}</div>
+        <div class="lv-product-sub">${data.subtitle || ""}</div>
+
+        <div class="lv-product-price-row">
+          <span class="lv-price">$${data.price}</span>
+          <span class="lv-unit">${data.size || ""}</span>
+        </div>
+
+        <div class="lv-tag-row">
+          ${(data.tags || []).map(t => `<span class="lv-mini-pill">${t}</span>`).join("")}
+        </div>
+
+        <div class="lv-cta-row">
+          <button type="button" class="lv-btn-primary">Add to bag</button>
+          <button type="button" class="lv-btn-ghost" onclick="window.location.href='listing.html?id=${doc.id}'">View details</button>
+        </div>
+      </article>
+      `;
+
+      // Add to ALL ITEMS
+      productsGrid.insertAdjacentHTML("beforeend", card);
+
+      // Add first 5 to FEATURED
+      if (featuredRow.children.length < 5) {
+        featuredRow.insertAdjacentHTML("beforeend", card);
+      }
+    });
+
+    // Update category counts + regenerate category list
+    categoryList.innerHTML = `
+      <div class="lv-category-row lv-category-row--active" data-category="All">
+        <span>All</span>
+        <span class="lv-count">${snapshot.size}</span>
+      </div>
+    `;
+
+    Object.keys(categoryCounts).forEach(cat => {
+      categoryList.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="lv-category-row" data-category="${cat}">
+          <span>${cat}</span>
+          <span class="lv-count">${categoryCounts[cat]}</span>
+        </div>
+        `
+      );
+    });
+
+    pillCount.textContent = snapshot.size;
+
+  } catch (err) {
+    console.error("Error loading listings:", err);
+  }
+});
+</script>
+
 </body>
 </html>
