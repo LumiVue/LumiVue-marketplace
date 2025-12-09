@@ -13,7 +13,7 @@
       --lv-border: #ddd3c6;
       --lv-border-strong: #ccc0b1;
       --lv-text: #2c1e19;
-      --lv-text-muted: #2c1e19;
+      --lv-text-muted: #7a6a5c;
       --lv-accent: #c98a5a;
       --lv-accent-soft: #fbede1;
       --lv-radius-lg: 18px;
@@ -380,6 +380,7 @@
       background: #fbf4ea;
       font-size: 11px;
       color: var(--lv-text);
+      cursor: pointer;
     }
 
     .feature-link {
@@ -496,7 +497,6 @@
         <div class="feature-card-body">
           Read what other buyers are saying about this store and its products. A highlighted testimonial can be featured here.
         </div>
-        
       </article>
 
       <!-- FAQ CARD -->
@@ -557,6 +557,149 @@
     const reviewsPageLink = document.getElementById("reviewsPageLink");
 
     let currentStoreUid = null;
+
+    const DEMO_PRODUCTS = [
+      {
+        title: "Avernak Daily Ritual Set",
+        subtitle: "Cleanser • Day & Night Serum",
+        price: 78.00,
+        chips: ["Vegan", "New"],
+        imageUrl: "https://images.pexels.com/photos/17150052/pexels-photo-17150052.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Cinnabari Radiance Serum",
+        subtitle: "Brightening • Dragon’s Blood Extract",
+        price: 52.00,
+        chips: ["Limited", "Glow"],
+        imageUrl: "https://images.pexels.com/photos/10825668/pexels-photo-10825668.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Misolo Cloud Serum",
+        subtitle: "Weightless hydrating concentrate",
+        price: 46.00,
+        chips: ["Hydrating", "Best seller"],
+        imageUrl: "https://images.pexels.com/photos/4841423/pexels-photo-4841423.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Soft Focus Skin Veil",
+        subtitle: "Blurring moisture tint",
+        price: 38.00,
+        chips: ["Silicone-free"],
+        imageUrl: "https://images.pexels.com/photos/4735905/pexels-photo-4735905.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Velvet Barrier Cream",
+        subtitle: "Barrier-repair night cream",
+        price: 44.00,
+        chips: ["Ceramides"],
+        imageUrl: "https://images.pexels.com/photos/4735904/pexels-photo-4735904.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Senyani Dew Essence",
+        subtitle: "Moisturizing facial essence",
+        price: 49.00,
+        chips: ["Essence", "Layering"],
+        imageUrl: "https://images.pexels.com/photos/13516796/pexels-photo-13516796.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Porcelain Calm Cream",
+        subtitle: "Soothing recovery moisturizer",
+        price: 40.00,
+        chips: ["Sensitive-safe"],
+        imageUrl: "https://images.pexels.com/photos/6690879/pexels-photo-6690879.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Pearl Drop Hydrating Serum",
+        subtitle: "Hyaluronic spheres • Glow",
+        price: 48.00,
+        chips: ["Plumping", "Vegan"],
+        imageUrl: "https://images.pexels.com/photos/6690881/pexels-photo-6690881.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Botanic Honey Mask",
+        subtitle: "Nourishing treatment blend",
+        price: 36.00,
+        chips: ["Honey", "Weekly"],
+        imageUrl: "https://images.pexels.com/photos/7704476/pexels-photo-7704476.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Texture Discovery Set",
+        subtitle: "Mini creams, serums & oils",
+        price: 59.00,
+        chips: ["Travel", "Bundle"],
+        imageUrl: "https://images.pexels.com/photos/6690198/pexels-photo-6690198.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Marble Cleanse Duo",
+        subtitle: "Daily & deep cleanse",
+        price: 34.00,
+        chips: ["Gentle"],
+        imageUrl: "https://images.pexels.com/photos/17150052/pexels-photo-17150052.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Monarch Glow Trio",
+        subtitle: "Targeted brightening set",
+        price: 69.00,
+        chips: ["Vitamin C"],
+        imageUrl: "https://images.pexels.com/photos/10825668/pexels-photo-10825668.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Bamboo Lid Essentials",
+        subtitle: "Refillable glass duo",
+        price: 55.00,
+        chips: ["Refillable", "Eco"],
+        imageUrl: "https://images.pexels.com/photos/4841423/pexels-photo-4841423.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Marble Glow Primer",
+        subtitle: "Soft-focus base layer",
+        price: 29.00,
+        chips: ["Makeup prep"],
+        imageUrl: "https://images.pexels.com/photos/4735905/pexels-photo-4735905.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Cream Tint Soufflé",
+        subtitle: "Tinted moisture whip",
+        price: 33.00,
+        chips: ["Light coverage"],
+        imageUrl: "https://images.pexels.com/photos/4735904/pexels-photo-4735904.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Silk Mist Essence",
+        subtitle: "Featherweight hydration mist",
+        price: 31.00,
+        chips: ["Fine spray"],
+        imageUrl: "https://images.pexels.com/photos/13516796/pexels-photo-13516796.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Clay Cloud Cream",
+        subtitle: "Soft-matte balancing cream",
+        price: 37.00,
+        chips: ["Oil-control"],
+        imageUrl: "https://images.pexels.com/photos/6690879/pexels-photo-6690879.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Rose Quartz Serum",
+        subtitle: "Micro-pearls • Dewy finish",
+        price: 50.00,
+        chips: ["Radiance"],
+        imageUrl: "https://images.pexels.com/photos/6690881/pexels-photo-6690881.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Apothecary Oil Elixir",
+        subtitle: "Botanical face oil blend",
+        price: 54.00,
+        chips: ["Cold-pressed"],
+        imageUrl: "https://images.pexels.com/photos/7704476/pexels-photo-7704476.jpeg?auto=compress&cs=tinysrgb&w=800"
+      },
+      {
+        title: "Full Routine Lab Kit",
+        subtitle: "Cleanse • Treat • Moisturize • Glow",
+        price: 95.00,
+        chips: ["Complete set", "Demo ready"],
+        imageUrl: "https://images.pexels.com/photos/6690198/pexels-photo-6690198.jpeg?auto=compress&cs=tinysrgb&w=800"
+      }
+    ];
 
     function buildPoliciesSummary(policies) {
       if (!policies) return "";
@@ -801,44 +944,23 @@
     }
 
     async function loadStoreProducts(uid) {
+      // DEMO: ignore Firestore listings and show static LumiVue demo products
       try {
-        const ref = db.collection("listings").where("ownerId", "==", uid);
-        const snap = await ref.get();
-
         productGridEl.innerHTML = "";
         productsStatusEl.textContent = "";
 
-        if (snap.empty) {
-          renderPlaceholders(PLACEHOLDER_MIN);
-          productsStatusEl.textContent =
-            "No products have been added yet. Use create-listing.html to add your first product.";
-          return;
-        }
-
-        let count = 0;
-
-        snap.forEach((doc) => {
-          const data = doc.data();
-          count++;
-
+        DEMO_PRODUCTS.forEach((data, index) => {
           const card = document.createElement("article");
           card.className = "product-card";
 
           const imgWrap = document.createElement("div");
           imgWrap.className = "product-img-wrap";
 
-          if (data.primaryImage) {
-            const img = document.createElement("img");
-            img.className = "product-img";
-            img.src = data.primaryImage;
-            img.alt = data.title || "Product";
-            imgWrap.appendChild(img);
-          } else {
-            const label = document.createElement("div");
-            label.className = "product-placeholder-label";
-            label.textContent = "Add photo in create-listing.html.";
-            imgWrap.appendChild(label);
-          }
+          const img = document.createElement("img");
+          img.className = "product-img";
+          img.src = data.imageUrl;
+          img.alt = data.title || "Product";
+          imgWrap.appendChild(img);
 
           const body = document.createElement("div");
           body.className = "product-body";
@@ -849,7 +971,7 @@
 
           const subEl = document.createElement("div");
           subEl.className = "product-sub";
-          subEl.textContent = data.subtitle || data.category || "";
+          subEl.textContent = data.subtitle || "";
 
           const footer = document.createElement("div");
           footer.className = "product-footer";
@@ -867,26 +989,13 @@
           const chipRow = document.createElement("div");
           chipRow.className = "product-chip-row";
 
-          const status = (data.status || "").toLowerCase();
-          if (status) {
-            const chip = document.createElement("span");
-            chip.className = "product-chip";
-            chip.textContent = status === "active" ? "Active" : status;
-            chipRow.appendChild(chip);
-          }
-
-          if (data.valueVegan) {
-            const chip = document.createElement("span");
-            chip.className = "product-chip";
-            chip.textContent = "Vegan";
-            chipRow.appendChild(chip);
-          }
-
-          if (data.valueCrueltyFree) {
-            const chip = document.createElement("span");
-            chip.className = "product-chip";
-            chip.textContent = "Cruelty-free";
-            chipRow.appendChild(chip);
+          if (Array.isArray(data.chips)) {
+            data.chips.forEach((chipText) => {
+              const chip = document.createElement("span");
+              chip.className = "product-chip";
+              chip.textContent = chipText;
+              chipRow.appendChild(chip);
+            });
           }
 
           footer.appendChild(priceEl);
@@ -899,20 +1008,18 @@
           card.appendChild(imgWrap);
           card.appendChild(body);
 
+          // In demo, clicking does nothing or could show placeholder
           card.addEventListener("click", () => {
-            window.location.href =
-              "product.html?id=" + encodeURIComponent(doc.id);
+            console.log("Demo product clicked:", data.title);
           });
 
           productGridEl.appendChild(card);
         });
-
-        if (count < PLACEHOLDER_MIN) {
-          renderPlaceholders(PLACEHOLDER_MIN - count);
-        }
       } catch (err) {
-        console.error("Product error:", err);
-        productsStatusEl.textContent = "Could not load products.";
+        console.error("Demo product error:", err);
+        productsStatusEl.textContent = "Could not load demo products.";
+        productGridEl.innerHTML = "";
+        renderPlaceholders(PLACEHOLDER_MIN);
       }
     }
 
@@ -942,9 +1049,23 @@
         snap.forEach((docSnap) => {
           const data = docSnap.data();
           const name = data.name || "Category";
-          const chip = document.createElement("span");
+
+          const chip = document.createElement("button");
+          chip.type = "button";
           chip.className = "feature-tag";
           chip.textContent = name;
+
+          // WHEN BUYER CLICKS A CATEGORY → GO TO product.html WITH UID + CATEGORY
+          chip.addEventListener("click", () => {
+            if (!currentStoreUid) return;
+            const url =
+              "product.html?uid=" +
+              encodeURIComponent(currentStoreUid) +
+              "&category=" +
+              encodeURIComponent(name);
+            window.location.href = url;
+          });
+
           categoriesChipsEl.appendChild(chip);
         });
       } catch (err) {
