@@ -281,6 +281,193 @@ Up to 30 seconds</span>
           </div>
         </div>
       </div>
+
+      <!-- VARIANT METAFIELD -->
+      <div class="lv-card">
+        <div class="lv-card-header">
+          <div>
+            <div class="lv-card-title">Variant Metafield</div>
+            <p class="lv-card-subtitle">Add variant-specific data (size, color, material)</p>
+          </div>
+        </div>
+        <div class="lv-card-body">
+          <div class="lv-inline-fields">
+            <div class="lv-field">
+              <label class="lv-label" for="variantSize">Size</label>
+              <input id="variantSize" class="lv-input" type="text" placeholder="e.g., 50ml, 2oz, Large" />
+            </div>
+            <div class="lv-field">
+              <label class="lv-label" for="variantColor">Color</label>
+              <input id="variantColor" class="lv-input" type="text" placeholder="e.g., Rose Gold, Natural" />
+            </div>
+          </div>
+          <div class="lv-inline-fields">
+            <div class="lv-field">
+              <label class="lv-label" for="variantMaterial">Material</label>
+              <input id="variantMaterial" class="lv-input" type="text" placeholder="e.g., Glass, Recycled Plastic" />
+            </div>
+            <div class="lv-field">
+              <label class="lv-label" for="variantStyle">Style</label>
+              <input id="variantStyle" class="lv-input" type="text" placeholder="e.g., Matte, Glossy" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GOOGLE SHOPPING FIELDS -->
+      <div class="lv-card">
+        <div class="lv-card-header">
+          <div>
+            <div class="lv-card-title">Google Shopping</div>
+            <p class="lv-card-subtitle">Required for Google Merchant Center listings</p>
+          </div>
+        </div>
+        <div class="lv-card-body">
+          <div class="lv-inline-fields">
+            <div class="lv-field">
+              <label class="lv-label" for="googleAgeGroup">Age Group</label>
+              <select id="googleAgeGroup" class="lv-select">
+                <option value="">Select age group</option>
+                <option value="adult">Adult</option>
+                <option value="all ages">All Ages</option>
+                <option value="teen">Teen</option>
+                <option value="kids">Kids</option>
+                <option value="toddler">Toddler</option>
+                <option value="infant">Infant</option>
+                <option value="newborn">Newborn</option>
+              </select>
+            </div>
+            <div class="lv-field">
+              <label class="lv-label" for="googleCondition">Condition</label>
+              <select id="googleCondition" class="lv-select">
+                <option value="new">New</option>
+                <option value="refurbished">Refurbished</option>
+                <option value="used">Used</option>
+              </select>
+            </div>
+          </div>
+          <div class="lv-inline-fields">
+            <div class="lv-field">
+              <label class="lv-label" for="googleGender">Gender</label>
+              <select id="googleGender" class="lv-select">
+                <option value="">Select gender</option>
+                <option value="unisex">Unisex</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+            <div class="lv-field">
+              <label class="lv-label" for="googleMPN">MPN (Manufacturer Part Number)</label>
+              <input id="googleMPN" class="lv-input" type="text" placeholder="e.g., SKN-2024-001" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEARCH ENGINE LISTING (SEO) -->
+      <div class="lv-card">
+        <div class="lv-card-header">
+          <div>
+            <div class="lv-card-title">Search Engine Listing</div>
+            <p class="lv-card-subtitle">Optimize for Google and other search engines</p>
+          </div>
+          <button type="button" class="lv-pill-btn" id="autoGenerateSeoBtn" style="font-size:11px;padding:4px 10px;">
+            ✨ Auto-Generate SEO
+          </button>
+        </div>
+        <div class="lv-card-body">
+          <div class="lv-field">
+            <label class="lv-label" for="seoTitle">SEO Title</label>
+            <input id="seoTitle" class="lv-input" type="text" placeholder="Optimized title for search results" />
+            <p class="lv-help">Recommended: 50-60 characters • <span id="seoTitleCount">0</span>/60</p>
+          </div>
+          <div class="lv-field">
+            <label class="lv-label" for="seoDescription">SEO Meta Description</label>
+            <textarea id="seoDescription" class="lv-textarea" style="min-height:80px;" placeholder="Compelling description for search results"></textarea>
+            <p class="lv-help">Recommended: 150-160 characters • <span id="seoDescCount">0</span>/160</p>
+          </div>
+          <div class="lv-field">
+            <label class="lv-label" for="seoKeywords">Keywords (comma-separated)</label>
+            <input id="seoKeywords" class="lv-input" type="text" placeholder="skincare, moisturizer, organic, cruelty-free" />
+            <p class="lv-help">Help Google understand your product • <span id="seoKeywordsCount">0</span> keywords</p>
+          </div>
+          <div class="lv-field">
+            <label class="lv-label" for="seoUrl">URL Handle</label>
+            <input id="seoUrl" class="lv-input" type="text" placeholder="creme-de-lumiere-moisturizer" />
+            <p class="lv-help">Custom URL slug for this product (auto-generated from title)</p>
+          </div>
+          <div style="background:#e8f5e9;border:1px solid #81c784;border-radius:8px;padding:10px;margin-top:8px;display:none;" id="seoSuccessMessage">
+            <div style="font-size:11px;color:#2e7d32;">✅ SEO fields auto-generated! Review and adjust as needed.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI FORMULATION INCI ASSISTANT -->
+      <div class="lv-card">
+        <div class="lv-card-header">
+          <div>
+            <div class="lv-card-title">🤖 AI Formulation INCI Assistant</div>
+            <p class="lv-card-subtitle">AI-powered ingredient list generator for cosmetic products</p>
+          </div>
+        </div>
+        <div class="lv-card-body">
+          <div class="lv-field">
+            <label class="lv-label" for="productFormulationType">Product Type</label>
+            <select id="productFormulationType" class="lv-select">
+              <option value="">Select product type</option>
+              <option value="moisturizer">Moisturizer / Cream</option>
+              <option value="serum">Serum</option>
+              <option value="cleanser">Cleanser</option>
+              <option value="toner">Toner / Essence</option>
+              <option value="mask">Mask</option>
+              <option value="oil">Face Oil</option>
+              <option value="sunscreen">Sunscreen</option>
+              <option value="exfoliant">Exfoliant</option>
+              <option value="eye-cream">Eye Cream</option>
+              <option value="lip-balm">Lip Balm</option>
+              <option value="body-lotion">Body Lotion</option>
+              <option value="shampoo">Shampoo</option>
+              <option value="conditioner">Conditioner</option>
+            </select>
+          </div>
+          <div class="lv-field">
+            <label class="lv-label" for="keyIngredients">Key Active Ingredients</label>
+            <input id="keyIngredients" class="lv-input" type="text" placeholder="e.g., hyaluronic acid, niacinamide, vitamin C" />
+            <p class="lv-help">Comma-separated list of main active ingredients</p>
+          </div>
+          <div class="lv-field">
+            <label class="lv-label" for="formulationGoal">Formulation Goal</label>
+            <textarea id="formulationGoal" class="lv-textarea" style="min-height:60px;" placeholder="e.g., Hydrating, anti-aging, brightening, acne-fighting"></textarea>
+            <p class="lv-help">Describe what you want the product to do</p>
+          </div>
+          <button type="button" class="lv-pill-btn" id="generateInciBtn" style="width:100%;margin-top:8px;">
+            ✨ Generate INCI Ingredient List
+          </button>
+          <div id="inciLoadingState" style="display:none;padding:12px;text-align:center;font-size:13px;color:var(--lv-text-muted);">
+            <div style="margin-bottom:8px;">🤖 AI is analyzing your formulation...</div>
+            <div style="font-size:11px;">Generating INCI-compliant ingredient list</div>
+          </div>
+          <div class="lv-field" id="inciResultField" style="display:none;margin-top:12px;">
+            <label class="lv-label">Generated INCI List (in descending order)</label>
+            <textarea id="inciResult" class="lv-textarea" style="min-height:120px;" readonly></textarea>
+            <p class="lv-help">This is an AI-generated ingredient list. Please verify with your actual formulation and regulatory requirements.</p>
+            <button type="button" class="lv-pill-btn" id="copyInciBtn" style="margin-top:8px;">
+              📋 Copy to Clipboard
+            </button>
+          </div>
+          <div class="lv-field" style="margin-top:12px;">
+            <label class="lv-label" for="finalInciList">Final INCI Ingredient List</label>
+            <textarea id="finalInciList" class="lv-textarea" style="min-height:100px;" placeholder="Aqua, Glycerin, Cetearyl Alcohol, etc."></textarea>
+            <p class="lv-help">Required for all cosmetic products - must be in descending order by weight</p>
+          </div>
+          <div style="background:#fbf3e7;border:1px solid var(--lv-border);border-radius:8px;padding:12px;margin-top:12px;">
+            <div style="font-size:12px;font-weight:600;margin-bottom:6px;">⚠️ Important Notice</div>
+            <div style="font-size:11px;line-height:1.5;color:var(--lv-text-muted);">
+              This AI assistant provides suggestions only. Always verify ingredients comply with local regulations (FDA, EU Cosmetics Regulation, etc.). You are responsible for accurate labeling and regulatory compliance.
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <aside>
@@ -319,6 +506,13 @@ Up to 30 seconds</span>
           <div class="lv-field">
             <label class="lv-label" for="tags">Tags</label>
             <input id="tags" class="lv-input" type="text" placeholder="organic, vegan, cruelty-free" />
+          </div>
+          <div class="lv-field">
+            <label class="lv-label">Product Categories</label>
+            <p class="lv-help" style="margin-bottom:8px;">Select categories from your store</p>
+            <div id="productCategoriesContainer" style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:11px;color:var(--lv-text-muted);">Loading your categories...</div>
+            </div>
           </div>
           <div class="lv-field">
             <label class="lv-label" for="productStatus">Status</label>
@@ -418,6 +612,12 @@ Up to 30 seconds</span>
     videoRemove.onclick=e=>{e.stopPropagation();videoInput.value="";videoPreview.pause();videoPreview.src="";videoPreview.style.display="none";videoLabel.style.display="block";videoRemove.style.display="none"};
     
     function getFormData(){
+      // Get selected categories
+      const selectedCategories = [];
+      document.querySelectorAll('input[name="productCategory"]:checked').forEach(cb => {
+        selectedCategories.push(cb.value);
+      });
+
       return{
         title:document.getElementById("productTitle").value||"Untitled product",
         subtitle:document.getElementById("productSubtitle").value||"",
@@ -437,7 +637,28 @@ Up to 30 seconds</span>
         vendor:document.getElementById("productVendor").value||"Vendor",
         collections:document.getElementById("collections").value||"",
         tags:document.getElementById("tags").value||"",
-        status:document.getElementById("productStatus").value||"draft"
+        categories:selectedCategories,
+        status:document.getElementById("productStatus").value||"draft",
+        // Variant metafield
+        variantSize:document.getElementById("variantSize").value||"",
+        variantColor:document.getElementById("variantColor").value||"",
+        variantMaterial:document.getElementById("variantMaterial").value||"",
+        variantStyle:document.getElementById("variantStyle").value||"",
+        // Google Shopping
+        googleAgeGroup:document.getElementById("googleAgeGroup").value||"",
+        googleCondition:document.getElementById("googleCondition").value||"new",
+        googleGender:document.getElementById("googleGender").value||"",
+        googleMPN:document.getElementById("googleMPN").value||"",
+        // SEO
+        seoTitle:document.getElementById("seoTitle").value||"",
+        seoDescription:document.getElementById("seoDescription").value||"",
+        seoKeywords:document.getElementById("seoKeywords").value||"",
+        seoUrl:document.getElementById("seoUrl").value||"",
+        // INCI Ingredients
+        inciIngredients:document.getElementById("finalInciList").value||"",
+        formulationType:document.getElementById("productFormulationType").value||"",
+        keyIngredients:document.getElementById("keyIngredients").value||"",
+        formulationGoal:document.getElementById("formulationGoal").value||""
       }
     }
     window.lvGetFormData=getFormData;
@@ -468,46 +689,296 @@ Up to 30 seconds</span>
     document.getElementById("productVendor").addEventListener("input",updatePreview);
     document.getElementById("productType").addEventListener("input",updatePreview);
     document.getElementById("productStatus").addEventListener("change",updatePreview);
-  </script>
-
-  <script type="module">
-    import{initializeApp,getApps}from"https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import{getAuth}from"https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-    import{getFirestore,collection,addDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-    import{getStorage,ref as sRef,uploadBytes,getDownloadURL}from"https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
     
-    const firebaseConfig={apiKey:"AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",authDomain:"lumivue-c8fdf.firebaseapp.com",projectId:"lumivue-c8fdf",storageBucket:"lumivue-c8fdf.firebasestorage.app",messagingSenderId:"120420036736",appId:"1:120420036736:web:0fbbc98b02ea54840d3665"};
-    const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);
-    const auth=getAuth(app);
-    const db=getFirestore(app);
-    const storage=getStorage(app);
-    
-    document.getElementById("publishBtnTop").addEventListener("click",async()=>{
-      console.log("Publishing product...");
-      try{
-        const data=window.lvGetFormData();
-        if(!data.title||!data.price){alert("Add title and price");return}
-        
-        // Upload featured image
-        let imageUrl=null;
-        const fileInput=window.lumivueFeaturedInput;
-        if(fileInput&&fileInput.files&&fileInput.files[0]){
-          const file=fileInput.files[0];
-          const path=`listing-images/${Date.now()}_${file.name}`;
-          const imgRef=sRef(storage,path);
-          const snap=await uploadBytes(imgRef,file);
-          imageUrl=await getDownloadURL(snap.ref);
-        }
-        
-        const payload={...data,status:"active",createdAt:serverTimestamp(),priceNumber:parseFloat(data.price||"0")||0,imageUrl:imageUrl||null};
-        const ref=await addDoc(collection(db,"listings"),payload);
-        console.log("Saved:",ref.id);
-        window.location.href=`product.html?id=${encodeURIComponent(ref.id)}`;
-      }catch(err){
-        console.error("Error:",err);
-        alert("Error: "+err.message);
+    // Auto-generate URL slug from title
+    document.getElementById("productTitle").addEventListener("input",()=>{
+      const title=document.getElementById("productTitle").value;
+      if(title&&!document.getElementById("seoUrl").value){
+        const slug=title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+        document.getElementById("seoUrl").value=slug;
       }
     });
+    
+    // SEO character counters
+    document.getElementById("seoTitle").addEventListener("input",()=>{
+      const count=document.getElementById("seoTitle").value.length;
+      document.getElementById("seoTitleCount").textContent=count;
+      document.getElementById("seoTitleCount").style.color=count>60?"#b91c1c":"var(--lv-text-muted)";
+    });
+    
+    document.getElementById("seoDescription").addEventListener("input",()=>{
+      const count=document.getElementById("seoDescription").value.length;
+      document.getElementById("seoDescCount").textContent=count;
+      document.getElementById("seoDescCount").style.color=count>160?"#b91c1c":"var(--lv-text-muted)";
+    });
+    
+    document.getElementById("seoKeywords").addEventListener("input",()=>{
+      const keywords=document.getElementById("seoKeywords").value.split(",").filter(k=>k.trim()).length;
+      document.getElementById("seoKeywordsCount").textContent=keywords;
+    });
+    
+    // Auto-Generate SEO
+    document.getElementById("autoGenerateSeoBtn").addEventListener("click",()=>{
+      const title=document.getElementById("productTitle").value;
+      const description=document.getElementById("productDescription").value;
+      const type=document.getElementById("productType").value||"Product";
+      const vendor=document.getElementById("productVendor").value||"Brand";
+      const price=document.getElementById("price").value;
+      
+      if(!title){
+        alert("Please enter a product title first");
+        return;
+      }
+      
+      // Generate SEO Title (50-60 chars)
+      let seoTitle=`${title}`;
+      if(seoTitle.length<50){
+        seoTitle+=` | ${type}`;
+      }
+      if(seoTitle.length<50){
+        seoTitle+=` by ${vendor}`;
+      }
+      if(seoTitle.length>60){
+        seoTitle=seoTitle.substring(0,57)+"...";
+      }
+      document.getElementById("seoTitle").value=seoTitle;
+      document.getElementById("seoTitleCount").textContent=seoTitle.length;
+      
+      // Generate SEO Description (150-160 chars)
+      let seoDesc=description?description.substring(0,140):`${title} - Premium ${type.toLowerCase()} by ${vendor}.`;
+      if(price){
+        seoDesc+=` Shop now for $${price}.`;
+      }else{
+        seoDesc+=" Shop now for the best quality.";
+      }
+      if(seoDesc.length>160){
+        seoDesc=seoDesc.substring(0,157)+"...";
+      }
+      document.getElementById("seoDescription").value=seoDesc;
+      document.getElementById("seoDescCount").textContent=seoDesc.length;
+      
+      // Generate Keywords
+      const keywords=[
+        type.toLowerCase(),
+        vendor.toLowerCase(),
+        "skincare","beauty","cosmetics"
+      ];
+      if(title.toLowerCase().includes("organic"))keywords.push("organic");
+      if(title.toLowerCase().includes("natural"))keywords.push("natural");
+      if(title.toLowerCase().includes("vegan"))keywords.push("vegan");
+      if(title.toLowerCase().includes("cruelty"))keywords.push("cruelty-free");
+      document.getElementById("seoKeywords").value=keywords.join(", ");
+      document.getElementById("seoKeywordsCount").textContent=keywords.length;
+      
+      // Generate URL slug
+      const slug=title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+      document.getElementById("seoUrl").value=slug;
+      
+      // Show success message
+      document.getElementById("seoSuccessMessage").style.display="block";
+      setTimeout(()=>{
+        document.getElementById("seoSuccessMessage").style.display="none";
+      },3000);
+    });
+    
+    // AI INCI Generator
+    document.getElementById("generateInciBtn").addEventListener("click",async()=>{
+      const formulationType=document.getElementById("productFormulationType").value;
+      const keyIngredients=document.getElementById("keyIngredients").value;
+      const formulationGoal=document.getElementById("formulationGoal").value;
+      
+      if(!formulationType||!keyIngredients){
+        alert("Please select a product type and enter key ingredients");
+        return;
+      }
+      
+      const btn=document.getElementById("generateInciBtn");
+      const loading=document.getElementById("inciLoadingState");
+      const resultField=document.getElementById("inciResultField");
+      
+      btn.disabled=true;
+      loading.style.display="block";
+      resultField.style.display="none";
+      
+      try{
+        // Simulate AI processing (in production, replace with actual API call)
+        await new Promise(resolve=>setTimeout(resolve,2000));
+        
+        // Generate INCI list based on product type and key ingredients
+        const inciList=generateInciList(formulationType,keyIngredients,formulationGoal);
+        
+        document.getElementById("inciResult").value=inciList;
+        loading.style.display="none";
+        resultField.style.display="block";
+      }catch(err){
+        console.error("INCI generation error:",err);
+        alert("Error generating INCI list. Please try again.");
+        loading.style.display="none";
+      }finally{
+        btn.disabled=false;
+      }
+    });
+    
+    // Copy INCI to clipboard
+    document.getElementById("copyInciBtn").addEventListener("click",()=>{
+      const inciText=document.getElementById("inciResult").value;
+      navigator.clipboard.writeText(inciText).then(()=>{
+        const btn=document.getElementById("copyInciBtn");
+        const originalText=btn.textContent;
+        btn.textContent="✅ Copied!";
+        setTimeout(()=>{btn.textContent=originalText},2000);
+        
+        // Also populate the final INCI field
+        document.getElementById("finalInciList").value=inciText;
+      });
+    });
+    
+    // AI INCI List Generator Logic
+    function generateInciList(type,keyIngredientsStr,goal){
+      const keyIngredients=keyIngredientsStr.split(",").map(i=>i.trim()).filter(Boolean);
+      
+      // Base formulation templates (realistic INCI order)
+      const baseTemplates={
+        moisturizer:["Aqua","Glycerin","Cetearyl Alcohol","Caprylic/Capric Triglyceride","Butyrospermum Parkii (Shea) Butter","Ceteareth-20","Dimethicone","Tocopherol","Xanthan Gum","Phenoxyethanol","Ethylhexylglycerin","Parfum"],
+        serum:["Aqua","Propanediol","Glycerin","Pentylene Glycol","Carbomer","Sodium Hydroxide","Phenoxyethanol","Ethylhexylglycerin"],
+        cleanser:["Aqua","Cocamidopropyl Betaine","Sodium Cocoyl Isethionate","Glycerin","Coco-Glucoside","Sodium Chloride","Citric Acid","Phenoxyethanol","Parfum"],
+        toner:["Aqua","Glycerin","Propanediol","Panthenol","Allantoin","Sodium Hyaluronate","Citric Acid","Sodium Benzoate","Potassium Sorbate"],
+        mask:["Aqua","Kaolin","Bentonite","Glycerin","Titanium Dioxide","Cetearyl Alcohol","Caprylic/Capric Triglyceride","Phenoxyethanol","Ethylhexylglycerin"],
+        oil:["Simmondsia Chinensis (Jojoba) Seed Oil","Prunus Armeniaca (Apricot) Kernel Oil","Argania Spinosa (Argan) Kernel Oil","Tocopherol","Parfum"],
+        sunscreen:["Aqua","Ethylhexyl Methoxycinnamate","Butyl Methoxydibenzoylmethane","Octocrylene","Glycerin","Cetearyl Alcohol","Titanium Dioxide","Phenoxyethanol"],
+        exfoliant:["Aqua","Glycerin","Propanediol","Lactic Acid","Glycolic Acid","Sodium Hydroxide","Xanthan Gum","Phenoxyethanol"],
+        "eye-cream":["Aqua","Glycerin","Caprylic/Capric Triglyceride","Caffeine","Sodium Hyaluronate","Tocopherol","Carbomer","Phenoxyethanol"],
+        "lip-balm":["Cera Alba","Butyrospermum Parkii (Shea) Butter","Cocos Nucifera (Coconut) Oil","Ricinus Communis (Castor) Seed Oil","Tocopherol","Parfum"],
+        "body-lotion":["Aqua","Glycerin","Cetearyl Alcohol","Caprylic/Capric Triglyceride","Dimethicone","Tocopherol","Phenoxyethanol","Parfum"],
+        shampoo:["Aqua","Sodium Laureth Sulfate","Cocamidopropyl Betaine","Glycerin","Panthenol","Citric Acid","Sodium Chloride","Phenoxyethanol","Parfum"],
+        conditioner:["Aqua","Cetearyl Alcohol","Behentrimonium Chloride","Glycerin","Panthenol","Dimethicone","Tocopherol","Citric Acid","Phenoxyethanol","Parfum"]
+      };
+      
+      // INCI name mapping for common ingredients
+      const inciMap={
+        "hyaluronic acid":"Sodium Hyaluronate",
+        "niacinamide":"Niacinamide",
+        "vitamin c":"Ascorbic Acid",
+        "vitamin e":"Tocopherol",
+        "retinol":"Retinol",
+        "salicylic acid":"Salicylic Acid",
+        "glycolic acid":"Glycolic Acid",
+        "lactic acid":"Lactic Acid",
+        "azelaic acid":"Azelaic Acid",
+        "peptides":"Palmitoyl Tripeptide-1",
+        "ceramides":"Ceramide NP",
+        "squalane":"Squalane",
+        "argan oil":"Argania Spinosa Kernel Oil",
+        "jojoba oil":"Simmondsia Chinensis Seed Oil",
+        "rosehip oil":"Rosa Canina Fruit Oil",
+        "aloe vera":"Aloe Barbadensis Leaf Juice",
+        "green tea":"Camellia Sinensis Leaf Extract",
+        "centella":"Centella Asiatica Extract",
+        "tea tree":"Melaleuca Alternifolia Leaf Oil",
+        "caffeine":"Caffeine",
+        "alpha arbutin":"Alpha-Arbutin",
+        "kojic acid":"Kojic Acid",
+        "tranexamic acid":"Tranexamic Acid"
+      };
+      
+      // Get base template
+      const baseList=[...(baseTemplates[type]||baseTemplates.moisturizer)];
+      
+      // Convert key ingredients to INCI names and insert into list
+      const inciIngredients=keyIngredients.map(ing=>{
+        const lower=ing.toLowerCase();
+        return inciMap[lower]||ing.split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
+      });
+      
+      // Insert actives after water/solvents but before preservatives
+      const insertPosition=Math.min(4,baseList.length-3);
+      inciIngredients.forEach((inci,idx)=>{
+        if(!baseList.includes(inci)){
+          baseList.splice(insertPosition+idx,0,inci);
+        }
+      });
+      
+      return baseList.join(", ");
+    }
+    
+    // SEO Auto-Generation
+    document.getElementById("autoGenerateSeoBtn").addEventListener("click",()=>{
+      const title=document.getElementById("productTitle").value;
+      const description=document.getElementById("productDescription").value;
+      const type=document.getElementById("productType").value||"Product";
+      const vendor=document.getElementById("productVendor").value||"Brand";
+      const price=document.getElementById("price").value;
+      
+      if(!title){
+        alert("Please enter a product title first");
+        return;
+      }
+      
+      // Generate SEO Title (50-60 chars)
+      let seoTitle=`${title}`;
+      if(seoTitle.length<50){
+        seoTitle+=` | ${type}`;
+      }
+      if(seoTitle.length<50){
+        seoTitle+=` by ${vendor}`;
+      }
+      if(seoTitle.length>60){
+        seoTitle=seoTitle.substring(0,57)+"...";
+      }
+      document.getElementById("seoTitle").value=seoTitle;
+      document.getElementById("seoTitleCount").textContent=seoTitle.length;
+      
+      // Generate SEO Description (150-160 chars)
+      let seoDesc=description?description.substring(0,140):`${title} - Premium ${type.toLowerCase()} by ${vendor}.`;
+      if(price){
+        seoDesc+=` Shop now for $${price}.`;
+      }else{
+        seoDesc+=" Shop now for the best quality.";
+      }
+      if(seoDesc.length>160){
+        seoDesc=seoDesc.substring(0,157)+"...";
+      }
+      document.getElementById("seoDescription").value=seoDesc;
+      document.getElementById("seoDescCount").textContent=seoDesc.length;
+      
+      // Generate Keywords
+      const keywords=[
+        type.toLowerCase(),
+        vendor.toLowerCase(),
+        "skincare","beauty","cosmetics"
+      ];
+      if(title.toLowerCase().includes("organic"))keywords.push("organic");
+      if(title.toLowerCase().includes("natural"))keywords.push("natural");
+      if(title.toLowerCase().includes("vegan"))keywords.push("vegan");
+      if(title.toLowerCase().includes("cruelty"))keywords.push("cruelty-free");
+      document.getElementById("seoKeywords").value=keywords.join(", ");
+      document.getElementById("seoKeywordsCount").textContent=keywords.length;
+      
+      // Generate URL slug
+      const slug=title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+      document.getElementById("seoUrl").value=slug;
+      
+      // Show success message
+      document.getElementById("seoSuccessMessage").style.display="block";
+      setTimeout(()=>{
+        document.getElementById("seoSuccessMessage").style.display="none";
+      },3000);
+    });
+    
+    // Character counters for SEO fields
+    function updateSeoCharacterCounts(){
+      const titleLength=document.getElementById("seoTitle").value.length;
+      const descLength=document.getElementById("seoDescription").value.length;
+      const keywordsLength=document.getElementById("seoKeywords").value.split(",").length;
+      
+      document.getElementById("seoTitleCount").textContent=titleLength;
+      document.getElementById("seoDescCount").textContent=descLength;
+      document.getElementById("seoKeywordsCount").textContent=keywordsLength;
+    }
+    
+    document.getElementById("seoTitle").addEventListener("input",updateSeoCharacterCounts);
+    document.getElementById("seoDescription").addEventListener("input",updateSeoCharacterCounts);
+    document.getElementById("seoKeywords").addEventListener("input",updateSeoCharacterCounts);
   </script>
 </body>
 </html>
