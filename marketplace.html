@@ -492,52 +492,33 @@
 
                 const card = document.createElement("article");
                 card.className = "lv-card";
+                card.style.cursor = "pointer";
                 card.innerHTML = `
-                    <div class="lv-card-image-wrap">
-                        ${product.imageUrl 
-                            ? `<img class="lv-card-image" src="${product.imageUrl}" alt="${product.title || 'Product'}" />`
-                            : `<div class="lv-card-image"></div>`
-                        }
-                    </div>
-                    <h3 class="lv-card-title">${product.title || 'Untitled Product'}</h3>
-                    <p class="lv-card-subtitle">${product.subtitle || ''}</p>
-                    <div class="lv-card-meta">
-                        <span class="lv-pill">${product.type || 'Product'}</span>
-                        <span class="lv-price">${currency}${price.toFixed(2)}</span>
-                    </div>
-                    <div class="lv-card-footer">
-                        <button class="lv-btn-ghost" type="button">View product</button>
-                    </div>
+                    <a href="product-detail.html?id=${product.id}" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="lv-card-image-wrap">
+                            ${product.imageUrl 
+                                ? `<img class="lv-card-image" src="${product.imageUrl}" alt="${product.title || 'Product'}" />`
+                                : `<div class="lv-card-image"></div>`
+                            }
+                        </div>
+                        <h3 class="lv-card-title">${product.title || 'Untitled Product'}</h3>
+                        <p class="lv-card-subtitle">${product.subtitle || ''}</p>
+                        <div class="lv-card-meta">
+                            <span class="lv-pill">${product.type || 'Product'}</span>
+                            <span class="lv-price">${currency}${price.toFixed(2)}</span>
+                        </div>
+                        <div class="lv-card-footer">
+                            <span class="lv-btn-ghost" style="display: inline-flex; width: 100%; align-items: center; justify-content: center; height: 28px; padding: 0 14px; border-radius: 50px; background: #e6d8c7; border: 1px solid var(--lv-border-strong); color: var(--lv-text); font-weight: 500; font-size: 11px; line-height: 1.2;">View product</span>
+                        </div>
+                    </a>
                 `;
-
-                // Add click handler to entire card
-                card.addEventListener("click", (e) => {
-                    console.log("🖱️ Product card clicked:", product.title, "ID:", product.id);
-                    // Prevent navigation if clicking the button directly
-                    if (e.target.tagName === 'BUTTON') {
-                        e.stopPropagation();
-                    }
-                    console.log("🔗 Navigating to: product-detail.html?id=" + product.id);
-                    window.location.href = `product-detail.html?id=${product.id}`;
-                });
-
-                // Also add click handler to button specifically
-                const btn = card.querySelector('.lv-btn-ghost');
-                if (btn) {
-                    btn.addEventListener('click', (e) => {
-                        console.log("🔘 View product button clicked:", product.title);
-                        e.stopPropagation();
-                        console.log("🔗 Navigating to: product-detail.html?id=" + product.id);
-                        window.location.href = `product-detail.html?id=${product.id}`;
-                    });
-                }
 
                 grid.appendChild(card);
             });
 
             container.innerHTML = "";
             container.appendChild(grid);
-            console.log(`✅ Rendered ${filteredProducts.length} product cards with click handlers`);
+            console.log(`✅ Rendered ${filteredProducts.length} product cards with direct links`);
         }
 
         async function loadVendors() {
@@ -557,49 +538,30 @@
 
                 const card = document.createElement("article");
                 card.className = "lv-card";
+                card.style.cursor = "pointer";
                 card.innerHTML = `
-                    <div class="lv-card-image-wrap">
-                        ${firstProduct.imageUrl 
-                            ? `<img class="lv-card-image" src="${firstProduct.imageUrl}" alt="${firstProduct.vendor || 'Store'}" />`
-                            : `<div class="lv-card-image"></div>`
-                        }
-                    </div>
-                    <h3 class="lv-card-title">${firstProduct.vendor || 'Independent Creator'}</h3>
-                    <p class="lv-card-subtitle">${vendorProducts.length} product${vendorProducts.length !== 1 ? 's' : ''} available</p>
-                    <div class="lv-card-meta">
-                        <span class="lv-pill">${firstProduct.type || 'Studio'}</span>
-                    </div>
-                    <div class="lv-card-footer">
-                        <button class="lv-btn-ghost" type="button">View store</button>
-                    </div>
+                    <a href="store.html?uid=${vendorUid}" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="lv-card-image-wrap">
+                            ${firstProduct.imageUrl 
+                                ? `<img class="lv-card-image" src="${firstProduct.imageUrl}" alt="${firstProduct.vendor || 'Store'}" />`
+                                : `<div class="lv-card-image"></div>`
+                            }
+                        </div>
+                        <h3 class="lv-card-title">${firstProduct.vendor || 'Independent Creator'}</h3>
+                        <p class="lv-card-subtitle">${vendorProducts.length} product${vendorProducts.length !== 1 ? 's' : ''} available</p>
+                        <div class="lv-card-meta">
+                            <span class="lv-pill">${firstProduct.type || 'Studio'}</span>
+                        </div>
+                        <div class="lv-card-footer">
+                            <span class="lv-btn-ghost" style="display: inline-flex; width: 100%; align-items: center; justify-content: center; height: 28px; padding: 0 14px; border-radius: 50px; background: #e6d8c7; border: 1px solid var(--lv-border-strong); color: var(--lv-text); font-weight: 500; font-size: 11px; line-height: 1.2;">View store</span>
+                        </div>
+                    </a>
                 `;
-
-                // Add click handler to entire card
-                card.addEventListener("click", (e) => {
-                    console.log("🏪 Vendor card clicked:", firstProduct.vendor, "UID:", vendorUid);
-                    // Prevent navigation if clicking the button directly
-                    if (e.target.tagName === 'BUTTON') {
-                        e.stopPropagation();
-                    }
-                    console.log("🔗 Navigating to: store.html?uid=" + vendorUid);
-                    window.location.href = `store.html?uid=${vendorUid}`;
-                });
-
-                // Also add click handler to button specifically
-                const btn = card.querySelector('.lv-btn-ghost');
-                if (btn) {
-                    btn.addEventListener('click', (e) => {
-                        console.log("🔘 View store button clicked:", firstProduct.vendor);
-                        e.stopPropagation();
-                        console.log("🔗 Navigating to: store.html?uid=" + vendorUid);
-                        window.location.href = `store.html?uid=${vendorUid}`;
-                    });
-                }
 
                 vendorsGrid.appendChild(card);
             }
             
-            console.log(`✅ Rendered ${uniqueVendorUids.length} vendor cards with click handlers`);
+            console.log(`✅ Rendered ${uniqueVendorUids.length} vendor cards with direct links`);
         }
 
         function searchProducts(query) {
@@ -658,10 +620,6 @@
         });
 
         console.log("🚀 Marketplace.html initialized");
-        console.log("📊 Event listeners attached:");
-        console.log("  - Search button:", document.getElementById("searchBtn"));
-        console.log("  - Search input:", document.getElementById("searchInput"));
-        console.log("  - Category chips:", document.querySelectorAll('.lv-chip').length);
         
         loadProducts();
     </script>
