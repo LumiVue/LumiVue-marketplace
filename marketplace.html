@@ -1,259 +1,662 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Marketplace · LumiVue</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <title>LumiVue Marketplace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
 
-  <!-- Shared LumiVue theme -->
-  <link rel="stylesheet" href="styles.css" />
+    <style>
+        :root {
+            --lv-bg: #f4f1eb;
+            --lv-surface: #ffffff;
+            --lv-border: #ddd3c6;
+            --lv-border-strong: #ccc0b1;
+            --lv-text: #2c1e19;
+            --lv-text-muted: #7a6a5c;
+            --lv-accent: #c98a5a;
+            --lv-accent-soft: #fbede1;
+            --lv-radius-lg: 14px;
+            --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+        }
 
-  <style>
-    /* YOUR ORIGINAL STYLES — UNTOUCHED */
-    body {
-      background: #020617;
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-      color: #F5F3EE;
-    }
+        * { box-sizing: border-box; }
 
-    .marketplace-page {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0 24px 40px;
-    }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFrame, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+            background: var(--lv-bg);
+            color: var(--lv-text);
+        }
 
-    .top-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 26px 0 18px;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+        .lv-page { min-height: 100vh; }
 
-    .brand-lockup {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 0.20em;
-      text-transform: uppercase;
-      color: #F5F3EE;
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-    }
+        .lv-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(244, 241, 235, 0.98);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(221, 211, 198, 0.7);
+        }
 
-    .brand-lockup span {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: #C6A574;
-    }
+        .lv-header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
 
-    .nav-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+        .lv-logo-wrap { display: flex; align-items: center; gap: 10px; }
 
-    .nav-btn {
-      font-size: 13px;
-      color: #e5e7eb;
-      text-decoration: none;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(198,165,116,0.45);
-      background: transparent;
-      transition: all 0.16s ease;
-    }
+        .lv-logo-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e6d8c7;
+            color: var(--lv-text);
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--lv-border-strong);
+        }
 
-    .nav-btn:hover {
-      border-color: rgba(198,165,116,0.9);
-      color: #C6A574;
-    }
+        .lv-logo-text {
+            font-size: 14px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--lv-text);
+        }
 
-    .nav-btn.primary {
-      background: linear-gradient(135deg, #C6A574, #fbbf24, #f97316);
-      color: #020617;
-      border-color: transparent;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.9);
-    }
+        .lv-nav { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+        .lv-nav a {
+            text-decoration: none !important;
+            border-bottom: none !important;
+            color: var(--lv-text);
+        }
 
-    .nav-btn.primary:hover {
-      background: linear-gradient(135deg, #b8945f, #f59e0b, #ea580c);
-      box-shadow: 0 22px 55px rgba(0,0,0,0.95);
-    }
+        .lv-header-actions { display: flex; align-items: center; gap: 10px; }
 
-    /*** EVERYTHING BELOW IS YOUR ORIGINAL — UNCHANGED ***/
-    .search-shell {
-      background: radial-gradient(circle at top left, rgba(198,165,116,0.32), rgba(11,17,32,0.98));
-      border-radius: 26px;
-      padding: 22px 22px 20px;
-      border: 1px solid rgba(198,165,116,0.75);
-      box-shadow: 0 24px 70px rgba(0,0,0,0.9);
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 22px;
-    }
+        .lv-btn-text, .lv-btn-soft {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 34px;
+            padding: 0 18px;
+            border-radius: 50px;
+            background: #e6d8c7;
+            color: var(--lv-text);
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid var(--lv-border-strong);
+            cursor: pointer;
+            text-decoration: none;
+        }
 
-    .search-shell::after {
-      content: "";
-      position: absolute;
-      right: -80px;
-      top: -110px;
-      width: 230px;
-      height: 230px;
-      background: radial-gradient(circle, rgba(198,165,116,0.60), transparent 70%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
+        .lv-main {
+            max-width: 1120px;
+            margin: 18px auto 40px;
+            padding: 0 24px 40px;
+        }
 
-    .search-inner {
-      position: relative;
-      z-index: 1;
-    }
+        .lv-hero-card {
+            background: var(--lv-surface);
+            border-radius: 26px;
+            padding: 30px 32px 26px;
+            box-shadow: var(--lv-shadow-soft);
+            border: 1px solid var(--lv-border);
+            margin-bottom: 32px;
+        }
 
-    .search-tag {
-      display: inline-flex;
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.8);
-      color: #e5e7eb;
-      margin-bottom: 10px;
-    }
+        .lv-hero-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 8px;
+            text-align: center;
+        }
 
-    .search-title {
-      font-size: clamp(22px, 3.2vw, 28px);
-      font-weight: 750;
-      color: #F5F3EE;
-      margin-bottom: 6px;
-    }
+        .lv-hero-subtitle {
+            margin: 0 0 24px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--lv-text-muted);
+        }
 
-    .search-subline {
-      font-size: 13px;
-      color: #e2e8f0;
-      margin-bottom: 14px;
-      max-width: 720px;
-    }
+        .lv-hero-search-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 640px;
+            margin: 0 auto 16px;
+        }
 
-    .search-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 12px;
-      align-items: center;
-    }
+        .lv-hero-search-wrap { display: flex; gap: 10px; width: 100%; }
 
-    .search-input-wrap {
-      flex: 1 1 260px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(15,23,42,0.96);
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.85);
-      padding: 4px 8px 4px 12px;
-    }
+        .lv-hero-search-input {
+            flex: 1;
+            border-radius: 999px;
+            border: 1px solid var(--lv-border-strong);
+            padding: 11px 16px;
+            font-size: 14px;
+            outline: none;
+            background: #f8f4ee;
+        }
 
-    .search-input {
-      border: none;
-      outline: none;
-      flex: 1;
-      background: transparent;
-      font-size: 13px;
-      color: #e5e7eb;
-    }
+        .lv-hero-search-btn {
+            height: 34px;
+            border-radius: 999px;
+            border: none;
+            padding: 0 22px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--lv-accent);
+            color: #ffffff;
+            cursor: pointer;
+            pointer-events: auto; /* Ensure clicks work */
+        }
 
-    .search-chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 11px;
-      margin-top: 2px;
-      color: #cbd5e1;
-    }
+        .lv-hero-search-btn:active {
+            opacity: 0.8;
+        }
 
-    .chip {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.7);
-      padding: 3px 9px;
-      background: rgba(15,23,42,0.9);
-      cursor: pointer;
-      transition: all 0.16s ease;
-    }
+        .lv-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
 
-    .chip:hover {
-      border-color: rgba(198,165,116,0.9);
-      color: #C6A574;
-    }
+        .lv-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            padding: 0 14px;
+            border-radius: 50px;
+            background: #e6d8c7 !important;
+            border: 1px solid var(--lv-border-strong);
+            color: var(--lv-text);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            pointer-events: auto; /* Ensure clicks work */
+        }
 
-    /* FILTER GRID, PRODUCT GRID, CARDS… (ALL UNCHANGED) */
-  </style>
+        .lv-chip:active {
+            opacity: 0.8;
+        }
+
+        .lv-section { margin-top: 32px; }
+
+        .lv-section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .lv-section-title { font-size: 18px; font-weight: 600; }
+        .lv-section-sub { font-size: 12px; color: var(--lv-text-muted); }
+
+        .lv-card-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        @media (max-width: 1024px) {
+            .lv-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
+            .lv-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 520px) {
+            .lv-card-grid { grid-template-columns: minmax(0, 1fr); }
+        }
+
+        .lv-card {
+            background: var(--lv-surface);
+            border-radius: var(--lv-radius-lg);
+            border: 1px solid var(--lv-border);
+            padding: 10px 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+            cursor: pointer;
+        }
+
+        .lv-card-image-wrap {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #ddd3c6;
+            height: 120px;
+        }
+
+        .lv-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .lv-card-title { font-size: 13px; font-weight: 600; margin: 0; }
+        .lv-card-subtitle { font-size: 12px; color: var(--lv-text-muted); margin: 0; }
+
+        .lv-card-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+
+        .lv-pill {
+            border-radius: 999px;
+            border: 1px solid var(--lv-border-strong);
+            padding: 4px 9px;
+            font-size: 11px;
+            color: var(--lv-text-muted);
+            background: #f8f3ea;
+        }
+
+        .lv-price { font-size: 13px; font-weight: 600; color: var(--lv-text); }
+
+        .lv-card-footer { margin-top: 2px; }
+
+        .lv-btn-ghost {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 18px !important;
+            padding: 0 6px !important;
+            border-radius: 50px;
+            background: #e6d8c7;
+            border: 1px solid var(--lv-border-strong);
+            color: var(--lv-text);
+            font-weight: 400 !important;
+            font-size: 8px !important;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .lv-footer {
+            max-width: 1120px;
+            margin: 0 auto 40px;
+            padding: 0 24px;
+            font-size: 12px;
+            color: var(--lv-text-muted);
+        }
+
+        .lv-footer p { margin: 4px 0; }
+
+        .lv-loading {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 14px;
+            color: var(--lv-text-muted);
+        }
+
+        .lv-empty {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .lv-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+        .lv-empty-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+        .lv-empty-text { font-size: 14px; color: var(--lv-text-muted); }
+    </style>
 </head>
 
 <body>
-  <div class="page-shell marketplace-page">
-    <header class="top-nav">
-      <div class="brand-lockup">
-        LUMI<span>VUE</span>
-      </div>
-      <nav class="nav-actions">
-        <a href="login.html" class="nav-btn">Creator login</a>
-        <a href="signup.html" class="nav-btn">Start listing</a>
-        <a href="dashboard.html" class="nav-btn primary">Creator dashboard</a>
-      </nav>
-    </header>
+    <div class="lv-page">
+        <header class="lv-header">
+            <div class="lv-header-inner">
+                <div class="lv-logo-wrap">
+                    <div class="lv-logo-circle">LV</div>
+                    <span class="lv-logo-text">LUMIVUE</span>
+                </div>
 
-    <!-- SEARCH + FILTERS + PRODUCTS — UNCHANGED -->
-    <!-- (I left your entire marketplace logic untouched) -->
+                <nav class="lv-nav">
+                    <a href="marketplace.html">Marketplace</a>
+                    <a href="listing.html">Browse all</a>
+                </nav>
 
-    <section class="products-section-header">
-      <span>
-        <strong>Marketplace listings</strong> · live products currently visible on LumiVue.
-      </span>
-    </section>
+                <div class="lv-header-actions">
+                    <a class="lv-btn-text" href="login.html">Sign in / Join</a>
+                    <a class="lv-btn-soft" href="signup.html">For vendors</a>
+                </div>
+            </div>
+        </header>
 
-    <section id="productsGrid" class="products-grid"></section>
-    <div id="status" class="status-banner"></div>
-  </div>
+        <main class="lv-main">
+            <section class="lv-hero-card">
+                <h1 class="lv-hero-title">Clean Beauty, Redefined.</h1>
+                <p class="lv-hero-subtitle">
+                    Discover a curated selection of high-quality, transparently formulated beauty products from trusted indie creators.
+                </p>
 
-  <!-- YOUR ORIGINAL MARKETPLACE JS — UNCHANGED -->
-  <script type="module">
-    /* NOTHING here was touched. 
-       Your entire marketplace JS remains exactly as-is. */
-  </script>
+                <div class="lv-hero-search-row">
+                    <div class="lv-hero-search-wrap">
+                        <input type="text" id="searchInput" class="lv-hero-search-input" placeholder="Search for products, brands, or ingredients..." />
+                        <button class="lv-hero-search-btn" type="button" id="searchBtn">Search</button>
+                    </div>
 
-  <!-- ============================================= -->
-  <!-- ✅ ADDED: LUMIVUE SHARED FIREBASE COMPAT BLOCK -->
-  <!-- ============================================= -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+                    <div class="lv-chip-row">
+                        <span class="lv-chip primary" data-category="all">All</span>
+                        <span class="lv-chip" data-category="skincare">Skincare</span>
+                        <span class="lv-chip" data-category="cosmetics">Cosmetics</span>
+                        <span class="lv-chip" data-category="soap">Soap</span>
+                        <span class="lv-chip" data-category="candles">Candles</span>
+                        <span class="lv-chip" data-category="body">Body</span>
+                    </div>
+                </div>
+            </section>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAMmoY8qYPr5KolzqnIEtE4sH1lb83iAQ8",
-      authDomain: "lumivue-c8fdf.firebaseapp.com",
-      projectId: "lumivue-c8fdf",
-      storageBucket: "lumivue-c8fdf.appspot.com",
-      messagingSenderId: "112402036736",
-      appId: "1:112402036736:web:bfbbc98b02ea5484803d65"
-    };
+            <section class="lv-section">
+                <div class="lv-section-header">
+                    <div>
+                        <h2 class="lv-section-title">Featured products</h2>
+                    </div>
+                    <div class="lv-section-sub" id="productCount">
+                        Loading products from the marketplace...
+                    </div>
+                </div>
 
-    firebase.initializeApp(firebaseConfig);
+                <div id="productsContainer">
+                    <div class="lv-loading">🔄 Loading products...</div>
+                </div>
+            </section>
 
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-  </script>
-  <!-- ============================================= -->
-  <!-- END SHARED BLOCK -->
-  <!-- ============================================= -->
+            <section class="lv-section" id="vendorsSection" style="display:none;">
+                <div class="lv-section-header">
+                    <div>
+                        <h2 class="lv-section-title">Featured vendors</h2>
+                    </div>
+                    <div class="lv-section-sub">
+                        Independent studios inside the LumiVue marketplace.
+                    </div>
+                </div>
 
+                <div id="vendorsContainer">
+                    <div class="lv-card-grid"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="lv-footer">
+            <p><strong>Sell your creations on LumiVue.</strong></p>
+            <p>LumiVue is a beauty-only marketplace built for skincare formulators, candle makers, soap artists, and cosmetic creators.</p>
+        </footer>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+            authDomain: "lumivue-c8fdf.firebaseapp.com",
+            projectId: "lumivue-c8fdf",
+            storageBucket: "lumivue-c8fdf.firebasestorage.app",
+            messagingSenderId: "120420036736",
+            appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let allProducts = [];
+        let filteredProducts = [];
+
+        async function loadProducts() {
+            console.log("🔥 Loading products from Firestore...");
+
+            try {
+                // TEMPORARY: Remove orderBy until index is created
+                const snapshot = await db.collection("listings")
+                    .where("status", "==", "active")
+                    .get();
+
+                console.log(`✅ Found ${snapshot.size} active products`);
+
+                allProducts = [];
+                snapshot.forEach(doc => {
+                    allProducts.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort in JavaScript instead
+                allProducts.sort((a, b) => {
+                    const aTime = a.createdAt ? a.createdAt.toMillis() : 0;
+                    const bTime = b.createdAt ? b.createdAt.toMillis() : 0;
+                    return bTime - aTime;
+                });
+
+                filteredProducts = [...allProducts];
+                renderProducts();
+                loadVendors();
+
+            } catch (err) {
+                console.error("❌ Error loading products:", err);
+                document.getElementById("productsContainer").innerHTML = `
+                    <div class="lv-empty">
+                        <div class="lv-empty-icon">⚠️</div>
+                        <div class="lv-empty-title">Error loading products</div>
+                        <div class="lv-empty-text">${err.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderProducts() {
+            const container = document.getElementById("productsContainer");
+            const countEl = document.getElementById("productCount");
+
+            if (filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="lv-empty">
+                        <div class="lv-empty-icon">📦</div>
+                        <div class="lv-empty-title">No products found</div>
+                        <div class="lv-empty-text">Be the first to list a product on LumiVue!</div>
+                    </div>
+                `;
+                countEl.textContent = "No products available";
+                return;
+            }
+
+            countEl.textContent = `${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''} available`;
+
+            const grid = document.createElement("div");
+            grid.className = "lv-card-grid";
+
+            filteredProducts.forEach(product => {
+                const price = product.priceNumber || parseFloat(product.price) || 0;
+                const currency = product.currency === "USD" ? "$" : (product.currency || "$");
+
+                const card = document.createElement("article");
+                card.className = "lv-card";
+                card.innerHTML = `
+                    <div class="lv-card-image-wrap">
+                        ${product.imageUrl 
+                            ? `<img class="lv-card-image" src="${product.imageUrl}" alt="${product.title || 'Product'}" />`
+                            : `<div class="lv-card-image"></div>`
+                        }
+                    </div>
+                    <h3 class="lv-card-title">${product.title || 'Untitled Product'}</h3>
+                    <p class="lv-card-subtitle">${product.subtitle || ''}</p>
+                    <div class="lv-card-meta">
+                        <span class="lv-pill">${product.type || 'Product'}</span>
+                        <span class="lv-price">${currency}${price.toFixed(2)}</span>
+                    </div>
+                    <div class="lv-card-footer">
+                        <button class="lv-btn-ghost" type="button">View product</button>
+                    </div>
+                `;
+
+                // Add click handler to entire card
+                card.addEventListener("click", (e) => {
+                    console.log("🖱️ Product card clicked:", product.title, "ID:", product.id);
+                    // Prevent navigation if clicking the button directly
+                    if (e.target.tagName === 'BUTTON') {
+                        e.stopPropagation();
+                    }
+                    console.log("🔗 Navigating to: product-detail.html?id=" + product.id);
+                    window.location.href = `product-detail.html?id=${product.id}`;
+                });
+
+                // Also add click handler to button specifically
+                const btn = card.querySelector('.lv-btn-ghost');
+                if (btn) {
+                    btn.addEventListener('click', (e) => {
+                        console.log("🔘 View product button clicked:", product.title);
+                        e.stopPropagation();
+                        console.log("🔗 Navigating to: product-detail.html?id=" + product.id);
+                        window.location.href = `product-detail.html?id=${product.id}`;
+                    });
+                }
+
+                grid.appendChild(card);
+            });
+
+            container.innerHTML = "";
+            container.appendChild(grid);
+            console.log(`✅ Rendered ${filteredProducts.length} product cards with click handlers`);
+        }
+
+        async function loadVendors() {
+            const uniqueVendorUids = [...new Set(allProducts.map(p => p.vendorUid).filter(Boolean))];
+            if (uniqueVendorUids.length === 0) return;
+
+            console.log(`🏪 Found ${uniqueVendorUids.length} unique vendors`);
+            document.getElementById("vendorsSection").style.display = "block";
+
+            const vendorsGrid = document.querySelector("#vendorsContainer .lv-card-grid");
+            vendorsGrid.innerHTML = "";
+
+            for (const vendorUid of uniqueVendorUids.slice(0, 10)) {
+                const vendorProducts = allProducts.filter(p => p.vendorUid === vendorUid);
+                const firstProduct = vendorProducts[0];
+
+                const card = document.createElement("article");
+                card.className = "lv-card";
+                card.innerHTML = `
+                    <div class="lv-card-image-wrap">
+                        ${firstProduct.imageUrl 
+                            ? `<img class="lv-card-image" src="${firstProduct.imageUrl}" alt="${firstProduct.vendor || 'Store'}" />`
+                            : `<div class="lv-card-image"></div>`
+                        }
+                    </div>
+                    <h3 class="lv-card-title">${firstProduct.vendor || 'Independent Creator'}</h3>
+                    <p class="lv-card-subtitle">${vendorProducts.length} product${vendorProducts.length !== 1 ? 's' : ''} available</p>
+                    <div class="lv-card-meta">
+                        <span class="lv-pill">${firstProduct.type || 'Studio'}</span>
+                    </div>
+                    <div class="lv-card-footer">
+                        <button class="lv-btn-ghost" type="button">View store</button>
+                    </div>
+                `;
+
+                // Add click handler to entire card
+                card.addEventListener("click", (e) => {
+                    console.log("🏪 Vendor card clicked:", firstProduct.vendor, "UID:", vendorUid);
+                    // Prevent navigation if clicking the button directly
+                    if (e.target.tagName === 'BUTTON') {
+                        e.stopPropagation();
+                    }
+                    console.log("🔗 Navigating to: store.html?uid=" + vendorUid);
+                    window.location.href = `store.html?uid=${vendorUid}`;
+                });
+
+                // Also add click handler to button specifically
+                const btn = card.querySelector('.lv-btn-ghost');
+                if (btn) {
+                    btn.addEventListener('click', (e) => {
+                        console.log("🔘 View store button clicked:", firstProduct.vendor);
+                        e.stopPropagation();
+                        console.log("🔗 Navigating to: store.html?uid=" + vendorUid);
+                        window.location.href = `store.html?uid=${vendorUid}`;
+                    });
+                }
+
+                vendorsGrid.appendChild(card);
+            }
+            
+            console.log(`✅ Rendered ${uniqueVendorUids.length} vendor cards with click handlers`);
+        }
+
+        function searchProducts(query) {
+            console.log("🔍 Searching for:", query);
+            const q = query.toLowerCase().trim();
+            if (!q) {
+                filteredProducts = [...allProducts];
+            } else {
+                filteredProducts = allProducts.filter(product => {
+                    return (product.title || '').toLowerCase().includes(q) ||
+                           (product.subtitle || '').toLowerCase().includes(q) ||
+                           (product.description || '').toLowerCase().includes(q) ||
+                           (product.vendor || '').toLowerCase().includes(q) ||
+                           (product.type || '').toLowerCase().includes(q) ||
+                           (product.tags || '').toLowerCase().includes(q);
+                });
+            }
+            console.log(`📋 Found ${filteredProducts.length} matching products`);
+            renderProducts();
+        }
+
+        function filterByCategory(category = 'all') {
+            console.log("🏷️ Filtering by category:", category);
+            document.querySelectorAll('.lv-chip').forEach(chip => {
+                chip.classList.toggle('primary', chip.dataset.category === category);
+            });
+
+            if (category === 'all') {
+                filteredProducts = [...allProducts];
+            } else {
+                filteredProducts = allProducts.filter(product => {
+                    return (product.type || '').toLowerCase().includes(category.toLowerCase());
+                });
+            }
+            console.log(`📋 Found ${filteredProducts.length} products in ${category} category`);
+            renderProducts();
+        }
+
+        document.getElementById("searchBtn").addEventListener("click", () => {
+            console.log("🔍 Search button clicked!");
+            searchProducts(document.getElementById("searchInput").value);
+        });
+
+        document.getElementById("searchInput").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                console.log("⌨️ Enter key pressed in search!");
+                searchProducts(document.getElementById("searchInput").value);
+            }
+        });
+
+        document.querySelectorAll('.lv-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                console.log("🏷️ Chip clicked:", chip.dataset.category);
+                filterByCategory(chip.dataset.category);
+            });
+        });
+
+        console.log("🚀 Marketplace.html initialized");
+        console.log("📊 Event listeners attached:");
+        console.log("  - Search button:", document.getElementById("searchBtn"));
+        console.log("  - Search input:", document.getElementById("searchInput"));
+        console.log("  - Category chips:", document.querySelectorAll('.lv-chip').length);
+        
+        loadProducts();
+    </script>
 </body>
 </html>
