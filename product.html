@@ -252,6 +252,15 @@
           </div>
         </div>
       </div>
+
+      <div class="lv-card" id="ingredientsCard" style="display:none;">
+        <div class="lv-card-header">
+          <div class="lv-card-title">Ingredients (INCI)</div>
+        </div>
+        <div class="lv-card-body">
+          <div id="inciIngredientsList" style="font-size:13px;line-height:1.6;color:var(--lv-text);">—</div>
+        </div>
+      </div>
     </aside>
   </main>
 
@@ -357,6 +366,12 @@
         if (data.costPerItem) {
           document.getElementById("costRow").style.display = "flex";
           document.getElementById("infoCost").textContent = `${currency}${parseFloat(data.costPerItem).toFixed(2)}`;
+        }
+
+        // INCI Ingredients
+        if (data.inciIngredients) {
+          document.getElementById("ingredientsCard").style.display = "block";
+          document.getElementById("inciIngredientsList").textContent = data.inciIngredients;
         }
 
       } catch (err) {
