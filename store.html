@@ -531,7 +531,23 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
     </script>
+</script>  <!-- END OF FIREBASE CONFIG SCRIPT -->
 
+<!-- FORCE STORE TO ALWAYS LOAD CORRECT VENDOR -->
+<script>
+auth.onAuthStateChanged(user => {
+    if (!user) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const urlUid = params.get("uid");
+
+    // Redirect if the UID in the URL is missing or wrong
+    if (!urlUid || urlUid !== user.uid) {
+        window.location.replace(`store.html?uid=${user.uid}`);
+    }
+});
+</script>
+  
     <!-- STORE LOGIC -->
     <script>
         const PLACEHOLDER_MIN = 20;
@@ -990,4 +1006,5 @@
     </script>
 </body>
 </html>
+
 
