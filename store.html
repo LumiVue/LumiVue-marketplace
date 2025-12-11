@@ -516,474 +516,477 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 
     <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
-      authDomain: "lumivue-c8fdf.firebaseapp.com",
-      projectId: "lumivue-c8fdf",
-      storageBucket: "lumivue-c8fdf.firebasestorage.app",
-      messagingSenderId: "120420036736",
-      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+            authDomain: "lumivue-c8fdf.firebaseapp.com",
+            projectId: "lumivue-c8fdf",
+            storageBucket: "lumivue-c8fdf.firebasestorage.app",
+            messagingSenderId: "120420036736",
+            appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+        };
 
-    firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
 
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    const storage = firebase.storage();
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
     </script>
 
     <!-- STORE LOGIC -->
     <script>
-    const PLACEHOLDER_MIN = 20;
+        const PLACEHOLDER_MIN = 20;
 
-    const bannerImgEl = document.getElementById("storeBannerImg");
-    const bannerVideoEl = document.getElementById("storeBannerVideo");
-    const productGridEl = document.getElementById("productGrid");
-    const productsStatusEl = document.getElementById("productsStatus");
-    const navAvatar = document.getElementById("navAvatar");
+        const bannerImgEl = document.getElementById("storeBannerImg");
+        const bannerVideoEl = document.getElementById("storeBannerVideo");
+        const productGridEl = document.getElementById("productGrid");
+        const productsStatusEl = document.getElementById("productsStatus");
+        const navAvatar = document.getElementById("navAvatar");
 
-    const navCategoriesLink = document.getElementById("navCategoriesLink");
-    const navBrandStoryLink = document.getElementById("navBrandStoryLink");
-    const navPoliciesLink = document.getElementById("navPoliciesLink");
-    const navIngredientsLink = document.getElementById("navIngredientsLink");
-    const navReviewsLink = document.getElementById("navReviewsLink");
-    const navFaqLink = document.getElementById("navFaqLink");
+        const navCategoriesLink = document.getElementById("navCategoriesLink");
+        const navBrandStoryLink = document.getElementById("navBrandStoryLink");
+        const navPoliciesLink = document.getElementById("navPoliciesLink");
+        const navIngredientsLink = document.getElementById("navIngredientsLink");
+        const navReviewsLink = document.getElementById("navReviewsLink");
+        const navFaqLink = document.getElementById("navFaqLink");
 
-    const brandStoryTextEl = document.getElementById("brandStoryText");
-    const categoriesChipsEl = document.getElementById("categoriesChips");
-    const policiesTextEl = document.getElementById("policiesText");
-    const ingredientGlossaryTextEl = document.getElementById("ingredientGlossaryText");
-    const faqTextEl = document.getElementById("faqText");
-    const reviewsPageLink = document.getElementById("reviewsPageLink");
+        const brandStoryTextEl = document.getElementById("brandStoryText");
+        const categoriesChipsEl = document.getElementById("categoriesChips");
+        const policiesTextEl = document.getElementById("policiesText");
+        const ingredientGlossaryTextEl = document.getElementById("ingredientGlossaryText");
+        const faqTextEl = document.getElementById("faqText");
+        const reviewsPageLink = document.getElementById("reviewsPageLink");
 
-    let currentStoreUid = null;
+        let currentStoreUid = null;
 
-    function buildPlaceholderCard() {
-      const card = document.createElement("article");
-      card.className = "product-card placeholder";
+        function buildPlaceholderCard() {
+            const card = document.createElement("article");
+            card.className = "product-card placeholder";
 
-      const imgWrap = document.createElement("div");
-      imgWrap.className = "product-img-wrap";
+            const imgWrap = document.createElement("div");
+            imgWrap.className = "product-img-wrap";
 
-      const label = document.createElement("div");
-      label.className = "product-placeholder-label";
-      label.textContent = "No products yet. Create your first product in create-listing.";
-
-      imgWrap.appendChild(label);
-
-      const body = document.createElement("div");
-      body.className = "product-body";
-
-      const nameEl = document.createElement("div");
-      nameEl.className = "product-name";
-      nameEl.textContent = "Create your first product";
-
-      const subEl = document.createElement("div");
-      subEl.className = "product-sub";
-      subEl.textContent = "Products you create will appear here automatically.";
-
-      const footer = document.createElement("div");
-      footer.className = "product-footer";
-
-      const priceEl = document.createElement("div");
-      priceEl.className = "product-price";
-      priceEl.textContent = "";
-
-      footer.appendChild(priceEl);
-      body.appendChild(nameEl);
-      body.appendChild(subEl);
-      body.appendChild(footer);
-
-      card.appendChild(imgWrap);
-      card.appendChild(body);
-
-      return card;
-    }
-
-    function renderPlaceholders(count) {
-      for (let i = 0; i < count; i++) {
-        productGridEl.appendChild(buildPlaceholderCard());
-      }
-    }
-
-    function setupNavScroll() {
-      function scrollToCard(id) {
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }
-
-      if (navCategoriesLink) {
-        navCategoriesLink.addEventListener("click", (e) => {
-          e.preventDefault();
-          scrollToCard("categoriesCard");
-        });
-      }
-      if (navBrandStoryLink) {
-        navBrandStoryLink.addEventListener("click", (e) => {
-          e.preventDefault();
-          scrollToCard("brandStoryCard");
-        });
-      }
-      if (navPoliciesLink) {
-        navPoliciesLink.addEventListener("click", (e) => {
-          e.preventDefault();
-          scrollToCard("policiesCard");
-        });
-      }
-      if (navIngredientsLink) {
-        navIngredientsLink.addEventListener("click", (e) => {
-          e.preventDefault();
-          scrollToCard("ingredientsCard");
-        });
-      }
-      if (navReviewsLink) {
-        navReviewsLink.addEventListener("click", (e) => {
-          e.preventDefault();
-          scrollToCard("reviewsCard");
-        });
-      }
-      if (navFaqLink) {
-        navFaqLink.addEventListener("click", (e) => {
-          e.preventDefault();
-          scrollToCard("faqCard");
-        });
-      }
-    }
-
-    function wireLinksForUid(uid) {
-      currentStoreUid = uid;
-      if (reviewsPageLink) {
-        reviewsPageLink.href = "reviews.html?uid=" + encodeURIComponent(uid);
-      }
-    }
-
-    async function loadStoreProfile(uid, currentUser) {
-      try {
-        const profileRef = db
-          .collection("stores")
-          .doc(uid)
-          .collection("profile")
-          .doc("main");
-        const profileSnap = await profileRef.get();
-
-        let profileData = profileSnap.exists ? profileSnap.data() : null;
-
-        let creatorData = null;
-        try {
-          const creatorSnap = await db.collection("creators").doc(uid).get();
-          if (creatorSnap.exists) creatorData = creatorSnap.data();
-        } catch (e) {
-          console.warn("Creator doc load failed (ok):", e);
-        }
-
-        const data = Object.assign({}, creatorData || {}, profileData || {});
-
-        const storeName = data.storeName || data.brandName || null;
-        setAvatarInitials(storeName, currentUser);
-
-        const videoUrl = data.storeVideoUrl;
-        const bannerUrl =
-          data.bannerImageUrl ||
-          data.storeLogoUrl ||
-          data.bannerUrl ||
-          data.logoUrl;
-
-        if (videoUrl && bannerVideoEl) {
-          bannerVideoEl.src = videoUrl;
-          bannerVideoEl.style.display = "block";
-          if (bannerImgEl) bannerImgEl.style.display = "none";
-
-          // Try to autoplay muted (allowed by browsers)
-          bannerVideoEl.play().catch(() => {});
-
-          // 🔊 Allow sound when buyer clicks the hero video
-          bannerVideoEl.addEventListener("click", () => {
-            bannerVideoEl.muted = false;
-            bannerVideoEl.play().catch(() => {});
-          });
-        } else if (bannerUrl && bannerImgEl) {
-          bannerImgEl.src = bannerUrl;
-          bannerImgEl.style.display = "block";
-          if (bannerVideoEl) bannerVideoEl.style.display = "none";
-        } else {
-          if (bannerVideoEl) bannerVideoEl.style.display = "none";
-          if (bannerImgEl) bannerImgEl.style.display = "none";
-        }
-
-        if (brandStoryTextEl) {
-          brandStoryTextEl.textContent =
-            data.brandStory ||
-            "Brand story will appear here after the creator saves it in Edit Store.";
-        }
-
-        const policiesSummary = buildPoliciesSummary(data.policies);
-        if (policiesTextEl) {
-          policiesTextEl.textContent =
-            policiesSummary ||
-            "Shipping timelines, return windows, and order adjustments appear here exactly as defined by the vendor.";
-        }
-
-        if (ingredientGlossaryTextEl) {
-          ingredientGlossaryTextEl.textContent =
-            data.ingredientGlossary ||
-            "Hero ingredients and short explanations will appear here once the creator adds them.";
-        }
-
-        if (faqTextEl) {
-          faqTextEl.textContent =
-            data.faqText ||
-            "Frequently asked questions and answers will appear here once the creator saves them in Edit Store.";
-        }
-      } catch (err) {
-        console.error("Profile error:", err);
-      }
-    }
-
-    async function loadStoreProducts(uid) {
-      try {
-        productGridEl.innerHTML = "";
-        productsStatusEl.textContent = "Loading products...";
-
-        // Query Firestore for active listings
-        const listingsRef = db.collection("listings");
-        const q = listingsRef.where("status", "==", "active").orderBy("createdAt", "desc");
-        const snapshot = await q.get();
-
-        console.log(`Found ${snapshot.size} active products`);
-
-        if (snapshot.empty) {
-          productsStatusEl.textContent = "No products available yet.";
-          renderPlaceholders(3);
-          return;
-        }
-
-        productsStatusEl.textContent = "";
-
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          
-          const card = document.createElement("article");
-          card.className = "product-card";
-
-          const imgWrap = document.createElement("div");
-          imgWrap.className = "product-img-wrap";
-
-          if (data.imageUrl) {
-            const img = document.createElement("img");
-            img.className = "product-img";
-            img.src = data.imageUrl;
-            img.alt = data.title || "Product";
-            imgWrap.appendChild(img);
-          } else {
             const label = document.createElement("div");
             label.className = "product-placeholder-label";
-            label.textContent = "No image";
+            label.textContent = "No products yet. Create your first product in create-listing.";
+
             imgWrap.appendChild(label);
-          }
 
-          const body = document.createElement("div");
-          body.className = "product-body";
+            const body = document.createElement("div");
+            body.className = "product-body";
 
-          const nameEl = document.createElement("div");
-          nameEl.className = "product-name";
-          nameEl.textContent = data.title || "Untitled Product";
+            const nameEl = document.createElement("div");
+            nameEl.className = "product-name";
+            nameEl.textContent = "Create your first product";
 
-          const subEl = document.createElement("div");
-          subEl.className = "product-sub";
-          subEl.textContent = data.subtitle || "";
+            const subEl = document.createElement("div");
+            subEl.className = "product-sub";
+            subEl.textContent = "Products you create will appear here automatically.";
 
-          const footer = document.createElement("div");
-          footer.className = "product-footer";
+            const footer = document.createElement("div");
+            footer.className = "product-footer";
 
-          const priceEl = document.createElement("div");
-          priceEl.className = "product-price";
-          const price = data.priceNumber || parseFloat(data.price) || 0;
-          const currency = data.currency === "USD" ? "$" : data.currency || "$";
-          priceEl.textContent = `${currency}${price.toFixed(2)}`;
+            const priceEl = document.createElement("div");
+            priceEl.className = "product-price";
+            priceEl.textContent = "";
 
-          const chipRow = document.createElement("div");
-          chipRow.className = "product-chip-row";
+            footer.appendChild(priceEl);
+            body.appendChild(nameEl);
+            body.appendChild(subEl);
+            body.appendChild(footer);
 
-          // Add vendor/type chip
-          if (data.vendor || data.type) {
-            const chip = document.createElement("span");
-            chip.className = "product-chip";
-            chip.textContent = [data.vendor, data.type].filter(Boolean).join(" · ");
-            chipRow.appendChild(chip);
-          }
+            card.appendChild(imgWrap);
+            card.appendChild(body);
 
-          footer.appendChild(priceEl);
-          footer.appendChild(chipRow);
-
-          body.appendChild(nameEl);
-          if (subEl.textContent) body.appendChild(subEl);
-          body.appendChild(footer);
-
-          card.appendChild(imgWrap);
-          card.appendChild(body);
-
-          // Click to view product details
-          card.addEventListener("click", () => {
-            window.location.href = `product.html?id=${encodeURIComponent(doc.id)}`;
-          });
-
-          productGridEl.appendChild(card);
-        });
-
-        console.log("Products loaded successfully!");
-      } catch (err) {
-        console.error("Error loading products:", err);
-        productsStatusEl.textContent = `Error loading products: ${err.message}`;
-        productGridEl.innerHTML = "";
-        renderPlaceholders(1);
-      }
-    }
-
-    async function loadStoreCategories(uid) {
-      if (!categoriesChipsEl) return;
-
-      categoriesChipsEl.innerHTML = "";
-      const loading = document.createElement("span");
-      loading.className = "feature-tag";
-      loading.textContent = "Loading…";
-      categoriesChipsEl.appendChild(loading);
-
-      try {
-        const colRef = db.collection("stores").doc(uid).collection("categories");
-        const snap = await colRef.get();
-
-        categoriesChipsEl.innerHTML = "";
-
-        if (snap.empty) {
-          const chip = document.createElement("span");
-          chip.className = "feature-tag";
-          chip.textContent = "No categories added yet.";
-          categoriesChipsEl.appendChild(chip);
-          return;
+            return card;
         }
 
-        snap.forEach((docSnap) => {
-          const data = docSnap.data();
-          const name = data.name || "Category";
-
-          const chip = document.createElement("button");
-          chip.type = "button";
-          chip.className = "feature-tag";
-          chip.textContent = name;
-
-          // WHEN BUYER CLICKS A CATEGORY → GO TO product.html WITH UID + CATEGORY
-          chip.addEventListener("click", () => {
-            if (!currentStoreUid) return;
-            const url =
-              "product.html?uid=" +
-              encodeURIComponent(currentStoreUid) +
-              "&category=" +
-              encodeURIComponent(name);
-            window.location.href = url;
-          });
-
-          categoriesChipsEl.appendChild(chip);
-        });
-      } catch (err) {
-        console.error("Error loading categories", err);
-        categoriesChipsEl.innerHTML = "";
-        const chip = document.createElement("span");
-        chip.className = "feature-tag";
-        chip.textContent = "Could not load categories.";
-        categoriesChipsEl.appendChild(chip);
-      }
-    }
-
-    function bootstrapStore() {
-      setupNavScroll();
-
-      const urlUid = getStoreUidFromUrl();
-
-      if (urlUid) {
-        wireLinksForUid(urlUid);
-        loadStoreProfile(urlUid, null);
-        loadStoreProducts(urlUid);
-        loadStoreCategories(urlUid);
-      } else {
-        auth.onAuthStateChanged((user) => {
-          if (!user) {
-            productGridEl.innerHTML = "";
-            renderPlaceholders(PLACEHOLDER_MIN);
-            productsStatusEl.textContent =
-              "Store not specified in URL. Sign in and visit your store link.";
-            return;
-          }
-          const uid = user.uid;
-          wireLinksForUid(uid);
-          loadStoreProfile(uid, user);
-          loadStoreProducts(uid);
-          loadStoreCategories(uid);
-        });
-      }
-    }
-
-    function buildPoliciesSummary(policies) {
-      if (!policies) return "";
-      const parts = [];
-
-      if (policies.processingTime) {
-        parts.push(`Processing: ${policies.processingTime}`);
-      }
-      if (policies.shippingRegions) {
-        parts.push(`Ships to: ${policies.shippingRegions}`);
-      }
-
-      if (policies.returnsAccepted) {
-        let label = "";
-        if (policies.returnsAccepted === "yes") {
-          label = "Returns accepted";
-        } else if (policies.returnsAccepted === "exchange-only") {
-          label = "Exchange only";
-        } else if (policies.returnsAccepted === "final-sale") {
-          label = "All sales final";
-        } else {
-          label = policies.returnsAccepted;
+        function renderPlaceholders(count) {
+            for (let i = 0; i < count; i++) {
+                productGridEl.appendChild(buildPlaceholderCard());
+            }
         }
-        if (policies.returnWindow) {
-          label += ` – ${policies.returnWindow}-day window`;
+
+        function setupNavScroll() {
+            function scrollToCard(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            }
+
+            if (navCategoriesLink) {
+                navCategoriesLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    scrollToCard("categoriesCard");
+                });
+            }
+            if (navBrandStoryLink) {
+                navBrandStoryLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    scrollToCard("brandStoryCard");
+                });
+            }
+            if (navPoliciesLink) {
+                navPoliciesLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    scrollToCard("policiesCard");
+                });
+            }
+            if (navIngredientsLink) {
+                navIngredientsLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    scrollToCard("ingredientsCard");
+                });
+            }
+            if (navReviewsLink) {
+                navReviewsLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    scrollToCard("reviewsCard");
+                });
+            }
+            if (navFaqLink) {
+                navFaqLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    scrollToCard("faqCard");
+                });
+            }
         }
-        parts.push(label);
-      }
 
-      if (policies.nonReturnableItems) {
-        parts.push(`Non-returnable: ${policies.nonReturnableItems}`);
-      }
-
-      return parts.join(" • ");
-    }
-
-    function getStoreUidFromUrl() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("uid") || params.get("creator") || params.get("store");
-    }
-
-    function setAvatarInitials(storeName, user) {
-      let initials = "LV";
-      if (storeName) {
-        const parts = storeName.trim().split(/\s+/);
-        if (parts.length === 1) {
-          initials = parts[0].slice(0, 2).toUpperCase();
-        } else {
-          initials =
-            (parts[0][0] || "L").toUpperCase() +
-            (parts[1][0] || "V").toUpperCase();
+        function wireLinksForUid(uid) {
+            currentStoreUid = uid;
+            if (reviewsPageLink) {
+                reviewsPageLink.href = "reviews.html?uid=" + encodeURIComponent(uid);
+            }
         }
-      } else if (user && user.email) {
-        initials = (user.email[0] || "L").toUpperCase();
-      }
-      navAvatar.textContent = initials;
-    }
 
-    const DEMO_PRODUCTS = [];
+        async function loadStoreProfile(uid, currentUser) {
+            try {
+                const profileRef = db
+                    .collection("stores")
+                    .doc(uid)
+                    .collection("profile")
+                    .doc("main");
+                const profileSnap = await profileRef.get();
 
-    bootstrapStore();
+                let profileData = profileSnap.exists ? profileSnap.data() : null;
+
+                let creatorData = null;
+                try {
+                    const creatorSnap = await db.collection("creators").doc(uid).get();
+                    if (creatorSnap.exists) creatorData = creatorSnap.data();
+                } catch (e) {
+                    console.warn("Creator doc load failed (ok):", e);
+                }
+
+                const data = Object.assign({}, creatorData || {}, profileData || {});
+
+                const storeName = data.storeName || data.brandName || null;
+                setAvatarInitials(storeName, currentUser);
+
+                const videoUrl = data.storeVideoUrl;
+                const bannerUrl =
+                    data.bannerImageUrl ||
+                    data.storeLogoUrl ||
+                    data.bannerUrl ||
+                    data.logoUrl;
+
+                if (videoUrl && bannerVideoEl) {
+                    bannerVideoEl.src = videoUrl;
+                    bannerVideoEl.style.display = "block";
+                    if (bannerImgEl) bannerImgEl.style.display = "none";
+
+                    // Try to autoplay muted (allowed by browsers)
+                    bannerVideoEl.play().catch(() => { });
+
+                    // 🔊 Allow sound when buyer clicks the hero video
+                    bannerVideoEl.addEventListener("click", () => {
+                        bannerVideoEl.muted = false;
+                        bannerVideoEl.play().catch(() => { });
+                    });
+                } else if (bannerUrl && bannerImgEl) {
+                    bannerImgEl.src = bannerUrl;
+                    bannerImgEl.style.display = "block";
+                    if (bannerVideoEl) bannerVideoEl.style.display = "none";
+                } else {
+                    if (bannerVideoEl) bannerVideoEl.style.display = "none";
+                    if (bannerImgEl) bannerImgEl.style.display = "none";
+                }
+
+                if (brandStoryTextEl) {
+                    brandStoryTextEl.textContent =
+                        data.brandStory ||
+                        "Brand story will appear here after the creator saves it in Edit Store.";
+                }
+
+                const policiesSummary = buildPoliciesSummary(data.policies);
+                if (policiesTextEl) {
+                    policiesTextEl.textContent =
+                        policiesSummary ||
+                        "Shipping timelines, return windows, and order adjustments appear here exactly as defined by the vendor.";
+                }
+
+                if (ingredientGlossaryTextEl) {
+                    ingredientGlossaryTextEl.textContent =
+                        data.ingredientGlossary ||
+                        "Hero ingredients and short explanations will appear here once the creator adds them.";
+                }
+
+                if (faqTextEl) {
+                    faqTextEl.textContent =
+                        data.faqText ||
+                        "Frequently asked questions and answers will appear here once the creator saves them in Edit Store.";
+                }
+            } catch (err) {
+                console.error("Profile error:", err);
+            }
+        }
+
+        async function loadStoreProducts(uid) {
+            try {
+                productGridEl.innerHTML = "";
+                productsStatusEl.textContent = "Loading products...";
+
+                // ✅ FIXED: Query only THIS VENDOR'S active products
+                const listingsRef = db.collection("listings");
+                const q = listingsRef
+                    .where("vendorUid", "==", uid)
+                    .where("status", "==", "active")
+                    .orderBy("createdAt", "desc");
+                const snapshot = await q.get();
+
+                console.log(`Found ${snapshot.size} active products for vendor ${uid}`);
+
+                if (snapshot.empty) {
+                    productsStatusEl.textContent = "No products available yet.";
+                    renderPlaceholders(3);
+                    return;
+                }
+
+                productsStatusEl.textContent = "";
+
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+
+                    const card = document.createElement("article");
+                    card.className = "product-card";
+
+                    const imgWrap = document.createElement("div");
+                    imgWrap.className = "product-img-wrap";
+
+                    if (data.imageUrl) {
+                        const img = document.createElement("img");
+                        img.className = "product-img";
+                        img.src = data.imageUrl;
+                        img.alt = data.title || "Product";
+                        imgWrap.appendChild(img);
+                    } else {
+                        const label = document.createElement("div");
+                        label.className = "product-placeholder-label";
+                        label.textContent = "No image";
+                        imgWrap.appendChild(label);
+                    }
+
+                    const body = document.createElement("div");
+                    body.className = "product-body";
+
+                    const nameEl = document.createElement("div");
+                    nameEl.className = "product-name";
+                    nameEl.textContent = data.title || "Untitled Product";
+
+                    const subEl = document.createElement("div");
+                    subEl.className = "product-sub";
+                    subEl.textContent = data.subtitle || "";
+
+                    const footer = document.createElement("div");
+                    footer.className = "product-footer";
+
+                    const priceEl = document.createElement("div");
+                    priceEl.className = "product-price";
+                    const price = data.priceNumber || parseFloat(data.price) || 0;
+                    const currency = data.currency === "USD" ? "$" : data.currency || "$";
+                    priceEl.textContent = `${currency}${price.toFixed(2)}`;
+
+                    const chipRow = document.createElement("div");
+                    chipRow.className = "product-chip-row";
+
+                    // Add vendor/type chip
+                    if (data.vendor || data.type) {
+                        const chip = document.createElement("span");
+                        chip.className = "product-chip";
+                        chip.textContent = [data.vendor, data.type].filter(Boolean).join(" · ");
+                        chipRow.appendChild(chip);
+                    }
+
+                    footer.appendChild(priceEl);
+                    footer.appendChild(chipRow);
+
+                    body.appendChild(nameEl);
+                    if (subEl.textContent) body.appendChild(subEl);
+                    body.appendChild(footer);
+
+                    card.appendChild(imgWrap);
+                    card.appendChild(body);
+
+                    // Click to view product details
+                    card.addEventListener("click", () => {
+                        window.location.href = `product.html?id=${encodeURIComponent(doc.id)}`;
+                    });
+
+                    productGridEl.appendChild(card);
+                });
+
+                console.log("Products loaded successfully!");
+            } catch (err) {
+                console.error("Error loading products:", err);
+                productsStatusEl.textContent = `Error loading products: ${err.message}`;
+                productGridEl.innerHTML = "";
+                renderPlaceholders(1);
+            }
+        }
+
+        async function loadStoreCategories(uid) {
+            if (!categoriesChipsEl) return;
+
+            categoriesChipsEl.innerHTML = "";
+            const loading = document.createElement("span");
+            loading.className = "feature-tag";
+            loading.textContent = "Loading…";
+            categoriesChipsEl.appendChild(loading);
+
+            try {
+                const colRef = db.collection("stores").doc(uid).collection("categories");
+                const snap = await colRef.get();
+
+                categoriesChipsEl.innerHTML = "";
+
+                if (snap.empty) {
+                    const chip = document.createElement("span");
+                    chip.className = "feature-tag";
+                    chip.textContent = "No categories added yet.";
+                    categoriesChipsEl.appendChild(chip);
+                    return;
+                }
+
+                snap.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const name = data.name || "Category";
+
+                    const chip = document.createElement("button");
+                    chip.type = "button";
+                    chip.className = "feature-tag";
+                    chip.textContent = name;
+
+                    // WHEN BUYER CLICKS A CATEGORY → GO TO product.html WITH UID + CATEGORY
+                    chip.addEventListener("click", () => {
+                        if (!currentStoreUid) return;
+                        const url =
+                            "product.html?uid=" +
+                            encodeURIComponent(currentStoreUid) +
+                            "&category=" +
+                            encodeURIComponent(name);
+                        window.location.href = url;
+                    });
+
+                    categoriesChipsEl.appendChild(chip);
+                });
+            } catch (err) {
+                console.error("Error loading categories", err);
+                categoriesChipsEl.innerHTML = "";
+                const chip = document.createElement("span");
+                chip.className = "feature-tag";
+                chip.textContent = "Could not load categories.";
+                categoriesChipsEl.appendChild(chip);
+            }
+        }
+
+        function bootstrapStore() {
+            setupNavScroll();
+
+            const urlUid = getStoreUidFromUrl();
+
+            if (urlUid) {
+                wireLinksForUid(urlUid);
+                loadStoreProfile(urlUid, null);
+                loadStoreProducts(urlUid);
+                loadStoreCategories(urlUid);
+            } else {
+                auth.onAuthStateChanged((user) => {
+                    if (!user) {
+                        productGridEl.innerHTML = "";
+                        renderPlaceholders(PLACEHOLDER_MIN);
+                        productsStatusEl.textContent =
+                            "Store not specified in URL. Sign in and visit your store link.";
+                        return;
+                    }
+                    const uid = user.uid;
+                    wireLinksForUid(uid);
+                    loadStoreProfile(uid, user);
+                    loadStoreProducts(uid);
+                    loadStoreCategories(uid);
+                });
+            }
+        }
+
+        function buildPoliciesSummary(policies) {
+            if (!policies) return "";
+            const parts = [];
+
+            if (policies.processingTime) {
+                parts.push(`Processing: ${policies.processingTime}`);
+            }
+            if (policies.shippingRegions) {
+                parts.push(`Ships to: ${policies.shippingRegions}`);
+            }
+
+            if (policies.returnsAccepted) {
+                let label = "";
+                if (policies.returnsAccepted === "yes") {
+                    label = "Returns accepted";
+                } else if (policies.returnsAccepted === "exchange-only") {
+                    label = "Exchange only";
+                } else if (policies.returnsAccepted === "final-sale") {
+                    label = "All sales final";
+                } else {
+                    label = policies.returnsAccepted;
+                }
+                if (policies.returnWindow) {
+                    label += ` – ${policies.returnWindow}-day window`;
+                }
+                parts.push(label);
+            }
+
+            if (policies.nonReturnableItems) {
+                parts.push(`Non-returnable: ${policies.nonReturnableItems}`);
+            }
+
+            return parts.join(" • ");
+        }
+
+        function getStoreUidFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("uid") || params.get("creator") || params.get("store");
+        }
+
+        function setAvatarInitials(storeName, user) {
+            let initials = "LV";
+            if (storeName) {
+                const parts = storeName.trim().split(/\s+/);
+                if (parts.length === 1) {
+                    initials = parts[0].slice(0, 2).toUpperCase();
+                } else {
+                    initials =
+                        (parts[0][0] || "L").toUpperCase() +
+                        (parts[1][0] || "V").toUpperCase();
+                }
+            } else if (user && user.email) {
+                initials = (user.email[0] || "L").toUpperCase();
+            }
+            navAvatar.textContent = initials;
+        }
+
+        const DEMO_PRODUCTS = [];
+
+        bootstrapStore();
     </script>
 </body>
 </html>
