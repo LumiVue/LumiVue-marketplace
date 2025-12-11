@@ -531,23 +531,22 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
     </script>
-</script>  <!-- END OF FIREBASE CONFIG SCRIPT -->
+    
+    <!-- FORCE STORE TO ALWAYS LOAD CORRECT VENDOR -->
+    <script>
+        auth.onAuthStateChanged(user => {
+            if (!user) return;
 
-<!-- FORCE STORE TO ALWAYS LOAD CORRECT VENDOR -->
-<script>
-auth.onAuthStateChanged(user => {
-    if (!user) return;
+            const params = new URLSearchParams(window.location.search);
+            const urlUid = params.get("uid");
 
-    const params = new URLSearchParams(window.location.search);
-    const urlUid = params.get("uid");
+            // Redirect if the UID in the URL is missing or wrong
+            if (!urlUid || urlUid !== user.uid) {
+                window.location.replace(`store.html?uid=${user.uid}`);
+            }
+        });
+    </script>
 
-    // Redirect if the UID in the URL is missing or wrong
-    if (!urlUid || urlUid !== user.uid) {
-        window.location.replace(`store.html?uid=${user.uid}`);
-    }
-});
-</script>
-  
     <!-- STORE LOGIC -->
     <script>
         const PLACEHOLDER_MIN = 20;
@@ -762,12 +761,15 @@ auth.onAuthStateChanged(user => {
                 productGridEl.innerHTML = "";
                 productsStatusEl.textContent = "Loading products...";
 
-                // ✅ FIXED: Query only THIS VENDOR'S active products
+                console.log(`Querying products for vendor: ${uid}`);
+
+                // Query THIS VENDOR'S active products - FIXED: use vendorUid not vendorId
                 const listingsRef = db.collection("listings");
                 const q = listingsRef
-                   .where("vendorId", "==", uid)
+                    .where("vendorUid", "==", uid)
                     .where("status", "==", "active")
                     .orderBy("createdAt", "desc");
+                
                 const snapshot = await q.get();
 
                 console.log(`Found ${snapshot.size} active products for vendor ${uid}`);
@@ -782,6 +784,7 @@ auth.onAuthStateChanged(user => {
 
                 snapshot.forEach((doc) => {
                     const data = doc.data();
+                    console.log(`Product: ${doc.id}`, data);
 
                     const card = document.createElement("article");
                     card.className = "product-card";
@@ -854,6 +857,7 @@ auth.onAuthStateChanged(user => {
                 console.log("Products loaded successfully!");
             } catch (err) {
                 console.error("Error loading products:", err);
+                console.error("Error details:", err.code, err.message);
                 productsStatusEl.textContent = `Error loading products: ${err.message}`;
                 productGridEl.innerHTML = "";
                 renderPlaceholders(1);
@@ -1006,5 +1010,4 @@ auth.onAuthStateChanged(user => {
     </script>
 </body>
 </html>
-
 
