@@ -1,394 +1,1214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>LumiVue – Product Details</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <title>LumiVue – Create Product Listing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
 
-  <style>
-    :root{
-      /* LumiVue latte / espresso system */
-      --lv-bg:#f4f1eb;
-      --lv-surface:#ffffff;
-      --lv-border:#e6d7c6;
-      --lv-border-strong:#d9c6b3;
-      --lv-text:#2c1e19;
-      --lv-text-muted:#7a6a5c;
-      --lv-pill:#e3ceb2;
-      --lv-pill-border:#c9a07a;
-      --lv-accent-soft:#fbf3e7;
-      --lv-shadow-soft:0 24px 60px rgba(15,23,42,.08);
-      --lv-radius-lg:14px;
-      --lv-radius-md:10px;
-    }
+    <style>
+        :root {
+            --lv-bg: #f4f1eb;
+            --lv-surface: #ffffff;
+            --lv-border: #e6d7c6;
+            --lv-border-strong: #d9c6b3;
+            --lv-text: #2c1e19;
+            --lv-text-muted: #7a6a5c;
+            --lv-pill: #e3ceb2;
+            --lv-pill-border: #c9a07a;
+            --lv-accent-soft: #fbf3e7;
+            --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
+            --lv-radius-lg: 14px;
+            --lv-radius-md: 10px;
+        }
 
-    html{scroll-behavior:smooth}
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
-      background:var(--lv-bg);
-      color:var(--lv-text);
-    }
-    a{color:inherit;text-decoration:none}
+        html {
+            scroll-behavior: smooth
+        }
 
-    /* ─── TOP BAR ─────────────────────────────── */
-    .lv-header{
-      position:sticky;top:0;z-index:40;
-      background:linear-gradient(180deg,#fbf8f2 0%, #f6f1ea 100%);
-      border-bottom:1px solid rgba(0,0,0,.06);
-      backdrop-filter:saturate(120%) blur(8px);
-    }
-    .lv-header-inner{
-      max-width:1120px;margin:0 auto;
-      padding:10px 18px;display:flex;align-items:center;gap:18px;
-    }
-    .lv-badge{
-      width:28px;height:28px;border-radius:999px;
-      background:#d3b79e;color:#2b2118;
-      display:grid;place-items:center;font-weight:700;font-size:12px;
-      box-shadow:inset 0 0 0 1px rgba(0,0,0,.28);
-      flex:0 0 28px;
-    }
-    .lv-wordmark{letter-spacing:.38em;font-weight:700;font-size:13px;margin-left:6px}
-    .lv-nav{margin-left:16px;display:flex;align-items:center;gap:18px;font-size:14px;color:var(--lv-text-muted)}
-    .lv-nav a{padding:2px 0;border-bottom:1px solid transparent}
-    .lv-nav a:hover{color:var(--lv-text);border-bottom-color:var(--lv-border)}
-    .lv-nav a.active{color:var(--lv-text);font-weight:600;border-bottom-color:var(--lv-border)}
-    .lv-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
-    .lv-pill-btn{
-      background:var(--lv-pill);border:1px solid var(--lv-pill-border);color:var(--lv-text);
-      border-radius:999px;padding:6px 12px;font-size:12px;letter-spacing:.06em;cursor:pointer;
-    }
-    .lv-pill-btn:active{transform:translateY(1px)}
-    .lv-avatar{
-      width:28px;height:28px;border-radius:999px;background:#d3b79e;color:#2b2118;
-      display:grid;place-items:center;font-weight:700;font-size:12px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.28);
-    }
+        * {
+            box-sizing: border-box
+        }
 
-    /* ─── MAIN LAYOUT ─────────────────────────────── */
-    .lv-main{
-      max-width:1120px;margin:24px auto 48px;
-      padding:0 18px;
-      display:grid;
-      grid-template-columns:minmax(0,2fr) minmax(0,1fr);
-      gap:24px;
-      align-items:flex-start;
-    }
-    @media (max-width:960px){.lv-main{grid-template-columns:1fr}}
+        body {
+            margin: 0;
+            font-family: system-ui,-apple-system,BlinkMacSystemFrame,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+            background: var(--lv-bg);
+            color: var(--lv-text)
+        }
 
-    .lv-card{
-      background:var(--lv-surface);
-      border:1px solid var(--lv-border);
-      border-radius:var(--lv-radius-lg);
-      box-shadow:var(--lv-shadow-soft);
-      padding:20px 24px;
-    }
-    .lv-card + .lv-card{margin-top:16px}
-    .lv-card-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:16px;
-    }
-    .lv-card-title{font-size:18px;font-weight:700}
-    .lv-card-subtitle{font-size:13px;color:var(--lv-text-muted);margin-top:4px}
-    .lv-card-body{display:flex;flex-direction:column;gap:1rem}
+        a {
+            color: inherit;
+            text-decoration: none
+        }
 
-    /* Product image */
-    .lv-product-hero{
-      width:100%;
-      height:400px;
-      border-radius:var(--lv-radius-lg);
-      background:#e5e1d8;
-      object-fit:cover;
-      margin-bottom:16px;
-    }
+        .lv-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: linear-gradient(180deg,#fbf8f2 0%, #f6f1ea 100%);
+            border-bottom: 1px solid rgba(0,0,0,.06);
+            backdrop-filter: saturate(120%) blur(8px)
+        }
 
-    .lv-status-badge{
-      display:inline-block;
-      background:var(--lv-pill);
-      border:1px solid var(--lv-pill-border);
-      color:var(--lv-text);
-      border-radius:999px;
-      padding:6px 12px;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.1em;
-      font-weight:600;
-    }
-    .lv-status-badge.active{
-      background:#c8e6c9;
-      border-color:#81c784;
-      color:#2e7d32;
-    }
+        .lv-header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 18px
+        }
 
-    .lv-product-title{
-      font-size:28px;
-      font-weight:700;
-      margin:12px 0 8px;
-    }
-    .lv-product-subtitle{
-      font-size:16px;
-      color:var(--lv-text-muted);
-      margin-bottom:16px;
-    }
-    .lv-product-price{
-      font-size:32px;
-      font-weight:700;
-      margin-bottom:8px;
-    }
-    .lv-product-meta{
-      font-size:14px;
-      color:var(--lv-text-muted);
-      margin-bottom:20px;
-    }
-    .lv-product-description{
-      font-size:15px;
-      line-height:1.6;
-      color:var(--lv-text);
-    }
+        .lv-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: #d3b79e;
+            color: #2b2118;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,.28);
+            flex: 0 0 28px
+        }
 
-    .lv-info-row{
-      display:flex;
-      justify-content:space-between;
-      padding:12px 0;
-      border-bottom:1px solid var(--lv-border);
-      font-size:14px;
-    }
-    .lv-info-row:last-child{border-bottom:none}
-    .lv-info-label{color:var(--lv-text-muted);font-weight:500}
-    .lv-info-value{font-weight:600}
+        .lv-wordmark {
+            letter-spacing: .38em;
+            font-weight: 700;
+            font-size: 13px;
+            margin-left: 6px
+        }
 
-    .lv-error-state{
-      text-align:center;
-      padding:60px 20px;
-    }
-    .lv-error-icon{font-size:48px;margin-bottom:16px;opacity:0.3}
-    .lv-error-title{font-size:20px;font-weight:600;margin-bottom:8px}
-    .lv-error-text{font-size:14px;color:var(--lv-text-muted);margin-bottom:20px}
-  </style>
+        .lv-nav {
+            margin-left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 14px;
+            color: var(--lv-text-muted)
+        }
+
+            .lv-nav a {
+                padding: 2px 0;
+                border-bottom: 1px solid transparent
+            }
+
+                .lv-nav a:hover {
+                    color: var(--lv-text);
+                    border-bottom-color: var(--lv-border)
+                }
+
+                .lv-nav a.active {
+                    color: var(--lv-text);
+                    font-weight: 600;
+                    border-bottom-color: var(--lv-border)
+                }
+
+        .lv-actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .lv-pill-btn {
+            background: var(--lv-pill);
+            border: 1px solid var(--lv-pill-border);
+            color: var(--lv-text);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            letter-spacing: .06em;
+            cursor: pointer;
+        }
+
+            .lv-pill-btn:active {
+                transform: translateY(1px);
+            }
+
+            .lv-pill-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+            .lv-pill-btn.delete-btn {
+                background: #fee;
+                border-color: #faa;
+                color: #c00;
+            }
+
+        .lv-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: #d3b79e;
+            color: #2b2118;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,.28)
+        }
+
+        .lv-main {
+            max-width: 1120px;
+            margin: 18px auto 32px;
+            padding: 0 18px;
+            display: grid;
+            grid-template-columns: minmax(0,2fr) minmax(0,1.1fr);
+            gap: 18px;
+            align-items: flex-start
+        }
+
+        @media (max-width:960px) {
+            .lv-main {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .lv-card {
+            background: var(--lv-surface);
+            border: 1px solid var(--lv-border);
+            border-radius: var(--lv-radius-lg);
+            box-shadow: var(--lv-shadow-soft);
+            padding: 16px 18px
+        }
+
+            .lv-card + .lv-card {
+                margin-top: 12px
+            }
+
+        .lv-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px
+        }
+
+        .lv-card-title {
+            font-size: 15px;
+            font-weight: 700
+        }
+
+        .lv-card-subtitle {
+            font-size: 12px;
+            color: var(--lv-text-muted);
+            margin-top: 2px
+        }
+
+        .lv-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: .85rem
+        }
+
+        .lv-field {
+            display: flex;
+            flex-direction: column;
+            gap: .25rem
+        }
+
+        .lv-label {
+            font-size: .82rem;
+            color: var(--lv-text-muted);
+            font-weight: 500
+        }
+
+        .lv-input, .lv-textarea, .lv-select {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--lv-border-strong);
+            padding: .55rem .75rem;
+            font-size: .9rem;
+            background: #fff;
+            color: var(--lv-text)
+        }
+
+            .lv-input:focus, .lv-textarea:focus, .lv-select:focus {
+                outline: none;
+                border-color: var(--lv-pill-border);
+                box-shadow: 0 0 0 2px var(--lv-accent-soft)
+            }
+
+        .lv-textarea {
+            min-height: 140px;
+            resize: vertical;
+            line-height: 1.4
+        }
+
+        .lv-help {
+            font-size: .76rem;
+            color: var(--lv-text-muted)
+        }
+
+        .lv-inline-fields {
+            display: grid;
+            grid-template-columns: repeat(2,minmax(0,1fr));
+            gap: .85rem
+        }
+
+        @media (max-width:720px) {
+            .lv-inline-fields {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .lv-media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(120px,1fr));
+            gap: .75rem
+        }
+
+        .lv-media-tile {
+            position: relative;
+            border-radius: var(--lv-radius-md);
+            border: 1px dashed var(--lv-border-strong);
+            background: #faf6ef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 130px;
+            cursor: pointer;
+            overflow: hidden
+        }
+
+            .lv-media-tile.primary {
+                border-style: solid;
+                border-color: var(--lv-pill-border);
+                background: var(--lv-accent-soft)
+            }
+
+        .lv-media-label {
+            font-size: .8rem;
+            color: var(--lv-text-muted);
+            text-align: center;
+            white-space: pre-line;
+            padding: 0 .5rem
+        }
+
+        .lv-media-primary-tag {
+            position: absolute;
+            top: .45rem;
+            left: .45rem;
+            font-size: .7rem;
+            padding: .15rem .45rem;
+            border-radius: 999px;
+            background: #2c1e19;
+            color: #fff
+        }
+
+        .lv-media-preview {
+            position: absolute;
+            inset: 0;
+            object-fit: cover;
+            width: 100%;
+            height: 100%
+        }
+
+        .lv-media-remove {
+            position: absolute;
+            top: .35rem;
+            right: .35rem;
+            font-size: .75rem;
+            border-radius: 999px;
+            background: rgba(17,24,39,.75);
+            color: #fff;
+            padding: .1rem .35rem;
+            cursor: pointer
+        }
+
+            .lv-media-remove:hover {
+                transform: none;
+                box-shadow: none
+            }
+
+        .lv-gallery-previews {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(90px,1fr));
+            gap: .6rem;
+            margin-top: .6rem
+        }
+
+        .lv-gallery-tile {
+            position: relative;
+            border-radius: 10px;
+            border: 1px solid var(--lv-border-strong);
+            overflow: hidden;
+            height: 90px
+        }
+
+        .lv-gallery-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .lv-gallery-remove {
+            position: absolute;
+            top: .25rem;
+            right: .25rem;
+            font-size: .7rem;
+            border-radius: 999px;
+            background: rgba(17,24,39,.75);
+            color: #fff;
+            padding: .1rem .35rem;
+            cursor: pointer
+        }
+
+            .lv-gallery-remove:hover {
+                transform: none;
+                box-shadow: none
+            }
+
+        .lv-toggle {
+            position: relative;
+            width: 40px;
+            height: 22px
+        }
+
+            .lv-toggle input {
+                opacity: 0;
+                width: 0;
+                height: 0
+            }
+
+        .lv-toggle-slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 999px;
+            background: #d1c8bb;
+            transition: .2s
+        }
+
+            .lv-toggle-slider::before {
+                content: "";
+                position: absolute;
+                height: 16px;
+                width: 16px;
+                left: 3px;
+                top: 3px;
+                background: #fff;
+                border-radius: 50%;
+                transition: .2s;
+                box-shadow: 0 0 0 1px rgba(148,163,184,.4)
+            }
+
+        .lv-toggle input:checked + .lv-toggle-slider {
+            background: var(--lv-pill-border)
+        }
+
+            .lv-toggle input:checked + .lv-toggle-slider::before {
+                transform: translateX(18px)
+            }
+
+        /* Preview card styles */
+        .preview-card {
+            position: sticky;
+            top: 80px
+        }
+
+        .preview-product-img {
+            width: 100%;
+            height: 200px;
+            border-radius: var(--lv-radius-md);
+            background: radial-gradient(circle at top left,#f5e1c7,#f7eee3);
+            object-fit: cover;
+            margin-bottom: 10px
+        }
+
+        .preview-status {
+            display: inline-block;
+            background: var(--lv-pill);
+            border: 1px solid var(--lv-pill-border);
+            color: var(--lv-text);
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 8px
+        }
+
+        .preview-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--lv-text)
+        }
+
+        .preview-subtitle {
+            font-size: 13px;
+            color: var(--lv-text-muted);
+            margin-bottom: 8px
+        }
+
+        .preview-price {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--lv-text)
+        }
+
+        .preview-meta {
+            font-size: 12px;
+            color: var(--lv-text-muted)
+        }
+    </style>
 </head>
-
 <body>
-  <!-- HEADER -->
-  <header class="lv-header">
-    <div class="lv-header-inner">
-      <div class="lv-badge">LV</div>
-      <div class="lv-wordmark">L U M I V U E</div>
-
-      <nav class="lv-nav">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="listings.html">My products</a>
-        <a href="create-listing.html">Create listing</a>
-        <a href="orders.html">Orders</a>
-      </nav>
-
-      <div class="lv-actions">
-        <button class="lv-pill-btn" onclick="window.location.href='listings.html'">← Back to products</button>
-        <button class="lv-pill-btn" id="editBtn" style="display:none;">Edit product</button>
-        <div class="lv-avatar">M</div>
-      </div>
-    </div>
-  </header>
-
-  <main class="lv-main" id="mainContent" style="display:none;">
-    <!-- LEFT COLUMN – Product Details -->
-    <section>
-      <div class="lv-card">
-        <img id="productImage" class="lv-product-hero" alt="Product image" />
-        <span id="productStatus" class="lv-status-badge">Draft</span>
-        <h1 class="lv-product-title" id="productTitle">Loading...</h1>
-        <p class="lv-product-subtitle" id="productSubtitle"></p>
-        <div class="lv-product-price" id="productPrice">$0.00</div>
-        <div class="lv-product-meta" id="productMeta"></div>
-        <div class="lv-product-description" id="productDescription"></div>
-      </div>
-    </section>
-
-    <!-- RIGHT COLUMN – Product Info -->
-    <aside>
-      <div class="lv-card">
-        <div class="lv-card-header">
-          <div class="lv-card-title">Product Information</div>
+    <header class="lv-header">
+        <div class="lv-header-inner">
+            <div class="lv-badge">LV</div>
+            <div class="lv-wordmark">L U M I V U E</div>
+            <nav class="lv-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="listings.html">My products</a>
+                <a href="create-listing.html" class="active">Create listing</a>
+                <a href="orders.html">Orders</a>
+            </nav>
+            <div class="lv-actions">
+                <button class="lv-pill-btn" id="saveDraftBtnTop">Save draft</button>
+                <button class="lv-pill-btn delete-btn" id="deleteBtnTop" style="display:none;">Delete</button>
+                <button class="lv-pill-btn" id="discardBtnTop">Discard</button>
+                <button class="lv-pill-btn" id="publishBtnTop">Publish product</button>
+                <div class="lv-avatar">M</div>
+            </div>
         </div>
-        <div class="lv-card-body">
-          <div class="lv-info-row">
-            <span class="lv-info-label">Vendor</span>
-            <span class="lv-info-value" id="infoVendor">—</span>
-          </div>
-          <div class="lv-info-row">
-            <span class="lv-info-label">Type</span>
-            <span class="lv-info-value" id="infoType">—</span>
-          </div>
-          <div class="lv-info-row">
-            <span class="lv-info-label">Collections</span>
-            <span class="lv-info-value" id="infoCollections">—</span>
-          </div>
-          <div class="lv-info-row">
-            <span class="lv-info-label">Currency</span>
-            <span class="lv-info-value" id="infoCurrency">—</span>
-          </div>
-        </div>
-      </div>
+    </header>
 
-      <div class="lv-card" id="pricingCard" style="display:none;">
-        <div class="lv-card-header">
-          <div class="lv-card-title">Pricing Details</div>
-        </div>
-        <div class="lv-card-body">
-          <div class="lv-info-row">
-            <span class="lv-info-label">Price</span>
-            <span class="lv-info-value" id="infoPrice">—</span>
-          </div>
-          <div class="lv-info-row" id="compareAtRow" style="display:none;">
-            <span class="lv-info-label">Compare-at price</span>
-            <span class="lv-info-value" id="infoCompareAt">—</span>
-          </div>
-          <div class="lv-info-row" id="costRow" style="display:none;">
-            <span class="lv-info-label">Cost per item</span>
-            <span class="lv-info-value" id="infoCost">—</span>
-          </div>
-        </div>
-      </div>
+    <main class="lv-main">
+        <section>
+            <!-- PRODUCT DETAILS -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Product details</div>
+                        <p class="lv-card-subtitle">Core information buyers see</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-field">
+                        <label class="lv-label" for="productTitle">Title</label>
+                        <input id="productTitle" class="lv-input" type="text" placeholder="Crème de Lumière" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="productSubtitle">Short subtitle (optional)</label>
+                        <input id="productSubtitle" class="lv-input" type="text" placeholder="Radiance-restoring moisturizing cream" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="productDescription">Description</label>
+                        <textarea id="productDescription" class="lv-textarea" placeholder="Describe your formula, benefits, texture, key ingredients, and how to use."></textarea>
+                        <p class="lv-help">Full product story and details</p>
+                    </div>
+                </div>
+            </div>
 
-      <div class="lv-card" id="ingredientsCard" style="display:none;">
-        <div class="lv-card-header">
-          <div class="lv-card-title">Ingredients (INCI)</div>
-        </div>
-        <div class="lv-card-body">
-          <div id="inciIngredientsList" style="font-size:13px;line-height:1.6;color:var(--lv-text);">—</div>
-        </div>
-      </div>
-    </aside>
-  </main>
+            <!-- MEDIA: 1 Display + 19 Gallery + 1 Video -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Media</div>
+                        <p class="lv-card-subtitle">1 display photo, up to 19 additional photos, and 1 video (30 seconds)</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-media-grid">
+                        <!-- Display image -->
+                        <div class="lv-media-tile primary" id="featuredTile">
+                            <span class="lv-media-primary-tag">Display</span>
+                            <span class="lv-media-label" id="featuredLabel">
+                                Click to upload main product photo
+                                1200 × 1200 recommended
+                            </span>
+                            <img id="featuredPreview" class="lv-media-preview" style="display:none;" alt="Featured preview" />
+                            <span id="featuredRemove" class="lv-media-remove" style="display:none;">✕</span>
+                            <input id="featuredImage" type="file" accept="image/*" style="display:none;" />
+                        </div>
 
-  <!-- Error State -->
-  <div id="errorState" class="lv-error-state" style="display:none;">
-    <div class="lv-error-icon">⚠️</div>
-    <div class="lv-error-title">Product not found</div>
-    <div class="lv-error-text">This product may have been deleted or you may not have access to it.</div>
-    <button class="lv-pill-btn" onclick="window.location.href='listings.html'">Back to products</button>
-  </div>
+                        <!-- Gallery -->
+                        <div class="lv-media-tile" id="galleryTile">
+                            <span class="lv-media-label" id="galleryLabel">
+                                Add gallery photos
+                                Up to 19 additional images
+                            </span>
+                            <input id="galleryImages" type="file" accept="image/*" multiple style="display:none;" />
+                        </div>
 
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+                        <!-- Video -->
+                        <div class="lv-media-tile" id="videoTile">
+                            <span class="lv-media-label" id="videoLabel">
+                                Add product video
+                                Up to 30 seconds
+                            </span>
+                            <video id="videoPreview" class="lv-media-preview" style="display:none;" loop playsinline></video>
+                            <span id="videoRemove" class="lv-media-remove" style="display:none;">✕</span>
+                            <input id="productVideo" type="file" accept="video/*" style="display:none;" />
+                        </div>
+                    </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
-      authDomain: "lumivue-c8fdf.firebaseapp.com",
-      projectId: "lumivue-c8fdf",
-      storageBucket: "lumivue-c8fdf.firebasestorage.app",
-      messagingSenderId: "120420036736",
-      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+                    <div class="lv-gallery-previews" id="galleryPreviewContainer"></div>
+                    <p class="lv-help">Files will upload to Firebase Storage when you publish</p>
+                </div>
+            </div>
+
+            <!-- PRICING -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Pricing</div>
+                        <p class="lv-card-subtitle">Set your price and optional compare-at price</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="price">Price</label>
+                            <div style="display:flex;align-items:center;gap:.35rem;">
+                                <span style="font-size:.9rem;color:var(--lv-text-muted);padding:.45rem .6rem;border-radius:10px;border:1px solid var(--lv-border-strong);background:#faf6ef">$</span>
+                                <input id="price" class="lv-input" type="number" step="0.01" min="0" placeholder="45.00" style="flex:1;" />
+                            </div>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="compareAt">Compare-at price</label>
+                            <input id="compareAt" class="lv-input" type="number" step="0.01" min="0" placeholder="Optional" />
+                            <p class="lv-help">Shows a "was" price when higher</p>
+                        </div>
+                    </div>
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="costPerItem">Cost per item</label>
+                            <input id="costPerItem" class="lv-input" type="number" step="0.01" min="0" placeholder="Optional" />
+                            <p class="lv-help">Private info for profit calculations</p>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="currency">Currency</label>
+                            <select id="currency" class="lv-select">
+                                <option value="USD">USD – US Dollar</option>
+                                <option value="CAD">CAD – Canadian Dollar</option>
+                                <option value="EUR">EUR – Euro</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INVENTORY -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Inventory</div>
+                        <p class="lv-card-subtitle">Track stock levels and SKUs</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="sku">SKU (optional)</label>
+                            <input id="sku" class="lv-input" type="text" placeholder="CML-902" />
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="barcode">Barcode (optional)</label>
+                            <input id="barcode" class="lv-input" type="text" placeholder="552001789334" />
+                        </div>
+                    </div>
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <div class="lv-label">Track quantity</div>
+                            <label class="lv-toggle">
+                                <input id="trackInventory" type="checkbox" checked />
+                                <span class="lv-toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div></div>
+                    </div>
+                    <div id="inventoryQuantityFields" class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="inventoryLocation">Location</label>
+                            <input id="inventoryLocation" class="lv-input" type="text" placeholder="Main warehouse" />
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="inventoryAvailable">Available</label>
+                            <input id="inventoryAvailable" class="lv-input" type="number" min="0" step="1" placeholder="10" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHIPPING -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Shipping</div>
+                        <p class="lv-card-subtitle">Required if you ship a physical product</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="weight">Weight</label>
+                            <input id="weight" class="lv-input" type="number" step="0.01" min="0" placeholder="0.5" />
+                            <p class="lv-help">lb or kg</p>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="weightUnit">Unit</label>
+                            <select id="weightUnit" class="lv-select">
+                                <option value="lb">lb</option>
+                                <option value="kg">kg</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VARIANT METAFIELD -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Variant Metafield</div>
+                        <p class="lv-card-subtitle">Add variant-specific data (size, color, material)</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="variantSize">Size</label>
+                            <input id="variantSize" class="lv-input" type="text" placeholder="e.g., 50ml, 2oz, Large" />
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="variantColor">Color</label>
+                            <input id="variantColor" class="lv-input" type="text" placeholder="e.g., Rose Gold, Natural" />
+                        </div>
+                    </div>
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="variantMaterial">Material</label>
+                            <input id="variantMaterial" class="lv-input" type="text" placeholder="e.g., Glass, Recycled Plastic" />
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="variantStyle">Style</label>
+                            <input id="variantStyle" class="lv-input" type="text" placeholder="e.g., Matte, Glossy" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GOOGLE SHOPPING FIELDS -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Google Shopping</div>
+                        <p class="lv-card-subtitle">Required for Google Merchant Center listings</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="googleAgeGroup">Age Group</label>
+                            <select id="googleAgeGroup" class="lv-select">
+                                <option value="">Select age group</option>
+                                <option value="adult">Adult</option>
+                                <option value="all ages">All Ages</option>
+                                <option value="teen">Teen</option>
+                                <option value="kids">Kids</option>
+                                <option value="toddler">Toddler</option>
+                                <option value="infant">Infant</option>
+                                <option value="newborn">Newborn</option>
+                            </select>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="googleCondition">Condition</label>
+                            <select id="googleCondition" class="lv-select">
+                                <option value="new">New</option>
+                                <option value="refurbished">Refurbished</option>
+                                <option value="used">Used</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="googleGender">Gender</label>
+                            <select id="googleGender" class="lv-select">
+                                <option value="">Select gender</option>
+                                <option value="unisex">Unisex</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="googleMPN">MPN (Manufacturer Part Number)</label>
+                            <input id="googleMPN" class="lv-input" type="text" placeholder="e.g., SKN-2024-001" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEARCH ENGINE LISTING (SEO) -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Search Engine Listing</div>
+                        <p class="lv-card-subtitle">Optimize for Google and other search engines</p>
+                    </div>
+                    <button type="button" class="lv-pill-btn" id="autoGenerateSeoBtn" style="font-size:11px;padding:4px 10px;">
+                        ✨ Auto-Generate SEO
+                    </button>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-field">
+                        <label class="lv-label" for="seoTitle">SEO Title</label>
+                        <input id="seoTitle" class="lv-input" type="text" placeholder="Optimized title for search results" />
+                        <p class="lv-help">Recommended: 50-60 characters • <span id="seoTitleCount">0</span>/60</p>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="seoDescription">SEO Meta Description</label>
+                        <textarea id="seoDescription" class="lv-textarea" style="min-height:80px;" placeholder="Compelling description for search results"></textarea>
+                        <p class="lv-help">Recommended: 150-160 characters • <span id="seoDescCount">0</span>/160</p>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="seoKeywords">Keywords (comma-separated)</label>
+                        <input id="seoKeywords" class="lv-input" type="text" placeholder="skincare, moisturizer, organic, cruelty-free" />
+                        <p class="lv-help">Help Google understand your product • <span id="seoKeywordsCount">0</span> keywords</p>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="seoUrl">URL Handle</label>
+                        <input id="seoUrl" class="lv-input" type="text" placeholder="creme-de-lumiere-moisturizer" />
+                        <p class="lv-help">Custom URL slug for this product (auto-generated from title)</p>
+                    </div>
+                    <div style="background:#e8f5e9;border:1px solid #81c784;border-radius:8px;padding:10px;margin-top:8px;display:none;" id="seoSuccessMessage">
+                        <div style="font-size:11px;color:#2e7d32;">✅ SEO fields auto-generated! Review and adjust as needed.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI FORMULATION INCI ASSISTANT -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">🤖 AI Formulation INCI Assistant</div>
+                        <p class="lv-card-subtitle">AI-powered ingredient list generator for cosmetic products</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-field">
+                        <label class="lv-label" for="productFormulationType">Product Type</label>
+                        <select id="productFormulationType" class="lv-select">
+                            <option value="">Select product type</option>
+                            <option value="moisturizer">Moisturizer / Cream</option>
+                            <option value="serum">Serum</option>
+                            <option value="cleanser">Cleanser</option>
+                            <option value="toner">Toner / Essence</option>
+                            <option value="mask">Mask</option>
+                            <option value="oil">Face Oil</option>
+                            <option value="sunscreen">Sunscreen</option>
+                            <option value="exfoliant">Exfoliant</option>
+                            <option value="eye-cream">Eye Cream</option>
+                            <option value="lip-balm">Lip Balm</option>
+                            <option value="body-lotion">Body Lotion</option>
+                            <option value="shampoo">Shampoo</option>
+                            <option value="conditioner">Conditioner</option>
+                        </select>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="keyIngredients">Key Active Ingredients</label>
+                        <input id="keyIngredients" class="lv-input" type="text" placeholder="e.g., hyaluronic acid, niacinamide, vitamin C" />
+                        <p class="lv-help">Comma-separated list of main active ingredients</p>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="formulationGoal">Formulation Goal</label>
+                        <textarea id="formulationGoal" class="lv-textarea" style="min-height:60px;" placeholder="e.g., Hydrating, anti-aging, brightening, acne-fighting"></textarea>
+                        <p class="lv-help">Describe what you want the product to do</p>
+                    </div>
+                    <button type="button" class="lv-pill-btn" id="generateInciBtn" style="width:100%;margin-top:8px;">
+                        ✨ Generate INCI Ingredient List
+                    </button>
+                    <div id="inciLoadingState" style="display:none;padding:12px;text-align:center;font-size:13px;color:var(--lv-text-muted);">
+                        <div style="margin-bottom:8px;">🤖 AI is analyzing your formulation...</div>
+                        <div style="font-size:11px;">Generating INCI-compliant ingredient list</div>
+                    </div>
+                    <div class="lv-field" id="inciResultField" style="display:none;margin-top:12px;">
+                        <label class="lv-label">Generated INCI List (in descending order)</label>
+                        <textarea id="inciResult" class="lv-textarea" style="min-height:120px;" readonly></textarea>
+                        <p class="lv-help">This is an AI-generated ingredient list. Please verify with your actual formulation and regulatory requirements.</p>
+                        <button type="button" class="lv-pill-btn" id="copyInciBtn" style="margin-top:8px;">
+                            📋 Copy to Clipboard
+                        </button>
+                    </div>
+                    <div class="lv-field" style="margin-top:12px;">
+                        <label class="lv-label" for="finalInciList">Final INCI Ingredient List</label>
+                        <textarea id="finalInciList" class="lv-textarea" style="min-height:100px;" placeholder="Aqua, Glycerin, Cetearyl Alcohol, etc."></textarea>
+                        <p class="lv-help">Required for all cosmetic products - must be in descending order by weight</p>
+                    </div>
+                    <div style="background:#fbf3e7;border:1px solid var(--lv-border);border-radius:8px;padding:12px;margin-top:12px;">
+                        <div style="font-size:12px;font-weight:600;margin-bottom:6px;">⚠️ Important Notice</div>
+                        <div style="font-size:11px;line-height:1.5;color:var(--lv-text-muted);">
+                            This AI assistant provides suggestions only. Always verify ingredients comply with local regulations (FDA, EU Cosmetics Regulation, etc.). You are responsible for accurate labeling and regulatory compliance.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside>
+            <!-- PREVIEW CARD -->
+            <div class="lv-card preview-card">
+                <div class="lv-card-header">
+                    <div class="lv-card-title">Preview</div>
+                </div>
+                <div class="lv-card-body">
+                    <img id="previewImage" class="preview-product-img" alt="Product preview" style="display:none;" />
+                    <div id="previewImagePlaceholder" class="preview-product-img" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--lv-text-muted);">Product image</div>
+                    <span id="previewStatus" class="preview-status">Draft</span>
+                    <div id="previewTitle" class="preview-title">Untitled product</div>
+                    <div id="previewSubtitle" class="preview-subtitle"></div>
+                    <div id="previewPrice" class="preview-price">$0.00</div>
+                    <div id="previewMeta" class="preview-meta">Vendor · Product</div>
+                </div>
+            </div>
+
+            <!-- ORGANIZATION -->
+            <div class="lv-card">
+                <div class="lv-card-header"><div class="lv-card-title">Organization</div></div>
+                <div class="lv-card-body">
+                    <div class="lv-field">
+                        <label class="lv-label" for="productType">Type</label>
+                        <input id="productType" class="lv-input" type="text" placeholder="Moisturizer" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="productVendor">Vendor</label>
+                        <input id="productVendor" class="lv-input" type="text" placeholder="Your Brand" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="collections">Collections</label>
+                        <input id="collections" class="lv-input" type="text" placeholder="Winter 2024" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="tags">Tags</label>
+                        <input id="tags" class="lv-input" type="text" placeholder="organic, vegan, cruelty-free" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label">Product Categories</label>
+                        <p class="lv-help" style="margin-bottom:8px;">Select categories from your store</p>
+                        <div id="productCategoriesContainer" style="display:flex;flex-direction:column;gap:6px;">
+                            <div style="font-size:11px;color:var(--lv-text-muted);">Loading your categories...</div>
+                        </div>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="productStatus">Status</label>
+                        <select id="productStatus" class="lv-select">
+                            <option value="draft">Draft</option>
+                            <option value="active">Active</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+    window.lumivueFeaturedInput=document.getElementById("featuredImage");
+    const featuredTile=document.getElementById("featuredTile");
+    const featuredInput=document.getElementById("featuredImage");
+    const featuredPreview=document.getElementById("featuredPreview");
+    const featuredLabel=document.getElementById("featuredLabel");
+    const featuredRemove=document.getElementById("featuredRemove");
+
+    const galleryTile=document.getElementById("galleryTile");
+    const galleryInput=document.getElementById("galleryImages");
+    const galleryLabel=document.getElementById("galleryLabel");
+    const galleryPreviewContainer=document.getElementById("galleryPreviewContainer");
+    let galleryState=[];
+
+    const videoTile=document.getElementById("videoTile");
+    const videoInput=document.getElementById("productVideo");
+    const videoPreview=document.getElementById("videoPreview");
+    const videoLabel=document.getElementById("videoLabel");
+    const videoRemove=document.getElementById("videoRemove");
+
+    // Featured image
+    featuredTile.onclick=()=>featuredInput.click();
+    featuredInput.onchange=()=>{
+      const f=featuredInput.files?.[0];if(!f)return;
+      const r=new FileReader();
+      r.onload=e=>{
+        featuredPreview.src=e.target.result;
+        featuredPreview.style.display="block";
+        featuredLabel.style.display="none";
+        featuredRemove.style.display="inline-flex";
+        // Update preview card
+        document.getElementById("previewImage").src=e.target.result;
+        document.getElementById("previewImage").style.display="block";
+        document.getElementById("previewImagePlaceholder").style.display="none";
+      };
+      r.readAsDataURL(f);
+    };
+    featuredRemove.onclick=e=>{
+      e.stopPropagation();
+      featuredInput.value="";
+      featuredPreview.src="";
+      featuredPreview.style.display="none";
+      featuredLabel.style.display="block";
+      featuredRemove.style.display="none";
+      // Reset preview card image
+      document.getElementById("previewImage").src="";
+      document.getElementById("previewImage").style.display="none";
+      document.getElementById("previewImagePlaceholder").style.display="flex";
     };
 
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    // Gallery (up to 19)
+    function updateGalleryLabel(){const c=galleryState.length;galleryLabel.textContent=c?`${c} photo${c>1?"s":""} selected (max 19)`:"Add gallery photos\nUp to 19 additional images"}
+    function renderGallery(){
+      galleryPreviewContainer.innerHTML="";
+      galleryState.forEach((item,i)=>{
+        const tile=document.createElement("div");tile.className="lv-gallery-tile";
+        const img=document.createElement("img");img.className="lv-gallery-img";img.src=item.url;
+        const rm=document.createElement("span");rm.className="lv-gallery-remove";rm.textContent="✕";
+        rm.onclick=()=>{URL.revokeObjectURL(item.url);galleryState.splice(i,1);renderGallery();updateGalleryLabel()}
+        tile.append(img,rm);galleryPreviewContainer.appendChild(tile);
+      });
+    }
+    galleryTile.onclick=()=>galleryInput.click();
+    galleryInput.onchange=()=>{
+      const files=[...(galleryInput.files||[])];if(!files.length)return;
+      const remain=19-galleryState.length;const use=files.slice(0,remain);
+      use.forEach(f=>galleryState.push({file:f,url:URL.createObjectURL(f)}));
+      if(files.length>use.length)alert("Only the first 19 images are used.");
+      renderGallery();updateGalleryLabel();
+    };
 
-    // Get product ID from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
+    // Video
+    videoTile.onclick=()=>videoInput.click();
+    videoInput.onchange=async()=>{
+      const f=videoInput.files?.[0];if(!f)return;
+      const url=URL.createObjectURL(f);
+      videoPreview.src=url;
+      videoPreview.style.display="block";
+      videoLabel.style.display="none";
+      videoRemove.style.display="inline-flex";
+      videoPreview.play().catch(()=>{});
+    };
+    videoRemove.onclick=e=>{
+      e.stopPropagation();
+      videoInput.value="";
+      videoPreview.src="";
+      videoPreview.style.display="none";
+      videoLabel.style.display="block";
+      videoRemove.style.display="none";
+    };
 
-    async function loadProduct() {
-      if (!productId) {
-        document.getElementById("errorState").style.display = "block";
+    // Auto-generate SEO fields
+    document.getElementById("autoGenerateSeoBtn").onclick=()=>{
+      const title=document.getElementById("productTitle").value;
+      const desc=document.getElementById("productDescription").value;
+      const keywords=document.getElementById("tags").value;
+
+      if(!title){alert("Please enter a product title");return}
+      if(!desc){alert("Please enter a product description");return}
+
+      // Simple SEO title and description generation
+      const seoTitle=`Buy ${title} Online | Your Store Name`;
+      const seoDescription=`Discover the benefits of ${title}. ${desc} Order now and enjoy fast shipping!`;
+
+      document.getElementById("seoTitle").value=seoTitle;
+      document.getElementById("seoDescription").value=seoDescription;
+
+      // Generate keywords from tags
+      const tagList=keywords.split(",").map(t=>t.trim()).filter(t=>t);
+      document.getElementById("seoKeywords").value=tagList.join(", ");
+
+      // Set URL handle
+      const urlHandle=title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+      document.getElementById("seoUrl").value=urlHandle;
+
+      document.getElementById("seoSuccessMessage").style.display="block";
+
+      // Count characters
+      document.getElementById("seoTitleCount").textContent=seoTitle.length;
+      document.getElementById("seoDescCount").textContent=seoDescription.length;
+      document.getElementById("seoKeywordsCount").textContent=tagList.length;
+    };
+
+    // PUBLISH BUTTON - Add product to Firestore
+    document.getElementById("publishBtnTop").addEventListener("click",async()=>{
+      console.log("Publishing product...");
+      try{
+        const user=auth.currentUser;
+        if(!user){alert("Please sign in to publish");return}
+
+        const data=window.lvGetFormData();
+        if(!data.title||!data.price){alert("Please add a title and price");return}
+
+        // Show loading state
+        const btn=document.getElementById("publishBtnTop");
+        const originalText=btn.textContent;
+        btn.textContent="Publishing...";
+        btn.disabled=true;
+
+        // Upload featured image
+        let imageUrl=null;
+        const fileInput=window.lumivueFeaturedInput;
+        if(fileInput&&fileInput.files&&fileInput.files[0]){
+          const file=fileInput.files[0];
+          const path=`listing-images/${Date.now()}_${file.name}`;
+          const imgRef=sRef(storage,path);
+          const snap=await uploadBytes(imgRef,file);
+          imageUrl=await getDownloadURL(snap.ref);
+        } else if(currentProductId){
+          // Keep existing image if editing and no new image uploaded
+          const docRef = doc(db, "listings", currentProductId);
+          const docSnap = await getDoc(docRef);
+          if(docSnap.exists()){
+            imageUrl = docSnap.data().imageUrl;
+          }
+        }
+
+        // Prepare payload
+        const payload={
+          ...data,
+          status:"active",
+          priceNumber:parseFloat(data.price||"0")||0,
+          imageUrl:imageUrl||null,
+          vendorUid:user.uid
+        };
+
+        // Update or create
+        let productId;
+        if(currentProductId){
+          // Update existing product
+          const docRef = doc(db, "listings", currentProductId);
+          await updateDoc(docRef, {
+            ...payload,
+            updatedAt: serverTimestamp()
+          });
+          productId = currentProductId;
+          console.log("Product updated:", productId);
+        } else {
+          // Create new product
+          payload.createdAt = serverTimestamp();
+          const ref=await addDoc(collection(db,"listings"),payload);
+          productId = ref.id;
+          console.log("Product created:", productId);
+        }
+
+        // Redirect to product page
+        alert("✅ Product published successfully!");
+        window.location.href=`product.html?id=${encodeURIComponent(productId)}`;
+      }catch(err){
+        console.error("Publish error:",err);
+        alert("❌ Error publishing product: "+err.message);
+        document.getElementById("publishBtnTop").textContent="Publish product";
+        document.getElementById("publishBtnTop").disabled=false;
+      }
+    });
+
+    // SAVE DRAFT BUTTON
+    document.getElementById("saveDraftBtnTop").addEventListener("click",async()=>{
+      try{
+        const user=auth.currentUser;
+        if(!user){alert("Please sign in to save draft");return}
+
+        const data=window.lvGetFormData();
+        if(!data.title){alert("Please add a product title");return}
+
+        const btn=document.getElementById("saveDraftBtnTop");
+        const originalText=btn.textContent;
+        btn.textContent="Saving...";
+        btn.disabled=true;
+
+        // Upload featured image if exists
+        let imageUrl=null;
+        const fileInput=window.lumivueFeaturedInput;
+        if(fileInput&&fileInput.files&&fileInput.files[0]){
+          const file=fileInput.files[0];
+          const path=`listing-images/${Date.now()}_${file.name}`;
+          const imgRef=sRef(storage,path);
+          const snap=await uploadBytes(imgRef,file);
+          imageUrl=await getDownloadURL(snap.ref);
+        } else if(currentProductId){
+          const docRef = doc(db, "listings", currentProductId);
+          const docSnap = await getDoc(docRef);
+          if(docSnap.exists()){
+            imageUrl = docSnap.data().imageUrl;
+          }
+        }
+
+        const payload={
+          ...data,
+          status:"draft",
+          priceNumber:parseFloat(data.price||"0")||0,
+          imageUrl:imageUrl||null,
+          vendorUid:user.uid
+        };
+
+        if(currentProductId){
+          // Update existing draft
+          const docRef = doc(db, "listings", currentProductId);
+          await updateDoc(docRef, {
+            ...payload,
+            updatedAt: serverTimestamp()
+          });
+          alert("✅ Draft saved successfully!");
+        } else {
+          // Create new draft
+          payload.createdAt = serverTimestamp();
+          const ref=await addDoc(collection(db,"listings"),payload);
+          currentProductId = ref.id;
+          document.getElementById("deleteBtnTop").style.display = "inline-block";
+          // Update URL without reload
+          window.history.replaceState({}, '', `create-listing.html?edit=${currentProductId}`);
+          alert("✅ Draft saved successfully!");
+        }
+
+        btn.textContent=originalText;
+        btn.disabled=false;
+      }catch(err){
+        console.error("Save draft error:",err);
+        alert("❌ Error saving draft: "+err.message);
+        document.getElementById("saveDraftBtnTop").textContent="Save draft";
+        document.getElementById("saveDraftBtnTop").disabled=false;
+      }
+    });
+
+    // DISCARD BUTTON
+    document.getElementById("discardBtnTop").addEventListener("click",()=>{
+      if(confirm("Are you sure you want to discard all changes? This cannot be undone.")){
+        window.location.href="listings.html";
+      }
+    });
+
+    // DELETE BUTTON
+    document.getElementById("deleteBtnTop").addEventListener("click",async()=>{
+      if(!currentProductId){
+        alert("No product to delete");
         return;
       }
 
-      try {
-        const docRef = doc(db, "listings", productId);
-        const docSnap = await getDoc(docRef);
-
-        if (!docSnap.exists()) {
-          document.getElementById("errorState").style.display = "block";
-          return;
-        }
-
-        const data = docSnap.data();
-        document.getElementById("mainContent").style.display = "grid";
-        document.getElementById("editBtn").style.display = "block";
-
-        // Image
-        if (data.imageUrl) {
-          document.getElementById("productImage").src = data.imageUrl;
-          document.getElementById("productImage").style.display = "block";
-        } else {
-          document.getElementById("productImage").style.display = "none";
-        }
-
-        // Status
-        const statusEl = document.getElementById("productStatus");
-        const isActive = data.status === "active";
-        statusEl.textContent = isActive ? "Active" : "Draft";
-        if (isActive) statusEl.classList.add("active");
-
-        // Basic info
-        document.getElementById("productTitle").textContent = data.title || "Untitled";
-        document.getElementById("productSubtitle").textContent = data.subtitle || "";
-        
-        // Price
-        const price = data.priceNumber || parseFloat(data.price) || 0;
-        const currency = data.currency === "USD" ? "$" : (data.currency || "$");
-        document.getElementById("productPrice").textContent = `${currency}${price.toFixed(2)}`;
-        
-        // Meta
-        document.getElementById("productMeta").textContent = 
-          `${data.vendor || "Unknown vendor"} · ${data.type || "Product"}`;
-        
-        // Description
-        const descEl = document.getElementById("productDescription");
-        if (data.description) {
-          descEl.textContent = data.description;
-          descEl.style.display = "block";
-        } else {
-          descEl.style.display = "none";
-        }
-
-        // Right column info
-        document.getElementById("infoVendor").textContent = data.vendor || "—";
-        document.getElementById("infoType").textContent = data.type || "—";
-        document.getElementById("infoCollections").textContent = data.collections || "—";
-        document.getElementById("infoCurrency").textContent = data.currency || "USD";
-
-        // Pricing details
-        document.getElementById("pricingCard").style.display = "block";
-        document.getElementById("infoPrice").textContent = `${currency}${price.toFixed(2)}`;
-        
-        if (data.compareAt) {
-          document.getElementById("compareAtRow").style.display = "flex";
-          document.getElementById("infoCompareAt").textContent = `${currency}${parseFloat(data.compareAt).toFixed(2)}`;
-        }
-        
-        if (data.costPerItem) {
-          document.getElementById("costRow").style.display = "flex";
-          document.getElementById("infoCost").textContent = `${currency}${parseFloat(data.costPerItem).toFixed(2)}`;
-        }
-
-        // INCI Ingredients
-        if (data.inciIngredients) {
-          document.getElementById("ingredientsCard").style.display = "block";
-          document.getElementById("inciIngredientsList").textContent = data.inciIngredients;
-        }
-
-      } catch (err) {
-        console.error("Error loading product:", err);
-        document.getElementById("errorState").style.display = "block";
-        document.getElementById("errorState").querySelector(".lv-error-text").textContent = err.message;
+      if(!confirm("Are you sure you want to permanently delete this product? This cannot be undone.")){
+        return;
       }
-    }
 
-    // Load product when page loads
-    loadProduct();
+      try{
+        const btn=document.getElementById("deleteBtnTop");
+        const originalText=btn.textContent;
+        btn.textContent="Deleting...";
+        btn.disabled=true;
 
-    // Edit button (future functionality)
-    document.getElementById("editBtn")?.addEventListener("click", () => {
-      alert("Edit functionality coming soon! For now, you can create a new product.");
-      // Future: window.location.href = `edit-listing.html?id=${productId}`;
+        const docRef = doc(db, "listings", currentProductId);
+        await deleteDoc(docRef);
+
+        alert("✅ Product deleted successfully!");
+        window.location.href="listings.html";
+      }catch(err){
+        console.error("Delete error:",err);
+        alert("❌ Error deleting product: "+err.message);
+        document.getElementById("deleteBtnTop").textContent="Delete";
+        document.getElementById("deleteBtnTop").disabled=false;
+      }
     });
-  </script>
+    </script>
 </body>
 </html>
