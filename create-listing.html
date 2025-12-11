@@ -569,7 +569,7 @@
                         <div class="lv-field">
                             <label class="lv-label" for="price">Price</label>
                             <div style="display:flex;align-items:center;gap:.35rem;">
-                                <span style="font-size:.9rem;color:var(--lv-text-muted);padding:.45rem .6rem;border-radius:10px;border:1px solid var(--lv-border-strong);background:#faf6ef">$</span>
+                                <span style="font-size:.9rem;color:var(--lv-text-muted);padding:.45rem .6rem:border-radius:10px;border:1px solid var(--lv-border-strong);background:#faf6ef">$</span>
                                 <input id="price" class="lv-input" type="number" step="0.01" min="0" placeholder="45.00" style="flex:1;" />
                             </div>
                         </div>
@@ -909,7 +909,73 @@
         </aside>
     </main>
 
+    <!-- Firebase compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
     <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+        authDomain: "lumivue-c8fdf.firebaseapp.com",
+        projectId: "lumivue-c8fdf",
+        storageBucket: "lumivue-c8fdf.firebasestorage.app",
+        messagingSenderId: "120420036736",
+        appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+    const sRef = firebase.storage().ref;
+
+    // Helper aliases for Firebase functions
+    const { serverTimestamp, addDoc, collection, doc, updateDoc, getDoc, deleteDoc } = firebase.firestore;
+    const { ref, uploadBytes, getDownloadURL } = firebase.storage;
+
+    // Global variables
+    let currentProductId = null;
+
+    // Get form data helper function
+    window.lvGetFormData = function() {
+        return {
+            title: document.getElementById("productTitle").value,
+            subtitle: document.getElementById("productSubtitle").value,
+            description: document.getElementById("productDescription").value,
+            price: document.getElementById("price").value,
+            compareAt: document.getElementById("compareAt").value,
+            costPerItem: document.getElementById("costPerItem").value,
+            currency: document.getElementById("currency").value,
+            sku: document.getElementById("sku").value,
+            barcode: document.getElementById("barcode").value,
+            trackInventory: document.getElementById("trackInventory").checked,
+            inventoryLocation: document.getElementById("inventoryLocation").value,
+            inventoryAvailable: document.getElementById("inventoryAvailable").value,
+            weight: document.getElementById("weight").value,
+            weightUnit: document.getElementById("weightUnit").value,
+            variantSize: document.getElementById("variantSize").value,
+            variantColor: document.getElementById("variantColor").value,
+            variantMaterial: document.getElementById("variantMaterial").value,
+            variantStyle: document.getElementById("variantStyle").value,
+            googleAgeGroup: document.getElementById("googleAgeGroup").value,
+            googleCondition: document.getElementById("googleCondition").value,
+            googleGender: document.getElementById("googleGender").value,
+            googleMPN: document.getElementById("googleMPN").value,
+            seoTitle: document.getElementById("seoTitle").value,
+            seoDescription: document.getElementById("seoDescription").value,
+            seoKeywords: document.getElementById("seoKeywords").value,
+            seoUrl: document.getElementById("seoUrl").value,
+            inciIngredients: document.getElementById("finalInciList").value,
+            type: document.getElementById("productType").value,
+            vendor: document.getElementById("productVendor").value,
+            collections: document.getElementById("collections").value,
+            tags: document.getElementById("tags").value
+        };
+    };
+
     window.lumivueFeaturedInput=document.getElementById("featuredImage");
     const featuredTile=document.getElementById("featuredTile");
     const featuredInput=document.getElementById("featuredImage");
@@ -1032,6 +1098,148 @@
       document.getElementById("seoKeywordsCount").textContent=tagList.length;
     };
 
+    // AI INCI INGREDIENT GENERATOR - Works for all product types
+    const inciDatabase = {
+      // Base ingredients by product type
+      moisturizer: ["Aqua", "Glycerin", "Cetearyl Alcohol", "Butyrospermum Parkii (Shea Butter)", "Caprylic/Capric Triglyceride"],
+      serum: ["Aqua", "Glycerin", "Propanediol", "Pentylene Glycol"],
+      cleanser: ["Aqua", "Sodium Cocoyl Isethionate", "Cocamidopropyl Betaine", "Glycerin", "Coco-Glucoside"],
+      toner: ["Aqua", "Glycerin", "Propanediol", "Pentylene Glycol"],
+      mask: ["Aqua", "Kaolin", "Glycerin", "Bentonite", "Cetearyl Alcohol"],
+      oil: ["Simmondsia Chinensis (Jojoba) Seed Oil", "Argania Spinosa (Argan) Kernel Oil", "Rosa Canina (Rosehip) Fruit Oil"],
+      sunscreen: ["Aqua", "Zinc Oxide", "Titanium Dioxide", "Glycerin", "C12-15 Alkyl Benzoate"],
+      exfoliant: ["Aqua", "Glycolic Acid", "Lactic Acid", "Glycerin", "Propanediol"],
+      "eye-cream": ["Aqua", "Glycerin", "Caffeine", "Niacinamide", "Pentylene Glycol"],
+      "lip-balm": ["Cera Alba (Beeswax)", "Butyrospermum Parkii (Shea Butter)", "Cocos Nucifera (Coconut) Oil", "Theobroma Cacao (Cocoa) Seed Butter"],
+      "body-lotion": ["Aqua", "Glycerin", "Cetearyl Alcohol", "Caprylic/Capric Triglyceride", "Butyrospermum Parkii (Shea Butter)"],
+      shampoo: ["Aqua", "Sodium Cocoyl Isethionate", "Cocamidopropyl Betaine", "Glycerin", "Coco-Glucoside"],
+      conditioner: ["Aqua", "Cetearyl Alcohol", "Behentrimonium Chloride", "Glycerin", "Cetyl Alcohol"],
+      soap: ["Sodium Cocoate", "Sodium Palmate", "Aqua", "Glycerin", "Sodium Olivate", "Cocos Nucifera (Coconut) Oil"],
+      candle: ["Soy Wax", "Paraffin Wax", "Beeswax", "Fragrance", "Stearic Acid"],
+      lotion: ["Aqua", "Glycerin", "Cetearyl Alcohol", "Caprylic/Capric Triglyceride", "Dimethicone"]
+    };
+
+    const activeIngredients = {
+      "hyaluronic acid": "Sodium Hyaluronate",
+      "niacinamide": "Niacinamide",
+      "vitamin c": "Ascorbic Acid",
+      "vitamin e": "Tocopherol",
+      "retinol": "Retinol",
+      "salicylic acid": "Salicylic Acid",
+      "glycolic acid": "Glycolic Acid",
+      "lactic acid": "Lactic Acid",
+      "caffeine": "Caffeine",
+      "peptides": "Palmitoyl Tripeptide-1",
+      "ceramides": "Ceramide NP",
+      "collagen": "Hydrolyzed Collagen",
+      "aloe vera": "Aloe Barbadensis Leaf Juice",
+      "tea tree": "Melaleuca Alternifolia (Tea Tree) Leaf Oil",
+      "lavender": "Lavandula Angustifolia (Lavender) Oil",
+      "rose": "Rosa Damascena Flower Oil",
+      "chamomile": "Chamomilla Recutita (Chamomile) Flower Extract",
+      "green tea": "Camellia Sinensis Leaf Extract"
+    };
+
+    const preservatives = ["Phenoxyethanol", "Ethylhexylglycerin", "Potassium Sorbate", "Sodium Benzoate"];
+    const emulsifiers = ["Cetearyl Glucoside", "Polysorbate 20", "Xanthan Gum"];
+    const thickeners = ["Carbomer", "Xanthan Gum", "Hydroxyethylcellulose"];
+
+    document.getElementById("generateInciBtn").onclick = async () => {
+      const productType = document.getElementById("productFormulationType").value;
+      const keyIngreds = document.getElementById("keyIngredients").value.toLowerCase();
+      const goal = document.getElementById("formulationGoal").value.toLowerCase();
+
+      if (!productType) {
+        alert("Please select a product type");
+        return;
+      }
+
+      // Show loading
+      document.getElementById("inciLoadingState").style.display = "block";
+      document.getElementById("inciResultField").style.display = "none";
+
+      // Simulate AI processing delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Build ingredient list
+      let ingredients = [];
+
+      // Start with base ingredients for product type
+      if (inciDatabase[productType]) {
+        ingredients.push(...inciDatabase[productType]);
+      } else {
+        // Default base for unknown types
+        ingredients.push("Aqua", "Glycerin", "Cetearyl Alcohol");
+      }
+
+      // Add active ingredients mentioned by user
+      if (keyIngreds) {
+        const userIngreds = keyIngreds.split(",").map(i => i.trim().toLowerCase());
+        userIngreds.forEach(ingred => {
+          if (activeIngredients[ingred]) {
+            ingredients.push(activeIngredients[ingred]);
+          } else {
+            // Add as-is if not in database (capitalize first letter of each word)
+            const formatted = ingred.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+            ingredients.push(formatted);
+          }
+        });
+      }
+
+      // Add goal-based actives
+      if (goal.includes("hydrat") || goal.includes("moist")) {
+        ingredients.push("Sodium Hyaluronate", "Panthenol");
+      }
+      if (goal.includes("anti-aging") || goal.includes("wrinkle")) {
+        ingredients.push("Retinol", "Palmitoyl Tripeptide-1");
+      }
+      if (goal.includes("brighten") || goal.includes("glow")) {
+        ingredients.push("Niacinamide", "Ascorbic Acid");
+      }
+      if (goal.includes("acne") || goal.includes("clear")) {
+        ingredients.push("Salicylic Acid", "Tea Tree Oil");
+      }
+      if (goal.includes("sensitive") || goal.includes("calm")) {
+        ingredients.push("Allantoin", "Bisabolol");
+      }
+
+      // Add functional ingredients based on product type
+      if (["moisturizer", "serum", "lotion", "body-lotion"].includes(productType)) {
+        ingredients.push(...emulsifiers.slice(0, 1));
+        ingredients.push(...preservatives.slice(0, 2));
+      }
+      if (["cleanser", "shampoo"].includes(productType)) {
+        ingredients.push("Citric Acid");
+      }
+      if (!["oil", "soap", "candle"].includes(productType)) {
+        ingredients.push(...preservatives.slice(0, 2));
+      }
+
+      // Remove duplicates and format
+      ingredients = [...new Set(ingredients)];
+
+      // Display result
+      const inciList = ingredients.join(", ");
+      document.getElementById("inciResult").value = inciList;
+      document.getElementById("inciLoadingState").style.display = "none";
+      document.getElementById("inciResultField").style.display = "block";
+    };
+
+    // Copy INCI to clipboard
+    document.getElementById("copyInciBtn").onclick = () => {
+      const inciText = document.getElementById("inciResult").value;
+      navigator.clipboard.writeText(inciText).then(() => {
+        const btn = document.getElementById("copyInciBtn");
+        const originalText = btn.textContent;
+        btn.textContent = "✅ Copied!";
+        setTimeout(() => {
+          btn.textContent = originalText;
+        }, 2000);
+      }).catch(err => {
+        alert("Failed to copy: " + err);
+      });
+    };
+
     // PUBLISH BUTTON - Add product to Firestore
     document.getElementById("publishBtnTop").addEventListener("click",async()=>{
       console.log("Publishing product...");
@@ -1054,14 +1262,13 @@
         if(fileInput&&fileInput.files&&fileInput.files[0]){
           const file=fileInput.files[0];
           const path=`listing-images/${Date.now()}_${file.name}`;
-          const imgRef=sRef(storage,path);
-          const snap=await uploadBytes(imgRef,file);
-          imageUrl=await getDownloadURL(snap.ref);
+          const imgRef=storage.ref(path);
+          const snap=await imgRef.put(file);
+          imageUrl=await snap.ref.getDownloadURL();
         } else if(currentProductId){
           // Keep existing image if editing and no new image uploaded
-          const docRef = doc(db, "listings", currentProductId);
-          const docSnap = await getDoc(docRef);
-          if(docSnap.exists()){
+          const docSnap = await db.collection("listings").doc(currentProductId).get();
+          if(docSnap.exists){
             imageUrl = docSnap.data().imageUrl;
           }
         }
@@ -1079,17 +1286,16 @@
         let productId;
         if(currentProductId){
           // Update existing product
-          const docRef = doc(db, "listings", currentProductId);
-          await updateDoc(docRef, {
+          await db.collection("listings").doc(currentProductId).update({
             ...payload,
-            updatedAt: serverTimestamp()
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
           productId = currentProductId;
           console.log("Product updated:", productId);
         } else {
           // Create new product
-          payload.createdAt = serverTimestamp();
-          const ref=await addDoc(collection(db,"listings"),payload);
+          payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          const ref=await db.collection("listings").add(payload);
           productId = ref.id;
           console.log("Product created:", productId);
         }
@@ -1125,13 +1331,12 @@
         if(fileInput&&fileInput.files&&fileInput.files[0]){
           const file=fileInput.files[0];
           const path=`listing-images/${Date.now()}_${file.name}`;
-          const imgRef=sRef(storage,path);
-          const snap=await uploadBytes(imgRef,file);
-          imageUrl=await getDownloadURL(snap.ref);
+          const imgRef=storage.ref(path);
+          const snap=await imgRef.put(file);
+          imageUrl=await snap.ref.getDownloadURL();
         } else if(currentProductId){
-          const docRef = doc(db, "listings", currentProductId);
-          const docSnap = await getDoc(docRef);
-          if(docSnap.exists()){
+          const docSnap = await db.collection("listings").doc(currentProductId).get();
+          if(docSnap.exists){
             imageUrl = docSnap.data().imageUrl;
           }
         }
@@ -1146,16 +1351,15 @@
 
         if(currentProductId){
           // Update existing draft
-          const docRef = doc(db, "listings", currentProductId);
-          await updateDoc(docRef, {
+          await db.collection("listings").doc(currentProductId).update({
             ...payload,
-            updatedAt: serverTimestamp()
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
           alert("✅ Draft saved successfully!");
         } else {
           // Create new draft
-          payload.createdAt = serverTimestamp();
-          const ref=await addDoc(collection(db,"listings"),payload);
+          payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          const ref=await db.collection("listings").add(payload);
           currentProductId = ref.id;
           document.getElementById("deleteBtnTop").style.display = "inline-block";
           // Update URL without reload
@@ -1197,8 +1401,7 @@
         btn.textContent="Deleting...";
         btn.disabled=true;
 
-        const docRef = doc(db, "listings", currentProductId);
-        await deleteDoc(docRef);
+        await db.collection("listings").doc(currentProductId).delete();
 
         alert("✅ Product deleted successfully!");
         window.location.href="listings.html";
