@@ -275,6 +275,10 @@
                 </nav>
 
                 <div class="lv-header-actions">
+                    <a class="lv-cart-btn" href="cart.html" title="Shopping Cart" style="position: relative; display: inline-flex; align-items: center; justify-content: center; height: 34px; width: 34px; padding: 0; border-radius: 50%; background: #e6d8c7; color: var(--lv-text); font-weight: 600; font-size: 18px; border: 1px solid var(--lv-border-strong); cursor: pointer; text-decoration: none;">
+                        ??
+                        <span class="lv-cart-count" style="position: absolute; top: -6px; right: -6px; background: var(--lv-accent); color: #ffffff; font-size: 10px; font-weight: 700; min-width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--lv-bg);">0</span>
+                    </a>
                     <a class="lv-btn-text" href="login.html">Sign in / Join</a>
                     <a class="lv-btn-soft" href="signup.html">For vendors</a>
                 </div>
@@ -282,7 +286,7 @@
         </header>
 
         <main class="lv-main" id="mainContent" style="display:none;">
-            <!-- LEFT COLUMN   Product Details -->
+            <!-- LEFT COLUMN � Product Details -->
             <section>
                 <div class="lv-card">
                     <img id="productImage" class="lv-product-hero" alt="Product image" />
@@ -294,7 +298,7 @@
                 </div>
             </section>
 
-            <!-- RIGHT COLUMN   Product Info -->
+            <!-- RIGHT COLUMN � Product Info -->
             <aside>
                 <div class="lv-card">
                     <div class="lv-card-header">
@@ -303,18 +307,18 @@
                     <div class="lv-card-body">
                         <div class="lv-info-row">
                             <span class="lv-info-label">Vendor</span>
-                            <span class="lv-info-value" id="infoVendor"> </span>
+                            <span class="lv-info-value" id="infoVendor">�</span>
                         </div>
                         <div class="lv-info-row">
                             <span class="lv-info-label">Type</span>
-                            <span class="lv-info-value" id="infoType"> </span>
+                            <span class="lv-info-value" id="infoType">�</span>
                         </div>
                         <div class="lv-info-row">
                             <span class="lv-info-label">Collections</span>
-                            <span class="lv-info-value" id="infoCollections"> </span>
+                            <span class="lv-info-value" id="infoCollections">�</span>
                         </div>
                     </div>
-                    <button class="lv-btn-primary" type="button">Add to cart</button>
+                    <button class="lv-btn-primary" type="button" id="addToCartBtn">Add to cart</button>
                 </div>
 
                 <div class="lv-card" id="ingredientsCard" style="display:none;">
@@ -322,7 +326,7 @@
                         <div class="lv-card-title">Ingredients (INCI)</div>
                     </div>
                     <div class="lv-card-body">
-                        <div id="inciIngredientsList" style="font-size:13px;line-height:1.6;color:var(--lv-text);"> </div>
+                        <div id="inciIngredientsList" style="font-size:13px;line-height:1.6;color:var(--lv-text);">�</div>
                     </div>
                 </div>
             </aside>
@@ -347,6 +351,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
+    <!-- Cart Utility -->
+    <script src="cart.js"></script>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
@@ -358,11 +365,16 @@
         };
 
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.firestore();
+
+        // Initialize cart
+        cart.init(auth, db);
 
         // Get product ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
+        let currentProduct = null;
 
         async function loadProduct() {
             if (!productId) {
@@ -380,6 +392,7 @@
                 }
 
                 const data = docSnap.data();
+                currentProduct = { id: productId, ...data };
 
                 // Only show active products to public buyers
                 if (data.status !== "active") {
@@ -408,7 +421,7 @@
 
                 // Meta
                 document.getElementById("productMeta").textContent =
-                    `${data.vendor || "Unknown vendor"}   ${data.type || "Product"}`;
+                    `${data.vendor || "Unknown vendor"} � ${data.type || "Product"}`;
 
                 // Description
                 const descEl = document.getElementById("productDescription");
@@ -420,9 +433,9 @@
                 }
 
                 // Right column info
-                document.getElementById("infoVendor").textContent = data.vendor || " ";
-                document.getElementById("infoType").textContent = data.type || " ";
-                document.getElementById("infoCollections").textContent = data.collections || " ";
+                document.getElementById("infoVendor").textContent = data.vendor || "�";
+                document.getElementById("infoType").textContent = data.type || "�";
+                document.getElementById("infoCollections").textContent = data.collections || "�";
 
                 // INCI Ingredients
                 if (data.inciIngredients) {
@@ -436,6 +449,32 @@
                 document.getElementById("errorState").querySelector(".lv-error-text").textContent = err.message;
             }
         }
+
+        // Add to cart button handler
+        document.getElementById('addToCartBtn').addEventListener('click', async () => {
+            if (!currentProduct) {
+                alert('Product not loaded yet');
+                return;
+            }
+
+            const btn = document.getElementById('addToCartBtn');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Adding...';
+
+            const success = await cart.addToCart(currentProduct);
+            
+            if (success) {
+                btn.textContent = '? Added to cart';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }, 2000);
+            } else {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
 
         // Load product when page loads
         loadProduct();
