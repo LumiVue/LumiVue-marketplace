@@ -262,31 +262,37 @@
         .lv-pill {
             border-radius: 999px;
             border: 1px solid var(--lv-border-strong);
-            padding: 4px 9px;
-            font-size: 11px;
+            padding: 3px 8px;
+            font-size: 9px;
             color: var(--lv-text-muted);
             background: #f8f3ea;
+            font-weight: 500;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
         }
 
         .lv-price { font-size: 13px; font-weight: 600; color: var(--lv-text); }
 
-        .lv-card-footer { margin-top: 2px; }
+        .lv-card-footer { margin-top: 6px; }
 
         .lv-btn-ghost {
             width: 100%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            height: 18px !important;
-            padding: 0 6px !important;
+            height: 28px !important;
+            padding: 0 14px !important;
             border-radius: 50px;
             background: #e6d8c7;
             border: 1px solid var(--lv-border-strong);
             color: var(--lv-text);
-            font-weight: 400 !important;
-            font-size: 8px !important;
+            font-weight: 500 !important;
+            font-size: 11px !important;
             cursor: pointer;
-            line-height: 1;
+            line-height: 1.2;
         }
 
         .lv-footer {
@@ -544,7 +550,8 @@
             const vendorsGrid = document.querySelector("#vendorsContainer .lv-card-grid");
             vendorsGrid.innerHTML = "";
 
-            for (const vendorUid of uniqueVendorUids.slice(0, 10)) {
+            // Render ALL vendors (removed .slice(0, 10) limitation)
+            for (const vendorUid of uniqueVendorUids) {
                 const vendorProducts = allProducts.filter(p => p.vendorUid === vendorUid);
                 const firstProduct = vendorProducts[0];
 
