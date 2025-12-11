@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LumiVue � Create Product Listing</title>
+  <title>LumiVue – Create Product Listing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css" />
 
@@ -23,7 +23,7 @@
     }
     html{scroll-behavior:smooth}
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;background:var(--lv-bg);color:var(--lv-text)}
+    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFrame,"SF Pro Text","Helvetica Neue",Arial,sans-serif;background:var(--lv-bg);color:var(--lv-text)}
     a{color:inherit;text-decoration:none}
     .lv-header{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#fbf8f2 0%, #f6f1ea 100%);border-bottom:1px solid rgba(0,0,0,.06);backdrop-filter:saturate(120%) blur(8px)}
     .lv-header-inner{max-width:1120px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:18px}
@@ -36,6 +36,7 @@
     .lv-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
     .lv-pill-btn{background:var(--lv-pill);border:1px solid var(--lv-pill-border);color:var(--lv-text);border-radius:999px;padding:6px 12px;font-size:12px;letter-spacing:.06em;cursor:pointer}
     .lv-pill-btn:active{transform:translateY(1px)}
+    .lv-pill-btn:hover{transform:none;box-shadow:none}
     .lv-avatar{width:28px;height:28px;border-radius:999px;background:#d3b79e;color:#2b2118;display:grid;place-items:center;font-weight:700;font-size:12px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.28)}
     .lv-main{max-width:1120px;margin:18px auto 32px;padding:0 18px;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.1fr);gap:18px;align-items:flex-start}
     @media (max-width:960px){.lv-main{grid-template-columns:1fr}}
@@ -60,16 +61,27 @@
     .lv-media-primary-tag{position:absolute;top:.45rem;left:.45rem;font-size:.7rem;padding:.15rem .45rem;border-radius:999px;background:#2c1e19;color:#fff}
     .lv-media-preview{position:absolute;inset:0;object-fit:cover;width:100%;height:100%}
     .lv-media-remove{position:absolute;top:.35rem;right:.35rem;font-size:.75rem;border-radius:999px;background:rgba(17,24,39,.75);color:#fff;padding:.1rem .35rem;cursor:pointer}
+    .lv-media-remove:hover{transform:none;box-shadow:none}
     .lv-gallery-previews{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.6rem;margin-top:.6rem}
     .lv-gallery-tile{position:relative;border-radius:10px;border:1px solid var(--lv-border-strong);overflow:hidden;height:90px}
     .lv-gallery-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     .lv-gallery-remove{position:absolute;top:.25rem;right:.25rem;font-size:.7rem;border-radius:999px;background:rgba(17,24,39,.75);color:#fff;padding:.1rem .35rem;cursor:pointer}
+    .lv-gallery-remove:hover{transform:none;box-shadow:none}
     .lv-toggle{position:relative;width:40px;height:22px}
     .lv-toggle input{opacity:0;width:0;height:0}
     .lv-toggle-slider{position:absolute;inset:0;border-radius:999px;background:#d1c8bb;transition:.2s}
     .lv-toggle-slider::before{content:"";position:absolute;height:16px;width:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 0 0 1px rgba(148,163,184,.4)}
     .lv-toggle input:checked + .lv-toggle-slider{background:var(--lv-pill-border)}
     .lv-toggle input:checked + .lv-toggle-slider::before{transform:translateX(18px)}
+    
+    /* Preview card styles */
+    .preview-card{position:sticky;top:80px}
+    .preview-product-img{width:100%;height:200px;border-radius:var(--lv-radius-md);background:radial-gradient(circle at top left,#f5e1c7,#f7eee3);object-fit:cover;margin-bottom:10px}
+    .preview-status{display:inline-block;background:var(--lv-pill);border:1px solid var(--lv-pill-border);color:var(--lv-text);border-radius:999px;padding:4px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+    .preview-title{font-size:16px;font-weight:600;margin-bottom:4px;color:var(--lv-text)}
+    .preview-subtitle{font-size:13px;color:var(--lv-text-muted);margin-bottom:8px}
+    .preview-price{font-size:20px;font-weight:700;margin-bottom:4px;color:var(--lv-text)}
+    .preview-meta{font-size:12px;color:var(--lv-text-muted)}
   </style>
 </head>
 <body>
@@ -105,7 +117,7 @@
         <div class="lv-card-body">
           <div class="lv-field">
             <label class="lv-label" for="productTitle">Title</label>
-            <input id="productTitle" class="lv-input" type="text" placeholder="Cr�me de Lumi�re" />
+            <input id="productTitle" class="lv-input" type="text" placeholder="Crème de Lumière" />
           </div>
           <div class="lv-field">
             <label class="lv-label" for="productSubtitle">Short subtitle (optional)</label>
@@ -133,9 +145,9 @@
             <div class="lv-media-tile primary" id="featuredTile">
               <span class="lv-media-primary-tag">Display</span>
               <span class="lv-media-label" id="featuredLabel">Click to upload main product photo
-1200 � 1200 recommended</span>
+1200 × 1200 recommended</span>
               <img id="featuredPreview" class="lv-media-preview" style="display:none;" alt="Featured preview" />
-              <span id="featuredRemove" class="lv-media-remove" style="display:none;">?</span>
+              <span id="featuredRemove" class="lv-media-remove" style="display:none;">✕</span>
               <input id="featuredImage" type="file" accept="image/*" style="display:none;" />
             </div>
 
@@ -151,7 +163,7 @@ Up to 19 additional images</span>
               <span class="lv-media-label" id="videoLabel">Add product video
 Up to 30 seconds</span>
               <video id="videoPreview" class="lv-media-preview" style="display:none;" loop playsinline></video>
-              <span id="videoRemove" class="lv-media-remove" style="display:none;">?</span>
+              <span id="videoRemove" class="lv-media-remove" style="display:none;">✕</span>
               <input id="productVideo" type="file" accept="video/*" style="display:none;" />
             </div>
           </div>
@@ -193,9 +205,9 @@ Up to 30 seconds</span>
             <div class="lv-field">
               <label class="lv-label" for="currency">Currency</label>
               <select id="currency" class="lv-select">
-                <option value="USD">USD � US Dollar</option>
-                <option value="CAD">CAD � Canadian Dollar</option>
-                <option value="EUR">EUR � Euro</option>
+                <option value="USD">USD – US Dollar</option>
+                <option value="CAD">CAD – Canadian Dollar</option>
+                <option value="EUR">EUR – Euro</option>
               </select>
             </div>
           </div>
@@ -272,6 +284,22 @@ Up to 30 seconds</span>
     </section>
 
     <aside>
+      <!-- PREVIEW CARD -->
+      <div class="lv-card preview-card">
+        <div class="lv-card-header">
+          <div class="lv-card-title">Preview</div>
+        </div>
+        <div class="lv-card-body">
+          <img id="previewImage" class="preview-product-img" alt="Product preview" style="display:none;" />
+          <div id="previewImagePlaceholder" class="preview-product-img" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--lv-text-muted);">Product image</div>
+          <span id="previewStatus" class="preview-status">Draft</span>
+          <div id="previewTitle" class="preview-title">Untitled product</div>
+          <div id="previewSubtitle" class="preview-subtitle"></div>
+          <div id="previewPrice" class="preview-price">$0.00</div>
+          <div id="previewMeta" class="preview-meta">Vendor · Product</div>
+        </div>
+      </div>
+      
       <!-- ORGANIZATION -->
       <div class="lv-card">
         <div class="lv-card-header"><div class="lv-card-title">Organization</div></div>
@@ -329,10 +357,30 @@ Up to 30 seconds</span>
     featuredInput.onchange=()=>{
       const f=featuredInput.files?.[0];if(!f)return;
       const r=new FileReader();
-      r.onload=e=>{featuredPreview.src=e.target.result;featuredPreview.style.display="block";featuredLabel.style.display="none";featuredRemove.style.display="inline-flex"};
+      r.onload=e=>{
+        featuredPreview.src=e.target.result;
+        featuredPreview.style.display="block";
+        featuredLabel.style.display="none";
+        featuredRemove.style.display="inline-flex";
+        // Update preview card
+        document.getElementById("previewImage").src=e.target.result;
+        document.getElementById("previewImage").style.display="block";
+        document.getElementById("previewImagePlaceholder").style.display="none";
+      };
       r.readAsDataURL(f);
     };
-    featuredRemove.onclick=e=>{e.stopPropagation();featuredInput.value="";featuredPreview.src="";featuredPreview.style.display="none";featuredLabel.style.display="block";featuredRemove.style.display="none"};
+    featuredRemove.onclick=e=>{
+      e.stopPropagation();
+      featuredInput.value="";
+      featuredPreview.src="";
+      featuredPreview.style.display="none";
+      featuredLabel.style.display="block";
+      featuredRemove.style.display="none";
+      // Reset preview card image
+      document.getElementById("previewImage").src="";
+      document.getElementById("previewImage").style.display="none";
+      document.getElementById("previewImagePlaceholder").style.display="flex";
+    };
     
     // Gallery (up to 19)
     function updateGalleryLabel(){const c=galleryState.length;galleryLabel.textContent=c?`${c} photo${c>1?"s":""} selected (max 19)`:"Add gallery photos\nUp to 19 additional images"}
@@ -341,7 +389,7 @@ Up to 30 seconds</span>
       galleryState.forEach((item,i)=>{
         const tile=document.createElement("div");tile.className="lv-gallery-tile";
         const img=document.createElement("img");img.className="lv-gallery-img";img.src=item.url;
-        const rm=document.createElement("span");rm.className="lv-gallery-remove";rm.textContent="?";
+        const rm=document.createElement("span");rm.className="lv-gallery-remove";rm.textContent="✕";
         rm.onclick=()=>{URL.revokeObjectURL(item.url);galleryState.splice(i,1);renderGallery();updateGalleryLabel()};
         tile.append(img,rm);galleryPreviewContainer.appendChild(tile);
       });
@@ -393,6 +441,33 @@ Up to 30 seconds</span>
       }
     }
     window.lvGetFormData=getFormData;
+    
+    // Update preview card in real-time
+    function updatePreview(){
+      const title=document.getElementById("productTitle").value||"Untitled product";
+      const subtitle=document.getElementById("productSubtitle").value;
+      const price=document.getElementById("price").value||"0";
+      const currency=document.getElementById("currency").value||"USD";
+      const vendor=document.getElementById("productVendor").value||"Vendor";
+      const type=document.getElementById("productType").value||"Product";
+      const status=document.getElementById("productStatus").value||"draft";
+      
+      document.getElementById("previewTitle").textContent=title;
+      document.getElementById("previewSubtitle").textContent=subtitle;
+      document.getElementById("previewSubtitle").style.display=subtitle?"block":"none";
+      document.getElementById("previewPrice").textContent=`${currency==="USD"?"$":currency}${parseFloat(price||0).toFixed(2)}`;
+      document.getElementById("previewMeta").textContent=`${vendor} · ${type}`;
+      document.getElementById("previewStatus").textContent=status==="active"?"Active":"Draft";
+    }
+    
+    // Attach event listeners for real-time preview
+    document.getElementById("productTitle").addEventListener("input",updatePreview);
+    document.getElementById("productSubtitle").addEventListener("input",updatePreview);
+    document.getElementById("price").addEventListener("input",updatePreview);
+    document.getElementById("currency").addEventListener("change",updatePreview);
+    document.getElementById("productVendor").addEventListener("input",updatePreview);
+    document.getElementById("productType").addEventListener("input",updatePreview);
+    document.getElementById("productStatus").addEventListener("change",updatePreview);
   </script>
 
   <script type="module">
