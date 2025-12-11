@@ -749,7 +749,7 @@
                 // ✅ FIXED: Query only THIS VENDOR'S active products
                 const listingsRef = db.collection("listings");
                 const q = listingsRef
-                    .where("vendorUid", "==", uid)
+                   .where("vendorId", "==", uid)
                     .where("status", "==", "active")
                     .orderBy("createdAt", "desc");
                 const snapshot = await q.get();
@@ -990,3 +990,4 @@
     </script>
 </body>
 </html>
+
