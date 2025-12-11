@@ -860,9 +860,8 @@
     if (bannerFileInput.files[0]) {
       try {
         const file = bannerFileInput.files[0];
-        const safeName = `${Date.now()}-${file.name}`;
-        // ✅ Path now matches Storage rules: listingImages/{userId}/{fileName}
-        const bannerRef = ref(storage, `listingImages/${user.uid}/store-banner-${safeName}`);
+        const path = `listing-images/${Date.now()}_${file.name}`;
+        const bannerRef = ref(storage, path);
         await uploadBytes(bannerRef, file);
         const url = await getDownloadURL(bannerRef);
         data.bannerImageUrl = url;   // hero fallback image
@@ -878,9 +877,8 @@
     if (videoInput.files[0]) {
       try {
         const file = videoInput.files[0];
-        const safeName = `${Date.now()}-${file.name}`;
-        // ✅ Path now matches Storage rules: listingVideos/{userId}/{fileName}
-        const videoRef = ref(storage, `listingVideos/${user.uid}/store-intro-${safeName}`);
+        const path = `listing-videos/${Date.now()}_${file.name}`;
+        const videoRef = ref(storage, path);
         await uploadBytes(videoRef, file);
         const url = await getDownloadURL(videoRef);
         data.storeVideoUrl = url;
