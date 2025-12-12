@@ -124,10 +124,6 @@
             cursor: pointer;
         }
 
-            .lv-pill-btn:active {
-                transform: translateY(1px);
-            }
-
             .lv-pill-btn:disabled {
                 opacity: 0.6;
                 cursor: not-allowed;
@@ -320,11 +316,6 @@
             cursor: pointer
         }
 
-            .lv-media-remove:hover {
-                transform: none;
-                box-shadow: none
-            }
-
         .lv-gallery-previews {
             display: grid;
             grid-template-columns: repeat(auto-fill,minmax(90px,1fr));
@@ -359,11 +350,6 @@
             padding: .1rem .35rem;
             cursor: pointer
         }
-
-            .lv-gallery-remove:hover {
-                transform: none;
-                box-shadow: none
-            }
 
         .lv-toggle {
             position: relative;
@@ -467,7 +453,7 @@
             <div class="lv-wordmark">L U M I V U E</div>
             <nav class="lv-nav">
                 <a href="dashboard.html">Dashboard</a>
-                <a href="listings.html">My products</a>
+                <a href="listing.html">My products</a>
                 <a href="create-listing.html" class="active">Create listing</a>
                 <a href="orders.html">Orders</a>
             </nav>
@@ -1302,7 +1288,7 @@
 
         // Redirect to product page
         alert("✅ Product published successfully!");
-        window.location.href=`product.html?id=${encodeURIComponent(productId)}`;
+        window.location.href=`listing.html`;
       }catch(err){
         console.error("Publish error:",err);
         alert("❌ Error publishing product: "+err.message);
