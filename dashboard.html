@@ -217,10 +217,6 @@
       font-weight: 500;
     }
 
-    .lv-btn:hover {
-      background: #f0ddc8;
-    }
-
     .lv-card,
     .lv-panel {
       background: var(--lv-surface);
@@ -480,10 +476,6 @@
       white-space: nowrap;
     }
 
-    .lv-card-manage:hover {
-      background: #f0ddc8;
-    }
-
     .lv-footer-note {
       margin-top: 10px;
       font-size: 11px;
@@ -538,7 +530,7 @@
         <div class="lv-header-right">
           <nav class="lv-top-nav">
             <a href="dashboard.html" class="lv-nav-active">Dashboard</a>
-            <a href="listings.html">Listings</a>
+            <a href="listing.html">My products</a>
             <a href="create-listing.html">Create listing</a>
             <a href="store.html">Storefront</a>
             <a href="account-payout.html">Payouts</a>
@@ -609,7 +601,7 @@
               <span>Listing</span>
               Create a new product
             </a>
-            <a href="listings.html" class="lv-chip">
+            <a href="listing.html" class="lv-chip">
               <span>Catalog</span>
               Manage all listings
             </a>
@@ -831,7 +823,7 @@
       const sectionStatusEls = {
         legal:      document.getElementById('status-legal'),
         tax:        document.getElementById('status-tax'),
-        payouts:    document.getElementById('status-payouts'),
+        payouts:    document.getElementById('status-payouts',
         storefront: document.getElementById('status-storefront'),
         shipping:   document.getElementById('status-shipping'),
         policies:   document.getElementById('status-policies')
@@ -875,14 +867,27 @@
         }
       }
 
-      function initDashboard() {
-        auth.onAuthStateChanged(async (user) => {
-          if (!user) {
-            const redirect = encodeURIComponent(window.location.pathname);
-            window.location.href = 'login.html?redirect=' + redirect;
-            return;
-          }
+    auth.onAuthStateChanged(async (user) => {
+  // Vendor-only access guard
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
 
+  // Vendor-only auth guard
+  try {
+    const creatorDoc = await db.collection("creators").doc(user.uid).get();
+    if (!creatorDoc.exists) {
+      // Not a vendor – redirect to buyer dashboard
+      window.location.href = "buyer-dashboard.html";
+      return;
+    }
+  } catch (error) {
+    console.error("Error checking vendor status:", error);
+    window.location.href = "login.html";
+    return;
+  }
+});
           currentUser = user;
 
           try {
