@@ -157,7 +157,7 @@
             background: var(--lv-accent);
             color: #ffffff;
             cursor: pointer;
-            pointer-events: auto; /* Ensure clicks work */
+            pointer-events: auto;
         }
 
         .lv-hero-search-btn:active {
@@ -184,7 +184,7 @@
             font-weight: 600;
             font-size: 13px;
             cursor: pointer;
-            pointer-events: auto; /* Ensure clicks work */
+            pointer-events: auto;
         }
 
         .lv-chip:active {
@@ -334,12 +334,16 @@
 
                 <nav class="lv-nav">
                     <a href="marketplace.html">Marketplace</a>
-                    <a href="listing.html">Browse all</a>
                 </nav>
 
                 <div class="lv-header-actions">
-                    <a class="lv-btn-text" href="login.html">Sign in / Join</a>
-                    <a class="lv-btn-soft" href="signup.html">For vendors</a>
+                    <!-- Logout Button (hidden by default) -->
+                    <button class="lv-btn-text" id="logoutBtn" style="display: none;">Sign out</button>
+                    <!-- My Account Button (hidden by default) -->
+                    <a class="lv-btn-text" href="buyer-dashboard.html" id="myAccountBtn" style="display: none;">My Account</a>
+                    <!-- Sign In Button (shown by default) -->
+                    <a class="lv-btn-text" href="login.html" id="signInBtn">Sign in / Join</a>
+                    <a class="lv-btn-soft" href="account.html">For vendors</a>
                 </div>
             </div>
         </header>
@@ -421,7 +425,64 @@
         };
 
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.firestore();
+
+        // Check auth state and show/hide account buttons
+        auth.onAuthStateChanged(async (user) => {
+            const logoutBtn = document.getElementById('logoutBtn');
+            const signInBtn = document.getElementById('signInBtn');
+
+            if (user) {
+                try {
+                    // Check if user is a buyer
+                    const buyerDoc = await db.collection('buyers').doc(user.uid).get();
+                    
+                    if (buyerDoc.exists) {
+                        // Show Logout button for buyers
+                        if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+                        if (signInBtn) signInBtn.style.display = 'none';
+                    } else {
+                        // Check if vendor
+                        const creatorDoc = await db.collection('creators').doc(user.uid).get();
+                        
+                        if (creatorDoc.exists) {
+                            // Vendor logged in
+                            if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+                            if (signInBtn) signInBtn.style.display = 'none';
+                        } else {
+                            // No buyer or creator doc - show sign in
+                            if (logoutBtn) logoutBtn.style.display = 'none';
+                            if (signInBtn) signInBtn.style.display = 'inline-flex';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking user type:', error);
+                    if (logoutBtn) logoutBtn.style.display = 'none';
+                    if (signInBtn) signInBtn.style.display = 'inline-flex';
+                }
+            } else {
+                // Not logged in
+                if (logoutBtn) logoutBtn.style.display = 'none';
+                if (signInBtn) signInBtn.style.display = 'inline-flex';
+            }
+        });
+
+        // Logout functionality
+        const logoutBtnElement = document.getElementById('logoutBtn');
+        if (logoutBtnElement) {
+            logoutBtnElement.addEventListener('click', async () => {
+                if (confirm('Are you sure you want to sign out?')) {
+                    try {
+                        await auth.signOut();
+                        window.location.href = 'marketplace.html';
+                    } catch (error) {
+                        console.error('Error signing out:', error);
+                        alert('Failed to sign out. Please try again.');
+                    }
+                }
+            });
+        }
 
         let allProducts = [];
         let filteredProducts = [];
@@ -430,7 +491,6 @@
             console.log("🔥 Loading products from Firestore...");
 
             try {
-                // TEMPORARY: Remove orderBy until index is created
                 const snapshot = await db.collection("listings")
                     .where("status", "==", "active")
                     .get();
@@ -442,7 +502,7 @@
                     allProducts.push({ id: doc.id, ...doc.data() });
                 });
 
-                // Sort in JavaScript instead
+                // Sort in JavaScript
                 allProducts.sort((a, b) => {
                     const aTime = a.createdAt ? a.createdAt.toMillis() : 0;
                     const bTime = b.createdAt ? b.createdAt.toMillis() : 0;
@@ -518,7 +578,7 @@
 
             container.innerHTML = "";
             container.appendChild(grid);
-            console.log(`✅ Rendered ${filteredProducts.length} product cards with direct links`);
+            console.log(`✅ Rendered ${filteredProducts.length} product cards`);
         }
 
         async function loadVendors() {
@@ -531,7 +591,6 @@
             const vendorsGrid = document.querySelector("#vendorsContainer .lv-card-grid");
             vendorsGrid.innerHTML = "";
 
-            // Render ALL vendors (removed .slice(0, 10) limitation)
             for (const vendorUid of uniqueVendorUids) {
                 const vendorProducts = allProducts.filter(p => p.vendorUid === vendorUid);
                 const firstProduct = vendorProducts[0];
@@ -561,7 +620,7 @@
                 vendorsGrid.appendChild(card);
             }
             
-            console.log(`✅ Rendered ${uniqueVendorUids.length} vendor cards with direct links`);
+            console.log(`✅ Rendered ${uniqueVendorUids.length} vendor cards`);
         }
 
         function searchProducts(query) {
@@ -574,53 +633,46 @@
                     return (product.title || '').toLowerCase().includes(q) ||
                            (product.subtitle || '').toLowerCase().includes(q) ||
                            (product.description || '').toLowerCase().includes(q) ||
-                           (product.vendor || '').toLowerCase().includes(q) ||
-                           (product.type || '').toLowerCase().includes(q) ||
-                           (product.tags || '').toLowerCase().includes(q);
+                           (product.vendor || '').toLowerCase().includes(q);
                 });
             }
-            console.log(`📋 Found ${filteredProducts.length} matching products`);
             renderProducts();
         }
 
-        function filterByCategory(category = 'all') {
-            console.log("🏷️ Filtering by category:", category);
-            document.querySelectorAll('.lv-chip').forEach(chip => {
-                chip.classList.toggle('primary', chip.dataset.category === category);
-            });
-
-            if (category === 'all') {
-                filteredProducts = [...allProducts];
-            } else {
-                filteredProducts = allProducts.filter(product => {
-                    return (product.type || '').toLowerCase().includes(category.toLowerCase());
-                });
-            }
-            console.log(`📋 Found ${filteredProducts.length} products in ${category} category`);
-            renderProducts();
-        }
-
-        document.getElementById("searchBtn").addEventListener("click", () => {
-            console.log("🔍 Search button clicked!");
-            searchProducts(document.getElementById("searchInput").value);
+        // Search button click
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            const query = document.getElementById('searchInput').value;
+            searchProducts(query);
         });
 
-        document.getElementById("searchInput").addEventListener("keypress", (e) => {
-            if (e.key === "Enter") {
-                console.log("⌨️ Enter key pressed in search!");
-                searchProducts(document.getElementById("searchInput").value);
+        // Search input enter key
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = e.target.value;
+                searchProducts(query);
             }
         });
 
-        document.querySelectorAll('.lv-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                console.log("🏷️ Chip clicked:", chip.dataset.category);
-                filterByCategory(chip.dataset.category);
+        // Category chip click
+        document.querySelectorAll('.lv-chip[data-category]').forEach(chip => {
+            chip.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+
+                // Update active chip
+                document.querySelectorAll('.lv-chip').forEach(c => c.classList.remove('primary'));
+                this.classList.add('primary');
+
+                if (category === 'all') {
+                    filteredProducts = [...allProducts];
+                } else {
+                    filteredProducts = allProducts.filter(product => product.category === category);
+                }
+
+                renderProducts();
             });
         });
 
-        console.log("🚀 Marketplace.html initialized");
-        
+        // Initial load
         loadProducts();
     </script>
 </body>
