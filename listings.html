@@ -126,10 +126,6 @@
             cursor: pointer;
         }
 
-            .lv-pill-btn:active {
-                transform: translateY(1px)
-            }
-
         .lv-avatar {
             width: 28px;
             height: 28px;
@@ -182,12 +178,7 @@
             box-shadow: var(--lv-shadow-soft);
             padding: 14px;
             cursor: pointer;
-            transition: box-shadow 0.2s;
         }
-
-            .lv-product-card:hover {
-                box-shadow: 0 28px 70px rgba(15,23,42,.10);
-            }
 
         .lv-product-image {
             width: 100%;
@@ -278,7 +269,7 @@
 
             <nav class="lv-nav">
                 <a href="dashboard.html">Dashboard</a>
-                <a href="listings.html" class="active">My products</a>
+                <a href="listing.html" class="active">My products</a>
                 <a href="create-listing.html">Create listing</a>
                 <a href="orders.html">Orders</a>
             </nav>
@@ -330,22 +321,36 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        async function loadProducts() {
-            console.log("Starting to load products...");
+        // Check authentication and load products
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Vendor-only auth guard
+            try {
+                const creatorDoc = await db.collection('creators').doc(user.uid).get();
+                if (!creatorDoc.exists) {
+                    // Not a vendor - redirect to buyer dashboard
+                    window.location.href = "buyer-dashboard.html";
+                    return;
+                }
+            } catch (error) {
+                console.error('Error checking vendor status:', error);
+                window.location.href = "login.html";
+                return;
+            }
 
             try {
                 const container = document.getElementById("productsContainer");
                 const emptyState = document.getElementById("emptyState");
 
-                console.log("Querying Firestore collection 'listings'...");
                 const snapshot = await db.collection("listings")
-                    .orderBy("createdAt", "desc")
+                    .where("vendorUid", "==", user.uid)
                     .get();
 
-                console.log(`Found ${snapshot.size} products in Firestore`);
-
                 if (snapshot.empty) {
-                    console.log("No products found - showing empty state");
                     container.style.display = "none";
                     emptyState.style.display = "block";
                     return;
@@ -357,11 +362,9 @@
 
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    console.log("Product data:", doc.id, data);
-
                     const card = document.createElement("div");
                     card.className = "lv-product-card";
-                    card.onclick = () => window.location.href = `product.html?id=${doc.id}`;
+                    card.onclick = () => window.location.href = `product-detail.html?id=${doc.id}`;
 
                     const statusClass = data.status === "active" ? "active" : "";
                     const statusText = data.status === "active" ? "Active" : "Draft";
@@ -369,39 +372,22 @@
                     const currency = data.currency === "USD" ? "$" : data.currency;
 
                     card.innerHTML = `
-                ${data.imageUrl ?
-                            `<img src="${data.imageUrl}" alt="${data.title}" class="lv-product-image" />` :
-                            `<div class="lv-product-image"></div>`
-                        }
-                <span class="lv-product-status ${statusClass}">${statusText}</span>
-                <div class="lv-product-title">${data.title || "Untitled"}</div>
-                <div class="lv-product-subtitle">${data.subtitle || ""}</div>
-                <div class="lv-product-meta">
-                  <span class="lv-product-vendor">${data.vendor || "Unknown"} · ${data.type || "Product"}</span>
-                  <span class="lv-product-price">${currency}${price.toFixed(2)}</span>
-                </div>
-              `;
-
+                        ${data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title}" class="lv-product-image" />` : `<div class="lv-product-image"></div>`}
+                        <span class="lv-product-status ${statusClass}">${statusText}</span>
+                        <div class="lv-product-title">${data.title || "Untitled"}</div>
+                        <div class="lv-product-subtitle">${data.subtitle || ""}</div>
+                        <div class="lv-product-meta">
+                            <span class="lv-product-vendor">${data.vendor || "Unknown"} · ${data.type || "Product"}</span>
+                            <span class="lv-product-price">${currency}${price.toFixed(2)}</span>
+                        </div>
+                    `;
                     container.appendChild(card);
                 });
-
-                console.log("Products loaded successfully!");
             } catch (err) {
-                console.error("Error loading products:", err);
-                console.error("Error details:", err.code, err.message);
+                console.error("Error:", err);
                 document.getElementById("emptyState").style.display = "block";
-                document.getElementById("emptyState").innerHTML = `
-              <div class="lv-empty-icon">⚠️</div>
-              <div class="lv-empty-title">Error loading products</div>
-              <div class="lv-empty-text">${err.message}</div>
-              <button class="lv-pill-btn" onclick="location.reload()">Retry</button>
-            `;
             }
-        }
-
-        // Load products when page loads
-        console.log("Page loaded, initializing Firebase and loading products...");
-        loadProducts();
+        });
     </script>
 </body>
 </html>
