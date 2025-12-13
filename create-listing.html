@@ -8,18 +8,21 @@
 
     <style>
         :root {
+            /* LumiVue latte / espresso system same as create-listing */
             --lv-bg: #f4f1eb;
             --lv-surface: #ffffff;
             --lv-border: #e6d7c6;
             --lv-border-strong: #d9c6b3;
-            --lv-text: #2c1e19;
+            --lv-text: #2c1e19;          /* espresso */
             --lv-text-muted: #7a6a5c;
-            --lv-pill: #e3ceb2;
-            --lv-pill-border: #c9a07a;
+            --lv-pill: #e3ceb2;          /* beige pill */
+            --lv-pill-border: #c9a07a;   /* caramel outline */
             --lv-accent-soft: #fbf3e7;
             --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
             --lv-radius-lg: 14px;
             --lv-radius-md: 10px;
+
+            --lv-danger: #c15b4b;
         }
 
         html {
@@ -27,7 +30,17 @@
         }
 
         * {
-            box-sizing: border-box
+            box-sizing: border-box;
+        }
+
+        /* Remove all hover pop-ups, transforms, and transitions */
+        *:hover,
+        *:focus,
+        *:active {
+            transition: none !important;
+            transform: none !important;
+            box-shadow: none !important;
+            filter: none !important;
         }
 
         body {
@@ -97,7 +110,9 @@
 
                 .lv-nav a:hover {
                     color: var(--lv-text);
-                    border-bottom-color: var(--lv-border)
+                    border-bottom-color: var(--lv-border);
+                    transition: none !important;
+                    transform: none !important;
                 }
 
                 .lv-nav a.active {
@@ -114,8 +129,8 @@
         }
 
         .lv-pill-btn {
-            background: var(--lv-pill);
-            border: 1px solid var(--lv-pill-border);
+            background: #e6d8c7;
+            border: 1px solid var(--lv-border-strong);
             color: var(--lv-text);
             border-radius: 999px;
             padding: 6px 12px;
@@ -462,7 +477,7 @@
                 <button class="lv-pill-btn delete-btn" id="deleteBtnTop" style="display:none;">Delete</button>
                 <button class="lv-pill-btn" id="discardBtnTop">Discard</button>
                 <button class="lv-pill-btn" id="publishBtnTop">Publish product</button>
-                <div class="lv-avatar">L</div>
+                <div class="lv-avatar">M</div>
             </div>
         </div>
     </header>
@@ -555,7 +570,7 @@
                         <div class="lv-field">
                             <label class="lv-label" for="price">Price</label>
                             <div style="display:flex;align-items:center;gap:.35rem;">
-                                <span style="font-size:.9rem;color:var(--lv-text-muted);padding:.45rem .6rem:border-radius:10px;border:1px solid var(--lv-border-strong);background:#faf6ef">$</span>
+                                <span style="font-size:.9rem;color:var(--lv-text-muted);padding:.45rem .6rem;border-radius:10px;border:1px solid var(--lv-border-strong);background:#faf6ef">$</span>
                                 <input id="price" class="lv-input" type="number" step="0.01" min="0" placeholder="45.00" style="flex:1;" />
                             </div>
                         </div>
@@ -681,6 +696,11 @@
                             <input id="variantStyle" class="lv-input" type="text" placeholder="e.g., Matte, Glossy" />
                         </div>
                     </div>
+                    <div class="lv-field" style="margin-top:10px;">
+                        <label class="lv-label" for="variantPrice">Variant Price (optional)</label>
+                        <input id="variantPrice" class="lv-input" type="number" step="0.01" min="0" placeholder="e.g., 25.00" />
+                        <p class="lv-help">Leave empty to use main product price</p>
+                    </div>
                     <button type="button" class="lv-pill-btn" id="addVariantBtn" style="margin-top:10px;">Add Variant</button>
                 </div>
             </div>
@@ -758,9 +778,10 @@
                         <p class="lv-help">Recommended: 150-160 characters • <span id="seoDescCount">0</span>/160</p>
                     </div>
                     <div class="lv-field">
-                        <label class="lv-label" for="seoKeywords">Keywords (comma-separated)</label>
-                        <input id="seoKeywords" class="lv-input" type="text" placeholder="skincare, moisturizer, organic, cruelty-free" />
+                        <label class="lv-label" for="seoKeywords">Keywords</label>
+                        <input id="seoKeywords" class="lv-input" type="text" placeholder="Type keyword and press Enter or comma" />
                         <p class="lv-help">Help Google understand your product • <span id="seoKeywordsCount">0</span> keywords</p>
+                        <div id="seoKeywordsTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
                     </div>
                     <div class="lv-field">
                         <label class="lv-label" for="seoUrl">URL Handle</label>
@@ -784,22 +805,8 @@
                 <div class="lv-card-body">
                     <div class="lv-field">
                         <label class="lv-label" for="productFormulationType">Product Type</label>
-                        <select id="productFormulationType" class="lv-select">
-                            <option value="">Select product type</option>
-                            <option value="moisturizer">Moisturizer / Cream</option>
-                            <option value="serum">Serum</option>
-                            <option value="cleanser">Cleanser</option>
-                            <option value="toner">Toner / Essence</option>
-                            <option value="mask">Mask</option>
-                            <option value="oil">Face Oil</option>
-                            <option value="sunscreen">Sunscreen</option>
-                            <option value="exfoliant">Exfoliant</option>
-                            <option value="eye-cream">Eye Cream</option>
-                            <option value="lip-balm">Lip Balm</option>
-                            <option value="body-lotion">Body Lotion</option>
-                            <option value="shampoo">Shampoo</option>
-                            <option value="conditioner">Conditioner</option>
-                        </select>
+                        <input id="productFormulationType" class="lv-input" type="text" placeholder="e.g., Moisturizer, Serum, Cleanser, etc." />
+                        <p class="lv-help">Enter the type of product you're creating</p>
                     </div>
                     <div class="lv-field">
                         <label class="lv-label" for="keyIngredients">Key Active Ingredients</label>
@@ -824,6 +831,9 @@
                         <p class="lv-help">This is an AI-generated ingredient list. Please verify with your actual formulation and regulatory requirements.</p>
                         <button type="button" class="lv-pill-btn" id="copyInciBtn" style="margin-top:8px;">
                             📋 Copy to Clipboard
+                        </button>
+                        <button type="button" class="lv-pill-btn" id="useInciBtn" style="margin-top:8px;width:100%;">
+                            ✅ Use This List (Copy to Final INCI Field)
                         </button>
                     </div>
                     <div class="lv-field" style="margin-top:12px;">
@@ -863,8 +873,9 @@
                 <div class="lv-card-header"><div class="lv-card-title">Organization</div></div>
                 <div class="lv-card-body">
                     <div class="lv-field">
-                        <label class="lv-label" for="productType">Type</label>
-                        <input id="productType" class="lv-input" type="text" placeholder="Moisturizer" />
+                        <label class="lv-label" for="productType">Product Type</label>
+                        <input id="productType" class="lv-input" type="text" placeholder="Type product type and press Enter or comma" />
+                        <div id="productTypeContainer" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
                     </div>
                     <div class="lv-field">
                         <label class="lv-label" for="productVendor">Vendor</label>
@@ -876,14 +887,14 @@
                     </div>
                     <div class="lv-field">
                         <label class="lv-label" for="tags">Tags</label>
-                        <input id="tags" class="lv-input" type="text" placeholder="organic, vegan, cruelty-free" />
+                        <input id="tags" class="lv-input" type="text" placeholder="Type tag and press Enter or comma" />
+                        <div id="tagsContainer" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
                     </div>
                     <div class="lv-field">
-                        <label class="lv-label">Product Categories</label>
-                        <p class="lv-help" style="margin-bottom:8px;">Select categories from your store</p>
-                        <div id="productCategoriesContainer" style="display:flex;flex-direction:column;gap:6px;">
-                            <div style="font-size:11px;color:var(--lv-text-muted);">Loading your categories...</div>
-                        </div>
+                        <label class="lv-label" for="productCategories">Product Categories</label>
+                        <input id="productCategories" class="lv-input" type="text" placeholder="Type category and press Enter or comma" />
+                        <p class="lv-help" style="margin-bottom:8px;">Add your own categories for this product</p>
+                        <div id="productCategoriesContainer" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
                     </div>
                     <div class="lv-field">
                         <label class="lv-label" for="productStatus">Status</label>
@@ -927,10 +938,216 @@
     // Global variables
     let currentProductId = null;
 
+    // Load product for editing
+    async function loadProductForEditing(productId) {
+        try {
+            console.log("📥 Loading product for editing:", productId);
+            const doc = await db.collection("listings").doc(productId).get();
+            
+            if (!doc.exists) {
+                alert("Product not found!");
+                window.location.href = "listings.html";
+                return;
+            }
+            
+            const data = doc.data();
+            console.log("📥 Product data loaded:", data);
+            
+            // Set current product ID
+            currentProductId = productId;
+            
+            // Populate form fields
+            if (data.title) document.getElementById("productTitle").value = data.title;
+            if (data.subtitle) document.getElementById("productSubtitle").value = data.subtitle;
+            if (data.description) document.getElementById("productDescription").value = data.description;
+            if (data.price) document.getElementById("price").value = data.price;
+            if (data.compareAt) document.getElementById("compareAt").value = data.compareAt;
+            if (data.costPerItem) document.getElementById("costPerItem").value = data.costPerItem;
+            if (data.currency) document.getElementById("currency").value = data.currency;
+            if (data.sku) document.getElementById("sku").value = data.sku;
+            if (data.barcode) document.getElementById("barcode").value = data.barcode;
+            if (data.trackInventory !== undefined) document.getElementById("trackInventory").checked = data.trackInventory;
+            if (data.inventoryLocation) document.getElementById("inventoryLocation").value = data.inventoryLocation;
+            if (data.inventoryAvailable) document.getElementById("inventoryAvailable").value = data.inventoryAvailable;
+            if (data.weight) document.getElementById("weight").value = data.weight;
+            if (data.weightUnit) document.getElementById("weightUnit").value = data.weightUnit;
+            if (data.googleAgeGroup) document.getElementById("googleAgeGroup").value = data.googleAgeGroup;
+            if (data.googleCondition) document.getElementById("googleCondition").value = data.googleCondition;
+            if (data.googleGender) document.getElementById("googleGender").value = data.googleGender;
+            if (data.googleMPN) document.getElementById("googleMPN").value = data.googleMPN;
+            // Load product types
+            if (data.type || data.productType) {
+                const typeStr = data.type || data.productType || "";
+                if (typeStr) {
+                    const typeArray = typeof typeStr === 'string' ? typeStr.split(',').map(t => t.trim()).filter(Boolean) : (Array.isArray(typeStr) ? typeStr : []);
+                    productTypeList = typeArray;
+                    renderProductTypes();
+                }
+            }
+            if (data.vendor) document.getElementById("productVendor").value = data.vendor;
+            if (data.collections) document.getElementById("collections").value = data.collections;
+            if (data.tags) {
+                const tagsArray = typeof data.tags === 'string' ? data.tags.split(',').map(t => t.trim()) : data.tags;
+                tagsList = Array.isArray(tagsArray) ? tagsArray : [];
+                renderTags();
+            }
+            if (data.seoTitle) document.getElementById("seoTitle").value = data.seoTitle;
+            if (data.seoDescription) document.getElementById("seoDescription").value = data.seoDescription;
+            if (data.seoKeywords) {
+                const keywordsArray = typeof data.seoKeywords === 'string' ? data.seoKeywords.split(',').map(k => k.trim()) : data.seoKeywords;
+                keywordsList = Array.isArray(keywordsArray) ? keywordsArray : [];
+                renderKeywordsTags();
+            }
+            if (data.seoUrl) document.getElementById("seoUrl").value = data.seoUrl;
+            if (data.inciIngredients) document.getElementById("finalInciList").value = data.inciIngredients;
+            
+            // Load variants
+            if (data.variants && Array.isArray(data.variants)) {
+                variants = data.variants;
+                renderVariants();
+            }
+            
+            // Load featured image
+            if (data.imageUrl) {
+                const featuredPreview = document.getElementById("featuredPreview");
+                const featuredLabel = document.getElementById("featuredLabel");
+                const featuredRemove = document.getElementById("featuredRemove");
+                if (featuredPreview) {
+                    featuredPreview.src = data.imageUrl;
+                    featuredPreview.style.display = "block";
+                    if (featuredLabel) featuredLabel.style.display = "none";
+                    if (featuredRemove) featuredRemove.style.display = "inline-flex";
+                }
+                // Update preview
+                const previewImage = document.getElementById("previewImage");
+                const previewImagePlaceholder = document.getElementById("previewImagePlaceholder");
+                if (previewImage) {
+                    previewImage.src = data.imageUrl;
+                    previewImage.style.display = "block";
+                }
+                if (previewImagePlaceholder) previewImagePlaceholder.style.display = "none";
+            }
+            
+            // Load gallery images
+            if (data.galleryImageUrls && Array.isArray(data.galleryImageUrls) && data.galleryImageUrls.length > 0) {
+                console.log("📥 Loading gallery images:", data.galleryImageUrls.length);
+                galleryState = data.galleryImageUrls.map(url => ({ url: url, file: null }));
+                renderGallery();
+                updateGalleryLabel();
+            }
+            
+            // Load video
+            if (data.videoUrl) {
+                console.log("📥 Loading video:", data.videoUrl);
+                const videoPreview = document.getElementById("videoPreview");
+                const videoLabel = document.getElementById("videoLabel");
+                const videoRemove = document.getElementById("videoRemove");
+                if (videoPreview) {
+                    videoPreview.src = data.videoUrl;
+                    videoPreview.style.display = "block";
+                    if (videoLabel) videoLabel.style.display = "none";
+                    if (videoRemove) videoRemove.style.display = "inline-flex";
+                    // Try to play the video
+                    videoPreview.load();
+                    videoPreview.play().catch(() => {
+                        console.log("Video autoplay prevented (normal)");
+                    });
+                }
+            }
+            
+            // Update preview fields
+            const previewTitleEl = document.getElementById("previewTitle");
+            const previewSubtitleEl = document.getElementById("previewSubtitle");
+            const previewPriceEl = document.getElementById("previewPrice");
+            const previewStatusEl = document.getElementById("previewStatus");
+            if (previewTitleEl && data.title) previewTitleEl.textContent = data.title;
+            if (previewSubtitleEl && data.subtitle) previewSubtitleEl.textContent = data.subtitle;
+            if (previewPriceEl && data.price) {
+                const price = parseFloat(data.price) || 0;
+                const currency = data.currency === "USD" ? "$" : (data.currency || "$");
+                previewPriceEl.textContent = `${currency}${price.toFixed(2)}`;
+            }
+            // Update preview status based on product status
+            if (previewStatusEl) {
+                const status = data.status || "draft";
+                previewStatusEl.textContent = status === "active" ? "Active" : "Draft";
+            }
+            
+            // Load product status
+            if (data.status) {
+                const statusSelect = document.getElementById("productStatus");
+                if (statusSelect) {
+                    statusSelect.value = data.status;
+                }
+            }
+            
+            // Show delete button when editing
+            const deleteBtn = document.getElementById("deleteBtnTop");
+            if (deleteBtn) {
+                deleteBtn.style.display = "inline-block";
+            }
+            
+            // Load categories
+            if (data.categories && Array.isArray(data.categories)) {
+                console.log("📥 Setting product categories:", data.categories);
+                productCategoriesList = [...data.categories]; // Create a copy
+                renderProductCategories();
+                console.log("✅ Categories loaded into productCategoriesList:", productCategoriesList);
+            } else if (data.categories && typeof data.categories === 'string') {
+                // Handle string categories (comma-separated)
+                productCategoriesList = data.categories.split(',').map(c => c.trim()).filter(Boolean);
+                renderProductCategories();
+                console.log("✅ Categories loaded from string into productCategoriesList:", productCategoriesList);
+            } else {
+                console.warn("⚠️ Product has no categories or categories is not an array:", data.categories);
+                productCategoriesList = []; // Ensure it's an array
+            }
+            
+            console.log("✅ Product loaded for editing");
+        } catch (err) {
+            console.error("❌ Error loading product:", err);
+            alert("Error loading product: " + err.message);
+        }
+    }
+
+    // Update preview status when status select changes
+    const productStatusSelect = document.getElementById("productStatus");
+    const previewStatusEl = document.getElementById("previewStatus");
+    if (productStatusSelect && previewStatusEl) {
+        productStatusSelect.addEventListener("change", function() {
+            const status = this.value;
+            previewStatusEl.textContent = status === "active" ? "Active" : "Draft";
+            console.log("✅ Preview status updated to:", status);
+        });
+    }
+
+    // Check if we're editing a product
+    const urlParams = new URLSearchParams(window.location.search);
+    const editProductId = urlParams.get("edit");
+    
+    // Hide delete button initially (will be shown when editing)
+    const deleteBtn = document.getElementById("deleteBtnTop");
+    if (deleteBtn) {
+        deleteBtn.style.display = "none";
+    }
+    
+    if (editProductId) {
+        console.log("🔍 Edit mode detected, product ID:", editProductId);
+        // Wait for auth, then load product
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                loadProductForEditing(editProductId);
+            }
+        });
+    }
+
     // Get form data helper function
     window.lvGetFormData = function() {
-        const selectedCategoryValues = Array.from(document.querySelectorAll('input[name="productCategoryCheckbox"]:checked'))
-            .map(cb => cb.value);
+        console.log("📋 Product types:", productTypeList);
+        console.log("📋 Product categories (from list):", productCategoriesList);
+        console.log("📋 Product categories type:", typeof productCategoriesList, "Is array:", Array.isArray(productCategoriesList));
+        console.log("📋 Product categories length:", productCategoriesList ? productCategoriesList.length : 0);
+        console.log("📋 Product categories content:", JSON.stringify(productCategoriesList));
 
         return {
             title: document.getElementById("productTitle").value,
@@ -951,21 +1168,22 @@
             variantColor: document.getElementById("variantColor").value,
             variantMaterial: document.getElementById("variantMaterial").value,
             variantStyle: document.getElementById("variantStyle").value,
+            variantPrice: document.getElementById("variantPrice").value,
             googleAgeGroup: document.getElementById("googleAgeGroup").value,
             googleCondition: document.getElementById("googleCondition").value,
             googleGender: document.getElementById("googleGender").value,
             googleMPN: document.getElementById("googleMPN").value,
             seoTitle: document.getElementById("seoTitle").value,
             seoDescription: document.getElementById("seoDescription").value,
-            seoKeywords: document.getElementById("seoKeywords").value,
+            seoKeywords: keywordsList.join(", "),
             seoUrl: document.getElementById("seoUrl").value,
             inciIngredients: document.getElementById("finalInciList").value,
-            type: document.getElementById("productType").value,
+            type: productTypeList.join(", "),
             vendor: document.getElementById("productVendor").value,
             collections: document.getElementById("collections").value,
-            tags: document.getElementById("tags").value,
+            tags: tagsList.join(", "),
             // categories array used by store.html filtering
-            categories: selectedCategoryValues
+            categories: productCategoriesList
         };
     };
 
@@ -1041,6 +1259,220 @@
 
     // Video
     videoTile.onclick=()=>videoInput.click();
+    
+    // Update preview when price changes
+    const priceInput = document.getElementById("price");
+    const previewPriceEl = document.getElementById("previewPrice");
+    if (priceInput && previewPriceEl) {
+        priceInput.addEventListener("input", () => {
+            const price = parseFloat(priceInput.value) || 0;
+            const currencyEl = document.getElementById("currency");
+            const currency = currencyEl && currencyEl.value === "USD" ? "$" : (currencyEl ? currencyEl.value : "$");
+            previewPriceEl.textContent = `${currency}${price.toFixed(2)}`;
+        });
+    }
+    
+    // Update preview when title changes
+    const titleInput = document.getElementById("productTitle");
+    const previewTitleEl = document.getElementById("previewTitle");
+    if (titleInput && previewTitleEl) {
+        titleInput.addEventListener("input", () => {
+            previewTitleEl.textContent = titleInput.value || "Untitled product";
+        });
+    }
+    
+    // Update preview when subtitle changes
+    const subtitleInput = document.getElementById("productSubtitle");
+    const previewSubtitleEl = document.getElementById("previewSubtitle");
+    if (subtitleInput && previewSubtitleEl) {
+        subtitleInput.addEventListener("input", () => {
+            previewSubtitleEl.textContent = subtitleInput.value || "";
+        });
+    }
+    
+    // Product Type tag functionality
+    let productTypeList = [];
+    const productTypeInput = document.getElementById("productType");
+    const productTypeContainer = document.getElementById("productTypeContainer");
+    
+    window.renderProductTypes = function() {
+        if (!productTypeContainer) return;
+        productTypeContainer.innerHTML = "";
+        productTypeList.forEach((type, i) => {
+            const tagEl = document.createElement("span");
+            tagEl.style.cssText = "display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;border:1px solid var(--lv-border-strong);background:#fbf4ea;font-size:11px;";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.style.cssText = "border:none;background:transparent;cursor:pointer;font-size:14px;line-height:1;padding:0;color:#6b7280;";
+            btn.textContent = "×";
+            btn.onclick = () => {
+                productTypeList.splice(i, 1);
+                renderProductTypes();
+            };
+            tagEl.innerHTML = `<span>${type}</span>`;
+            tagEl.appendChild(btn);
+            productTypeContainer.appendChild(tagEl);
+        });
+    };
+    
+    if (productTypeInput) {
+        productTypeInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const value = productTypeInput.value.trim();
+                if (value && !productTypeList.includes(value)) {
+                    productTypeList.push(value);
+                    productTypeInput.value = "";
+                    renderProductTypes();
+                }
+            }
+        });
+    }
+    
+    // Product Categories tag functionality
+    let productCategoriesList = [];
+    const productCategoriesInput = document.getElementById("productCategories");
+    const productCategoriesContainer = document.getElementById("productCategoriesContainer");
+    
+    window.renderProductCategories = function() {
+        if (!productCategoriesContainer) {
+            console.error("❌ productCategoriesContainer not found!");
+            return;
+        }
+        productCategoriesContainer.innerHTML = "";
+        console.log("🔄 Rendering categories. Current list:", productCategoriesList);
+        productCategoriesList.forEach((category, i) => {
+            if (!category || !category.trim()) return; // Skip empty categories
+            const tagEl = document.createElement("span");
+            tagEl.style.cssText = "display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;border:1px solid var(--lv-border-strong);background:#fbf4ea;font-size:11px;";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.style.cssText = "border:none;background:transparent;cursor:pointer;font-size:14px;line-height:1;padding:0;color:#6b7280;";
+            btn.textContent = "×";
+            btn.onclick = () => {
+                productCategoriesList.splice(i, 1);
+                renderProductCategories();
+                console.log("🗑️ Category removed. Updated list:", productCategoriesList);
+            };
+            tagEl.innerHTML = `<span>${category}</span>`;
+            tagEl.appendChild(btn);
+            productCategoriesContainer.appendChild(tagEl);
+        });
+        console.log("✅ Rendered", productCategoriesList.length, "categories");
+    };
+    
+    if (productCategoriesInput) {
+        productCategoriesInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const value = productCategoriesInput.value.trim();
+                if (value) {
+                    // Case-insensitive check to avoid duplicates
+                    const valueLower = value.toLowerCase();
+                    const alreadyExists = productCategoriesList.some(cat => cat.toLowerCase() === valueLower);
+                    if (!alreadyExists) {
+                        productCategoriesList.push(value);
+                        productCategoriesInput.value = "";
+                        renderProductCategories();
+                        console.log("✅ Category added:", value);
+                        console.log("✅ Current categories list:", productCategoriesList);
+                    } else {
+                        console.log("⚠️ Category already exists:", value);
+                    }
+                }
+            }
+        });
+    } else {
+        console.error("❌ productCategoriesInput element not found!");
+    }
+    
+    // Keywords tag functionality
+    let keywordsList = [];
+    const seoKeywordsInput = document.getElementById("seoKeywords");
+    const seoKeywordsTags = document.getElementById("seoKeywordsTags");
+    const seoKeywordsCount = document.getElementById("seoKeywordsCount");
+    
+    window.renderKeywordsTags = function() {
+        if (!seoKeywordsTags) return;
+        seoKeywordsTags.innerHTML = "";
+        keywordsList.forEach((keyword, i) => {
+            const tag = document.createElement("span");
+            tag.style.cssText = "display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;border:1px solid var(--lv-border-strong);background:#fbf4ea;font-size:11px;";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.style.cssText = "border:none;background:transparent;cursor:pointer;font-size:14px;line-height:1;padding:0;color:#6b7280;";
+            btn.textContent = "×";
+            btn.onclick = () => {
+                keywordsList.splice(i, 1);
+                renderKeywordsTags();
+                updateKeywordsCount();
+            };
+            tag.innerHTML = `<span>${keyword}</span>`;
+            tag.appendChild(btn);
+            seoKeywordsTags.appendChild(tag);
+        });
+        updateKeywordsCount();
+    };
+    
+    window.updateKeywordsCount = function() {
+        if (seoKeywordsCount) {
+            seoKeywordsCount.textContent = keywordsList.length;
+        }
+    };
+    
+    if (seoKeywordsInput) {
+        seoKeywordsInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const value = seoKeywordsInput.value.trim();
+                if (value && !keywordsList.includes(value)) {
+                    keywordsList.push(value);
+                    seoKeywordsInput.value = "";
+                    renderKeywordsTags();
+                }
+            }
+        });
+    }
+    
+    // Tags tag functionality
+    let tagsList = [];
+    const tagsInput = document.getElementById("tags");
+    const tagsContainer = document.getElementById("tagsContainer");
+    
+    window.renderTags = function() {
+        if (!tagsContainer) return;
+        tagsContainer.innerHTML = "";
+        tagsList.forEach((tag, i) => {
+            const tagEl = document.createElement("span");
+            tagEl.style.cssText = "display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;border:1px solid var(--lv-border-strong);background:#fbf4ea;font-size:11px;";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.style.cssText = "border:none;background:transparent;cursor:pointer;font-size:14px;line-height:1;padding:0;color:#6b7280;";
+            btn.textContent = "×";
+            btn.onclick = () => {
+                tagsList.splice(i, 1);
+                renderTags();
+            };
+            tagEl.innerHTML = `<span>${tag}</span>`;
+            tagEl.appendChild(btn);
+            tagsContainer.appendChild(tagEl);
+        });
+    };
+    
+    if (tagsInput) {
+        tagsInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const value = tagsInput.value.trim();
+                if (value && !tagsList.includes(value)) {
+                    tagsList.push(value);
+                    tagsInput.value = "";
+                    renderTags();
+                }
+            }
+        });
+    }
+    
     videoInput.onchange=async()=>{
       const f=videoInput.files?.[0];if(!f)return;
       const url=URL.createObjectURL(f);
@@ -1137,101 +1569,183 @@
     const emulsifiers = ["Cetearyl Glucoside", "Polysorbate 20", "Xanthan Gum"];
     const thickeners = ["Carbomer", "Xanthan Gum", "Hydroxyethylcellulose"];
 
-    document.getElementById("generateInciBtn").onclick = async () => {
-      const productType = document.getElementById("productFormulationType").value;
-      const keyIngreds = document.getElementById("keyIngredients").value.toLowerCase();
-      const goal = document.getElementById("formulationGoal").value.toLowerCase();
+    // Ensure button exists before attaching handler
+    const generateInciBtn = document.getElementById("generateInciBtn");
+    if (generateInciBtn) {
+      generateInciBtn.onclick = async () => {
+        try {
+          const productTypeInput = document.getElementById("productFormulationType").value.trim().toLowerCase();
+          const keyIngreds = document.getElementById("keyIngredients").value.toLowerCase();
+          const goal = document.getElementById("formulationGoal").value.toLowerCase();
 
-      if (!productType) {
-        alert("Please select a product type");
-        return;
-      }
-
-      // Show loading
-      document.getElementById("inciLoadingState").style.display = "block";
-      document.getElementById("inciResultField").style.display = "none";
-
-      // Simulate AI processing delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Build ingredient list
-      let ingredients = [];
-
-      // Start with base ingredients for product type
-      if (inciDatabase[productType]) {
-        ingredients.push(...inciDatabase[productType]);
-      } else {
-        // Default base for unknown types
-        ingredients.push("Aqua", "Glycerin", "Cetearyl Alcohol");
-      }
-
-      // Add active ingredients mentioned by user
-      if (keyIngreds) {
-        const userIngreds = keyIngreds.split(",").map(i => i.trim().toLowerCase());
-        userIngreds.forEach(ingred => {
-          if (activeIngredients[ingred]) {
-            ingredients.push(activeIngredients[ingred]);
-          } else {
-            // Add as-is if not in database (capitalize first letter of each word)
-            const formatted = ingred.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
-            ingredients.push(formatted);
+          if (!productTypeInput) {
+            alert("Please enter a product type");
+            return;
           }
-        });
-      }
 
-      // Add goal-based actives
-      if (goal.includes("hydrat") || goal.includes("moist")) {
-        ingredients.push("Sodium Hyaluronate", "Panthenol");
-      }
-      if (goal.includes("anti-aging") || goal.includes("wrinkle")) {
-        ingredients.push("Retinol", "Palmitoyl Tripeptide-1");
-      }
-      if (goal.includes("brighten") || goal.includes("glow")) {
-        ingredients.push("Niacinamide", "Ascorbic Acid");
-      }
-      if (goal.includes("acne") || goal.includes("clear")) {
-        ingredients.push("Salicylic Acid", "Tea Tree Oil");
-      }
-      if (goal.includes("sensitive") || goal.includes("calm")) {
-        ingredients.push("Allantoin", "Bisabolol");
-      }
+          // Show loading
+          document.getElementById("inciLoadingState").style.display = "block";
+          document.getElementById("inciResultField").style.display = "none";
 
-      // Add functional ingredients based on product type
-      if (["moisturizer", "serum", "lotion", "body-lotion"].includes(productType)) {
-        ingredients.push(...emulsifiers.slice(0, 1));
-        ingredients.push(...preservatives.slice(0, 2));
-      }
-      if (["cleanser", "shampoo"].includes(productType)) {
-        ingredients.push("Citric Acid");
-      }
-      if (!["oil", "soap", "candle"].includes(productType)) {
-        ingredients.push(...preservatives.slice(0, 2));
-      }
+          // Simulate AI processing delay
+          await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Remove duplicates and format
-      ingredients = [...new Set(ingredients)];
+          // Build ingredient list
+          let ingredients = [];
 
-      // Display result
-      const inciList = ingredients.join(", ");
-      document.getElementById("inciResult").value = inciList;
-      document.getElementById("inciLoadingState").style.display = "none";
-      document.getElementById("inciResultField").style.display = "block";
-    };
+          // Find matching product type in database (case-insensitive, partial match)
+          let matchedType = null;
+          for (const dbType in inciDatabase) {
+            if (productTypeInput.includes(dbType) || dbType.includes(productTypeInput)) {
+              matchedType = dbType;
+              break;
+            }
+          }
+          
+          // Also check common variations
+          if (!matchedType) {
+            const typeMap = {
+              "cream": "moisturizer",
+              "lotion": "body-lotion",
+              "essence": "toner",
+              "face oil": "oil",
+              "facial oil": "oil",
+              "body butter": "moisturizer",
+              "scrub": "exfoliant"
+            };
+            for (const [key, value] of Object.entries(typeMap)) {
+              if (productTypeInput.includes(key)) {
+                matchedType = value;
+                break;
+              }
+            }
+          }
+
+          // Start with base ingredients for product type
+          if (matchedType && inciDatabase[matchedType]) {
+            ingredients.push(...inciDatabase[matchedType]);
+          } else {
+            // Default base for unknown types
+            ingredients.push("Aqua", "Glycerin", "Cetearyl Alcohol");
+          }
+
+          // Add active ingredients mentioned by user
+          if (keyIngreds) {
+            const userIngreds = keyIngreds.split(",").map(i => i.trim().toLowerCase());
+            userIngreds.forEach(ingred => {
+              if (activeIngredients[ingred]) {
+                ingredients.push(activeIngredients[ingred]);
+              } else {
+                // Add as-is if not in database (capitalize first letter of each word)
+                const formatted = ingred.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+                ingredients.push(formatted);
+              }
+            });
+          }
+
+          // Add goal-based actives
+          if (goal.includes("hydrat") || goal.includes("moist")) {
+            ingredients.push("Sodium Hyaluronate", "Panthenol");
+          }
+          if (goal.includes("anti-aging") || goal.includes("wrinkle")) {
+            ingredients.push("Retinol", "Palmitoyl Tripeptide-1");
+          }
+          if (goal.includes("brighten") || goal.includes("glow")) {
+            ingredients.push("Niacinamide", "Ascorbic Acid");
+          }
+          if (goal.includes("acne") || goal.includes("clear")) {
+            ingredients.push("Salicylic Acid", "Tea Tree Oil");
+          }
+          if (goal.includes("sensitive") || goal.includes("calm")) {
+            ingredients.push("Allantoin", "Bisabolol");
+          }
+
+          // Add functional ingredients based on product type (use matchedType or check input)
+          const typeForCheck = matchedType || productTypeInput;
+          if (["moisturizer", "serum", "lotion", "body-lotion"].some(t => typeForCheck.includes(t) || productTypeInput.includes(t))) {
+            ingredients.push(...emulsifiers.slice(0, 1));
+            ingredients.push(...preservatives.slice(0, 2));
+          }
+          if (["cleanser", "shampoo"].some(t => typeForCheck.includes(t) || productTypeInput.includes(t))) {
+            ingredients.push("Citric Acid");
+          }
+          if (!["oil", "soap", "candle"].some(t => typeForCheck.includes(t) || productTypeInput.includes(t))) {
+            ingredients.push(...preservatives.slice(0, 2));
+          }
+
+          // Remove duplicates and format
+          ingredients = [...new Set(ingredients)];
+
+          // Display result
+          const inciList = ingredients.join(", ");
+          const inciResultEl = document.getElementById("inciResult");
+          const finalInciEl = document.getElementById("finalInciList");
+          
+          if (inciResultEl) {
+            inciResultEl.value = inciList;
+          }
+          document.getElementById("inciLoadingState").style.display = "none";
+          document.getElementById("inciResultField").style.display = "block";
+          
+          // Automatically copy to Final INCI List field
+          if (finalInciEl) {
+            finalInciEl.value = inciList;
+            console.log("✅ Generated INCI list automatically copied to Final INCI field");
+          } else {
+            console.error("❌ finalInciList element not found!");
+          }
+        } catch (err) {
+          console.error("Error generating INCI:", err);
+          alert("Error generating INCI list: " + err.message);
+          document.getElementById("inciLoadingState").style.display = "none";
+        }
+      };
+    } else {
+      console.error("generateInciBtn not found!");
+    }
 
     // Copy INCI to clipboard
-    document.getElementById("copyInciBtn").onclick = () => {
-      const inciText = document.getElementById("inciResult").value;
-      navigator.clipboard.writeText(inciText).then(() => {
-        const btn = document.getElementById("copyInciBtn");
+    const copyInciBtn = document.getElementById("copyInciBtn");
+    if (copyInciBtn) {
+      copyInciBtn.onclick = () => {
+        const inciText = document.getElementById("inciResult").value;
+        if (!inciText) {
+          alert("No INCI list to copy. Please generate one first.");
+          return;
+        }
+        navigator.clipboard.writeText(inciText).then(() => {
+          const btn = document.getElementById("copyInciBtn");
+          const originalText = btn.textContent;
+          btn.textContent = "✅ Copied!";
+          setTimeout(() => {
+            btn.textContent = originalText;
+          }, 2000);
+        }).catch(err => {
+          alert("Failed to copy: " + err);
+        });
+      };
+    } else {
+      console.error("copyInciBtn not found!");
+    }
+    
+    // Use INCI list button - copy generated list to Final INCI field
+    const useInciBtn = document.getElementById("useInciBtn");
+    if (useInciBtn) {
+      useInciBtn.onclick = () => {
+        const inciText = document.getElementById("inciResult").value;
+        if (!inciText) {
+          alert("No INCI list to use. Please generate one first.");
+          return;
+        }
+        document.getElementById("finalInciList").value = inciText;
+        const btn = document.getElementById("useInciBtn");
         const originalText = btn.textContent;
-        btn.textContent = "✅ Copied!";
+        btn.textContent = "✅ Copied to Final INCI Field!";
         setTimeout(() => {
           btn.textContent = originalText;
         }, 2000);
-      }).catch(err => {
-        alert("Failed to copy: " + err);
-      });
-    };
+      };
+    }
 
     // PUBLISH BUTTON - Add product to Firestore
     document.getElementById("publishBtnTop").addEventListener("click",async()=>{
@@ -1265,32 +1779,220 @@
             imageUrl = docSnap.data().imageUrl;
           }
         }
+        
+        // Upload gallery images
+        let galleryImageUrls = [];
+        const galleryFiles = galleryState.filter(item => item.file).map(item => item.file);
+        if (galleryFiles.length > 0) {
+          console.log(`Uploading ${galleryFiles.length} gallery images...`);
+          for (const file of galleryFiles) {
+            const path = `listing-images/${Date.now()}_${file.name}`;
+            const imgRef = storage.ref(path);
+            const snap = await imgRef.put(file);
+            const url = await snap.ref.getDownloadURL();
+            galleryImageUrls.push(url);
+          }
+          // Also add existing URLs from galleryState (images that were loaded but not replaced)
+          const existingUrls = galleryState.filter(item => item.url && !item.file).map(item => item.url);
+          galleryImageUrls = [...galleryImageUrls, ...existingUrls];
+        } else {
+          // Use existing URLs from galleryState (either loaded from edit or existing)
+          galleryImageUrls = galleryState.filter(item => item.url && !item.file).map(item => item.url);
+          // If galleryState is empty but we're editing, get from Firestore
+          if (galleryImageUrls.length === 0 && currentProductId) {
+            const docSnap = await db.collection("listings").doc(currentProductId).get();
+            if (docSnap.exists && docSnap.data().galleryImageUrls) {
+              galleryImageUrls = docSnap.data().galleryImageUrls;
+            }
+          }
+        }
+        
+        // Upload video
+        let videoUrl = null;
+        const videoFileInput = document.getElementById("productVideo");
+        if (videoFileInput && videoFileInput.files && videoFileInput.files[0]) {
+          const file = videoFileInput.files[0];
+          const path = `listing-videos/${Date.now()}_${file.name}`;
+          const videoRef = storage.ref(path);
+          const snap = await videoRef.put(file);
+          videoUrl = await snap.ref.getDownloadURL();
+        } else if (currentProductId) {
+          // Keep existing video if editing and no new video uploaded
+          const docSnap = await db.collection("listings").doc(currentProductId).get();
+          if (docSnap.exists && docSnap.data().videoUrl) {
+            videoUrl = docSnap.data().videoUrl;
+          }
+        }
 
         // Prepare payload
-        const payload={
+        console.log("📋 Form data categories:", data.categories);
+        console.log("📋 productCategoriesList (tag input):", productCategoriesList);
+        console.log("📋 productCategoriesList type:", typeof productCategoriesList, "Is array:", Array.isArray(productCategoriesList));
+        console.log("📋 productCategoriesList length:", productCategoriesList ? productCategoriesList.length : 0);
+        
+        // ALWAYS use productCategoriesList as the source of truth (from tag input)
+        // This ensures we get the categories the vendor actually typed and added
+        let categoriesArray = [];
+        
+        // Debug: Log the current state
+        console.log("🔍 DEBUG PUBLISH: productCategoriesList state:", {
+            exists: !!productCategoriesList,
+            isArray: Array.isArray(productCategoriesList),
+            length: productCategoriesList ? productCategoriesList.length : 0,
+            content: productCategoriesList,
+            stringified: JSON.stringify(productCategoriesList)
+        });
+        
+        if (productCategoriesList && Array.isArray(productCategoriesList) && productCategoriesList.length > 0) {
+            // Filter out empty strings and trim whitespace
+            categoriesArray = productCategoriesList
+                .map(cat => cat ? cat.toString().trim() : "")
+                .filter(cat => cat.length > 0);
+            console.log("✅ Using categories from productCategoriesList (tag input):", categoriesArray);
+            console.log("✅ Categories count:", categoriesArray.length);
+        } else {
+            // Fallback: try to get from form data
+            if (data.categories) {
+                categoriesArray = Array.isArray(data.categories) 
+                    ? data.categories.map(cat => cat ? cat.toString().trim() : "").filter(cat => cat.length > 0)
+                    : (data.categories ? [data.categories.toString().trim()].filter(cat => cat.length > 0) : []);
+                console.log("⚠️ productCategoriesList empty, using form data categories:", categoriesArray);
+            } else {
+                categoriesArray = [];
+                console.warn("⚠️ No categories found - productCategoriesList and form data both empty");
+            }
+        }
+        
+        console.log("📦 Final categories array being saved:", categoriesArray);
+        console.log("📦 Categories array length:", categoriesArray.length);
+        console.log("📦 Categories array JSON:", JSON.stringify(categoriesArray));
+        
+        if (categoriesArray.length === 0) {
+            console.error("❌ ERROR: Categories array is EMPTY - product will not appear in category chips!");
+            console.error("❌ Make sure you typed categories in the 'Product Categories' field and pressed Enter/comma");
+        }
+        
+        // Build payload - preserve existing values when editing
+        let finalImageUrl = imageUrl;
+        let finalGalleryImageUrls = galleryImageUrls.length > 0 ? galleryImageUrls : null;
+        let finalVideoUrl = videoUrl;
+        
+        // If editing and no new media uploaded, preserve existing media
+        if (currentProductId && !imageUrl) {
+          const existingDoc = await db.collection("listings").doc(currentProductId).get();
+          if (existingDoc.exists) {
+            const existingData = existingDoc.data();
+            if (!finalImageUrl && existingData.imageUrl) finalImageUrl = existingData.imageUrl;
+            if (!finalGalleryImageUrls && existingData.galleryImageUrls) finalGalleryImageUrls = existingData.galleryImageUrls;
+            if (!finalVideoUrl && existingData.videoUrl) finalVideoUrl = existingData.videoUrl;
+          }
+        }
+        
+        // Get status from form (or default to "active" for publish)
+        const statusSelect = document.getElementById("productStatus");
+        const productStatus = statusSelect ? statusSelect.value : "active";
+        
+        // Build payload - ALWAYS include categories (even if empty array)
+        // Categories can be any product type - skincare, cosmetics, soaps, candles, oils, etc.
+        const payload = {
           ...data,
-          status:"active",
+          status: productStatus, // Use status from form select
           priceNumber:parseFloat(data.price||"0")||0,
-          imageUrl:imageUrl||null,
-          vendorUid:user.uid
+          vendorUid:user.uid,
+          categories: categoriesArray  // Always an array - can contain any category names
         };
+        
+        // Ensure categories is always in the payload as an array
+        if (!payload.categories || !Array.isArray(payload.categories)) {
+          payload.categories = [];
+          console.warn("⚠️ Categories was not an array, setting to empty array");
+        }
+        
+        // Only include media fields if they have values (don't set to null)
+        if (finalImageUrl) payload.imageUrl = finalImageUrl;
+        if (finalGalleryImageUrls && finalGalleryImageUrls.length > 0) payload.galleryImageUrls = finalGalleryImageUrls;
+        if (finalVideoUrl) payload.videoUrl = finalVideoUrl;
+        if (variants.length > 0) payload.variants = variants;
+        console.log("Full payload:", payload);
+        console.log("Payload categories:", payload.categories);
 
         // Update or create
         let productId;
         if(currentProductId){
-          // Update existing product
-          await db.collection("listings").doc(currentProductId).update({
+          // Update existing product - only update when user explicitly clicks Publish
+          console.log("🔄 Updating existing product:", currentProductId);
+          console.log("🔄 Update payload categories:", payload.categories);
+          
+          // Get existing document to preserve fields not in payload
+          const existingDoc = await db.collection("listings").doc(currentProductId).get();
+          const existingData = existingDoc.exists ? existingDoc.data() : {};
+          
+          // Build update data - ALWAYS include categories even if empty array
+          // Preserve createdAt and other metadata
+          const updateData = {
             ...payload,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            // Preserve createdAt if it exists
+            createdAt: existingData.createdAt || firebase.firestore.FieldValue.serverTimestamp(),
+            // ALWAYS include categories - ensure it's an array
+            categories: Array.isArray(payload.categories) ? payload.categories : (payload.categories ? [payload.categories] : [])
+          };
+          
+          console.log("🔄 Update data being sent:", updateData);
+          console.log("🔄 Update data categories (type):", typeof updateData.categories, "Is array:", Array.isArray(updateData.categories));
+          console.log("🔄 Update data categories (value):", updateData.categories);
+          console.log("🔄 Update data categories (length):", updateData.categories ? updateData.categories.length : 0);
+          console.log("🔄 Existing product status before update:", existingData.status);
+          console.log("🔄 Existing product categories before update:", existingData.categories);
+          
+          await db.collection("listings").doc(currentProductId).update(updateData);
           productId = currentProductId;
-          console.log("Product updated:", productId);
+          console.log("✅ Product updated:", productId);
+          
+          // Verify the update
+          const updatedDoc = await db.collection("listings").doc(productId).get();
+          if (updatedDoc.exists) {
+            const updatedData = updatedDoc.data();
+            console.log("✅ Updated product categories:", updatedData.categories);
+            console.log("✅ Updated product categories type:", typeof updatedData.categories, "Is array:", Array.isArray(updatedData.categories));
+            console.log("✅ Updated product categories JSON:", JSON.stringify(updatedData.categories));
+            console.log("✅ Updated product status:", updatedData.status);
+            if (!updatedData.categories || updatedData.categories.length === 0) {
+              console.warn("⚠️ WARNING: Product was updated with NO categories!");
+              console.warn("⚠️ This product will NOT appear in category chips on store.html");
+            } else {
+              console.log(`✅ Product has ${updatedData.categories.length} category/categories saved successfully`);
+              console.log(`✅ Categories: ${updatedData.categories.join(", ")}`);
+            }
+          }
         } else {
           // Create new product
           payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
           const ref=await db.collection("listings").add(payload);
           productId = ref.id;
           console.log("Product created:", productId);
+          console.log("🔍 Verifying saved product...");
+          // Verify the product was saved with categories
+          const savedDoc = await db.collection("listings").doc(productId).get();
+          if (savedDoc.exists) {
+            const savedData = savedDoc.data();
+            console.log("✅ Saved product categories:", savedData.categories);
+            console.log("✅ Saved product status:", savedData.status);
+            console.log("✅ Saved product title:", savedData.title);
+            console.log("✅ Saved product vendorUid:", savedData.vendorUid);
+            
+              if (!savedData.categories || savedData.categories.length === 0) {
+                console.warn("⚠️ WARNING: Product was saved with NO categories!");
+                console.warn("⚠️ Make sure you typed categories in the 'Product Categories' field and pressed Enter/comma before publishing.");
+              } else {
+                console.log(`✅ Product has ${savedData.categories.length} category/categories saved successfully`);
+                console.log(`✅ Categories: ${savedData.categories.join(", ")}`);
+                console.log("✅ Saved product categories type:", typeof savedData.categories, "Is array:", Array.isArray(savedData.categories));
+                console.log("✅ Saved product categories JSON:", JSON.stringify(savedData.categories));
+              }
+          } else {
+            console.error("❌ ERROR: Product document not found after creation!");
+          }
         }
 
         // Redirect to product page
@@ -1333,27 +2035,193 @@
             imageUrl = docSnap.data().imageUrl;
           }
         }
+        
+        // Upload gallery images
+        let galleryImageUrls = [];
+        const galleryFiles = galleryState.filter(item => item.file).map(item => item.file);
+        if (galleryFiles.length > 0) {
+          for (const file of galleryFiles) {
+            const path = `listing-images/${Date.now()}_${file.name}`;
+            const imgRef = storage.ref(path);
+            const snap = await imgRef.put(file);
+            const url = await snap.ref.getDownloadURL();
+            galleryImageUrls.push(url);
+          }
+        } else {
+          // Use existing URLs from galleryState (either loaded from edit or existing)
+          galleryImageUrls = galleryState.filter(item => item.url && !item.file).map(item => item.url);
+          // If galleryState is empty but we're editing, get from Firestore
+          if (galleryImageUrls.length === 0 && currentProductId) {
+            const docSnap = await db.collection("listings").doc(currentProductId).get();
+            if (docSnap.exists && docSnap.data().galleryImageUrls) {
+              galleryImageUrls = docSnap.data().galleryImageUrls;
+            }
+          }
+        }
+        
+        // Upload video
+        let videoUrl = null;
+        const videoFileInput = document.getElementById("productVideo");
+        if (videoFileInput && videoFileInput.files && videoFileInput.files[0]) {
+          const file = videoFileInput.files[0];
+          const path = `listing-videos/${Date.now()}_${file.name}`;
+          const videoRef = storage.ref(path);
+          const snap = await videoRef.put(file);
+          videoUrl = await snap.ref.getDownloadURL();
+        } else if (currentProductId) {
+          const docSnap = await db.collection("listings").doc(currentProductId).get();
+          if (docSnap.exists && docSnap.data().videoUrl) {
+            videoUrl = docSnap.data().videoUrl;
+          }
+        }
 
-        const payload={
+        // ALWAYS use productCategoriesList as the source of truth (from tag input)
+        console.log("📋 Form data categories for draft:", data.categories);
+        console.log("📋 productCategoriesList (tag input) for draft:", productCategoriesList);
+        console.log("📋 productCategoriesList type:", typeof productCategoriesList, "Is array:", Array.isArray(productCategoriesList));
+        
+        // Debug: Log the current state
+        console.log("🔍 DEBUG DRAFT: productCategoriesList state:", {
+            exists: !!productCategoriesList,
+            isArray: Array.isArray(productCategoriesList),
+            length: productCategoriesList ? productCategoriesList.length : 0,
+            content: productCategoriesList,
+            stringified: JSON.stringify(productCategoriesList)
+        });
+        
+        let categoriesArray = [];
+        if (productCategoriesList && Array.isArray(productCategoriesList) && productCategoriesList.length > 0) {
+            // Filter out empty strings and trim whitespace
+            categoriesArray = productCategoriesList
+                .map(cat => cat ? cat.toString().trim() : "")
+                .filter(cat => cat.length > 0);
+            console.log("✅ Using categories from productCategoriesList (tag input) for draft:", categoriesArray);
+            console.log("✅ Draft categories count:", categoriesArray.length);
+        } else {
+            // Fallback: try to get from form data
+            if (data.categories) {
+                categoriesArray = Array.isArray(data.categories) 
+                    ? data.categories.map(cat => cat ? cat.toString().trim() : "").filter(cat => cat.length > 0)
+                    : (data.categories ? [data.categories.toString().trim()].filter(cat => cat.length > 0) : []);
+                console.log("⚠️ productCategoriesList empty, using form data categories for draft:", categoriesArray);
+            } else {
+                categoriesArray = [];
+                console.warn("⚠️ No categories found for draft - productCategoriesList and form data both empty");
+            }
+        }
+        
+        console.log("💾 Saving draft with categories:", categoriesArray);
+        console.log("💾 Draft categories array length:", categoriesArray.length);
+        console.log("💾 Draft categories array JSON:", JSON.stringify(categoriesArray));
+        
+        if (categoriesArray.length === 0) {
+            console.error("❌ ERROR: Categories array is EMPTY for draft - product will not appear in category chips!");
+            console.error("❌ Make sure you typed categories in the 'Product Categories' field and pressed Enter/comma");
+        }
+
+        // If editing, get existing document to preserve fields
+        let existingData = {};
+        if (currentProductId) {
+          const existingDoc = await db.collection("listings").doc(currentProductId).get();
+          if (existingDoc.exists) {
+            existingData = existingDoc.data();
+          }
+        }
+        
+        // Get status from form (or default to "draft" for save draft)
+        const statusSelect = document.getElementById("productStatus");
+        const productStatus = statusSelect ? statusSelect.value : "draft";
+        
+        // Build payload - ALWAYS include categories (even if empty array)
+        // Categories can be any product type - skincare, cosmetics, soaps, candles, oils, etc.
+        const payload = {
           ...data,
-          status:"draft",
+          status: productStatus, // Use status from form select
           priceNumber:parseFloat(data.price||"0")||0,
-          imageUrl:imageUrl||null,
-          vendorUid:user.uid
+          vendorUid:user.uid,
+          categories: categoriesArray  // Always an array - can contain any category names
         };
+        
+        // Ensure categories is always in the payload as an array
+        if (!payload.categories || !Array.isArray(payload.categories)) {
+          payload.categories = [];
+          console.warn("⚠️ Categories was not an array for draft, setting to empty array");
+        }
+        
+        // Only include media fields if they have values (don't set to null)
+        // Preserve existing values if no new ones uploaded
+        if (imageUrl) {
+          payload.imageUrl = imageUrl;
+        } else if (currentProductId && existingData.imageUrl) {
+          payload.imageUrl = existingData.imageUrl;
+        }
+        
+        if (galleryImageUrls.length > 0) {
+          payload.galleryImageUrls = galleryImageUrls;
+        } else if (currentProductId && existingData.galleryImageUrls) {
+          payload.galleryImageUrls = existingData.galleryImageUrls;
+        }
+        
+        if (videoUrl) {
+          payload.videoUrl = videoUrl;
+        } else if (currentProductId && existingData.videoUrl) {
+          payload.videoUrl = existingData.videoUrl;
+        }
+        
+        if (variants.length > 0) {
+          payload.variants = variants;
+        } else if (currentProductId && existingData.variants) {
+          payload.variants = existingData.variants;
+        }
+        console.log("💾 Draft payload:", payload);
 
         if(currentProductId){
-          // Update existing draft
-          await db.collection("listings").doc(currentProductId).update({
+          // Update existing draft - ALWAYS include categories
+          console.log("💾 Updating draft:", currentProductId);
+          console.log("💾 Draft payload categories:", payload.categories);
+          
+          // Get existing document to preserve fields
+          const existingDoc = await db.collection("listings").doc(currentProductId).get();
+          const existingData = existingDoc.exists ? existingDoc.data() : {};
+          
+          const updateData = {
             ...payload,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            // Preserve createdAt
+            createdAt: existingData.createdAt || firebase.firestore.FieldValue.serverTimestamp(),
+            // ALWAYS include categories - ensure it's an array
+            categories: Array.isArray(payload.categories) ? payload.categories : (payload.categories ? [payload.categories] : [])
+          };
+          
+          console.log("💾 Draft update data categories (type):", typeof updateData.categories, "Is array:", Array.isArray(updateData.categories));
+          console.log("💾 Draft update data categories (value):", updateData.categories);
+          console.log("💾 Draft update data categories (length):", updateData.categories ? updateData.categories.length : 0);
+          console.log("💾 Draft update data being sent:", updateData);
+          console.log("💾 Draft update data categories:", updateData.categories);
+          await db.collection("listings").doc(currentProductId).update(updateData);
+          
+          // Verify the update
+          const updatedDoc = await db.collection("listings").doc(currentProductId).get();
+          if (updatedDoc.exists) {
+            const updatedData = updatedDoc.data();
+            console.log("✅ Draft updated with categories:", updatedData.categories);
+          }
+          
           alert("✅ Draft saved successfully!");
         } else {
           // Create new draft
           payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
           const ref=await db.collection("listings").add(payload);
           currentProductId = ref.id;
+          console.log("💾 Draft created:", currentProductId);
+          
+          // Verify the creation
+          const savedDoc = await db.collection("listings").doc(currentProductId).get();
+          if (savedDoc.exists) {
+            const savedData = savedDoc.data();
+            console.log("✅ Draft created with categories:", savedData.categories);
+          }
+          
           document.getElementById("deleteBtnTop").style.display = "inline-block";
           // Update URL without reload
           window.history.replaceState({}, '', `create-listing.html?edit=${currentProductId}`);
@@ -1379,12 +2247,20 @@
 
     // DELETE BUTTON
     document.getElementById("deleteBtnTop").addEventListener("click",async()=>{
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Please sign in to delete products");
+        return;
+      }
+
       if(!currentProductId){
         alert("No product to delete");
         return;
       }
 
-      if(!confirm("Are you sure you want to permanently delete this product? This cannot be undone.")){
+      // Confirm deletion
+      const productTitle = document.getElementById("productTitle")?.value || "this product";
+      if(!confirm(`Are you sure you want to permanently delete "${productTitle}"?\n\nThis action cannot be undone. The product will be removed from your store and will no longer be visible to buyers.`)){
         return;
       }
 
@@ -1394,17 +2270,33 @@
         btn.textContent="Deleting...";
         btn.disabled=true;
 
+        // Security check: Verify the product belongs to the current user
+        const productDoc = await db.collection("listings").doc(currentProductId).get();
+        if (!productDoc.exists) {
+          throw new Error("Product not found");
+        }
+
+        const productData = productDoc.data();
+        if (productData.vendorUid !== user.uid) {
+          throw new Error("You don't have permission to delete this product");
+        }
+
+        // Delete the product
         await db.collection("listings").doc(currentProductId).delete();
+        console.log("✅ Product deleted:", currentProductId);
 
         alert("✅ Product deleted successfully!");
-        window.location.href="listings.html";
+        // Redirect to listing page
+        window.location.href="listing.html";
       }catch(err){
         console.error("Delete error:",err);
         alert("❌ Error deleting product: "+err.message);
-        document.getElementById("deleteBtnTop").textContent="Delete";
-        document.getElementById("deleteBtnTop").disabled=false;
+        const btn=document.getElementById("deleteBtnTop");
+        btn.textContent="Delete";
+        btn.disabled=false;
       }
     });
+
 
     // Variant Metafield logic
 let variants = [];
@@ -1423,51 +2315,32 @@ function renderVariants() {
                 <b>Size:</b> ${v.size || '-'} | 
                 <b>Color:</b> ${v.color || '-'} | 
                 <b>Material:</b> ${v.material || '-'} | 
-                <b>Style:</b> ${v.style || '-'}
-
-    // Load store categories into productCategoriesContainer
-    async function loadStoreCategories() {
-        const container = document.getElementById("productCategoriesContainer");
-        if (!container) return;
-        
-        const user = auth.currentUser;
-        if (!user) {
-            container.innerHTML = '<div>Please sign in.</div>';
-            return;
-        }
-        
-        try {
-            const snap = await db.collection("stores").doc(user.uid).collection("categories").get();
-            container.innerHTML = "";
-            
-            if (snap.empty) {
-                container.innerHTML = '<div>No categories yet. Create them in Edit Store.</div>';
-                return;
-            }
-            
-            snap.forEach((doc) => {
-                const name = doc.data().name || "";
-                if (!name) return;
-                
-                const label = document.createElement("label");
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.name = "productCategoryCheckbox";
-                checkbox.value = name;
-                
-                const span = document.createElement("span");
-                span.textContent = name;
-                
-                label.appendChild(checkbox);
-                label.appendChild(span);
-                container.appendChild(label);
-            });
-        } catch (err) {
-            console.error("Error loading categories:", err);
-            container.innerHTML = '<div>Error loading categories.</div>';
-        }
-    }
-
-    auth.onAuthStateChanged((user) => {
-        if (user) loadStoreCategories();
+                <b>Style:</b> ${v.style || '-'}${v.price ? ` | <b>Price:</b> $${v.price.toFixed(2)}` : ''}
+            </span>
+            <button type="button" class="lv-pill-btn" onclick="variants.splice(${i}, 1); renderVariants();" style="font-size:11px;padding:4px 10px;">Remove</button>
+        `;
+        variantList.appendChild(div);
     });
+}
+if (addVariantBtn) {
+    addVariantBtn.addEventListener('click', () => {
+        const size = document.getElementById('variantSize').value;
+        const color = document.getElementById('variantColor').value;
+        const material = document.getElementById('variantMaterial').value;
+        const style = document.getElementById('variantStyle').value;
+        const price = document.getElementById('variantPrice').value;
+        if (size || color || material || style || price) {
+            variants.push({ size, color, material, style, price: price ? parseFloat(price) : null });
+            document.getElementById('variantSize').value = '';
+            document.getElementById('variantColor').value = '';
+            document.getElementById('variantMaterial').value = '';
+            document.getElementById('variantStyle').value = '';
+            document.getElementById('variantPrice').value = '';
+            renderVariants();
+        }
+    });
+}
+
+    </script>
+</body>
+</html>
