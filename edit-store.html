@@ -9,10 +9,38 @@
   <link rel="stylesheet" href="styles.css" />
 
   <style>
+    :root {
+      /* LumiVue latte / espresso system same as create-listing */
+      --lv-bg: #f4f1eb;
+      --lv-surface: #ffffff;
+      --lv-border: #e6d7c6;
+      --lv-border-strong: #d9c6b3;
+      --lv-text: #2c1e19;          /* espresso */
+      --lv-text-muted: #7a6a5c;
+      --lv-pill: #e3ceb2;          /* beige pill */
+      --lv-pill-border: #c9a07a;   /* caramel outline */
+      --lv-accent-soft: #fbf3e7;
+      --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
+      --lv-radius-lg: 14px;
+      --lv-radius-md: 10px;
+
+      --lv-danger: #c15b4b;
+    }
+
     body {
-      background: var(--lv-bg, #f4f1eb);
-      color: var(--lv-text, #2c1e19);
+      background: var(--lv-bg);
+      color: var(--lv-text);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    }
+
+    /* Remove all hover pop-ups, transforms, and transitions */
+    *:hover,
+    *:focus,
+    *:active {
+      transition: none !important;
+      transform: none !important;
+      box-shadow: none !important;
+      filter: none !important;
     }
 
     /* Top LumiVue header */
@@ -260,9 +288,9 @@
     .lv-btn-primary {
       padding: 8px 18px;
       border-radius: 999px;
-      border: 1px solid var(--lv-pill-border, #c9a07a);
+      border: 1px solid var(--lv-border-strong);
       cursor: pointer;
-      background: var(--lv-pill, #e3ceb2);
+      background: #e6d8c7;
       color: var(--lv-text, #2c1e19);
       font-size: 13px;
       font-weight: 600;
@@ -289,8 +317,8 @@
     .lv-btn-ghost {
       padding: 8px 16px;
       border-radius: 999px;
-      border: 1px solid var(--lv-pill-border, #c9a07a);
-      background: var(--lv-pill, #e3ceb2);
+      border: 1px solid var(--lv-border-strong);
+      background: #e6d8c7;
       color: var(--lv-text, #2c1e19);
       font-size: 13px;
       letter-spacing: 0.08em;
@@ -1062,8 +1090,7 @@
         deleteCategory(catId);
       });
     }
-  </script>
-
+</script>
 </body>
 
 </html>
