@@ -9,20 +9,21 @@
 
   <style>
     :root {
-      /* same palette as landing page */
+      /* LumiVue latte / espresso system same as create-listing */
       --lv-bg: #f4f1eb;
       --lv-surface: #ffffff;
-      --lv-border: #ddd3c6;
-      --lv-border-strong: #ccc0b1;
-      --lv-text: #2c1e19;       /* espresso */
+      --lv-border: #e6d7c6;
+      --lv-border-strong: #d9c6b3;
+      --lv-text: #2c1e19;          /* espresso */
       --lv-text-muted: #7a6a5c;
-      --lv-accent: #c98a5a;
-      --lv-accent-soft: #fbede1;
+      --lv-pill: #e3ceb2;          /* beige pill */
+      --lv-pill-border: #c9a07a;   /* caramel outline */
+      --lv-accent-soft: #fbf3e7;
+      --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
       --lv-radius-lg: 14px;
-      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
-      --lv-danger: #dc2626;
-      --lv-bubble-bg: #f8ebd9;
-      --lv-button-bg: #e1c8a6;  /* pill buttons like landing page */
+      --lv-radius-md: 10px;
+
+      --lv-danger: #c15b4b;
     }
 
     body {
@@ -31,6 +32,16 @@
         "Helvetica Neue", Arial, sans-serif;
       background: var(--lv-bg);
       color: var(--lv-text);
+    }
+
+    /* Remove all hover pop-ups, transforms, and transitions */
+    *:hover,
+    *:focus,
+    *:active {
+      transition: none !important;
+      transform: none !important;
+      box-shadow: none !important;
+      filter: none !important;
     }
 
     .page-shell {
@@ -121,14 +132,14 @@
       font-size: 12px;
       font-weight: 500;
       text-decoration: none;
-      background: var(--lv-button-bg);
+      background: #e6d8c7;
       color: var(--lv-text);
       cursor: pointer;
       box-shadow: none;
     }
 
     .header-pill:hover {
-      background: var(--lv-button-bg); /* no pop-up, no change */
+      background: #e6d8c7; /* no pop-up, no change */
       color: var(--lv-text);
     }
 
@@ -384,7 +395,7 @@
       font-weight: 500;
       border: 1px solid var(--lv-border-strong);
       cursor: pointer;
-      background: var(--lv-button-bg);
+      background: #e6d8c7;
       color: var(--lv-text);     /* espresso */
       box-shadow: none;          /* no pop-up */
       text-decoration: none;
@@ -393,7 +404,7 @@
     }
 
     .btn-primary:hover {
-      background: var(--lv-button-bg); /* no change */
+      background: #e6d8c7; /* no change */
       color: var(--lv-text);
       box-shadow: none;
     }
