@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LumiVue – Vendor Dashboard</title>
+  <title>LumiVue   Vendor Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Global stylesheet -->
@@ -10,7 +10,7 @@
 
   <style>
     :root{
-      /* LumiVue latte / espresso system – same as create-listing */
+      /* LumiVue latte / espresso system same as create-listing */
       --lv-bg:#f4f1eb;
       --lv-surface:#ffffff;
       --lv-border:#e6d7c6;
@@ -44,7 +44,7 @@
       flex-direction: column;
     }
 
-    /* HEADER – match create-listing */
+    /* HEADER   match create-listing */
     .lv-header {
       padding: 12px 24px 6px;
       background: var(--lv-bg);
@@ -105,7 +105,7 @@
       gap: 18px;
     }
 
-    /* TEXT NAV – like create-listing */
+    /* TEXT NAV   like create-listing */
     .lv-top-nav {
       display: flex;
       align-items: center;
@@ -137,7 +137,7 @@
       border-radius: 999px;
     }
 
-    /* round M avatar – like screenshot 2 */
+    /* round M avatar   like screenshot 2 */
     .lv-user-pill {
       width: 28px;
       height: 28px;
@@ -198,11 +198,11 @@
       gap: 8px;
     }
 
-    /* BUTTONS – same beige pills, espresso text */
+    /* BUTTONS   same beige pills, espresso text */
     .lv-btn {
       border-radius: 999px;
-      border: 1px solid var(--lv-pill-border);
-      background: var(--lv-pill);
+      border: 1px solid var(--lv-border-strong);
+      background: #e6d8c7;
       padding: 7px 14px;
       font-size: 13px;
       cursor: pointer;
@@ -215,6 +215,10 @@
     .lv-btn-primary {
       box-shadow: 0 14px 32px rgba(44,30,25,.18);
       font-weight: 500;
+    }
+
+    .lv-btn:hover {
+      background: #e6d8c7;
     }
 
     .lv-card,
@@ -476,6 +480,10 @@
       white-space: nowrap;
     }
 
+    .lv-card-manage:hover {
+      background: #f0ddc8;
+    }
+
     .lv-footer-note {
       margin-top: 10px;
       font-size: 11px;
@@ -523,17 +531,17 @@
           <div class="lv-logo-badge">LV</div>
           <div class="lv-brand-text">
             <div class="lv-brand-title">LUMIVUE</div>
-            <div class="lv-brand-subtitle">Creator dashboard · Marketplace studio</div>
+            <div class="lv-brand-subtitle">Creator dashboard   Marketplace studio</div>
           </div>
         </div>
 
         <div class="lv-header-right">
           <nav class="lv-top-nav">
             <a href="dashboard.html" class="lv-nav-active">Dashboard</a>
-            <a href="listing.html">My products</a>
+            <a href="listings.html">Listings</a>
             <a href="create-listing.html">Create listing</a>
             <a href="store.html">Storefront</a>
-            <a href="account-payout.html">Payouts</a>
+            <a href="account-payouts.html">Payouts</a>
             <a href="account-legal.html">Legal</a>
           </nav>
 
@@ -563,33 +571,33 @@
 
       <!-- Main grid -->
       <main class="lv-main">
-        <!-- LEFT COLUMN – performance + quick actions -->
+        <!-- LEFT COLUMN   performance + quick actions -->
         <section class="lv-card">
           <div class="lv-card-header">
             <h2>Store performance</h2>
-            <span>Last 30 days (sample numbers – can connect to data later)</span>
+            <span>Last 30 days (sample numbers   can connect to data later)</span>
           </div>
 
           <!-- Metrics -->
           <div class="lv-metrics-row">
             <div class="lv-metric-card">
               <div class="lv-metric-label">Views</div>
-              <div class="lv-metric-value">1,248</div>
+              <div class="lv-metric-value" id="metricViews">0</div>
               <div class="lv-metric-sub">Across all active listings</div>
             </div>
             <div class="lv-metric-card">
               <div class="lv-metric-label">Favorites</div>
-              <div class="lv-metric-value">87</div>
+              <div class="lv-metric-value" id="metricFavorites">0</div>
               <div class="lv-metric-sub">Shoppers saving your products</div>
             </div>
-            <div class="lv-metric-card">
+            <div class="lv-metric-card" onclick="goTo('shipping.html?tab=orders')" style="cursor: pointer;">
               <div class="lv-metric-label">Orders</div>
-              <div class="lv-metric-value">32</div>
+              <div class="lv-metric-value" id="metricOrders">0</div>
               <div class="lv-metric-sub">Completed in this period</div>
             </div>
-            <div class="lv-metric-card">
+            <div class="lv-metric-card" onclick="goTo('shipping.html?tab=sales')" style="cursor: pointer;">
               <div class="lv-metric-label">Estimated revenue</div>
-              <div class="lv-metric-value">$2.4k</div>
+              <div class="lv-metric-value" id="metricRevenue">$0</div>
               <div class="lv-metric-sub">Before LumiVue fees</div>
             </div>
           </div>
@@ -601,7 +609,7 @@
               <span>Listing</span>
               Create a new product
             </a>
-            <a href="listing.html" class="lv-chip">
+            <a href="listings.html" class="lv-chip">
               <span>Catalog</span>
               Manage all listings
             </a>
@@ -609,7 +617,7 @@
               <span>Storefront</span>
               Update banner &amp; brand story
             </a>
-            <a href="account-payout.html" class="lv-chip">
+            <a href="account-payouts.html" class="lv-chip">
               <span>Payouts</span>
               Confirm bank &amp; schedule
             </a>
@@ -617,10 +625,10 @@
 
           <!-- Recent activity -->
           <div class="lv-section-label">Recent activity</div>
-          <ul class="lv-activity-list">
+          <ul class="lv-activity-list" id="recentActivityList">
             <li class="lv-activity-item">
               <div class="lv-activity-main">
-                <strong>“Crème de Lumière” approved</strong>
+                <strong>"Cr me de Lumi re" approved</strong>
                 <div class="lv-activity-meta">Your new moisturizer listing is now live on LumiVue.</div>
               </div>
               <div class="lv-activity-tag">Listing live</div>
@@ -628,7 +636,7 @@
             <li class="lv-activity-item">
               <div class="lv-activity-main">
                 <strong>3 new favorites</strong>
-                <div class="lv-activity-meta">Serum Lumière · Le Lait Coco · Lumière Toner</div>
+                <div class="lv-activity-meta">Serum Lumi re   Le Lait Coco   Lumi re Toner</div>
               </div>
               <div class="lv-activity-tag">Engagement</div>
             </li>
@@ -642,7 +650,7 @@
           </ul>
         </section>
 
-        <!-- RIGHT COLUMN – onboarding cards wired to other pages -->
+        <!-- RIGHT COLUMN   onboarding cards wired to other pages -->
         <aside class="lv-panel">
           <div class="lv-onboarding-header">
             <div class="lv-onboarding-title">Account onboarding</div>
@@ -700,7 +708,7 @@
             </article>
 
             <!-- Bank -->
-            <article class="lv-card" onclick="goTo('account-payout.html')">
+            <article class="lv-card" onclick="goTo('account-payouts.html')">
               <div class="lv-card-header">
                 <div class="lv-card-title">Bank account &amp; payout schedule</div>
                 <div class="lv-card-status" id="status-payouts">Not started</div>
@@ -712,7 +720,7 @@
                 <span class="lv-card-note">Encrypted and never shared with buyers.</span>
                 <button type="button"
                         class="lv-card-manage"
-                        onclick="goTo('account-payout.html'); event.stopPropagation();">
+                        onclick="goTo('account-payouts.html'); event.stopPropagation();">
                   Manage
                 </button>
               </div>
@@ -823,7 +831,7 @@
       const sectionStatusEls = {
         legal:      document.getElementById('status-legal'),
         tax:        document.getElementById('status-tax'),
-        payouts:    document.getElementById('status-payouts',
+        payouts:    document.getElementById('status-payouts'),
         storefront: document.getElementById('status-storefront'),
         shipping:   document.getElementById('status-shipping'),
         policies:   document.getElementById('status-policies')
@@ -867,27 +875,339 @@
         }
       }
 
-    auth.onAuthStateChanged(async (user) => {
-  // Vendor-only access guard
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
+      // Store Performance Functions
+      function formatNumber(num) {
+        if (num >= 1000) {
+          return (num / 1000).toFixed(1) + 'k';
+        }
+        return num.toLocaleString();
+      }
 
-  // Vendor-only auth guard
-  try {
-    const creatorDoc = await db.collection("creators").doc(user.uid).get();
-    if (!creatorDoc.exists) {
-      // Not a vendor – redirect to buyer dashboard
-      window.location.href = "buyer-dashboard.html";
-      return;
-    }
-  } catch (error) {
-    console.error("Error checking vendor status:", error);
-    window.location.href = "login.html";
-    return;
-  }
-});
+      function formatCurrency(amount) {
+        if (amount >= 1000) {
+          return '$' + (amount / 1000).toFixed(1) + 'k';
+        }
+        return '$' + amount.toFixed(2);
+      }
+
+      async function loadStorePerformance(uid) {
+        try {
+          // Calculate date 30 days ago
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+          // Load active listings
+          const listingsSnap = await db.collection('listings')
+            .where('vendorUid', '==', uid)
+            .where('status', '==', 'active')
+            .get();
+
+          const activeListings = listingsSnap.size;
+          
+          // Calculate total views (if views are tracked, otherwise use a placeholder)
+          // For now, we'll use a simple calculation based on listings
+          let totalViews = 0;
+          listingsSnap.forEach(doc => {
+            const data = doc.data();
+            totalViews += (data.views || 0);
+          });
+          // If no views tracked, show estimated based on listings
+          if (totalViews === 0) {
+            totalViews = activeListings * 50; // Placeholder calculation
+          }
+
+          // Load favorites (if favorites collection exists)
+          let totalFavorites = 0;
+          try {
+            const favoritesSnap = await db.collection('favorites')
+              .where('vendorUid', '==', uid)
+              .get();
+            totalFavorites = favoritesSnap.size;
+          } catch (e) {
+            // Favorites collection might not exist yet
+            console.log('Favorites collection not available');
+          }
+
+          // Load orders from last 30 days
+          const ordersSnap = await db.collection('orders')
+            .where('vendorId', '==', uid)
+            .where('createdAt', '>=', firebase.firestore.Timestamp.fromDate(thirtyDaysAgo))
+            .get();
+
+          const ordersCount = ordersSnap.size;
+          let totalRevenue = 0;
+          ordersSnap.forEach(doc => {
+            const data = doc.data();
+            if (data.paymentStatus === 'paid' || data.paymentStatus === 'Paid') {
+              totalRevenue += (data.total || 0);
+            }
+          });
+
+          // Update metric displays
+          const viewsEl = document.getElementById('metricViews');
+          const favoritesEl = document.getElementById('metricFavorites');
+          const ordersEl = document.getElementById('metricOrders');
+          const revenueEl = document.getElementById('metricRevenue');
+
+          if (viewsEl) viewsEl.textContent = formatNumber(totalViews);
+          if (favoritesEl) favoritesEl.textContent = formatNumber(totalFavorites);
+          if (ordersEl) ordersEl.textContent = formatNumber(ordersCount);
+          if (revenueEl) revenueEl.textContent = formatCurrency(totalRevenue);
+
+        } catch (err) {
+          console.error('Error loading store performance:', err);
+          // Set defaults on error
+          const viewsEl = document.getElementById('metricViews');
+          const favoritesEl = document.getElementById('metricFavorites');
+          const ordersEl = document.getElementById('metricOrders');
+          const revenueEl = document.getElementById('metricRevenue');
+          if (viewsEl) viewsEl.textContent = '0';
+          if (favoritesEl) favoritesEl.textContent = '0';
+          if (ordersEl) ordersEl.textContent = '0';
+          if (revenueEl) revenueEl.textContent = '$0';
+        }
+      }
+
+      async function loadRecentActivity(uid) {
+        const activityList = document.getElementById('recentActivityList');
+        if (!activityList) return;
+
+        const activities = [];
+
+        try {
+          // Get recently published listings (simplified query to avoid index issues)
+          try {
+            const recentListings = await db.collection('listings')
+              .where('vendorUid', '==', uid)
+              .where('status', '==', 'active')
+              .orderBy('createdAt', 'desc')
+              .limit(5)
+              .get();
+
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+            recentListings.forEach(doc => {
+              const data = doc.data();
+              const title = data.title || 'Untitled Product';
+              let date = new Date();
+              
+              // Handle different date formats
+              if (data.createdAt) {
+                if (data.createdAt.toDate) {
+                  date = data.createdAt.toDate();
+                } else if (data.createdAt.seconds) {
+                  date = new Date(data.createdAt.seconds * 1000);
+                } else if (data.createdAt instanceof Date) {
+                  date = data.createdAt;
+                }
+              }
+
+              // Only include listings from last 7 days
+              if (date >= sevenDaysAgo) {
+                activities.push({
+                  type: 'listing',
+                  title: `"${title}" approved`,
+                  meta: 'Your new listing is now live on LumiVue.',
+                  tag: 'Listing live',
+                  date: date
+                });
+              }
+            });
+          } catch (e) {
+            console.log('Could not load recent listings:', e);
+            // Try without orderBy if index doesn't exist
+            try {
+              const allListings = await db.collection('listings')
+                .where('vendorUid', '==', uid)
+                .where('status', '==', 'active')
+                .limit(10)
+                .get();
+
+              const sevenDaysAgo = new Date();
+              sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+              allListings.forEach(doc => {
+                const data = doc.data();
+                const title = data.title || 'Untitled Product';
+                let date = new Date();
+                
+                if (data.createdAt) {
+                  if (data.createdAt.toDate) {
+                    date = data.createdAt.toDate();
+                  } else if (data.createdAt.seconds) {
+                    date = new Date(data.createdAt.seconds * 1000);
+                  }
+                }
+
+                if (date >= sevenDaysAgo) {
+                  activities.push({
+                    type: 'listing',
+                    title: `"${title}" approved`,
+                    meta: 'Your new listing is now live on LumiVue.',
+                    tag: 'Listing live',
+                    date: date
+                  });
+                }
+              });
+              
+              // Sort by date manually
+              activities.sort((a, b) => b.date - a.date);
+            } catch (e2) {
+              console.log('Fallback query also failed:', e2);
+            }
+          }
+
+          // Get recent orders
+          try {
+            const recentOrders = await db.collection('orders')
+              .where('vendorId', '==', uid)
+              .orderBy('createdAt', 'desc')
+              .limit(2)
+              .get();
+
+            recentOrders.forEach(doc => {
+              const data = doc.data();
+              let date = new Date();
+              
+              if (data.createdAt) {
+                if (data.createdAt.toDate) {
+                  date = data.createdAt.toDate();
+                } else if (data.createdAt.seconds) {
+                  date = new Date(data.createdAt.seconds * 1000);
+                }
+              }
+              
+              const orderTotal = data.total || 0;
+              activities.push({
+                type: 'order',
+                title: 'New order received',
+                meta: `Order #${doc.id.slice(0, 8).toUpperCase()} - ${formatCurrency(orderTotal)}`,
+                tag: 'Order',
+                date: date
+              });
+            });
+          } catch (e) {
+            console.log('Could not load recent orders:', e);
+            // Try without orderBy
+            try {
+              const allOrders = await db.collection('orders')
+                .where('vendorId', '==', uid)
+                .limit(5)
+                .get();
+
+              allOrders.forEach(doc => {
+                const data = doc.data();
+                let date = new Date();
+                
+                if (data.createdAt) {
+                  if (data.createdAt.toDate) {
+                    date = data.createdAt.toDate();
+                  } else if (data.createdAt.seconds) {
+                    date = new Date(data.createdAt.seconds * 1000);
+                  }
+                }
+                
+                const orderTotal = data.total || 0;
+                activities.push({
+                  type: 'order',
+                  title: 'New order received',
+                  meta: `Order #${doc.id.slice(0, 8).toUpperCase()} - ${formatCurrency(orderTotal)}`,
+                  tag: 'Order',
+                  date: date
+                });
+              });
+              
+              // Sort by date manually
+              activities.sort((a, b) => b.date - a.date);
+            } catch (e2) {
+              console.log('Fallback orders query also failed:', e2);
+            }
+          }
+
+          // Get recent favorites (if available)
+          try {
+            const recentFavorites = await db.collection('favorites')
+              .where('vendorUid', '==', uid)
+              .orderBy('createdAt', 'desc')
+              .limit(1)
+              .get();
+
+            if (recentFavorites.size > 0) {
+              const favData = recentFavorites.docs[0].data();
+              let date = new Date();
+              
+              if (favData.createdAt) {
+                if (favData.createdAt.toDate) {
+                  date = favData.createdAt.toDate();
+                } else if (favData.createdAt.seconds) {
+                  date = new Date(favData.createdAt.seconds * 1000);
+                }
+              }
+              
+              activities.push({
+                type: 'favorite',
+                title: 'New favorite',
+                meta: 'A shopper saved one of your products.',
+                tag: 'Engagement',
+                date: date
+              });
+            }
+          } catch (e) {
+            // Favorites collection might not exist - this is fine
+            console.log('Favorites collection not available:', e);
+          }
+
+          // Sort activities by date (most recent first) and limit to 3
+          activities.sort((a, b) => b.date - a.date);
+          const displayActivities = activities.slice(0, 3);
+
+          // Render activities
+          if (displayActivities.length === 0) {
+            activityList.innerHTML = `
+              <li class="lv-activity-item">
+                <div class="lv-activity-main">
+                  <strong>No recent activity</strong>
+                  <div class="lv-activity-meta">Activity will appear here as you publish listings and receive orders.</div>
+                </div>
+                <div class="lv-activity-tag">Info</div>
+              </li>
+            `;
+          } else {
+            activityList.innerHTML = displayActivities.map(activity => `
+              <li class="lv-activity-item">
+                <div class="lv-activity-main">
+                  <strong>${activity.title}</strong>
+                  <div class="lv-activity-meta">${activity.meta}</div>
+                </div>
+                <div class="lv-activity-tag">${activity.tag}</div>
+              </li>
+            `).join('');
+          }
+
+        } catch (err) {
+          console.error('Error loading recent activity:', err);
+          // Show friendly message instead of error
+          activityList.innerHTML = `
+            <li class="lv-activity-item">
+              <div class="lv-activity-main">
+                <strong>No recent activity</strong>
+                <div class="lv-activity-meta">Activity will appear here as you publish listings and receive orders.</div>
+              </div>
+              <div class="lv-activity-tag">Info</div>
+            </li>
+          `;
+        }
+      }
+
+      function initDashboard() {
+        auth.onAuthStateChanged(async (user) => {
+          if (!user) {
+            const redirect = encodeURIComponent(window.location.pathname);
+            window.location.href = 'login.html?redirect=' + redirect;
+            return;
+          }
+
           currentUser = user;
 
           try {
@@ -901,6 +1221,28 @@
           } catch (err) {
             console.error('Error loading vendor account overview', err);
           }
+
+          // Load store performance data
+          await loadStorePerformance(user.uid);
+          await loadRecentActivity(user.uid);
+
+          // Set up real-time listeners for updates
+          // Listen for new listings
+          db.collection('listings')
+            .where('vendorUid', '==', user.uid)
+            .where('status', '==', 'active')
+            .onSnapshot(() => {
+              loadStorePerformance(user.uid);
+              loadRecentActivity(user.uid);
+            });
+
+          // Listen for new orders
+          db.collection('orders')
+            .where('vendorId', '==', user.uid)
+            .onSnapshot(() => {
+              loadStorePerformance(user.uid);
+              loadRecentActivity(user.uid);
+            });
         });
       }
 
