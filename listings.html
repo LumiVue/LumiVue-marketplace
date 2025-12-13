@@ -8,19 +8,21 @@
 
     <style>
         :root {
-            /* LumiVue latte / espresso system */
+            /* LumiVue latte / espresso system same as create-listing */
             --lv-bg: #f4f1eb;
             --lv-surface: #ffffff;
             --lv-border: #e6d7c6;
             --lv-border-strong: #d9c6b3;
-            --lv-text: #2c1e19;
+            --lv-text: #2c1e19;          /* espresso */
             --lv-text-muted: #7a6a5c;
-            --lv-pill: #e3ceb2;
-            --lv-pill-border: #c9a07a;
+            --lv-pill: #e3ceb2;          /* beige pill */
+            --lv-pill-border: #c9a07a;   /* caramel outline */
             --lv-accent-soft: #fbf3e7;
             --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
             --lv-radius-lg: 14px;
             --lv-radius-md: 10px;
+
+            --lv-danger: #c15b4b;
         }
 
         html {
@@ -28,7 +30,17 @@
         }
 
         * {
-            box-sizing: border-box
+            box-sizing: border-box;
+        }
+
+        /* Remove all hover pop-ups, transforms, and transitions */
+        *:hover,
+        *:focus,
+        *:active {
+            transition: none !important;
+            transform: none !important;
+            box-shadow: none !important;
+            filter: none !important;
         }
 
         body {
@@ -116,8 +128,8 @@
         }
 
         .lv-pill-btn {
-            background: var(--lv-pill);
-            border: 1px solid var(--lv-pill-border);
+            background: #e6d8c7;
+            border: 1px solid var(--lv-border-strong);
             color: var(--lv-text);
             border-radius: 999px;
             padding: 6px 12px;
@@ -187,6 +199,55 @@
             background: #e5e1d8;
             object-fit: cover;
             margin-bottom: 12px;
+        }
+        
+        .lv-product-media-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        
+        .lv-product-media-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            border-radius: var(--lv-radius-md);
+            overflow: hidden;
+        }
+        
+        .lv-product-media-item {
+            aspect-ratio: 1;
+            object-fit: cover;
+            width: 100%;
+            background: #e5e1d8;
+        }
+        
+        .lv-product-media-item.video {
+            position: relative;
+        }
+        
+        .lv-product-media-item.video::after {
+            content: "▶";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        
+        .lv-product-media-count {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
         }
 
         .lv-product-status {
@@ -364,15 +425,55 @@
                     const data = doc.data();
                     const card = document.createElement("div");
                     card.className = "lv-product-card";
-                    card.onclick = () => window.location.href = `product-detail.html?id=${doc.id}`;
+                    card.onclick = () => window.location.href = `create-listing.html?edit=${doc.id}`;
 
                     const statusClass = data.status === "active" ? "active" : "";
                     const statusText = data.status === "active" ? "Active" : "Draft";
                     const price = data.priceNumber || parseFloat(data.price) || 0;
                     const currency = data.currency === "USD" ? "$" : data.currency;
+                    
+                    // Collect all media: featured image + gallery images + video
+                    const allMedia = [];
+                    if (data.imageUrl) {
+                        allMedia.push({ type: 'image', url: data.imageUrl });
+                    }
+                    if (data.galleryImageUrls && Array.isArray(data.galleryImageUrls)) {
+                        data.galleryImageUrls.forEach(url => {
+                            if (url) allMedia.push({ type: 'image', url: url });
+                        });
+                    }
+                    if (data.videoUrl) {
+                        allMedia.push({ type: 'video', url: data.videoUrl });
+                    }
+                    
+                    // Build media grid HTML
+                    let mediaHTML = '';
+                    if (allMedia.length > 0) {
+                        const mediaToShow = allMedia.slice(0, 16); // Show up to 16 items in 4x4 grid
+                        const totalCount = allMedia.length;
+                        
+                        mediaHTML = '<div class="lv-product-media-container">';
+                        mediaHTML += '<div class="lv-product-media-grid">';
+                        mediaToShow.forEach((media, index) => {
+                            if (media.type === 'video') {
+                                mediaHTML += `<video class="lv-product-media-item video" src="${media.url}" muted></video>`;
+                            } else {
+                                mediaHTML += `<img class="lv-product-media-item" src="${media.url}" alt="${data.title || 'Product image'}" />`;
+                            }
+                        });
+                        mediaHTML += '</div>';
+                        if (totalCount > 16) {
+                            mediaHTML += `<div class="lv-product-media-count">+${totalCount - 16} more</div>`;
+                        } else if (totalCount > 1) {
+                            mediaHTML += `<div class="lv-product-media-count">${totalCount} items</div>`;
+                        }
+                        mediaHTML += '</div>';
+                    } else {
+                        mediaHTML = '<div class="lv-product-image"></div>';
+                    }
 
                     card.innerHTML = `
-                        ${data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title}" class="lv-product-image" />` : `<div class="lv-product-image"></div>`}
+                        ${mediaHTML}
                         <span class="lv-product-status ${statusClass}">${statusText}</span>
                         <div class="lv-product-title">${data.title || "Untitled"}</div>
                         <div class="lv-product-subtitle">${data.subtitle || ""}</div>
