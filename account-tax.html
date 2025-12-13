@@ -8,20 +8,21 @@
 
   <style>
     :root {
-      /* Same palette as landing page */
+      /* LumiVue latte / espresso system same as create-listing */
       --lv-bg: #f4f1eb;
       --lv-surface: #ffffff;
-      --lv-border: #ddd3c6;
-      --lv-border-strong: #ccc0b1;
+      --lv-border: #e6d7c6;
+      --lv-border-strong: #d9c6b3;
       --lv-text: #2c1e19;          /* espresso */
       --lv-text-muted: #7a6a5c;
-      --lv-accent: #c98a5a;
-      --lv-accent-soft: #fbede1;
+      --lv-pill: #e3ceb2;          /* beige pill */
+      --lv-pill-border: #c9a07a;   /* caramel outline */
+      --lv-accent-soft: #fbf3e7;
+      --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
       --lv-radius-lg: 14px;
-      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
-      --lv-button-bg: #e1c8a6;     /* beige pills like Marketplace button */
-      --lv-danger: #dc2626;
-      --lv-danger-soft: #fee2e2;
+      --lv-radius-md: 10px;
+
+      --lv-danger: #c15b4b;
     }
 
     * {
@@ -34,6 +35,16 @@
         "Helvetica Neue", Arial, sans-serif;
       background: var(--lv-bg);
       color: var(--lv-text);
+    }
+
+    /* Remove all hover pop-ups, transforms, and transitions */
+    *:hover,
+    *:focus,
+    *:active {
+      transition: none !important;
+      transform: none !important;
+      box-shadow: none !important;
+      filter: none !important;
     }
 
     .page-shell {
@@ -113,13 +124,13 @@
       letter-spacing: 0.16em;
       text-transform: uppercase;
       text-decoration: none;
-      background: var(--lv-button-bg);
+      background: #e6d8c7;
       color: var(--lv-text);
       cursor: pointer;
     }
 
     .nav-pill:hover {
-      background: var(--lv-button-bg); /* no hover pop-up */
+      background: #e6d8c7; /* no hover pop-up */
     }
 
     /* MAIN CARD */
@@ -273,13 +284,13 @@
       text-transform: uppercase;
       border: 1px solid var(--lv-border-strong);
       cursor: pointer;
-      background: var(--lv-button-bg);
+      background: #e6d8c7;
       color: var(--lv-text);
       box-shadow: none; /* no pop-up */
     }
 
     .btn-primary:hover {
-      background: var(--lv-button-bg); /* no hover pop-up */
+      background: #e6d8c7; /* no hover pop-up */
     }
 
     .btn-primary:disabled {
