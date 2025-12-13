@@ -462,7 +462,7 @@
                 <button class="lv-pill-btn delete-btn" id="deleteBtnTop" style="display:none;">Delete</button>
                 <button class="lv-pill-btn" id="discardBtnTop">Discard</button>
                 <button class="lv-pill-btn" id="publishBtnTop">Publish product</button>
-                <div class="lv-avatar">M</div>
+                <div class="lv-avatar">L</div>
             </div>
         </div>
     </header>
@@ -660,6 +660,7 @@
                     </div>
                 </div>
                 <div class="lv-card-body">
+                    <div id="variantList"></div>
                     <div class="lv-inline-fields">
                         <div class="lv-field">
                             <label class="lv-label" for="variantSize">Size</label>
@@ -680,6 +681,7 @@
                             <input id="variantStyle" class="lv-input" type="text" placeholder="e.g., Matte, Glossy" />
                         </div>
                     </div>
+                    <button type="button" class="lv-pill-btn" id="addVariantBtn" style="margin-top:10px;">Add Variant</button>
                 </div>
             </div>
 
@@ -927,6 +929,9 @@
 
     // Get form data helper function
     window.lvGetFormData = function() {
+        const selectedCategoryValues = Array.from(document.querySelectorAll('input[name="productCategoryCheckbox"]:checked'))
+            .map(cb => cb.value);
+
         return {
             title: document.getElementById("productTitle").value,
             subtitle: document.getElementById("productSubtitle").value,
@@ -958,7 +963,9 @@
             type: document.getElementById("productType").value,
             vendor: document.getElementById("productVendor").value,
             collections: document.getElementById("collections").value,
-            tags: document.getElementById("tags").value
+            tags: document.getElementById("tags").value,
+            // categories array used by store.html filtering
+            categories: selectedCategoryValues
         };
     };
 
@@ -1398,6 +1405,69 @@
         document.getElementById("deleteBtnTop").disabled=false;
       }
     });
-    </script>
-</body>
-</html>
+
+    // Variant Metafield logic
+let variants = [];
+const variantList = document.getElementById('variantList');
+const addVariantBtn = document.getElementById('addVariantBtn');
+function renderVariants() {
+    variantList.innerHTML = '';
+    variants.forEach((v, i) => {
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.gap = '10px';
+        div.style.marginBottom = '6px';
+        div.innerHTML = `
+            <span style="font-size:12px;">
+                <b>Size:</b> ${v.size || '-'} | 
+                <b>Color:</b> ${v.color || '-'} | 
+                <b>Material:</b> ${v.material || '-'} | 
+                <b>Style:</b> ${v.style || '-'}
+
+    // Load store categories into productCategoriesContainer
+    async function loadStoreCategories() {
+        const container = document.getElementById("productCategoriesContainer");
+        if (!container) return;
+        
+        const user = auth.currentUser;
+        if (!user) {
+            container.innerHTML = '<div>Please sign in.</div>';
+            return;
+        }
+        
+        try {
+            const snap = await db.collection("stores").doc(user.uid).collection("categories").get();
+            container.innerHTML = "";
+            
+            if (snap.empty) {
+                container.innerHTML = '<div>No categories yet. Create them in Edit Store.</div>';
+                return;
+            }
+            
+            snap.forEach((doc) => {
+                const name = doc.data().name || "";
+                if (!name) return;
+                
+                const label = document.createElement("label");
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.name = "productCategoryCheckbox";
+                checkbox.value = name;
+                
+                const span = document.createElement("span");
+                span.textContent = name;
+                
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                container.appendChild(label);
+            });
+        } catch (err) {
+            console.error("Error loading categories:", err);
+            container.innerHTML = '<div>Error loading categories.</div>';
+        }
+    }
+
+    auth.onAuthStateChanged((user) => {
+        if (user) loadStoreCategories();
+    });
