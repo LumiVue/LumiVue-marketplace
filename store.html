@@ -572,6 +572,7 @@
         const reviewsPageLink = document.getElementById("reviewsPageLink");
 
         let currentStoreUid = null;
+        let activeCategoryFilter = null; // currently selected category name or null
 
         function buildPlaceholderCard() {
             const card = document.createElement("article");
@@ -763,19 +764,30 @@
 
                 console.log(`Querying products for vendor: ${uid}`);
 
-                // Query THIS VENDOR'S active products - FIXED: use vendorUid not vendorId
-                const listingsRef = db.collection("listings");
-                const q = listingsRef
+                // Base query: this vendor's active products
+                let q = db.collection("listings")
                     .where("vendorUid", "==", uid)
                     .where("status", "==", "active")
                     .orderBy("createdAt", "desc");
-                
+
+                // If a category filter is selected, narrow results to listings that include that category
+                if (activeCategoryFilter) {
+                    // Expect an array field "categories" on listing docs (set from create-listing/edit-store)
+                    q = db.collection("listings")
+                        .where("vendorUid", "==", uid)
+                        .where("status", "==", "active")
+                        .where("categories", "array-contains", activeCategoryFilter)
+                        .orderBy("createdAt", "desc");
+                }
+
                 const snapshot = await q.get();
 
-                console.log(`Found ${snapshot.size} active products for vendor ${uid}`);
+                console.log(`Found ${snapshot.size} active products for vendor ${uid}${activeCategoryFilter ? " in category " + activeCategoryFilter : ""}`);
 
                 if (snapshot.empty) {
-                    productsStatusEl.textContent = "No products available yet.";
+                    productsStatusEl.textContent = activeCategoryFilter
+                        ? `No products available in "${activeCategoryFilter}" yet.`
+                        : "No products available yet.";
                     renderPlaceholders(3);
                     return;
                 }
@@ -896,15 +908,22 @@
                     chip.className = "feature-tag";
                     chip.textContent = name;
 
-                    // WHEN BUYER CLICKS A CATEGORY → GO TO product.html WITH UID + CATEGORY
-                    chip.addEventListener("click", () => {
+                    // When buyer clicks a category, filter products shown in the grid for this store
+                    chip.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
                         if (!currentStoreUid) return;
-                        const url =
-                            "product.html?uid=" +
-                            encodeURIComponent(currentStoreUid) +
-                            "&category=" +
-                            encodeURIComponent(name);
-                        window.location.href = url;
+
+                        // Toggle filter: clicking the same chip again clears the filter
+                        if (activeCategoryFilter === name) {
+                            activeCategoryFilter = null;
+                        } else {
+                            activeCategoryFilter = name;
+                        }
+
+                        // Reload products using the selected (or cleared) category filter
+                        loadStoreProducts(currentStoreUid);
                     });
 
                     categoriesChipsEl.appendChild(chip);
@@ -1010,4 +1029,3 @@
     </script>
 </body>
 </html>
-
