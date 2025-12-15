@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>LumiVue Product</title>
+    <title>Order Details - LumiVue</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="styles.css" />
-
+    
     <style>
         :root {
             --lv-bg: #f4f1eb;
@@ -20,16 +19,20 @@
             --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFrame, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
             background: var(--lv-bg);
             color: var(--lv-text);
         }
 
-        .lv-page { min-height: 100vh; }
+        .lv-page {
+            min-height: 100vh;
+        }
 
         .lv-header {
             position: sticky;
@@ -43,144 +46,94 @@
         .lv-header-inner {
             max-width: 1120px;
             margin: 0 auto;
-            padding: 10px 24px;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
         }
 
-        .lv-logo-wrap { display: flex; align-items: center; gap: 10px; }
+        .lv-logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
         .lv-logo-circle {
             width: 34px;
             height: 34px;
             border-radius: 50%;
-            background: #e6d8c7;
-            color: var(--lv-text);
-            font-weight: 600;
-            font-size: 14px;
+            background: linear-gradient(135deg, #e6d8c7 0%, #ddd3c6 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--lv-border-strong);
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--lv-text);
         }
 
         .lv-logo-text {
-            font-size: 14px;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.5px;
             color: var(--lv-text);
         }
 
-        .lv-nav { display: flex; align-items: center; gap: 18px; font-size: 14px; }
-        .lv-nav a {
-            text-decoration: none !important;
-            border-bottom: none !important;
-            color: var(--lv-text);
+        .lv-container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 24px 20px;
         }
 
-        .lv-header-actions { display: flex; align-items: center; gap: 10px; }
-
-        .lv-btn-text, .lv-btn-soft {
-            display: inline-flex;
+        .lv-page-header {
+            display: flex;
             align-items: center;
-            justify-content: center;
-            height: 34px;
-            padding: 0 18px;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .lv-page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .lv-btn {
+            padding: 10px 20px;
             border-radius: 50px;
-            background: #e6d8c7;
-            color: var(--lv-text);
             font-weight: 600;
             font-size: 14px;
-            border: 1px solid var(--lv-border-strong);
+            border: none;
             cursor: pointer;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .lv-main {
-            max-width: 1120px;
-            margin: 24px auto 48px;
-            padding: 0 24px;
-            display: grid;
-            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-            gap: 24px;
-            align-items: flex-start;
+        .lv-btn-primary {
+            background: var(--lv-accent);
+            color: #ffffff;
         }
 
-        @media (max-width: 960px) {
-            .lv-main {
-                grid-template-columns: 1fr;
-            }
+        .lv-btn-secondary {
+            background: var(--lv-surface);
+            color: var(--lv-text);
+            border: 1px solid var(--lv-border-strong);
         }
 
         .lv-card {
             background: var(--lv-surface);
             border: 1px solid var(--lv-border);
             border-radius: var(--lv-radius-lg);
+            padding: 24px;
+            margin-bottom: 20px;
             box-shadow: var(--lv-shadow-soft);
-            padding: 20px 24px;
-        }
-
-        .lv-card + .lv-card {
-            margin-top: 16px;
-        }
-
-        .lv-card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
         }
 
         .lv-card-title {
             font-size: 18px;
             font-weight: 700;
-        }
-
-        .lv-card-body {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .lv-product-hero {
-            width: 100%;
-            height: 400px;
-            border-radius: var(--lv-radius-lg);
-            background: #e5e1d8;
-            object-fit: cover;
-            margin-bottom: 16px;
-        }
-
-        .lv-product-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 12px 0 8px;
-        }
-
-        .lv-product-subtitle {
-            font-size: 16px;
-            color: var(--lv-text-muted);
-            margin-bottom: 16px;
-        }
-
-        .lv-product-price {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .lv-product-meta {
-            font-size: 14px;
-            color: var(--lv-text-muted);
-            margin-bottom: 20px;
-        }
-
-        .lv-product-description {
-            font-size: 15px;
-            line-height: 1.6;
-            color: var(--lv-text);
+            margin: 0 0 16px 0;
         }
 
         .lv-info-row {
@@ -188,7 +141,6 @@
             justify-content: space-between;
             padding: 12px 0;
             border-bottom: 1px solid var(--lv-border);
-            font-size: 14px;
         }
 
         .lv-info-row:last-child {
@@ -196,163 +148,134 @@
         }
 
         .lv-info-label {
+            font-weight: 600;
             color: var(--lv-text-muted);
-            font-weight: 500;
+            font-size: 13px;
         }
 
         .lv-info-value {
             font-weight: 600;
+            color: var(--lv-text);
+            font-size: 14px;
         }
 
-        .lv-btn-primary {
-            width: 100%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            height: 44px;
-            padding: 0 24px;
-            border-radius: 50px;
-            background: var(--lv-accent);
-            color: #ffffff;
+        .lv-order-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--lv-border);
+        }
+
+        .lv-order-item:last-child {
+            border-bottom: none;
+        }
+
+        .lv-order-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background: var(--lv-border);
+            object-fit: cover;
+        }
+
+        .lv-order-item-details {
+            flex: 1;
+        }
+
+        .lv-order-item-title {
             font-weight: 600;
             font-size: 15px;
-            border: none;
-            cursor: pointer;
-            margin-top: 16px;
+            margin-bottom: 4px;
         }
 
-        .lv-btn-primary:hover {
-            opacity: 0.9;
-        }
-
-        .lv-error-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .lv-error-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-            opacity: 0.3;
-        }
-
-        .lv-error-title {
-            font-size: 20px;
-            font-weight: 600;
+        .lv-order-item-subtitle {
+            font-size: 13px;
+            color: var(--lv-text-muted);
             margin-bottom: 8px;
         }
 
-        .lv-error-text {
-            font-size: 14px;
-            color: var(--lv-text-muted);
-            margin-bottom: 20px;
+        .lv-order-item-price {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--lv-accent);
         }
 
-        .lv-footer {
-            max-width: 1120px;
-            margin: 0 auto 40px;
-            padding: 0 24px;
+        .lv-status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 50px;
             font-size: 12px;
+            font-weight: 600;
+            background: var(--lv-accent-soft);
+            color: var(--lv-text);
+        }
+
+        .lv-status-badge.processing {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .lv-status-badge.shipped {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .lv-status-badge.delivered {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .lv-empty-state {
+            text-align: center;
+            padding: 40px 20px;
             color: var(--lv-text-muted);
         }
 
-        .lv-footer p { margin: 4px 0; }
+        .lv-address-block {
+            background: var(--lv-accent-soft);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .lv-address-line {
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
     </style>
 </head>
-
 <body>
     <div class="lv-page">
         <header class="lv-header">
             <div class="lv-header-inner">
-                <div class="lv-logo-wrap">
+                <a href="marketplace.html" class="lv-logo-wrap" style="text-decoration: none; color: inherit;">
                     <div class="lv-logo-circle">LV</div>
                     <span class="lv-logo-text">LUMIVUE</span>
-                </div>
-
-                <nav class="lv-nav">
-                    <a href="marketplace.html">Marketplace</a>
-                    <a href="listing.html">Browse all</a>
+                </a>
+                <nav>
+                    <a href="buyer-dashboard.html" class="lv-btn lv-btn-secondary">Back to Dashboard</a>
                 </nav>
-
-                <div class="lv-header-actions">
-                    <a class="lv-cart-btn" href="cart.html" title="Shopping Cart" style="position: relative; display: inline-flex; align-items: center; justify-content: center; height: 34px; width: 34px; padding: 0; border-radius: 50%; background: #e6d8c7; color: var(--lv-text); font-weight: 600; font-size: 18px; border: 1px solid var(--lv-border-strong); cursor: pointer; text-decoration: none;">
-                        ??
-                        <span class="lv-cart-count" style="position: absolute; top: -6px; right: -6px; background: var(--lv-accent); color: #ffffff; font-size: 10px; font-weight: 700; min-width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--lv-bg);">0</span>
-                    </a>
-                    <a class="lv-btn-text" href="login.html">Sign in / Join</a>
-                    <a class="lv-btn-soft" href="signup.html">For vendors</a>
-                </div>
             </div>
         </header>
 
-        <main class="lv-main" id="mainContent" style="display:none;">
-            <!-- LEFT COLUMN � Product Details -->
-            <section>
-                <div class="lv-card">
-                    <img id="productImage" class="lv-product-hero" alt="Product image" />
-                    <h1 class="lv-product-title" id="productTitle">Loading...</h1>
-                    <p class="lv-product-subtitle" id="productSubtitle"></p>
-                    <div class="lv-product-price" id="productPrice">$0.00</div>
-                    <div class="lv-product-meta" id="productMeta"></div>
-                    <div class="lv-product-description" id="productDescription"></div>
-                </div>
-            </section>
+        <main class="lv-container">
+            <div class="lv-page-header">
+                <h1 class="lv-page-title">Order Details</h1>
+                <a href="buyer-dashboard.html" class="lv-btn lv-btn-secondary">Back</a>
+            </div>
 
-            <!-- RIGHT COLUMN � Product Info -->
-            <aside>
-                <div class="lv-card">
-                    <div class="lv-card-header">
-                        <div class="lv-card-title">Product Information</div>
-                    </div>
-                    <div class="lv-card-body">
-                        <div class="lv-info-row">
-                            <span class="lv-info-label">Vendor</span>
-                            <span class="lv-info-value" id="infoVendor">�</span>
-                        </div>
-                        <div class="lv-info-row">
-                            <span class="lv-info-label">Type</span>
-                            <span class="lv-info-value" id="infoType">�</span>
-                        </div>
-                        <div class="lv-info-row">
-                            <span class="lv-info-label">Collections</span>
-                            <span class="lv-info-value" id="infoCollections">�</span>
-                        </div>
-                    </div>
-                    <button class="lv-btn-primary" type="button" id="addToCartBtn">Add to cart</button>
+            <div id="orderDetails">
+                <div class="lv-empty-state">
+                    <div>Loading order details...</div>
                 </div>
-
-                <div class="lv-card" id="ingredientsCard" style="display:none;">
-                    <div class="lv-card-header">
-                        <div class="lv-card-title">Ingredients (INCI)</div>
-                    </div>
-                    <div class="lv-card-body">
-                        <div id="inciIngredientsList" style="font-size:13px;line-height:1.6;color:var(--lv-text);">�</div>
-                    </div>
-                </div>
-            </aside>
+            </div>
         </main>
-
-        <!-- Error State -->
-        <div id="errorState" class="lv-error-state" style="display:none;">
-            <div class="lv-error-icon">??</div>
-            <div class="lv-error-title">Product not found</div>
-            <div class="lv-error-text">This product may have been removed or is no longer available.</div>
-            <button class="lv-btn-soft" onclick="window.location.href='marketplace.html'">Back to marketplace</button>
-        </div>
-
-        <footer class="lv-footer">
-            <p><strong>Sell your creations on LumiVue.</strong></p>
-            <p>LumiVue is a beauty-only marketplace built for skincare formulators, candle makers, soap artists, and cosmetic creators.</p>
-        </footer>
     </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-
-    <!-- Cart Utility -->
-    <script src="cart.js"></script>
 
     <script>
         const firebaseConfig = {
@@ -368,116 +291,229 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Initialize cart
-        cart.init(auth, db);
-
-        // Get product ID from URL
+        // Get order ID from URL
         const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('id');
-        let currentProduct = null;
+        const orderId = urlParams.get('id');
 
-        async function loadProduct() {
-            if (!productId) {
-                document.getElementById("errorState").style.display = "block";
+        // Load order details
+        async function loadOrderDetails() {
+            if (!orderId) {
+                document.getElementById('orderDetails').innerHTML = `
+                    <div class="lv-empty-state">
+                        <div>Order ID not found</div>
+                        <a href="buyer-dashboard.html" class="lv-btn lv-btn-primary" style="margin-top: 16px;">Back to Dashboard</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                document.getElementById('orderDetails').innerHTML = `
+                    <div class="lv-empty-state">
+                        <div>Please sign in to view order details</div>
+                        <a href="login.html" class="lv-btn lv-btn-primary" style="margin-top: 16px;">Sign In</a>
+                    </div>
+                `;
                 return;
             }
 
             try {
-                const docRef = db.collection("listings").doc(productId);
-                const docSnap = await docRef.get();
-
-                if (!docSnap.exists) {
-                    document.getElementById("errorState").style.display = "block";
+                const orderDoc = await db.collection('orders').doc(orderId).get();
+                
+                if (!orderDoc.exists) {
+                    document.getElementById('orderDetails').innerHTML = `
+                        <div class="lv-empty-state">
+                            <div>Order not found</div>
+                            <a href="buyer-dashboard.html" class="lv-btn lv-btn-primary" style="margin-top: 16px;">Back to Dashboard</a>
+                        </div>
+                    `;
                     return;
                 }
 
-                const data = docSnap.data();
-                currentProduct = { id: productId, ...data };
+                const order = orderDoc.data();
 
-                // Only show active products to public buyers
-                if (data.status !== "active") {
-                    document.getElementById("errorState").style.display = "block";
-                    return;
+                // Load buyer data for addresses
+                let shippingAddress = null;
+                let billingAddress = null;
+                try {
+                    const buyerDoc = await db.collection('buyers').doc(user.uid).get();
+                    if (buyerDoc.exists) {
+                        const buyerData = buyerDoc.data();
+                        shippingAddress = buyerData.shippingAddress || null;
+                        billingAddress = buyerData.billingAddress || null;
+                    }
+                } catch (e) {
+                    console.warn('Could not load buyer addresses:', e);
                 }
 
-                document.getElementById("mainContent").style.display = "grid";
-
-                // Image
-                if (data.imageUrl) {
-                    document.getElementById("productImage").src = data.imageUrl;
-                    document.getElementById("productImage").style.display = "block";
-                } else {
-                    document.getElementById("productImage").style.display = "none";
-                }
-
-                // Basic info
-                document.getElementById("productTitle").textContent = data.title || "Untitled";
-                document.getElementById("productSubtitle").textContent = data.subtitle || "";
-
-                // Price
-                const price = data.priceNumber || parseFloat(data.price) || 0;
-                const currency = data.currency === "USD" ? "$" : (data.currency || "$");
-                document.getElementById("productPrice").textContent = `${currency}${price.toFixed(2)}`;
-
-                // Meta
-                document.getElementById("productMeta").textContent =
-                    `${data.vendor || "Unknown vendor"} � ${data.type || "Product"}`;
-
-                // Description
-                const descEl = document.getElementById("productDescription");
-                if (data.description) {
-                    descEl.textContent = data.description;
-                    descEl.style.display = "block";
-                } else {
-                    descEl.style.display = "none";
-                }
-
-                // Right column info
-                document.getElementById("infoVendor").textContent = data.vendor || "�";
-                document.getElementById("infoType").textContent = data.type || "�";
-                document.getElementById("infoCollections").textContent = data.collections || "�";
-
-                // INCI Ingredients
-                if (data.inciIngredients) {
-                    document.getElementById("ingredientsCard").style.display = "block";
-                    document.getElementById("inciIngredientsList").textContent = data.inciIngredients;
-                }
-
-            } catch (err) {
-                console.error("Error loading product:", err);
-                document.getElementById("errorState").style.display = "block";
-                document.getElementById("errorState").querySelector(".lv-error-text").textContent = err.message;
+                renderOrderDetails(order, orderId, shippingAddress, billingAddress);
+            } catch (error) {
+                console.error('Error loading order details:', error);
+                document.getElementById('orderDetails').innerHTML = `
+                    <div class="lv-empty-state">
+                        <div>Error loading order details</div>
+                        <a href="buyer-dashboard.html" class="lv-btn lv-btn-primary" style="margin-top: 16px;">Back to Dashboard</a>
+                    </div>
+                `;
             }
         }
 
-        // Add to cart button handler
-        document.getElementById('addToCartBtn').addEventListener('click', async () => {
-            if (!currentProduct) {
-                alert('Product not loaded yet');
-                return;
+        function renderOrderDetails(order, orderId, shippingAddress, billingAddress) {
+            const orderDate = order.createdAt?.toDate ? order.createdAt.toDate().toLocaleDateString() : 
+                            (order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A');
+            const currency = order.currency === 'USD' ? '$' : (order.currency || '$');
+            const status = order.fulfillmentStatus || order.status || 'processing';
+            const paymentStatus = order.paymentStatus || 'unpaid';
+            const trackingNo = order.trackingNo || '';
+            const carrier = order.carrier || '';
+            
+            // Format status badge
+            let statusClass = 'processing';
+            let statusText = 'Processing';
+            if (status === 'shipped') {
+                statusClass = 'shipped';
+                statusText = 'Shipped';
+            } else if (status === 'delivered') {
+                statusClass = 'delivered';
+                statusText = 'Delivered';
             }
 
-            const btn = document.getElementById('addToCartBtn');
-            const originalText = btn.textContent;
-            btn.disabled = true;
-            btn.textContent = 'Adding...';
-
-            const success = await cart.addToCart(currentProduct);
-            
-            if (success) {
-                btn.textContent = '? Added to cart';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                }, 2000);
+            // Render order items
+            let itemsHTML = '';
+            if (order.items && Array.isArray(order.items) && order.items.length > 0) {
+                order.items.forEach(item => {
+                    const itemPrice = item.price || 0;
+                    const quantity = item.quantity || 1;
+                    const itemTotal = itemPrice * quantity;
+                    
+                    itemsHTML += `
+                        <div class="lv-order-item">
+                            ${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title || 'Product'}" class="lv-order-item-image" />` : `<div class="lv-order-item-image"></div>`}
+                            <div class="lv-order-item-details">
+                                <div class="lv-order-item-title">${item.title || 'Product'}</div>
+                                ${item.subtitle ? `<div class="lv-order-item-subtitle">${item.subtitle}</div>` : ''}
+                                <div style="margin-top: 8px; font-size: 13px; color: var(--lv-text-muted);">
+                                    ${currency}${itemPrice.toFixed(2)} × ${quantity} = ${currency}${itemTotal.toFixed(2)}
+                                </div>
+                            </div>
+                            <div class="lv-order-item-price">${currency}${itemTotal.toFixed(2)}</div>
+                        </div>
+                    `;
+                });
             } else {
-                btn.textContent = originalText;
-                btn.disabled = false;
+                itemsHTML = '<div class="lv-empty-state">No items found</div>';
+            }
+
+            // Format addresses
+            let shippingHTML = '<div style="color: var(--lv-text-muted);">No shipping address saved</div>';
+            if (shippingAddress) {
+                shippingHTML = `
+                    <div class="lv-address-block">
+                        ${shippingAddress.name ? `<div class="lv-address-line"><strong>${shippingAddress.name}</strong></div>` : ''}
+                        ${shippingAddress.street ? `<div class="lv-address-line">${shippingAddress.street}</div>` : ''}
+                        ${shippingAddress.city ? `<div class="lv-address-line">${shippingAddress.city}, ${shippingAddress.state || ''} ${shippingAddress.zip || ''}</div>` : ''}
+                        ${shippingAddress.phone ? `<div class="lv-address-line">${shippingAddress.phone}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            let billingHTML = '<div style="color: var(--lv-text-muted);">No billing address saved</div>';
+            if (billingAddress) {
+                billingHTML = `
+                    <div class="lv-address-block">
+                        ${billingAddress.name ? `<div class="lv-address-line"><strong>${billingAddress.name}</strong></div>` : ''}
+                        ${billingAddress.street ? `<div class="lv-address-line">${billingAddress.street}</div>` : ''}
+                        ${billingAddress.city ? `<div class="lv-address-line">${billingAddress.city}, ${billingAddress.state || ''} ${billingAddress.zip || ''}</div>` : ''}
+                        ${billingAddress.phone ? `<div class="lv-address-line">${billingAddress.phone}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            const html = `
+                <!-- Order Information -->
+                <div class="lv-card">
+                    <h2 class="lv-card-title">Order Information</h2>
+                    <div class="lv-info-row">
+                        <span class="lv-info-label">Order Number</span>
+                        <span class="lv-info-value">#${orderId.slice(0, 8).toUpperCase()}</span>
+                    </div>
+                    <div class="lv-info-row">
+                        <span class="lv-info-label">Order Date</span>
+                        <span class="lv-info-value">${orderDate}</span>
+                    </div>
+                    <div class="lv-info-row">
+                        <span class="lv-info-label">Status</span>
+                        <span class="lv-status-badge ${statusClass}">${statusText}</span>
+                    </div>
+                    ${trackingNo ? `
+                    <div class="lv-info-row">
+                        <span class="lv-info-label">Tracking Number</span>
+                        <span class="lv-info-value">${carrier ? carrier + ' · ' : ''}${trackingNo}</span>
+                    </div>
+                    ` : ''}
+                    <div class="lv-info-row">
+                        <span class="lv-info-label">Payment Status</span>
+                        <span class="lv-info-value">${paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1)}</span>
+                    </div>
+                    ${order.vendorName ? `
+                    <div class="lv-info-row">
+                        <span class="lv-info-label">Vendor</span>
+                        <span class="lv-info-value">${order.vendorName}</span>
+                    </div>
+                    ` : ''}
+                </div>
+
+                <!-- Order Items -->
+                <div class="lv-card">
+                    <h2 class="lv-card-title">Order Items</h2>
+                    ${itemsHTML}
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--lv-border);">
+                        <div class="lv-info-row">
+                            <span class="lv-info-label">Subtotal</span>
+                            <span class="lv-info-value">${currency}${(order.total || 0).toFixed(2)}</span>
+                        </div>
+                        <div class="lv-info-row">
+                            <span class="lv-info-label">Shipping</span>
+                            <span class="lv-info-value">${order.shippingCost ? currency + order.shippingCost.toFixed(2) : 'Calculated at checkout'}</span>
+                        </div>
+                        <div class="lv-info-row" style="font-size: 18px; font-weight: 700;">
+                            <span>Total</span>
+                            <span style="color: var(--lv-accent);">${currency}${(order.total || 0).toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="lv-card">
+                    <h2 class="lv-card-title">Shipping Address</h2>
+                    ${shippingHTML}
+                </div>
+
+                <!-- Billing Address -->
+                <div class="lv-card">
+                    <h2 class="lv-card-title">Billing Address</h2>
+                    ${billingHTML}
+                </div>
+            `;
+
+            document.getElementById('orderDetails').innerHTML = html;
+        }
+
+        // Load order when page loads
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                loadOrderDetails();
+            } else {
+                document.getElementById('orderDetails').innerHTML = `
+                    <div class="lv-empty-state">
+                        <div>Please sign in to view order details</div>
+                        <a href="login.html" class="lv-btn lv-btn-primary" style="margin-top: 16px;">Sign In</a>
+                    </div>
+                `;
             }
         });
-
-        // Load product when page loads
-        loadProduct();
     </script>
 </body>
 </html>
+
