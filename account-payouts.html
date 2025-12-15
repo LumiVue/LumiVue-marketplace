@@ -700,6 +700,7 @@
 
       if (!user) {
         setStatus("Please sign in on your account page before saving payout details.", true);
+        // Don't block page access - allow viewing
         return;
       }
 
