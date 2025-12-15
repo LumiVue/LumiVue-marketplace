@@ -330,9 +330,9 @@
 
             <nav class="lv-nav">
                 <a href="dashboard.html">Dashboard</a>
-                <a href="listing.html" class="active">My products</a>
+                <a href="listings.html" class="active">My products</a>
                 <a href="create-listing.html">Create listing</a>
-                <a href="orders.html">Orders</a>
+               
             </nav>
 
             <div class="lv-actions">
@@ -385,21 +385,15 @@
         // Check authentication and load products
         auth.onAuthStateChanged(async (user) => {
             if (!user) {
-                window.location.href = "login.html";
-                return;
-            }
-
-            // Vendor-only auth guard
-            try {
-                const creatorDoc = await db.collection('creators').doc(user.uid).get();
-                if (!creatorDoc.exists) {
-                    // Not a vendor - redirect to buyer dashboard
-                    window.location.href = "buyer-dashboard.html";
-                    return;
+                // Show login prompt but don't block page access
+                console.log('User not logged in - page accessible but features may be limited');
+                const container = document.getElementById("productsContainer");
+                const emptyState = document.getElementById("emptyState");
+                if (container) container.style.display = "none";
+                if (emptyState) {
+                    emptyState.style.display = "block";
+                    emptyState.innerHTML = '<p>Please sign in to view your products.</p>';
                 }
-            } catch (error) {
-                console.error('Error checking vendor status:', error);
-                window.location.href = "login.html";
                 return;
             }
 
