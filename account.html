@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LumiVue – Vendor Account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    :root {
+      /* same palette as landing page */
+      --lv-bg: #f4f1eb;
+      --lv-surface: #ffffff;
+      --lv-border: #ddd3c6;
+      --lv-border-strong: #ccc0b1;
+      --lv-text: #2c1e19; /* espresso */
+      --lv-text-muted: #7a6a5c;
+      --lv-accent: #c98a5a;
+      --lv-accent-soft: #fbede1;
+      --lv-radius-lg: 14px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+      --lv-danger: #dc2626;
+      /* bubble / button beige (same as LV bubble on landing page) */
+      --lv-bubble-bg: #e6d8c7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--lv-bg);
+      color: var(--lv-text);
+    }
+
+    .lv-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--lv-bg);
+    }
+
+    /* TOP NAV */
+    .lv-top-nav {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      backdrop-filter: blur(16px);
+      background: rgba(244, 241, 235, 0.98);
+    }
+
+    .lv-top-nav-inner {
+      width: 100%;
+      max-width: 1120px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .lv-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* LV bubble + wordmark – same as landing page */
+    .lv-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lv-logo-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: var(--lv-bubble-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--lv-text);
+      border: 1px solid var(--lv-border-strong);
+      box-shadow: none;
+    }
+
+    .lv-logo-text {
+      font-size: 14px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--lv-text);
+    }
+
+    .lv-brand-sub {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+
+    .lv-nav-links a {
+      text-decoration: none;
+      color: var(--lv-text-muted);
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .lv-nav-links a:hover,
+    .lv-nav-links a:active,
+    .lv-nav-links a:focus {
+      color: var(--lv-text-muted);
+      border-bottom-color: transparent;
+      text-decoration: none;
+      outline: none;
+    }
+
+    .lv-nav-active {
+      color: var(--lv-text) !important;
+      border-bottom-color: var(--lv-border) !important;
+    }
+
+    .lv-nav-logout {
+      border-left: 1px solid rgba(0,0,0,.1);
+      padding-left: 14px;
+      margin-left: 8px;
+    }
+
+    .lv-nav-logout a {
+      color: var(--lv-danger);
+      font-weight: 500;
+    }
+
+    /* MAIN */
+    .lv-main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px 48px;
+    }
+
+    .lv-main-inner {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--lv-surface);
+      border-radius: 22px;
+      border: 1px solid var(--lv-border);
+      padding: 26px 28px 30px;
+      box-shadow: var(--lv-shadow-soft);
+    }
+
+    /* HEADER */
+    .lv-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .lv-header-title {
+      margin: 0 0 6px;
+      font-size: 22px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--lv-text);
+    }
+
+    .lv-header-sub {
+      margin: 0;
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      max-width: 520px;
+      line-height: 1.5;
+    }
+
+    /* Pill-style buttons: Status, COMPLETED, NOT STARTED, Manage */
+    .lv-pill,
+    .lv-status-pill,
+    .lv-card-status,
+    .lv-card-manage {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 34px;
+      padding: 0 22px;
+      min-width: 130px;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: var(--lv-bubble-bg);
+      color: var(--lv-text);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      box-shadow: none;
+      cursor: default;
+      white-space: nowrap;
+    }
+
+    .lv-card-manage {
+      cursor: pointer;
+    }
+
+    .lv-status-pill:hover,
+    .lv-card-status:hover,
+    .lv-card-manage:hover,
+    .lv-status-pill:active,
+    .lv-card-status:active,
+    .lv-card-manage:active,
+    .lv-status-pill:focus,
+    .lv-card-status:focus,
+    .lv-card-manage:focus {
+      background: var(--lv-bubble-bg);
+      color: var(--lv-text);
+      box-shadow: none;
+      outline: none;
+      transform: none;
+    }
+
+    /* PROGRESS */
+    .lv-progress {
+      margin-bottom: 22px;
+    }
+
+    .lv-progress-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--lv-text-muted);
+      margin-bottom: 8px;
+    }
+
+    .lv-progress-bar-outer {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: #f4e2c6;
+      overflow: hidden;
+    }
+
+    .lv-progress-bar-inner {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg,#c98a5a,#d8a86d,#f1d6b5);
+      transition: width .3s ease;
+    }
+
+    /* GRID */
+    .lv-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 840px) {
+      .lv-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* CARDS */
+    .lv-card {
+      position: relative;
+      padding: 18px 18px 16px;
+      background: var(--lv-surface);
+      border-radius: 18px;
+      border: 1px solid var(--lv-border);
+      box-shadow: 0 16px 38px rgba(0,0,0,.04);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: none;
+    }
+
+    .lv-card:hover,
+    .lv-card:active,
+    .lv-card:focus {
+      background: var(--lv-surface);
+      border-color: var(--lv-border);
+      box-shadow: 0 16px 38px rgba(0,0,0,.04);
+      transform: none;
+      outline: none;
+    }
+
+    .lv-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .lv-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--lv-text);
+    }
+
+    .lv-card-body {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    .lv-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .lv-card-note {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      opacity: .95;
+    }
+
+    .lv-footer-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .lv-top-nav-inner,
+      .lv-main-inner {
+        padding: 16px;
+      }
+      .lv-top-nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        height: auto;
+      }
+      .lv-nav-links {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .lv-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .lv-status-pill {
+        align-self: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="lv-shell">
+    <!-- TOP NAV -->
+    <header class="lv-top-nav">
+      <div class="lv-top-nav-inner">
+        <div class="lv-brand">
+          <div class="lv-logo-wrap">
+            <div class="lv-logo-circle">LV</div>
+            <span class="lv-logo-text">LUMIVUE</span>
+          </div>
+          <div class="lv-brand-sub">Marketplace · Vendor account</div>
+        </div>
+
+        <nav class="lv-nav-links">
+          <a href="marketplace.html">Marketplace</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="listings.html">Listings</a>
+          <span class="lv-nav-logout">
+            <a href="logout.html">Log out</a>
+          </span>
+        </nav>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="lv-main">
+      <section class="lv-main-inner">
+        <!-- header + status -->
+        <div class="lv-header">
+          <div>
+            <h1 class="lv-header-title">Vendor account</h1>
+            <p class="lv-header-sub">
+              Complete these steps to activate payouts and go live. While your
+              account is under review, you can still create products, publish
+              listings, and refine your storefront.
+            </p>
+          </div>
+          <span class="lv-status-pill lv-pill" id="overallStatusPill">Status: Not approved yet</span>
+        </div>
+
+        <!-- progress -->
+        <div class="lv-progress">
+          <div class="lv-progress-label-row">
+            <span>Onboarding completion</span>
+            <span id="onboardingPercent">0%</span>
+          </div>
+          <div class="lv-progress-bar-outer">
+            <div class="lv-progress-bar-inner" id="onboardingBar"></div>
+          </div>
+        </div>
+
+        <!-- cards -->
+        <div class="lv-grid">
+          <!-- Legal -->
+          <article class="lv-card" onclick="goTo('account-legal.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Legal business name &amp; contact details</div>
+              <div class="lv-card-status lv-pill" id="status-legal">Completed</div>
+            </div>
+            <div class="lv-card-body">
+              Add your legal business name, primary contact, and full billing address so we can generate invoices and compliance documents.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Required before payouts can be activated.</span>
+              <button type="button"
+                      class="lv-card-manage lv-pill"
+                      onclick="event.stopPropagation(); goTo('account-legal.html');">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <!-- Tax -->
+          <article class="lv-card" onclick="goTo('account-tax.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Tax forms &amp; marketplace agreements</div>
+              <div class="lv-card-status lv-pill" id="status-tax">Completed</div>
+            </div>
+            <div class="lv-card-body">
+              Upload W-9 / W-8 forms, complete ID verification, and confirm LumiVue marketplace agreements for your region.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Helps keep payouts compliant and secure.</span>
+              <button type="button"
+                      class="lv-card-manage lv-pill"
+                      onclick="event.stopPropagation(); goTo('account-tax.html');">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <!-- Bank -->
+          <article class="lv-card" onclick="goTo('account-payouts.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Bank account &amp; payout schedule</div>
+              <div class="lv-card-status lv-pill" id="status-payouts">Completed</div>
+            </div>
+            <div class="lv-card-body">
+              Connect the payout bank account where you want to receive funds, choose a schedule, and review your deposit summary.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Encrypted and never shared with buyers.</span>
+              <button type="button"
+                      class="lv-card-manage lv-pill"
+                      onclick="event.stopPropagation(); goTo('account-payouts.html');">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <!-- Storefront -->
+          <article class="lv-card" onclick="goTo('edit-store.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Storefront name, branding &amp; first listing</div>
+              <div class="lv-card-status lv-pill" id="status-storefront">Not started</div>
+            </div>
+            <div class="lv-card-body">
+              Choose your storefront name, upload brand visuals, and publish at least one hero listing so shoppers can discover your work.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">You can edit your brand at any time.</span>
+              <button type="button"
+                      class="lv-card-manage lv-pill"
+                      onclick="event.stopPropagation(); goTo('edit-store.html');">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <!-- Shipping -->
+          <article class="lv-card" onclick="goTo('shipping.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Shipping methods &amp; delivery promises</div>
+              <div class="lv-card-status lv-pill" id="status-shipping">Not started</div>
+            </div>
+            <div class="lv-card-body">
+              Configure carriers, handling times, and delivery expectations so customers know exactly how and when orders will arrive.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Applies to all listings by default.</span>
+              <button type="button"
+                      class="lv-card-manage lv-pill"
+                      onclick="event.stopPropagation(); goTo('shipping.html');">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <!-- Policies -->
+          <article class="lv-card" onclick="goTo('account-policies.html')">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Policies, returns &amp; customer support</div>
+              <div class="lv-card-status lv-pill" id="status-policies">Completed</div>
+            </div>
+            <div class="lv-card-body">
+              Define your return, exchange, and customer support policies so shoppers feel confident buying from your LumiVue storefront.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note">Shown on your public store profile.</span>
+              <button type="button"
+                      class="lv-card-manage lv-pill"
+                      onclick="event.stopPropagation(); goTo('account-policies.html');">
+                Manage
+              </button>
+            </div>
+          </article>
+
+          <!-- Vendor Membership (Stripe subscription) -->
+          <article class="lv-card" id="membershipCard">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Vendor membership ($9.99/mo)</div>
+              <div class="lv-card-status lv-pill" id="status-membership">Not active</div>
+            </div>
+            <div class="lv-card-body">
+              Activate your monthly vendor membership to sell on LumiVue. Your subscription status updates automatically after payment.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note" id="membershipNote">Required to enable vendor access.</span>
+              <button type="button"
+                      class="lv-card-manage lv-pill"
+                      id="membershipBtn">
+                Subscribe
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <p class="lv-footer-note">
+          You can return to these steps at any time. Once all required sections are completed and reviewed, your account will be approved and payouts will be activated. Until then, you can still create drafts and refine your listings.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <!-- Firebase CDN SDKs (compat, same pattern as login.html) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+
+  <script>
+    // LumiVue Firebase config (same project as login.html)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+    };
+
+    // Initialize Firebase (compat)
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script>
+    function goTo(path) {
+      window.location.href = path;
+    }
+
+    (function () {
+      const onboardingBar    = document.getElementById('onboardingBar');
+      const onboardingLabel  = document.getElementById('onboardingPercent');
+      const overallStatus    = document.getElementById('overallStatusPill');
+
+      const membershipStatusEl = document.getElementById('status-membership');
+      const membershipBtn = document.getElementById('membershipBtn');
+      const membershipNote = document.getElementById('membershipNote');
+
+      const STRIPE_PRICE_ID = "price_1Seg6zFFCAoQlog4QKQ6kZeR";
+
+      const sectionStatusEls = {
+        legal:      document.getElementById('status-legal'),
+        tax:        document.getElementById('status-tax'),
+        payouts:    document.getElementById('status-payouts'),
+        storefront: document.getElementById('status-storefront'),
+        shipping:   document.getElementById('status-shipping'),
+        policies:   document.getElementById('status-policies')
+      };
+
+      let db = null;
+      let auth = null;
+      let currentUser = null;
+
+      let isMembershipActive = false;
+
+      function setSectionStatus(el, isDone) {
+        if (!el) return;
+        el.textContent = isDone ? 'Completed' : 'Not started';
+      }
+
+      function setMembershipUI(active, statusText) {
+        isMembershipActive = !!active;
+        if (membershipStatusEl) membershipStatusEl.textContent = active ? 'Active' : (statusText || 'Not active');
+        if (membershipBtn) membershipBtn.textContent = active ? 'Manage' : 'Subscribe';
+        if (membershipNote) membershipNote.textContent = active
+          ? 'Subscription active. You can manage billing in Stripe.'
+          : 'Required to enable vendor access.';
+      }
+
+      function updateFromCreatorDoc(data) {
+        const sections = ['legal','tax','payouts','storefront','shipping','policies'];
+        let completedCount = 0;
+
+        sections.forEach((key) => {
+          const info = data && data.sections && data.sections[key];
+          const done = info && info.completed === true;
+          if (done) completedCount++;
+          setSectionStatus(sectionStatusEls[key], done);
+        });
+
+        const percent = Math.round((completedCount / sections.length) * 100);
+
+        if (onboardingBar) onboardingBar.style.width = percent + '%';
+        if (onboardingLabel) onboardingLabel.textContent = percent + '%';
+
+        if (overallStatus) {
+          if (percent === 100 && isMembershipActive) {
+            overallStatus.textContent = 'Status: Ready for approval';
+          } else if (percent > 0 || isMembershipActive) {
+            overallStatus.textContent = 'Status: In progress';
+          } else {
+            overallStatus.textContent = 'Status: Not approved yet';
+          }
+        }
+      }
+
+      async function ensureCustomerDoc(uid, email) {
+        // Extension uses /customers/{uid}
+        const ref = db.collection('customers').doc(uid);
+        await ref.set(
+          {
+            email: email || null,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          },
+          { merge: true }
+        );
+      }
+
+      function listenToSubscription(uid) {
+        // Extension writes subscription docs here:
+        // customers/{uid}/subscriptions/{subId}
+        const subsRef = db.collection('customers').doc(uid).collection('subscriptions');
+
+        subsRef.onSnapshot((snap) => {
+          let active = false;
+          let statusText = 'Not active';
+
+          snap.forEach((doc) => {
+            const d = doc.data() || {};
+            const status = (d.status || '').toLowerCase();
+            if (status === 'active' || status === 'trialing') active = true;
+            if (status) statusText = status.toUpperCase();
+          });
+
+          setMembershipUI(active, statusText);
+          // refresh header status text based on membership
+          // (won't break anything if creator doc hasn't loaded yet)
+          updateFromCreatorDoc(window.__lastCreatorData || {});
+        }, (err) => {
+          console.error('Subscription listener error', err);
+        });
+      }
+
+      async function startCheckout(uid) {
+        // Create a Checkout Session via Firestore write (Stripe Extension)
+        // customers/{uid}/checkout_sessions/{autoId}
+        const origin = window.location.origin;
+        const successUrl = origin + '/account.html?stripe=success';
+        const cancelUrl  = origin + '/account.html?stripe=cancel';
+
+        const sessionRef = await db
+          .collection('customers').doc(uid)
+          .collection('checkout_sessions')
+          .add({
+            price: STRIPE_PRICE_ID,
+            success_url: successUrl,
+            cancel_url: cancelUrl,
+            mode: 'subscription'
+          });
+
+        // Listen for the extension to populate the session doc with the Checkout URL or an error
+        sessionRef.onSnapshot((snap) => {
+          const data = snap.data() || {};
+          if (data.error) {
+            console.error('Stripe checkout error:', data.error);
+            alert('Stripe checkout error. Please try again or check Stripe settings.');
+            return;
+          }
+          // Extension usually returns a "url" (best) or sometimes "sessionId"
+          if (data.url) {
+            window.location.href = data.url;
+          } else if (data.sessionId) {
+            // If your extension returns sessionId only, you can still proceed,
+            // but url is the typical value. We'll show a clear message instead of failing silently.
+            alert('Checkout session created, but no URL returned. Please check the Stripe extension configuration.');
+          }
+        });
+      }
+
+      async function openCustomerPortal(uid) {
+        // Many versions of the extension also support a billing portal session via:
+        // customers/{uid}/portal_sessions/{autoId}
+        // We'll try it safely; if not supported, user can manage in Stripe dashboard.
+        try {
+          const origin = window.location.origin;
+          const returnUrl = origin + '/account.html';
+
+          const ref = await db
+            .collection('customers').doc(uid)
+            .collection('portal_sessions')
+            .add({ return_url: returnUrl });
+
+          ref.onSnapshot((snap) => {
+            const data = snap.data() || {};
+            if (data.error) {
+              console.error('Portal error:', data.error);
+              alert('Billing portal not available. You can manage billing in Stripe for now.');
+              return;
+            }
+            if (data.url) window.location.href = data.url;
+          });
+        } catch (e) {
+          console.error('Portal not supported / error:', e);
+          alert('Billing portal not available. You can manage billing in Stripe for now.');
+        }
+      }
+
+      function attachMembershipButton() {
+        if (!membershipBtn) return;
+
+        membershipBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!currentUser) return;
+
+          // If already active, attempt portal; otherwise checkout
+          if (isMembershipActive) {
+            await openCustomerPortal(currentUser.uid);
+          } else {
+            await startCheckout(currentUser.uid);
+          }
+        });
+      }
+
+      function initFirebase() {
+        db = firebase.firestore();
+        auth = firebase.auth();
+
+        attachMembershipButton();
+
+        auth.onAuthStateChanged(async (user) => {
+          if (!user) {
+            const redirect = encodeURIComponent(window.location.pathname);
+            window.location.href = 'login.html?redirect=' + redirect;
+            return;
+          }
+
+          currentUser = user;
+
+          // Verify user role matches the page
+          const creatorSnap = await db.collection('creators').doc(user.uid).get();
+          const buyerSnap = await db.collection('buyers').doc(user.uid).get();
+
+          const isCreatorPage = window.location.pathname.includes('account.html');
+          const isBuyerPage = window.location.pathname.includes('buyer-dashboard');
+
+          if (isCreatorPage && !creatorSnap.exists && buyerSnap.exists) {
+            window.location.href = 'buyer-dashboard.html';
+            return;
+          }
+
+          if (isBuyerPage && !buyerSnap.exists && creatorSnap.exists) {
+            window.location.href = 'account.html';
+            return;
+          }
+
+          if (!creatorSnap.exists && !buyerSnap.exists) {
+            console.error('User has no creator or buyer profile');
+            window.location.href = 'login.html';
+            return;
+          }
+
+          // Ensure Stripe extension has a customer doc to work with
+          try {
+            await ensureCustomerDoc(user.uid, user.email || null);
+            listenToSubscription(user.uid);
+          } catch (err) {
+            console.error('Error ensuring customer doc / subscription listener', err);
+          }
+
+          try {
+            const docRef = db.collection('creators').doc(user.uid);
+            const snap = await docRef.get();
+            const data = snap.exists ? (snap.data() || {}) : {};
+            window.__lastCreatorData = data;
+            updateFromCreatorDoc(data);
+          } catch (err) {
+            console.error('Error loading vendor account overview', err);
+            window.__lastCreatorData = {};
+            updateFromCreatorDoc({});
+          }
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', initFirebase);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Marketplace agreements & legal · LumiVue Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    :root {
+      /* LumiVue latte / espresso system same as create-listing */
+      --lv-bg: #f4f1eb;
+      --lv-surface: #ffffff;
+      --lv-border: #e6d7c6;
+      --lv-border-strong: #d9c6b3;
+      --lv-text: #2c1e19;          /* espresso */
+      --lv-text-muted: #7a6a5c;
+      --lv-pill: #e3ceb2;          /* beige pill */
+      --lv-pill-border: #c9a07a;   /* caramel outline */
+      --lv-accent-soft: #fbf3e7;
+      --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
+      --lv-radius-lg: 14px;
+      --lv-radius-md: 10px;
+
+      --lv-danger: #c15b4b;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Helvetica Neue", Arial, sans-serif;
+      background: var(--lv-bg);
+      color: var(--lv-text);
+    }
+
+    /* Remove all hover pop-ups, transforms, and transitions */
+    *:hover,
+    *:focus,
+    *:active {
+      transition: none !important;
+      transform: none !important;
+      box-shadow: none !important;
+      filter: none !important;
+    }
+
+    .page-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px 24px 40px;
+    }
+
+    .auth-page {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ───── TOP BAR – MATCH LANDING PAGE ───── */
+
+    .site-header {
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    .site-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lv-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: #d0b596;
+      border: 1px solid #b89a77;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text);
+    }
+
+    .brand-wordmark {
+      font-size: 13px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--lv-text);
+    }
+
+    .header-center-nav {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--lv-text);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .header-center-nav a {
+      text-decoration: none;
+      color: var(--lv-text);
+    }
+
+    .header-center-nav a:hover {
+      color: var(--lv-text); /* no hover change */
+    }
+
+    .header-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .header-pill {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 7px 18px;
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      background: #e6d8c7;
+      color: var(--lv-text);
+      cursor: pointer;
+      box-shadow: none;
+    }
+
+    .header-pill:hover {
+      background: #e6d8c7; /* no pop-up, no change */
+      color: var(--lv-text);
+    }
+
+    /* ───── ACCOUNT HEADER CARD ───── */
+
+    .account-header-card {
+      background: var(--lv-surface);
+      border-radius: 22px;
+      padding: 22px 22px 18px;
+      box-shadow: var(--lv-shadow-soft);
+      border: 1px solid var(--lv-border);
+      margin-bottom: 18px;
+    }
+
+    .account-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .account-title-block h1 {
+      font-size: 22px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin: 0 0 6px;
+      color: var(--lv-text);
+    }
+
+    .account-title-block p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      max-width: 520px;
+    }
+
+    .status-pill {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 6px 14px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--lv-bubble-bg);
+      color: var(--lv-text);
+      white-space: nowrap;
+    }
+
+    .account-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .progress-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: #e5ddd0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 67%;
+      height: 100%;
+      background: linear-gradient(90deg, #c98a5a, #fbbf24);
+    }
+
+    .progress-value {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      white-space: nowrap;
+    }
+
+    /* ───── MAIN SECTION CARD ───── */
+
+    .section-card {
+      background: var(--lv-surface);
+      border-radius: 22px;
+      padding: 22px 22px 20px;
+      border: 1px solid var(--lv-border);
+      box-shadow: var(--lv-shadow-soft);
+      margin-bottom: 20px;
+    }
+
+    .section-header {
+      margin-bottom: 14px;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin: 0 0 4px;
+      color: var(--lv-text);
+    }
+
+    .section-subline {
+      font-size: 13px;
+      color: var(--lv-text-muted);
+      margin: 0;
+      max-width: 620px;
+    }
+
+    form.legal-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .field-group-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lv-text-muted);
+      margin-bottom: 6px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .field-row.single {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--lv-text-muted);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      background: #fdf6eb;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--lv-text); /* espresso text */
+      outline: none;
+      transition:
+        border-color 120ms ease,
+        background 120ms ease;
+    }
+
+    .field textarea {
+      border-radius: 18px;
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #b2a391;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: #c6a574;
+      background: #fffaf2;
+    }
+
+    .helper-text {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      margin-top: 2px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      margin-top: 3px;
+    }
+
+    .checkbox-row label {
+      font-size: 12px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--lv-text);
+    }
+
+    .legal-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .legal-requirement {
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      max-width: 260px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* SHARED BUTTON STYLE – BOTH BUTTONS SAME COLOR, NO HOVER POPUP */
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      appearance: none;
+      border-radius: 999px;
+      padding: 7px 18px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--lv-border-strong);
+      cursor: pointer;
+      background: #e6d8c7;
+      color: var(--lv-text);     /* espresso */
+      box-shadow: none;          /* no pop-up */
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+
+    .btn-primary:hover {
+      background: #e6d8c7; /* no change */
+      color: var(--lv-text);
+      box-shadow: none;
+    }
+
+    #status {
+      margin-top: 8px;
+      font-size: 12px;
+      min-height: 18px;
+      color: var(--lv-text-muted);
+    }
+
+    #status.error {
+      color: #b91c1c;
+    }
+
+    @media (max-width: 768px) {
+      .page-shell {
+        padding: 14px 16px 30px;
+      }
+
+      .site-header-inner {
+        align-items: flex-start;
+      }
+
+      .header-center-nav {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      .field-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .account-header-card {
+        padding: 18px 16px 16px;
+      }
+
+      .section-card {
+        padding: 18px 16px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell auth-page">
+    <!-- TOP BAR matching landing page -->
+    <header class="site-header">
+      <div class="site-header-inner">
+        <div class="brand-left">
+          <div class="lv-badge">LV</div>
+          <div class="brand-wordmark">LUMIVUE</div>
+        </div>
+
+        <nav class="header-center-nav">
+          <a href="marketplace.html">Marketplace</a>
+          <a href="browse.html">Browse all</a>
+        </nav>
+
+        <div class="header-right">
+          <a href="login.html" class="header-pill">Sign in / Join</a>
+          <a href="signup.html" class="header-pill">For vendors</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Vendor account header -->
+    <section class="account-header-card">
+      <div class="account-header-top">
+        <div class="account-title-block">
+          <h1>VENDOR ACCOUNT</h1>
+          <p>
+            Review and confirm the legal agreements, marketplace terms, and customer-facing policies
+            that apply to your LumiVue storefront.
+          </p>
+        </div>
+        <div class="status-pill">STATUS: IN REVIEW</div>
+      </div>
+
+      <div class="account-progress-row">
+        <div class="progress-label">ONBOARDING COMPLETION</div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="progress-value">67%</div>
+      </div>
+    </section>
+
+    <!-- Legal agreements form -->
+    <section class="section-card">
+      <div class="section-header">
+        <div class="section-eyebrow">MARKETPLACE AGREEMENTS</div>
+        <h2 class="section-title">Legal forms & policies</h2>
+        <p class="section-subline">
+          Confirm the legal name that appears on invoices, and add links or summaries for your
+          returns, exchanges, and customer support policies.
+        </p>
+      </div>
+
+      <form id="legalForm" class="legal-form">
+        <!-- Legal identity -->
+        <div>
+          <div class="field-group-label">Legal identity</div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="legalName">Legal business name</label>
+              <input id="legalName" name="legalName" type="text" />
+              <div class="helper-text">
+                This should match your tax documents (for example, W-9 or W-8 forms).
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="taxCountry">Tax country / region</label>
+              <select id="taxCountry" name="taxCountry">
+                <option value="">Select country</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="GB">United Kingdom</option>
+                <option value="AU">Australia</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="taxId">Tax ID (optional)</label>
+              <input id="taxId" name="taxId" type="text" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Policy details -->
+        <div>
+          <div class="field-group-label">Storefront policies</div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="returnsPolicy">Returns & exchanges</label>
+              <textarea
+                id="returnsPolicy"
+                name="returnsPolicy"
+                placeholder="Describe how customers can request a return, exchange, or refund."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="shippingPolicy">Shipping & delivery</label>
+              <textarea
+                id="shippingPolicy"
+                name="shippingPolicy"
+                placeholder="Describe your shipping regions, delivery timeframes, and any important notes."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="supportPolicy">Customer support</label>
+              <textarea
+                id="supportPolicy"
+                name="supportPolicy"
+                placeholder="How shoppers can contact you and how quickly you usually respond."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="field-row single">
+            <div class="field">
+              <label for="legalNotes">Internal notes (optional)</label>
+              <textarea
+                id="legalNotes"
+                name="legalNotes"
+                placeholder="Optional internal notes about your legal or policy setup."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="checkbox-row">
+            <input type="checkbox" id="agreementsAccepted" name="agreementsAccepted" />
+            <label for="agreementsAccepted">
+              I confirm that this information is accurate to the best of my knowledge and that I will keep it updated
+              if my legal name or policies change.
+            </label>
+          </div>
+        </div>
+
+        <div class="legal-footer-row">
+          <p class="legal-requirement">
+            These agreements and policies are required before your account can be approved and shown to buyers.
+          </p>
+          <div class="btn-row">
+            <button type="submit" class="btn-primary">Save legal details</button>
+            <!-- SAME COLOR & STYLE AS SAVE BUTTON -->
+            <a href="account.html" class="btn-primary">Back to account overview</a>
+          </div>
+        </div>
+
+        <div id="status"></div>
+      </form>
+    </section>
+  </div>
+
+  <!-- Firebase: real saving into creators/{uid}.legalProfile -->
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+    };
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("legalForm");
+    const statusEl = document.getElementById("status");
+    let currentUser = null;
+
+    function setStatus(msg, isError = false) {
+      if (!statusEl) return;
+      statusEl.textContent = msg || "";
+      statusEl.className = isError ? "error" : "";
+    }
+
+    function fillFormFromData(data) {
+      if (!data) return;
+
+      const fields = [
+        "legalName",
+        "taxCountry",
+        "taxId",
+        "returnsPolicy",
+        "shippingPolicy",
+        "supportPolicy",
+        "legalNotes"
+      ];
+
+      fields.forEach((key) => {
+        if (form[key] && data[key] != null) {
+          form[key].value = data[key];
+        }
+      });
+
+      if (data.agreementsAccepted) {
+        form.agreementsAccepted.checked = true;
+      }
+    }
+
+    // Load existing legal profile once user is known
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+
+      if (!user) {
+        setStatus("Please sign in on your account page before saving legal details.", true);
+        return;
+      }
+
+      setStatus("");
+
+      try {
+        const ref = doc(db, "creators", user.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          const docData = snap.data();
+          const legalProfile = docData.legalProfile || null;
+          fillFormFromData(legalProfile);
+        }
+      } catch (err) {
+        console.error("Error loading legal profile", err);
+        // don't block page on load error
+      }
+    });
+
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!currentUser) {
+          setStatus("Please sign in first, then save legal details again.", true);
+          return;
+        }
+
+        const legalProfile = {
+          legalName: form.legalName.value.trim(),
+          taxCountry: form.taxCountry.value,
+          taxId: form.taxId.value.trim(),
+          returnsPolicy: form.returnsPolicy.value.trim(),
+          shippingPolicy: form.shippingPolicy.value.trim(),
+          supportPolicy: form.supportPolicy.value.trim(),
+          legalNotes: form.legalNotes.value.trim(),
+          agreementsAccepted: form.agreementsAccepted.checked,
+          updatedAt: serverTimestamp()
+        };
+
+        if (!legalProfile.legalName) {
+          setStatus("Please enter your legal business name.", true);
+          return;
+        }
+
+        if (!legalProfile.agreementsAccepted) {
+          setStatus("Please confirm the checkbox to accept these agreements.", true);
+          return;
+        }
+
+        try {
+          setStatus("Saving legal details…");
+
+          const ref = doc(db, "creators", currentUser.uid);
+          await setDoc(
+            ref,
+            { legalProfile },
+            { merge: true }
+          );
+
+          setStatus("Legal details saved.");
+
+          // Redirect back to overview after a short pause
+          setTimeout(() => {
+            window.location.href = "account.html";
+          }, 700);
+        } catch (err) {
+          console.error("Error saving legal details", err);
+          const code = err.code || "";
+          setStatus(
+            code
+              ? `Could not save legal details (${code}). Check Firestore rules in the console.`
+              : "Could not save legal details. Check Firestore settings.",
+            true
+          );
+        }
+      });
+    }
+  </script>
+</body>
+</html>

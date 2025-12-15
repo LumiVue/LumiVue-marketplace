@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Store Reviews   LumiVue</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    :root{
+      --lv-bg:#f4f1eb;
+      --lv-surface:#ffffff;
+      --lv-border:#e6d7c6;
+      --lv-border-strong:#d9c6b3;
+      --lv-text:#2c1e19;
+      --lv-text-muted:#7a6a5c;
+      --lv-pill:#e3ceb2;
+      --lv-pill-border:#c9a07a;
+      --lv-accent-soft:#fbf3e7;
+      --lv-shadow-soft:0 24px 60px rgba(15,23,42,.08);
+      --lv-radius-lg:14px;
+      --lv-radius-md:10px;
+    }
+    html{scroll-behavior:smooth}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;background:var(--lv-bg);color:var(--lv-text)}
+    a{color:inherit;text-decoration:none}
+    .lv-header{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,#fbf8f2 0%, #f6f1ea 100%);border-bottom:1px solid rgba(0,0,0,.06);backdrop-filter:saturate(120%) blur(8px)}
+    .lv-header-inner{max-width:1120px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:18px}
+    .lv-badge{width:28px;height:28px;border-radius:999px;background:#d3b79e;color:#2b2118;display:grid;place-items:center;font-weight:700;font-size:12px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.28);flex:0 0 28px}
+    .lv-wordmark{letter-spacing:.38em;font-weight:700;font-size:13px;margin-left:6px}
+    .lv-nav{margin-left:16px;display:flex;align-items:center;gap:18px;font-size:14px;color:var(--lv-text-muted)}
+    .lv-nav a{padding:2px 0;border-bottom:1px solid transparent}
+    .lv-nav a:hover{color:var(--lv-text);border-bottom-color:var(--lv-border)}
+    .lv-nav a.active{color:var(--lv-text);font-weight:600;border-bottom-color:var(--lv-border)}
+    .lv-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+    .lv-pill-btn{background:var(--lv-pill);border:1px solid var(--lv-pill-border);color:var(--lv-text);border-radius:999px;padding:6px 12px;font-size:12px;letter-spacing:.06em;cursor:pointer}
+    .lv-avatar{width:28px;height:28px;border-radius:999px;background:#d3b79e;color:#2b2118;display:grid;place-items:center;font-weight:700;font-size:12px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.28)}
+    .lv-main{max-width:1120px;margin:24px auto 48px;padding:0 18px}
+    .page-title{font-size:28px;font-weight:700;margin-bottom:8px}
+    .page-subtitle{font-size:14px;color:var(--lv-text-muted);margin-bottom:32px}
+    .reviews-summary{background:var(--lv-surface);border:1px solid var(--lv-border);border-radius:var(--lv-radius-lg);box-shadow:var(--lv-shadow-soft);padding:24px;margin-bottom:24px;display:flex;gap:32px;align-items:center}
+    .summary-rating{font-size:48px;font-weight:700}
+    .summary-stars{font-size:32px;color:#facc6b}
+    .summary-count{font-size:14px;color:var(--lv-text-muted);margin-top:4px}
+    .review-card{background:var(--lv-surface);border:1px solid var(--lv-border);border-radius:var(--lv-radius-lg);box-shadow:var(--lv-shadow-soft);padding:20px;margin-bottom:16px}
+    .review-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+    .reviewer-info{display:flex;align-items:center;gap:12px}
+    .reviewer-avatar{width:40px;height:40px;border-radius:999px;background:#d3b79e;display:grid;place-items:center;font-weight:600;font-size:14px;color:#2b2118}
+    .reviewer-name{font-weight:600;font-size:14px}
+    .review-date{font-size:12px;color:var(--lv-text-muted)}
+    .review-stars{font-size:16px;color:#facc6b}
+    .review-product{font-size:12px;color:var(--lv-text-muted);margin-bottom:8px}
+    .review-text{font-size:14px;line-height:1.6;color:var(--lv-text)}
+    .review-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:12px}
+    .review-img{width:100%;height:100px;border-radius:8px;object-fit:cover}
+    .empty-state{text-align:center;padding:60px 20px}
+    .empty-icon{font-size:48px;margin-bottom:16px;opacity:0.3}
+    .empty-title{font-size:20px;font-weight:600;margin-bottom:8px}
+    .empty-text{font-size:14px;color:var(--lv-text-muted)}
+  </style>
+</head>
+<body>
+  <header class="lv-header">
+    <div class="lv-header-inner">
+      <div class="lv-badge">LV</div>
+      <div class="lv-wordmark">L U M I V U E</div>
+      <nav class="lv-nav">
+        <a href="index.html">Home</a>
+        <a href="marketplace.html">Marketplace</a>
+      </nav>
+      <div class="lv-actions">
+        <button class="lv-pill-btn" onclick="history.back()">← Back to store</button>
+        <div class="lv-avatar">M</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="lv-main">
+    <h1 class="page-title" id="storeName">Store Reviews</h1>
+    <p class="page-subtitle">See what buyers are saying about this vendor</p>
+
+    <div id="reviewsSummary" class="reviews-summary" style="display:none;">
+      <div>
+        <div class="summary-rating" id="avgRating">0.0</div>
+        <div class="summary-stars" id="summaryStars">★★★★★</div>
+        <div class="summary-count" id="reviewCount">0 reviews</div>
+      </div>
+    </div>
+
+    <div id="reviewsList"></div>
+
+    <div id="emptyState" class="empty-state" style="display:none;">
+      <div class="empty-icon">⭐</div>
+      <div class="empty-title">No reviews yet</div>
+      <div class="empty-text">Be the first to review this store!</div>
+    </div>
+  </main>
+
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const storeUid = urlParams.get("uid");
+
+    function renderStars(rating) {
+      const r = Math.max(0, Math.min(5, Number(rating) || 0));
+      const full = Math.floor(r);
+      const half = (r - full) >= 0.5 ? 1 : 0;
+      const empty = 5 - full - half;
+      // Keep it simple (no half star glyph): round to nearest whole for display
+      const rounded = Math.round(r);
+      return "★".repeat(rounded) + "☆".repeat(5 - rounded);
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) return "";
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      return date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    async function loadReviews() {
+      const emptyState = document.getElementById("emptyState");
+      const emptyText = emptyState.querySelector(".empty-text");
+      const reviewsSummary = document.getElementById("reviewsSummary");
+      const reviewsList = document.getElementById("reviewsList");
+
+      if (!storeUid) {
+        emptyState.style.display = "block";
+        emptyText.textContent = "No store specified";
+        return;
+      }
+
+      try {
+        const snapshot = await db
+          .collection("stores")
+          .doc(storeUid)
+          .collection("reviews")
+          .orderBy("createdAt", "desc")
+          .get();
+
+        if (snapshot.empty) {
+          emptyState.style.display = "block";
+          return;
+        }
+
+        const reviews = [];
+        let totalRating = 0;
+
+        snapshot.forEach((doc) => {
+          const data = doc.data() || {};
+          reviews.push({ id: doc.id, ...data });
+          totalRating += Number(data.rating || 0);
+        });
+
+        const avg = reviews.length ? (totalRating / reviews.length) : 0;
+        const avgRating = avg.toFixed(1);
+
+        reviewsSummary.style.display = "flex";
+        document.getElementById("avgRating").textContent = avgRating;
+        document.getElementById("summaryStars").textContent = renderStars(parseFloat(avgRating));
+        document.getElementById("reviewCount").textContent = `${reviews.length} review${reviews.length > 1 ? "s" : ""}`;
+
+        reviews.forEach((review) => {
+          const card = document.createElement("div");
+          card.className = "review-card";
+
+          const name =
+            review.reviewerName ||
+            review.buyerName ||
+            (review.buyerEmail ? String(review.buyerEmail).split("@")[0] : "") ||
+            "Anonymous";
+
+          const initials = String(name)
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase() || "A";
+
+          const rating = Number(review.rating || 5);
+
+          // Support both possible field names without changing your data
+          const text = review.text || review.comment || "";
+
+          card.innerHTML = `
+            <div class="review-header">
+              <div class="reviewer-info">
+                <div class="reviewer-avatar">${initials}</div>
+                <div>
+                  <div class="reviewer-name">${name}</div>
+                  <div class="review-date">${formatDate(review.createdAt)}</div>
+                </div>
+              </div>
+              <div class="review-stars">${renderStars(rating)}</div>
+            </div>
+            ${review.productTitle ? `<div class="review-product">Reviewed: ${review.productTitle}</div>` : ""}
+            <div class="review-text">${text}</div>
+          `;
+
+          reviewsList.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Error loading reviews:", err);
+        emptyState.style.display = "block";
+        emptyText.textContent = `Error: ${err.message}`;
+      }
+    }
+
+    loadReviews();
+  </script>
+</body>
+</html>

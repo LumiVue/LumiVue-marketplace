@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sign In - LumiVue</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root { --lv-bg: #f4f1eb; --lv-surface: #ffffff; --lv-border: #ddd3c6; --lv-border-strong: #ccc0b1; --lv-text: #2c1e19; --lv-text-muted: #7a6a5c; --lv-accent: #c98a5a; --lv-radius-lg: 14px; --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18); --lv-success: #16a34a; --lv-success-soft: #dcfce7; --lv-danger: #dc2626; --lv-danger-soft: #fee2e2; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; background: var(--lv-bg); color: var(--lv-text); }
+        .lv-page { min-height: 100vh; }
+        .lv-header { position: sticky; top: 0; z-index: 10; background: rgba(244, 241, 235, 0.98); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(221, 211, 198, 0.7); }
+        .lv-header-inner { max-width: 1120px; margin: 0 auto; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+        .lv-logo-wrap { display: flex; align-items: center; gap: 10px; }
+        .lv-logo-circle { width: 34px; height: 34px; border-radius: 50%; background: #e6d8c7; color: var(--lv-text); font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--lv-border-strong); }
+        .lv-logo-text { font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--lv-text); }
+        .lv-nav { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+        .lv-nav a { text-decoration: none; color: var(--lv-text); }
+        .lv-header-actions { display: flex; align-items: center; gap: 10px; }
+        .lv-btn-text, .lv-btn-soft { display: inline-flex; align-items: center; justify-content: center; height: 34px; padding: 0 18px; border-radius: 50px; background: #e6d8c7; color: var(--lv-text); font-weight: 600; font-size: 14px; border: 1px solid var(--lv-border-strong); cursor: pointer; text-decoration: none; }
+        .lv-main { max-width: 540px; margin: 40px auto; padding: 0 24px; }
+        .lv-form-card { background: var(--lv-surface); border-radius: 26px; padding: 40px 36px; box-shadow: var(--lv-shadow-soft); border: 1px solid var(--lv-border); }
+        .lv-form-title { font-size: 28px; font-weight: 700; margin: 0 0 8px; text-align: center; }
+        .lv-form-subtitle { margin: 0 0 32px; text-align: center; font-size: 14px; color: var(--lv-text-muted); }
+        .lv-form-group { margin-bottom: 20px; }
+        .lv-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--lv-text); }
+        .lv-input { width: 100%; border-radius: 12px; border: 1px solid var(--lv-border-strong); padding: 12px 16px; font-size: 14px; outline: none; background: #f8f4ee; font-family: inherit; transition: border-color 0.2s; }
+        .lv-input:focus { border-color: var(--lv-accent); }
+        .lv-input::placeholder { color: var(--lv-text-muted); opacity: 0.6; }
+        .lv-btn-primary { width: 100%; border-radius: 12px; border: none; padding: 14px; font-size: 15px; font-weight: 600; background: var(--lv-accent); color: #ffffff; cursor: pointer; margin-top: 8px; }
+        .lv-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .lv-alert { padding: 12px 16px; border-radius: 12px; font-size: 13px; margin-bottom: 20px; display: none; }
+        .lv-alert.success { background: var(--lv-success-soft); color: var(--lv-success); border: 1px solid var(--lv-success); display: block; }
+        .lv-alert.error { background: var(--lv-danger-soft); color: var(--lv-danger); border: 1px solid var(--lv-danger); display: block; }
+        .lv-form-footer { text-align: center; margin-top: 24px; font-size: 13px; color: var(--lv-text-muted); }
+        .lv-form-footer a { color: var(--lv-accent); text-decoration: none; font-weight: 600; }
+        .lv-divider { display: flex; align-items: center; gap: 16px; margin: 24px 0; }
+        .lv-divider::before, .lv-divider::after { content: ''; flex: 1; height: 1px; background: var(--lv-border); }
+        .lv-divider-text { font-size: 12px; color: var(--lv-text-muted); }
+    </style>
+</head>
+<body>
+    <div class="lv-page">
+        <header class="lv-header">
+            <div class="lv-header-inner">
+                <div class="lv-logo-wrap">
+                    <div class="lv-logo-circle">LV</div>
+                    <span class="lv-logo-text">LUMIVUE</span>
+                </div>
+                <nav class="lv-nav">
+                    <a href="marketplace.html">Marketplace</a>
+                    <a href="Index.html">Browse all</a>
+                </nav>
+                <div class="lv-header-actions">
+                    <a class="lv-btn-text" href="buyer account.html">Create Account</a>
+                    <a class="lv-btn-soft" href="signup.html">For vendors</a>
+                </div>
+            </div>
+        </header>
+        <main class="lv-main">
+            <div class="lv-form-card">
+                <h1 class="lv-form-title">Welcome Back</h1>
+                <p class="lv-form-subtitle">Sign in to continue shopping</p>
+                <div id="alertMessage" class="lv-alert"></div>
+                <form id="loginForm">
+                    <div class="lv-form-group">
+                        <label class="lv-label" for="email">Email Address</label>
+                        <input type="email" id="email" class="lv-input" placeholder="your.email@example.com" required />
+                    </div>
+                    <div class="lv-form-group">
+                        <label class="lv-label" for="password">Password</label>
+                        <input type="password" id="password" class="lv-input" placeholder="Enter your password" required minlength="6" />
+                    </div>
+                    <button type="submit" id="loginBtn" class="lv-btn-primary">Sign In</button>
+                </form>
+                <div class="lv-divider"><span class="lv-divider-text">or</span></div>
+                <div class="lv-form-footer">Don't have an account? <a href="buyer account.html">Create buyer account</a></div>
+                <div class="lv-form-footer" style="margin-top: 8px;">Are you a vendor? <a href="signup.html">Sign up here</a></div>
+            </div>
+        </main>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig={apiKey:"AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",authDomain:"lumivue-c8fdf.firebaseapp.com",projectId:"lumivue-c8fdf",storageBucket:"lumivue-c8fdf.firebasestorage.app",messagingSenderId:"120420036736",appId:"1:120420036736:web:0fbbc98b02ea54840d3665"};
+        firebase.initializeApp(firebaseConfig);const auth=firebase.auth();const db=firebase.firestore();const loginForm=document.getElementById('loginForm');const emailInput=document.getElementById('email');const passwordInput=document.getElementById('password');const loginBtn=document.getElementById('loginBtn');const alertMessage=document.getElementById('alertMessage');
+        function showAlert(message,type='error'){alertMessage.textContent=message;alertMessage.className=`lv-alert ${type}`;alertMessage.scrollIntoView({behavior:'smooth',block:'center'});}
+        function hideAlert(){alertMessage.className='lv-alert';alertMessage.textContent='';}
+        loginForm.addEventListener('submit',async(e)=>{e.preventDefault();hideAlert();const email=emailInput.value.trim();const password=passwordInput.value;if(!email){showAlert('Please enter your email address','error');return;}if(!password){showAlert('Please enter your password','error');return;}loginBtn.disabled=true;loginBtn.textContent='Signing in...';try{console.log('Signing in...');const userCredential=await auth.signInWithEmailAndPassword(email,password);const user=userCredential.user;console.log('User signed in:',user.uid);const buyerDoc=await db.collection('buyers').doc(user.uid).get();const creatorDoc=await db.collection('creators').doc(user.uid).get();showAlert('Signed in successfully! Redirecting...','success');setTimeout(()=>{if(buyerDoc.exists){window.location.href='marketplace.html';}else if(creatorDoc.exists){window.location.href='dashboard.html';}else{window.location.href='marketplace.html';}},1500);}catch(error){console.error('Error:',error);let errorMessage='An error occurred. Please try again.';if(error.code==='auth/user-not-found'){errorMessage='No account found with this email. Please create an account.';}else if(error.code==='auth/wrong-password'){errorMessage='Incorrect password. Please try again.';}else if(error.code==='auth/invalid-email'){errorMessage='Please enter a valid email address.';}else if(error.code==='auth/too-many-requests'){errorMessage='Too many failed attempts. Please try again later.';}else if(error.message){errorMessage=error.message;}showAlert(errorMessage,'error');loginBtn.disabled=false;loginBtn.textContent='Sign In';}});
+    </script>
+</body>
+</html>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>LumiVue Product</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+        :root {
+            /* LumiVue latte / espresso system same as create-listing */
+            --lv-bg: #f4f1eb;
+            --lv-surface: #ffffff;
+            --lv-border: #e6d7c6;
+            --lv-border-strong: #d9c6b3;
+            --lv-text: #2c1e19;          /* espresso */
+            --lv-text-muted: #7a6a5c;
+            --lv-pill: #e3ceb2;          /* beige pill */
+            --lv-pill-border: #c9a07a;   /* caramel outline */
+            --lv-accent: #c98a5a;        /* accent color for buttons */
+            --lv-accent-soft: #fbf3e7;
+            --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
+            --lv-radius-lg: 14px;
+            --lv-radius-md: 10px;
+
+            --lv-danger: #c15b4b;
+        }
+
+        * { 
+            box-sizing: border-box;
+        }
+
+        /* Remove all hover pop-ups, transforms, and transitions */
+        *:hover,
+        *:focus,
+        *:active {
+            transition: none !important;
+            transform: none !important;
+            box-shadow: none !important;
+            filter: none !important;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFrame, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+            background: var(--lv-bg);
+            color: var(--lv-text);
+        }
+
+        .lv-page { min-height: 100vh; }
+
+        .lv-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(244, 241, 235, 0.98);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(221, 211, 198, 0.7);
+        }
+
+        .lv-header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .lv-logo-wrap { display: flex; align-items: center; gap: 10px; }
+
+        .lv-logo-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e6d8c7;
+            color: var(--lv-text);
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--lv-border-strong);
+        }
+
+        .lv-logo-text {
+            font-size: 14px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--lv-text);
+        }
+
+        .lv-nav { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+        .lv-nav a {
+            text-decoration: none !important;
+            border-bottom: none !important;
+            color: var(--lv-text);
+        }
+
+        .lv-header-actions { display: flex; align-items: center; gap: 10px; }
+
+        .lv-btn-text, .lv-btn-soft {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 34px;
+            padding: 0 18px;
+            border-radius: 50px;
+            background: #e6d8c7;
+            color: var(--lv-text);
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid var(--lv-border-strong);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .lv-main {
+            max-width: 1120px;
+            margin: 24px auto 48px;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 960px) {
+            .lv-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .lv-card {
+            background: var(--lv-surface);
+            border: 1px solid var(--lv-border);
+            border-radius: var(--lv-radius-lg);
+            box-shadow: var(--lv-shadow-soft);
+            padding: 20px 24px;
+        }
+
+        .lv-card + .lv-card {
+            margin-top: 16px;
+        }
+
+        .lv-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .lv-card-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .lv-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .lv-product-hero {
+            width: 100%;
+            max-width: 600px;
+            max-height: 600px;
+            height: auto;
+            border-radius: var(--lv-radius-lg);
+            background: #e5e1d8;
+            object-fit: contain;
+            object-position: center;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .lv-video-container {
+            width: 100%;
+            max-width: 640px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .lv-video-player {
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            max-height: 360px;
+            border-radius: var(--lv-radius-lg);
+            background: #000;
+            object-fit: contain;
+        }
+
+        .lv-product-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .lv-gallery-item {
+            width: 100%;
+            max-width: 300px;
+            max-height: 300px;
+            height: auto;
+            border-radius: var(--lv-radius-md);
+            object-fit: contain;
+            cursor: pointer;
+            background: #e5e1d8;
+        }
+
+        .lv-product-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 12px 0 8px;
+        }
+
+        .lv-product-subtitle {
+            font-size: 16px;
+            color: var(--lv-text-muted);
+            margin-bottom: 16px;
+        }
+
+        .lv-product-price {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .lv-product-meta {
+            font-size: 14px;
+            color: var(--lv-text-muted);
+            margin-bottom: 20px;
+        }
+
+        .lv-product-description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--lv-text);
+        }
+
+        .lv-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--lv-border);
+            font-size: 14px;
+        }
+
+        .lv-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .lv-info-label {
+            color: var(--lv-text-muted);
+            font-weight: 500;
+        }
+
+        .lv-info-value {
+            font-weight: 600;
+        }
+
+        .lv-btn-primary {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 44px;
+            padding: 0 24px;
+            border-radius: 50px;
+            background: var(--lv-accent);
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .lv-btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .lv-error-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .lv-error-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .lv-error-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .lv-error-text {
+            font-size: 14px;
+            color: var(--lv-text-muted);
+            margin-bottom: 20px;
+        }
+
+        .lv-footer {
+            max-width: 1120px;
+            margin: 0 auto 40px;
+            padding: 0 24px;
+            font-size: 12px;
+            color: var(--lv-text-muted);
+        }
+
+        .lv-footer p { margin: 4px 0; }
+    </style>
+</head>
+
+<body>
+    <div class="lv-page">
+        <header class="lv-header">
+            <div class="lv-header-inner">
+                <div class="lv-logo-wrap">
+                    <div class="lv-logo-circle">LV</div>
+                    <span class="lv-logo-text">LUMIVUE</span>
+                </div>
+
+                <nav class="lv-nav">
+                    <a href="marketplace.html">Marketplace</a>
+                    <a href="listings.html">Browse all</a>
+                </nav>
+
+                <div class="lv-header-actions">
+                    <a class="lv-cart-btn" href="cart.html" title="Shopping Cart" style="position: relative; display: inline-flex; align-items: center; justify-content: center; height: 34px; width: 34px; padding: 0; border-radius: 50%; background: #e6d8c7; color: var(--lv-text); font-weight: 600; font-size: 18px; border: 1px solid var(--lv-border-strong); cursor: pointer; text-decoration: none;">
+                        ??
+                        <span class="lv-cart-count" style="position: absolute; top: -6px; right: -6px; background: var(--lv-accent); color: #ffffff; font-size: 10px; font-weight: 700; min-width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--lv-bg);">0</span>
+                    </a>
+                    <a class="lv-btn-text" href="login.html">Sign in / Join</a>
+                    <a class="lv-btn-soft" href="login.html">For vendors</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="lv-main" id="mainContent" style="display:none;">
+            <!-- LEFT COLUMN   Product Details -->
+            <section>
+                <div class="lv-card">
+                    <!-- Featured Image -->
+                    <img id="productImage" class="lv-product-hero" alt="Product image" />
+                    
+                    <!-- Gallery Images -->
+                    <div id="productGallery" class="lv-product-gallery" style="display:none;"></div>
+                    
+                    <!-- Video -->
+                    <div id="productVideoContainer" class="lv-video-container" style="display:none;">
+                        <video id="productVideo" class="lv-video-player" controls></video>
+                    </div>
+                    
+                    <h1 class="lv-product-title" id="productTitle">Loading...</h1>
+                    <p class="lv-product-subtitle" id="productSubtitle"></p>
+                    <div class="lv-product-price" id="productPrice">$0.00</div>
+                    <div class="lv-product-meta" id="productMeta"></div>
+                    <div class="lv-product-description" id="productDescription"></div>
+                    
+                    <!-- Categories -->
+                    <div id="productCategories" class="lv-categories-section" style="display:none;"></div>
+                    
+                    <!-- Tags -->
+                    <div id="productTags" class="lv-tags-section" style="display:none;"></div>
+                    
+                    <!-- Variants -->
+                    <div id="productVariants" class="lv-variants-section" style="display:none;"></div>
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN   Product Info -->
+            <aside>
+                <div class="lv-card">
+                    <div class="lv-card-header">
+                        <div class="lv-card-title">Product Information</div>
+                    </div>
+                    <div class="lv-card-body">
+                        <div class="lv-info-row" style="margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--lv-border);">
+                            <span class="lv-info-label" style="font-size: 15px; font-weight: 700;">Price</span>
+                            <span class="lv-info-value" id="infoPrice" style="font-size: 24px; font-weight: 700; color: var(--lv-accent);"> </span>
+                        </div>
+                        <div class="lv-info-row">
+                            <span class="lv-info-label">Vendor</span>
+                            <span class="lv-info-value" id="infoVendor"> </span>
+                        </div>
+                        <div class="lv-info-row">
+                            <span class="lv-info-label">Type</span>
+                            <span class="lv-info-value" id="infoType"> </span>
+                        </div>
+                        <div class="lv-info-row" id="infoCollectionsRow" style="display:none;">
+                            <span class="lv-info-label">Collections</span>
+                            <span class="lv-info-value" id="infoCollections"> </span>
+                        </div>
+                        <div class="lv-info-row" id="infoWeightRow" style="display:none;">
+                            <span class="lv-info-label">Weight</span>
+                            <span class="lv-info-value" id="infoWeight"> </span>
+                        </div>
+                        <div class="lv-info-row" id="infoSKURow" style="display:none;">
+                            <span class="lv-info-label">SKU</span>
+                            <span class="lv-info-value" id="infoSKU"> </span>
+                        </div>
+                        <div class="lv-info-row" id="infoCompareAtRow" style="display:none;">
+                            <span class="lv-info-label">Compare at</span>
+                            <span class="lv-info-value" id="infoCompareAt" style="text-decoration:line-through;color:var(--lv-text-muted);"> </span>
+                        </div>
+                    </div>
+                    <!-- Quantity Selector -->
+                    <div style="margin: 16px 0; display: flex; flex-direction: column; gap: 8px;">
+                        <label for="productQuantity" style="font-size: 13px; font-weight: 600; color: var(--lv-text);">Quantity</label>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <button type="button" id="quantityDecrease" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--lv-border-strong); background: var(--lv-surface); color: var(--lv-text); font-size: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center;">−</button>
+                            <input type="number" id="productQuantity" value="1" min="1" max="99" style="width: 80px; height: 36px; text-align: center; border: 1px solid var(--lv-border-strong); border-radius: 8px; background: var(--lv-surface); color: var(--lv-text); font-size: 15px; font-weight: 600;">
+                            <button type="button" id="quantityIncrease" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--lv-border-strong); background: var(--lv-surface); color: var(--lv-text); font-size: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+                        </div>
+                    </div>
+                    <button class="lv-btn-primary" type="button" id="addToCartBtn">Add to cart</button>
+                    <button class="lv-btn-secondary" type="button" onclick="window.location.href='marketplace.html'" style="width: 100%; margin-top: 12px; display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 24px; border-radius: 50px; background: var(--lv-surface); color: var(--lv-text); font-weight: 600; font-size: 15px; border: 1px solid var(--lv-border-strong); cursor: pointer;">Continue Shopping</button>
+                </div>
+
+                <div class="lv-card" id="ingredientsCard" style="display:none;">
+                    <div class="lv-card-header">
+                        <div class="lv-card-title">Ingredients (INCI)</div>
+                    </div>
+                    <div class="lv-card-body">
+                        <div id="inciIngredientsList" style="font-size:13px;line-height:1.6;color:var(--lv-text);"> </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Error State -->
+        <div id="errorState" class="lv-error-state" style="display:none;">
+            <div class="lv-error-icon">??</div>
+            <div class="lv-error-title">Product not found</div>
+            <div class="lv-error-text">This product may have been removed or is no longer available.</div>
+            <button class="lv-btn-soft" onclick="window.location.href='marketplace.html'">Back to marketplace</button>
+        </div>
+
+        <footer class="lv-footer">
+            <p><strong>Sell your creations on LumiVue.</strong></p>
+            <p>LumiVue is a beauty-only marketplace built for skincare formulators, candle makers, soap artists, and cosmetic creators.</p>
+        </footer>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+    <!-- Cart Utility -->
+    <script src="cart.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+            authDomain: "lumivue-c8fdf.firebaseapp.com",
+            projectId: "lumivue-c8fdf",
+            storageBucket: "lumivue-c8fdf.firebasestorage.app",
+            messagingSenderId: "120420036736",
+            appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Initialize cart
+        cart.init(auth, db);
+
+        // Get product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        let currentProduct = null;
+
+        async function loadProduct() {
+            if (!productId) {
+                document.getElementById("errorState").style.display = "block";
+                return;
+            }
+
+            try {
+                const docRef = db.collection("listings").doc(productId);
+                const docSnap = await docRef.get();
+
+                if (!docSnap.exists) {
+                    document.getElementById("errorState").style.display = "block";
+                    return;
+                }
+
+                const data = docSnap.data();
+                // Ensure all required fields are present for cart
+                currentProduct = { 
+                    id: productId, 
+                    ...data,
+                    priceNumber: data.priceNumber !== undefined ? data.priceNumber : (parseFloat(data.price) || 0),
+                    vendor: data.vendor || '',
+                    vendorUid: data.vendorUid || '',
+                    currency: data.currency || 'USD'
+                };
+
+                // Only show active products to public buyers
+                if (data.status !== "active") {
+                    document.getElementById("errorState").style.display = "block";
+                    return;
+                }
+
+                document.getElementById("mainContent").style.display = "grid";
+
+                // Featured Image
+                if (data.imageUrl) {
+                    document.getElementById("productImage").src = data.imageUrl;
+                    document.getElementById("productImage").style.display = "block";
+                } else {
+                    document.getElementById("productImage").style.display = "none";
+                }
+                
+                // Gallery Images
+                const galleryContainer = document.getElementById("productGallery");
+                if (data.galleryImageUrls && Array.isArray(data.galleryImageUrls) && data.galleryImageUrls.length > 0) {
+                    galleryContainer.innerHTML = "";
+                    data.galleryImageUrls.forEach((url, index) => {
+                        if (url) {
+                            const img = document.createElement("img");
+                            img.className = "lv-gallery-item";
+                            img.src = url;
+                            img.alt = `${data.title || 'Product'} - Image ${index + 1}`;
+                            img.onclick = () => {
+                                document.getElementById("productImage").src = url;
+                            };
+                            galleryContainer.appendChild(img);
+                        }
+                    });
+                    galleryContainer.style.display = "grid";
+                } else {
+                    galleryContainer.style.display = "none";
+                }
+                
+                // Video
+                const videoContainer = document.getElementById("productVideoContainer");
+                const videoPlayer = document.getElementById("productVideo");
+                if (data.videoUrl) {
+                    videoPlayer.src = data.videoUrl;
+                    videoContainer.style.display = "block";
+                } else {
+                    videoContainer.style.display = "none";
+                }
+
+                // Basic info
+                document.getElementById("productTitle").textContent = data.title || "Untitled";
+                document.getElementById("productSubtitle").textContent = data.subtitle || "";
+
+                // Price
+                const price = data.priceNumber || parseFloat(data.price) || 0;
+                const currency = data.currency === "USD" ? "$" : (data.currency || "$");
+                document.getElementById("productPrice").textContent = `${currency}${price.toFixed(2)}`;
+                
+                // Also set price in the info card
+                document.getElementById("infoPrice").textContent = `${currency}${price.toFixed(2)}`;
+
+                // Meta
+                document.getElementById("productMeta").textContent =
+                    `${data.vendor || "Unknown vendor"}   ${data.type || "Product"}`;
+
+                // Description
+                const descEl = document.getElementById("productDescription");
+                if (data.description) {
+                    descEl.textContent = data.description;
+                    descEl.style.display = "block";
+                } else {
+                    descEl.style.display = "none";
+                }
+
+                // Right column info
+                document.getElementById("infoVendor").textContent = data.vendor || " ";
+                document.getElementById("infoType").textContent = data.type || " ";
+                
+                if (data.collections) {
+                    document.getElementById("infoCollections").textContent = data.collections;
+                    document.getElementById("infoCollectionsRow").style.display = "flex";
+                } else {
+                    document.getElementById("infoCollectionsRow").style.display = "none";
+                }
+                
+                if (data.weight && data.weightUnit) {
+                    document.getElementById("infoWeight").textContent = `${data.weight} ${data.weightUnit}`;
+                    document.getElementById("infoWeightRow").style.display = "flex";
+                } else {
+                    document.getElementById("infoWeightRow").style.display = "none";
+                }
+                
+                if (data.sku) {
+                    document.getElementById("infoSKU").textContent = data.sku;
+                    document.getElementById("infoSKURow").style.display = "flex";
+                } else {
+                    document.getElementById("infoSKURow").style.display = "none";
+                }
+                
+                if (data.compareAt) {
+                    const comparePrice = parseFloat(data.compareAt) || 0;
+                    document.getElementById("infoCompareAt").textContent = `${currency}${comparePrice.toFixed(2)}`;
+                    document.getElementById("infoCompareAtRow").style.display = "flex";
+                } else {
+                    document.getElementById("infoCompareAtRow").style.display = "none";
+                }
+
+                // INCI Ingredients
+                if (data.inciIngredients) {
+                    document.getElementById("ingredientsCard").style.display = "block";
+                    document.getElementById("inciIngredientsList").textContent = data.inciIngredients;
+                }
+                
+                // Categories
+                const categoriesContainer = document.getElementById("productCategories");
+                if (data.categories && Array.isArray(data.categories) && data.categories.length > 0) {
+                    categoriesContainer.innerHTML = "";
+                    data.categories.forEach(category => {
+                        if (category) {
+                            const chip = document.createElement("span");
+                            chip.className = "lv-category-chip";
+                            chip.textContent = category;
+                            categoriesContainer.appendChild(chip);
+                        }
+                    });
+                    categoriesContainer.style.display = "flex";
+                } else {
+                    categoriesContainer.style.display = "none";
+                }
+                
+                // Tags
+                const tagsContainer = document.getElementById("productTags");
+                if (data.tags) {
+                    const tagsArray = typeof data.tags === 'string' ? data.tags.split(',').map(t => t.trim()).filter(Boolean) : (Array.isArray(data.tags) ? data.tags : []);
+                    if (tagsArray.length > 0) {
+                        tagsContainer.innerHTML = "";
+                        tagsArray.forEach(tag => {
+                            if (tag) {
+                                const tagEl = document.createElement("span");
+                                tagEl.className = "lv-tag";
+                                tagEl.textContent = tag;
+                                tagsContainer.appendChild(tagEl);
+                            }
+                        });
+                        tagsContainer.style.display = "flex";
+                    } else {
+                        tagsContainer.style.display = "none";
+                    }
+                } else {
+                    tagsContainer.style.display = "none";
+                }
+                
+                // Variants
+                const variantsContainer = document.getElementById("productVariants");
+                if (data.variants && Array.isArray(data.variants) && data.variants.length > 0) {
+                    variantsContainer.innerHTML = '<div style="font-weight:600;margin-bottom:12px;font-size:15px;">Available Variants</div>';
+                    data.variants.forEach((variant, index) => {
+                        const variantEl = document.createElement("div");
+                        variantEl.className = "lv-variant-item";
+                        let variantHtml = `<div class="lv-variant-title">Variant ${index + 1}`;
+                        if (variant.size) variantHtml += ` - Size: ${variant.size}`;
+                        if (variant.color) variantHtml += `, Color: ${variant.color}`;
+                        if (variant.material) variantHtml += `, Material: ${variant.material}`;
+                        if (variant.style) variantHtml += `, Style: ${variant.style}`;
+                        variantHtml += `</div>`;
+                        variantHtml += `<div class="lv-variant-details">`;
+                        if (variant.price || variant.variantPrice) {
+                            const variantPrice = variant.variantPrice || variant.price || price;
+                            variantHtml += `Price: ${currency}${parseFloat(variantPrice).toFixed(2)}`;
+                        }
+                        if (variant.sku) variantHtml += ` | SKU: ${variant.sku}`;
+                        variantHtml += `</div>`;
+                        variantEl.innerHTML = variantHtml;
+                        variantsContainer.appendChild(variantEl);
+                    });
+                    variantsContainer.style.display = "block";
+                } else {
+                    variantsContainer.style.display = "none";
+                }
+
+            } catch (err) {
+                console.error("Error loading product:", err);
+                document.getElementById("errorState").style.display = "block";
+                document.getElementById("errorState").querySelector(".lv-error-text").textContent = err.message;
+            }
+        }
+
+        // Add to cart button handler
+        document.getElementById('addToCartBtn').addEventListener('click', async () => {
+            if (!currentProduct) {
+                alert('Product not loaded yet');
+                return;
+            }
+
+            const btn = document.getElementById('addToCartBtn');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Adding...';
+
+            // Get quantity
+            const quantityInput = document.getElementById('productQuantity');
+            const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+            
+            // Add product with quantity
+            const success = await cart.addToCart(currentProduct, quantity);
+            
+            if (success) {
+                btn.textContent = quantity > 1 ? `✓ Added ${quantity} to cart` : '✓ Added to cart';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }, 2000);
+            } else {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Quantity selector handlers
+        const quantityInput = document.getElementById('productQuantity');
+        const quantityDecrease = document.getElementById('quantityDecrease');
+        const quantityIncrease = document.getElementById('quantityIncrease');
+
+        if (quantityDecrease && quantityIncrease && quantityInput) {
+            quantityDecrease.addEventListener('click', () => {
+                const current = parseInt(quantityInput.value) || 1;
+                if (current > 1) {
+                    quantityInput.value = current - 1;
+                }
+            });
+
+            quantityIncrease.addEventListener('click', () => {
+                const current = parseInt(quantityInput.value) || 1;
+                if (current < 99) {
+                    quantityInput.value = current + 1;
+                }
+            });
+
+            quantityInput.addEventListener('change', () => {
+                let value = parseInt(quantityInput.value) || 1;
+                if (value < 1) value = 1;
+                if (value > 99) value = 99;
+                quantityInput.value = value;
+            });
+        }
+
+        // Listen for cart updates to refresh page if needed
+        window.addEventListener('cartUpdated', () => {
+            // Cart count will update automatically via cart.js
+            // If needed, we can refresh product info here
+        });
+
+        // Load product when page loads
+        loadProduct();
+    </script>
+</body>
+</html>

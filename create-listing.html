@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>LumiVue – Create Product Listing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+        :root {
+            /* LumiVue latte / espresso system same as create-listing */
+            --lv-bg: #f4f1eb;
+            --lv-surface: #ffffff;
+            --lv-border: #e6d7c6;
+            --lv-border-strong: #d9c6b3;
+            --lv-text: #2c1e19;          /* espresso */
+            --lv-text-muted: #7a6a5c;
+            --lv-pill: #e3ceb2;          /* beige pill */
+            --lv-pill-border: #c9a07a;   /* caramel outline */
+            --lv-accent-soft: #fbf3e7;
+            --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
+            --lv-radius-lg: 14px;
+            --lv-radius-md: 10px;
+
+            --lv-danger: #c15b4b;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Remove all hover pop-ups, transforms, and transitions */
+        *:hover,
+        *:focus,
+        *:active {
+            transition: none !important;
+            transform: none !important;
+            box-shadow: none !important;
+            filter: none !important;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui,-apple-system,BlinkMacSystemFrame,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+            background: var(--lv-bg);
+            color: var(--lv-text)
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        .lv-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: linear-gradient(180deg,#fbf8f2 0%, #f6f1ea 100%);
+            border-bottom: 1px solid rgba(0,0,0,.06);
+            backdrop-filter: saturate(120%) blur(8px)
+        }
+
+        .lv-header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 18px
+        }
+
+        .lv-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: #d3b79e;
+            color: #2b2118;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,.28);
+            flex: 0 0 28px
+        }
+
+        .lv-wordmark {
+            letter-spacing: .38em;
+            font-weight: 700;
+            font-size: 13px;
+            margin-left: 6px
+        }
+
+        .lv-nav {
+            margin-left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 14px;
+            color: var(--lv-text-muted)
+        }
+
+            .lv-nav a {
+                padding: 2px 0;
+                border-bottom: 1px solid transparent
+            }
+
+                .lv-nav a:hover {
+                    color: var(--lv-text);
+                    border-bottom-color: var(--lv-border);
+                    transition: none !important;
+                    transform: none !important;
+                }
+
+                .lv-nav a.active {
+                    color: var(--lv-text);
+                    font-weight: 600;
+                    border-bottom-color: var(--lv-border)
+                }
+
+        .lv-actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .lv-pill-btn {
+            background: #e6d8c7;
+            border: 1px solid var(--lv-border-strong);
+            color: var(--lv-text);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            letter-spacing: .06em;
+            cursor: pointer;
+        }
+
+            .lv-pill-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+            .lv-pill-btn.delete-btn {
+                background: #fee;
+                border-color: #faa;
+                color: #c00;
+            }
+
+        .lv-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: #d3b79e;
+            color: #2b2118;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,.28)
+        }
+
+        .lv-main {
+            max-width: 1120px;
+            margin: 18px auto 32px;
+            padding: 0 18px;
+            display: grid;
+            grid-template-columns: minmax(0,2fr) minmax(0,1.1fr);
+            gap: 18px;
+            align-items: flex-start
+        }
+
+        @media (max-width:960px) {
+            .lv-main {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .lv-card {
+            background: var(--lv-surface);
+            border: 1px solid var(--lv-border);
+            border-radius: var(--lv-radius-lg);
+            box-shadow: var(--lv-shadow-soft);
+            padding: 16px 18px
+        }
+
+            .lv-card + .lv-card {
+                margin-top: 12px
+            }
+
+        .lv-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px
+        }
+
+        .lv-card-title {
+            font-size: 15px;
+            font-weight: 700
+        }
+
+        .lv-card-subtitle {
+            font-size: 12px;
+            color: var(--lv-text-muted);
+            margin-top: 2px
+        }
+
+        .lv-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: .85rem
+        }
+
+        .lv-field {
+            display: flex;
+            flex-direction: column;
+            gap: .25rem
+        }
+
+        .lv-label {
+            font-size: .82rem;
+            color: var(--lv-text-muted);
+            font-weight: 500
+        }
+
+        .lv-input, .lv-textarea, .lv-select {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--lv-border-strong);
+            padding: .55rem .75rem;
+            font-size: .9rem;
+            background: #fff;
+            color: var(--lv-text)
+        }
+
+            .lv-input:focus, .lv-textarea:focus, .lv-select:focus {
+                outline: none;
+                border-color: var(--lv-pill-border);
+                box-shadow: 0 0 0 2px var(--lv-accent-soft)
+            }
+
+        .lv-textarea {
+            min-height: 140px;
+            resize: vertical;
+            line-height: 1.4
+        }
+
+        .lv-help {
+            font-size: .76rem;
+            color: var(--lv-text-muted)
+        }
+
+        .lv-inline-fields {
+            display: grid;
+            grid-template-columns: repeat(2,minmax(0,1fr));
+            gap: .85rem
+        }
+
+        @media (max-width:720px) {
+            .lv-inline-fields {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .lv-media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(120px,1fr));
+            gap: .75rem
+        }
+
+        .lv-media-tile {
+            position: relative;
+            border-radius: var(--lv-radius-md);
+            border: 1px dashed var(--lv-border-strong);
+            background: #faf6ef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 130px;
+            cursor: pointer;
+            overflow: hidden
+        }
+
+            .lv-media-tile.primary {
+                border-style: solid;
+                border-color: var(--lv-pill-border);
+                background: var(--lv-accent-soft)
+            }
+
+        .lv-media-label {
+            font-size: .8rem;
+            color: var(--lv-text-muted);
+            text-align: center;
+            white-space: pre-line;
+            padding: 0 .5rem
+        }
+
+        .lv-media-primary-tag {
+            position: absolute;
+            top: .45rem;
+            left: .45rem;
+            font-size: .7rem;
+            padding: .15rem .45rem;
+            border-radius: 999px;
+            background: #2c1e19;
+            color: #fff
+        }
+
+        .lv-media-preview {
+            position: absolute;
+            inset: 0;
+            object-fit: cover;
+            width: 100%;
+            height: 100%
+        }
+
+        .lv-media-remove {
+            position: absolute;
+            top: .35rem;
+            right: .35rem;
+            font-size: .75rem;
+            border-radius: 999px;
+            background: rgba(17,24,39,.75);
+            color: #fff;
+            padding: .1rem .35rem;
+            cursor: pointer
+        }
+
+        .lv-gallery-previews {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(90px,1fr));
+            gap: .6rem;
+            margin-top: .6rem
+        }
+
+        .lv-gallery-tile {
+            position: relative;
+            border-radius: 10px;
+            border: 1px solid var(--lv-border-strong);
+            overflow: hidden;
+            height: 90px
+        }
+
+        .lv-gallery-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .lv-gallery-remove {
+            position: absolute;
+            top: .25rem;
+            right: .25rem;
+            font-size: .7rem;
+            border-radius: 999px;
+            background: rgba(17,24,39,.75);
+            color: #fff;
+            padding: .1rem .35rem;
+            cursor: pointer
+        }
+
+        .lv-toggle {
+            position: relative;
+            width: 40px;
+            height: 22px
+        }
+
+            .lv-toggle input {
+                opacity: 0;
+                width: 0;
+                height: 0
+            }
+
+        .lv-toggle-slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 999px;
+            background: #d1c8bb;
+            transition: .2s
+        }
+
+            .lv-toggle-slider::before {
+                content: "";
+                position: absolute;
+                height: 16px;
+                width: 16px;
+                left: 3px;
+                top: 3px;
+                background: #fff;
+                border-radius: 50%;
+                transition: .2s;
+                box-shadow: 0 0 0 1px rgba(148,163,184,.4)
+            }
+
+        .lv-toggle input:checked + .lv-toggle-slider {
+            background: var(--lv-pill-border)
+        }
+
+            .lv-toggle input:checked + .lv-toggle-slider::before {
+                transform: translateX(18px)
+            }
+
+        /* Preview card styles */
+        .preview-card {
+            position: sticky;
+            top: 80px
+        }
+
+        .preview-product-img {
+            width: 100%;
+            height: 200px;
+            border-radius: var(--lv-radius-md);
+            background: radial-gradient(circle at top left,#f5e1c7,#f7eee3);
+            object-fit: cover;
+            margin-bottom: 10px
+        }
+
+        .preview-status {
+            display: inline-block;
+            background: var(--lv-pill);
+            border: 1px solid var(--lv-pill-border);
+            color: var(--lv-text);
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 8px
+        }
+
+        .preview-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--lv-text)
+        }
+
+        .preview-subtitle {
+            font-size: 13px;
+            color: var(--lv-text-muted);
+            margin-bottom: 8px
+        }
+
+        .preview-price {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--lv-text)
+        }
+
+        .preview-meta {
+            font-size: 12px;
+            color: var(--lv-text-muted)
+        }
+    </style>
+</head>
+<body>
+    <header class="lv-header">
+        <div class="lv-header-inner">
+            <div class="lv-badge">LV</div>
+            <div class="lv-wordmark">L U M I V U E</div>
+            <nav class="lv-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="listing.html">My products</a>
+                <a href="create-listing.html" class="active">Create listing</a>
+                            </nav>
+            <div class="lv-actions">
+                <button class="lv-pill-btn" id="saveDraftBtnTop">Save draft</button>
+                <button class="lv-pill-btn delete-btn" id="deleteBtnTop" style="display:none;">Delete</button>
+                <button class="lv-pill-btn" id="discardBtnTop">Discard</button>
+                <button class="lv-pill-btn" id="publishBtnTop">Publish product</button>
+                <div class="lv-avatar">M</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="lv-main">
+        <section>
+            <!-- PRODUCT DETAILS -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Product details</div>
+                        <p class="lv-card-subtitle">Core information buyers see</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-field">
+                        <label class="lv-label" for="productTitle">Title</label>
+                        <input id="productTitle" class="lv-input" type="text" placeholder="Crème de Lumière" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="productSubtitle">Short subtitle (optional)</label>
+                        <input id="productSubtitle" class="lv-input" type="text" placeholder="Radiance-restoring moisturizing cream" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="productDescription">Description</label>
+                        <textarea id="productDescription" class="lv-textarea" placeholder="Describe your formula, benefits, texture, key ingredients, and how to use."></textarea>
+                        <p class="lv-help">Full product story and details</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MEDIA: 1 Display + 19 Gallery + 1 Video -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Media</div>
+                        <p class="lv-card-subtitle">1 display photo, up to 19 additional photos, and 1 video (30 seconds)</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-media-grid">
+                        <!-- Display image -->
+                        <div class="lv-media-tile primary" id="featuredTile">
+                            <span class="lv-media-primary-tag">Display</span>
+                            <span class="lv-media-label" id="featuredLabel">
+                                Click to upload main product photo
+                                1200 × 1200px max, 400KB max (JPG)
+                            </span>
+                            <img id="featuredPreview" class="lv-media-preview" style="display:none;" alt="Featured preview" />
+                            <span id="featuredRemove" class="lv-media-remove" style="display:none;">✕</span>
+                            <input id="featuredImage" type="file" accept="image/*" style="display:none;" />
+                        </div>
+
+                        <!-- Gallery -->
+                        <div class="lv-media-tile" id="galleryTile">
+                            <span class="lv-media-label" id="galleryLabel">
+                                Add gallery photos
+                                Up to 19 images, 1200×1200px max, 400KB max each (JPG)
+                            </span>
+                            <input id="galleryImages" type="file" accept="image/*" multiple style="display:none;" />
+                        </div>
+
+                        <!-- Video -->
+                        <div class="lv-media-tile" id="videoTile">
+                            <span class="lv-media-label" id="videoLabel">
+                                Add product video
+                                1280×720 (720p) max, MP4 format
+                            </span>
+                            <video id="videoPreview" class="lv-media-preview" style="display:none;" loop playsinline></video>
+                            <span id="videoRemove" class="lv-media-remove" style="display:none;">✕</span>
+                            <input id="productVideo" type="file" accept="video/*" style="display:none;" />
+                        </div>
+                    </div>
+
+                    <div class="lv-gallery-previews" id="galleryPreviewContainer"></div>
+                    <p class="lv-help">Files will upload to Firebase Storage when you publish</p>
+                </div>
+            </div>
+
+            <!-- PRICING -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Pricing</div>
+                        <p class="lv-card-subtitle">Set your price and optional compare-at price</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="price">Price</label>
+                            <div style="display:flex;align-items:center;gap:.35rem;">
+                                <span style="font-size:.9rem;color:var(--lv-text-muted);padding:.45rem .6rem;border-radius:10px;border:1px solid var(--lv-border-strong);background:#faf6ef">$</span>
+                                <input id="price" class="lv-input" type="number" step="0.01" min="0" placeholder="45.00" style="flex:1;" />
+                            </div>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="compareAt">Compare-at price</label>
+                            <input id="compareAt" class="lv-input" type="number" step="0.01" min="0" placeholder="Optional" />
+                            <p class="lv-help">Shows a "was" price when higher</p>
+                        </div>
+                    </div>
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="costPerItem">Cost per item</label>
+                            <input id="costPerItem" class="lv-input" type="number" step="0.01" min="0" placeholder="Optional" />
+                            <p class="lv-help">Private info for profit calculations</p>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="currency">Currency</label>
+                            <select id="currency" class="lv-select">
+                                <option value="USD">USD – US Dollar</option>
+                                <option value="CAD">CAD – Canadian Dollar</option>
+                                <option value="EUR">EUR – Euro</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INVENTORY -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Inventory</div>
+                        <p class="lv-card-subtitle">Track stock levels and SKUs</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="sku">SKU (optional)</label>
+                            <input id="sku" class="lv-input" type="text" placeholder="CML-902" />
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="barcode">Barcode (optional)</label>
+                            <input id="barcode" class="lv-input" type="text" placeholder="552001789334" />
+                        </div>
+                    </div>
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <div class="lv-label">Track quantity</div>
+                            <label class="lv-toggle">
+                                <input id="trackInventory" type="checkbox" checked />
+                                <span class="lv-toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div></div>
+                    </div>
+                    <div id="inventoryQuantityFields" class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="inventoryLocation">Location</label>
+                            <input id="inventoryLocation" class="lv-input" type="text" placeholder="Main warehouse" />
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="inventoryAvailable">Available</label>
+                            <input id="inventoryAvailable" class="lv-input" type="number" min="0" step="1" placeholder="10" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHIPPING -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Shipping</div>
+                        <p class="lv-card-subtitle">Required if you ship a physical product</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="weight">Weight</label>
+                            <input id="weight" class="lv-input" type="number" step="0.01" min="0" placeholder="0.5" />
+                            <p class="lv-help">lb or kg</p>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="weightUnit">Unit</label>
+                            <select id="weightUnit" class="lv-select">
+                                <option value="lb">lb</option>
+                                <option value="kg">kg</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VARIANT METAFIELD -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Variant Metafield</div>
+                        <p class="lv-card-subtitle">Add variant-specific data (size, color, material)</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div id="variantList"></div>
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="variantSize">Size</label>
+                            <input id="variantSize" class="lv-input" type="text" placeholder="e.g., 50ml, 2oz, Large" />
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="variantColor">Color</label>
+                            <input id="variantColor" class="lv-input" type="text" placeholder="e.g., Rose Gold, Natural" />
+                        </div>
+                    </div>
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="variantMaterial">Material</label>
+                            <input id="variantMaterial" class="lv-input" type="text" placeholder="e.g., Glass, Recycled Plastic" />
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="variantStyle">Style</label>
+                            <input id="variantStyle" class="lv-input" type="text" placeholder="e.g., Matte, Glossy" />
+                        </div>
+                    </div>
+                    <div class="lv-field" style="margin-top:10px;">
+                        <label class="lv-label" for="variantPrice">Variant Price (optional)</label>
+                        <input id="variantPrice" class="lv-input" type="number" step="0.01" min="0" placeholder="e.g., 25.00" />
+                        <p class="lv-help">Leave empty to use main product price</p>
+                    </div>
+                    <button type="button" class="lv-pill-btn" id="addVariantBtn" style="margin-top:10px;">Add Variant</button>
+                </div>
+            </div>
+
+            <!-- GOOGLE SHOPPING FIELDS -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Google Shopping</div>
+                        <p class="lv-card-subtitle">Required for Google Merchant Center listings</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="googleAgeGroup">Age Group</label>
+                            <select id="googleAgeGroup" class="lv-select">
+                                <option value="">Select age group</option>
+                                <option value="adult">Adult</option>
+                                <option value="all ages">All Ages</option>
+                                <option value="teen">Teen</option>
+                                <option value="kids">Kids</option>
+                                <option value="toddler">Toddler</option>
+                                <option value="infant">Infant</option>
+                                <option value="newborn">Newborn</option>
+                            </select>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="googleCondition">Condition</label>
+                            <select id="googleCondition" class="lv-select">
+                                <option value="new">New</option>
+                                <option value="refurbished">Refurbished</option>
+                                <option value="used">Used</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="lv-inline-fields">
+                        <div class="lv-field">
+                            <label class="lv-label" for="googleGender">Gender</label>
+                            <select id="googleGender" class="lv-select">
+                                <option value="">Select gender</option>
+                                <option value="unisex">Unisex</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="lv-field">
+                            <label class="lv-label" for="googleMPN">MPN (Manufacturer Part Number)</label>
+                            <input id="googleMPN" class="lv-input" type="text" placeholder="e.g., SKN-2024-001" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEARCH ENGINE LISTING (SEO) -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">Search Engine Listing</div>
+                        <p class="lv-card-subtitle">Optimize for Google and other search engines</p>
+                    </div>
+                    <button type="button" class="lv-pill-btn" id="autoGenerateSeoBtn" style="font-size:11px;padding:4px 10px;">
+                        ✨ Auto-Generate SEO
+                    </button>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-field">
+                        <label class="lv-label" for="seoTitle">SEO Title</label>
+                        <input id="seoTitle" class="lv-input" type="text" placeholder="Optimized title for search results" />
+                        <p class="lv-help">Recommended: 50-60 characters • <span id="seoTitleCount">0</span>/60</p>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="seoDescription">SEO Meta Description</label>
+                        <textarea id="seoDescription" class="lv-textarea" style="min-height:80px;" placeholder="Compelling description for search results"></textarea>
+                        <p class="lv-help">Recommended: 150-160 characters • <span id="seoDescCount">0</span>/160</p>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="seoKeywords">Keywords</label>
+                        <input id="seoKeywords" class="lv-input" type="text" placeholder="Type keyword and press Enter or comma" />
+                        <p class="lv-help">Help Google understand your product • <span id="seoKeywordsCount">0</span> keywords</p>
+                        <div id="seoKeywordsTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="seoUrl">URL Handle</label>
+                        <input id="seoUrl" class="lv-input" type="text" placeholder="creme-de-lumiere-moisturizer" />
+                        <p class="lv-help">Custom URL slug for this product (auto-generated from title)</p>
+                    </div>
+                    <div style="background:#e8f5e9;border:1px solid #81c784;border-radius:8px;padding:10px;margin-top:8px;display:none;" id="seoSuccessMessage">
+                        <div style="font-size:11px;color:#2e7d32;">✅ SEO fields auto-generated! Review and adjust as needed.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI FORMULATION INCI ASSISTANT -->
+            <div class="lv-card">
+                <div class="lv-card-header">
+                    <div>
+                        <div class="lv-card-title">🤖 AI Formulation INCI Assistant</div>
+                        <p class="lv-card-subtitle">AI-powered ingredient list generator for cosmetic products</p>
+                    </div>
+                </div>
+                <div class="lv-card-body">
+                    <div class="lv-field">
+                        <label class="lv-label" for="productFormulationType">Product Type</label>
+                        <input id="productFormulationType" class="lv-input" type="text" placeholder="e.g., Moisturizer, Serum, Cleanser, etc." />
+                        <p class="lv-help">Enter the type of product you're creating</p>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="keyIngredients">Key Active Ingredients</label>
+                        <input id="keyIngredients" class="lv-input" type="text" placeholder="e.g., hyaluronic acid, niacinamide, vitamin C" />
+                        <p class="lv-help">Comma-separated list of main active ingredients</p>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="formulationGoal">Formulation Goal</label>
+                        <textarea id="formulationGoal" class="lv-textarea" style="min-height:60px;" placeholder="e.g., Hydrating, anti-aging, brightening, acne-fighting"></textarea>
+                        <p class="lv-help">Describe what you want the product to do</p>
+                    </div>
+                    <button type="button" class="lv-pill-btn" id="generateInciBtn" style="width:100%;margin-top:8px;">
+                        ✨ Generate INCI Ingredient List
+                    </button>
+                    <div id="inciLoadingState" style="display:none;padding:12px;text-align:center;font-size:13px;color:var(--lv-text-muted);">
+                        <div style="margin-bottom:8px;">🤖 AI is analyzing your formulation...</div>
+                        <div style="font-size:11px;">Generating INCI-compliant ingredient list</div>
+                    </div>
+                    <div class="lv-field" id="inciResultField" style="display:none;margin-top:12px;">
+                        <label class="lv-label">Generated INCI List (in descending order)</label>
+                        <textarea id="inciResult" class="lv-textarea" style="min-height:120px;" readonly></textarea>
+                        <p class="lv-help">This is an AI-generated ingredient list. Please verify with your actual formulation and regulatory requirements.</p>
+                        <button type="button" class="lv-pill-btn" id="copyInciBtn" style="margin-top:8px;">
+                            📋 Copy to Clipboard
+                        </button>
+                        <button type="button" class="lv-pill-btn" id="useInciBtn" style="margin-top:8px;width:100%;">
+                            ✅ Use This List (Copy to Final INCI Field)
+                        </button>
+                    </div>
+                    <div class="lv-field" style="margin-top:12px;">
+                        <label class="lv-label" for="finalInciList">Final INCI Ingredient List</label>
+                        <textarea id="finalInciList" class="lv-textarea" style="min-height:100px;" placeholder="Aqua, Glycerin, Cetearyl Alcohol, etc."></textarea>
+                        <p class="lv-help">Required for all cosmetic products - must be in descending order by weight</p>
+                    </div>
+                    <div style="background:#fbf3e7;border:1px solid var(--lv-border);border-radius:8px;padding:12px;margin-top:12px;">
+                        <div style="font-size:12px;font-weight:600;margin-bottom:6px;">⚠️ Important Notice</div>
+                        <div style="font-size:11px;line-height:1.5;color:var(--lv-text-muted);">
+                            This AI assistant provides suggestions only. Always verify ingredients comply with local regulations (FDA, EU Cosmetics Regulation, etc.). You are responsible for accurate labeling and regulatory compliance.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside>
+            <!-- PREVIEW CARD -->
+            <div class="lv-card preview-card">
+                <div class="lv-card-header">
+                    <div class="lv-card-title">Preview</div>
+                </div>
+                <div class="lv-card-body">
+                    <img id="previewImage" class="preview-product-img" alt="Product preview" style="display:none;" />
+                    <div id="previewImagePlaceholder" class="preview-product-img" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--lv-text-muted);">Product image</div>
+                    <span id="previewStatus" class="preview-status">Draft</span>
+                    <div id="previewTitle" class="preview-title">Untitled product</div>
+                    <div id="previewSubtitle" class="preview-subtitle"></div>
+                    <div id="previewPrice" class="preview-price">$0.00</div>
+                    <div id="previewMeta" class="preview-meta">Vendor · Product</div>
+                </div>
+            </div>
+
+            <!-- ORGANIZATION -->
+            <div class="lv-card">
+                <div class="lv-card-header"><div class="lv-card-title">Organization</div></div>
+                <div class="lv-card-body">
+                    <div class="lv-field">
+                        <label class="lv-label" for="productType">Product Type</label>
+                        <input id="productType" class="lv-input" type="text" placeholder="Type product type and press Enter or comma" />
+                        <div id="productTypeContainer" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="productVendor">Vendor</label>
+                        <input id="productVendor" class="lv-input" type="text" placeholder="Your Brand" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="collections">Collections</label>
+                        <input id="collections" class="lv-input" type="text" placeholder="Winter 2024" />
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="tags">Tags</label>
+                        <input id="tags" class="lv-input" type="text" placeholder="Type tag and press Enter or comma" />
+                        <div id="tagsContainer" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="productCategories">Product Categories</label>
+                        <input id="productCategories" class="lv-input" type="text" placeholder="Type category and press Enter or comma" />
+                        <p class="lv-help" style="margin-bottom:8px;">Add your own categories for this product</p>
+                        <div id="productCategoriesContainer" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+                    </div>
+                    <div class="lv-field">
+                        <label class="lv-label" for="productStatus">Status</label>
+                        <select id="productStatus" class="lv-select">
+                            <option value="draft">Draft</option>
+                            <option value="active">Active</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Firebase compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
+    <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+        authDomain: "lumivue-c8fdf.firebaseapp.com",
+        projectId: "lumivue-c8fdf",
+        storageBucket: "lumivue-c8fdf.firebasestorage.app",
+        messagingSenderId: "120420036736",
+        appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // Check authentication on page load and auth state changes (non-blocking)
+    let currentUser = null;
+    auth.onAuthStateChanged(async (user) => {
+      currentUser = user;
+      // Page is accessible even if not logged in - user will be prompted to sign in when needed
+    });
+    const sRef = firebase.storage().ref;
+
+    // Helper aliases for Firebase functions
+    const { serverTimestamp, addDoc, collection, doc, updateDoc, getDoc, deleteDoc } = firebase.firestore;
+    const { ref, uploadBytes, getDownloadURL } = firebase.storage;
+
+    // Global variables
+    let currentProductId = null;
+
+    // Load product for editing
+    async function loadProductForEditing(productId) {
+        try {
+            console.log("📥 Loading product for editing:", productId);
+            const doc = await db.collection("listings").doc(productId).get();
+            
+            if (!doc.exists) {
+                alert("Product not found!");
+                window.location.href = "listings.html";
+                return;
+            }
+            
+            const data = doc.data();
+            console.log("📥 Product data loaded:", data);
+            
+            // Set current product ID
+            currentProductId = productId;
+            
+            // Populate form fields
+            if (data.title) document.getElementById("productTitle").value = data.title;
+            if (data.subtitle) document.getElementById("productSubtitle").value = data.subtitle;
+            if (data.description) document.getElementById("productDescription").value = data.description;
+            if (data.price) document.getElementById("price").value = data.price;
+            if (data.compareAt) document.getElementById("compareAt").value = data.compareAt;
+            if (data.costPerItem) document.getElementById("costPerItem").value = data.costPerItem;
+            if (data.currency) document.getElementById("currency").value = data.currency;
+            if (data.sku) document.getElementById("sku").value = data.sku;
+            if (data.barcode) document.getElementById("barcode").value = data.barcode;
+            if (data.trackInventory !== undefined) document.getElementById("trackInventory").checked = data.trackInventory;
+            if (data.inventoryLocation) document.getElementById("inventoryLocation").value = data.inventoryLocation;
+            if (data.inventoryAvailable) document.getElementById("inventoryAvailable").value = data.inventoryAvailable;
+            if (data.weight) document.getElementById("weight").value = data.weight;
+            if (data.weightUnit) document.getElementById("weightUnit").value = data.weightUnit;
+            if (data.googleAgeGroup) document.getElementById("googleAgeGroup").value = data.googleAgeGroup;
+            if (data.googleCondition) document.getElementById("googleCondition").value = data.googleCondition;
+            if (data.googleGender) document.getElementById("googleGender").value = data.googleGender;
+            if (data.googleMPN) document.getElementById("googleMPN").value = data.googleMPN;
+            // Load product types
+            if (data.type || data.productType) {
+                const typeStr = data.type || data.productType || "";
+                if (typeStr) {
+                    const typeArray = typeof typeStr === 'string' ? typeStr.split(',').map(t => t.trim()).filter(Boolean) : (Array.isArray(typeStr) ? typeStr : []);
+                    productTypeList = typeArray;
+                    renderProductTypes();
+                }
+            }
+            if (data.vendor) document.getElementById("productVendor").value = data.vendor;
+            if (data.collections) document.getElementById("collections").value = data.collections;
+            if (data.tags) {
+                const tagsArray = typeof data.tags === 'string' ? data.tags.split(',').map(t => t.trim()) : data.tags;
+                tagsList = Array.isArray(tagsArray) ? tagsArray : [];
+                renderTags();
+            }
+            if (data.seoTitle) document.getElementById("seoTitle").value = data.seoTitle;
+            if (data.seoDescription) document.getElementById("seoDescription").value = data.seoDescription;
+            if (data.seoKeywords) {
+                const keywordsArray = typeof data.seoKeywords === 'string' ? data.seoKeywords.split(',').map(k => k.trim()) : data.seoKeywords;
+                keywordsList = Array.isArray(keywordsArray) ? keywordsArray : [];
+                renderKeywordsTags();
+            }
+            if (data.seoUrl) document.getElementById("seoUrl").value = data.seoUrl;
+            if (data.inciIngredients) document.getElementById("finalInciList").value = data.inciIngredients;
+            
+            // Load variants
+            if (data.variants && Array.isArray(data.variants)) {
+                variants = data.variants;
+                renderVariants();
+            }
+            
+            // Load featured image
+            if (data.imageUrl) {
+                const featuredPreview = document.getElementById("featuredPreview");
+                const featuredLabel = document.getElementById("featuredLabel");
+                const featuredRemove = document.getElementById("featuredRemove");
+                if (featuredPreview) {
+                    featuredPreview.src = data.imageUrl;
+                    featuredPreview.style.display = "block";
+                    if (featuredLabel) featuredLabel.style.display = "none";
+                    if (featuredRemove) featuredRemove.style.display = "inline-flex";
+                }
+                // Update preview
+                const previewImage = document.getElementById("previewImage");
+                const previewImagePlaceholder = document.getElementById("previewImagePlaceholder");
+                if (previewImage) {
+                    previewImage.src = data.imageUrl;
+                    previewImage.style.display = "block";
+                }
+                if (previewImagePlaceholder) previewImagePlaceholder.style.display = "none";
+            }
+            
+            // Load gallery images
+            if (data.galleryImageUrls && Array.isArray(data.galleryImageUrls) && data.galleryImageUrls.length > 0) {
+                console.log("📥 Loading gallery images:", data.galleryImageUrls.length);
+                galleryState = data.galleryImageUrls.map(url => ({ url: url, file: null }));
+                renderGallery();
+                updateGalleryLabel();
+            }
+            
+            // Load video
+            if (data.videoUrl) {
+                console.log("📥 Loading video:", data.videoUrl);
+                const videoPreview = document.getElementById("videoPreview");
+                const videoLabel = document.getElementById("videoLabel");
+                const videoRemove = document.getElementById("videoRemove");
+                if (videoPreview) {
+                    videoPreview.src = data.videoUrl;
+                    videoPreview.style.display = "block";
+                    if (videoLabel) videoLabel.style.display = "none";
+                    if (videoRemove) videoRemove.style.display = "inline-flex";
+                    // Try to play the video
+                    videoPreview.load();
+                    videoPreview.play().catch(() => {
+                        console.log("Video autoplay prevented (normal)");
+                    });
+                }
+            }
+            
+            // Update preview fields
+            const previewTitleEl = document.getElementById("previewTitle");
+            const previewSubtitleEl = document.getElementById("previewSubtitle");
+            const previewPriceEl = document.getElementById("previewPrice");
+            const previewStatusEl = document.getElementById("previewStatus");
+            if (previewTitleEl && data.title) previewTitleEl.textContent = data.title;
+            if (previewSubtitleEl && data.subtitle) previewSubtitleEl.textContent = data.subtitle;
+            if (previewPriceEl && data.price) {
+                const price = parseFloat(data.price) || 0;
+                const currency = data.currency === "USD" ? "$" : (data.currency || "$");
+                previewPriceEl.textContent = `${currency}${price.toFixed(2)}`;
+            }
+            // Update preview status based on product status
+            if (previewStatusEl) {
+                const status = data.status || "draft";
+                previewStatusEl.textContent = status === "active" ? "Active" : "Draft";
+            }
+            
+            // Load product status
+            if (data.status) {
+                const statusSelect = document.getElementById("productStatus");
+                if (statusSelect) {
+                    statusSelect.value = data.status;
+                }
+            }
+            
+            // Show delete button when editing
+            const deleteBtn = document.getElementById("deleteBtnTop");
+            if (deleteBtn) {
+                deleteBtn.style.display = "inline-block";
+            }
+            
+            // Load categories
+            if (data.categories && Array.isArray(data.categories)) {
+                console.log("📥 Setting product categories:", data.categories);
+                productCategoriesList = [...data.categories]; // Create a copy
+                renderProductCategories();
+                console.log("✅ Categories loaded into productCategoriesList:", productCategoriesList);
+            } else if (data.categories && typeof data.categories === 'string') {
+                // Handle string categories (comma-separated)
+                productCategoriesList = data.categories.split(',').map(c => c.trim()).filter(Boolean);
+                renderProductCategories();
+                console.log("✅ Categories loaded from string into productCategoriesList:", productCategoriesList);
+            } else {
+                console.warn("⚠️ Product has no categories or categories is not an array:", data.categories);
+                productCategoriesList = []; // Ensure it's an array
+            }
+            
+            console.log("✅ Product loaded for editing");
+        } catch (err) {
+            console.error("❌ Error loading product:", err);
+            alert("Error loading product: " + err.message);
+        }
+    }
+
+    // Update preview status when status select changes
+    const productStatusSelect = document.getElementById("productStatus");
+    const previewStatusEl = document.getElementById("previewStatus");
+    if (productStatusSelect && previewStatusEl) {
+        productStatusSelect.addEventListener("change", function() {
+            const status = this.value;
+            previewStatusEl.textContent = status === "active" ? "Active" : "Draft";
+            console.log("✅ Preview status updated to:", status);
+        });
+    }
+
+    // Check if we're editing a product
+    const urlParams = new URLSearchParams(window.location.search);
+    const editProductId = urlParams.get("edit");
+    
+    // Hide delete button initially (will be shown when editing)
+    const deleteBtn = document.getElementById("deleteBtnTop");
+    if (deleteBtn) {
+        deleteBtn.style.display = "none";
+    }
+    
+    if (editProductId) {
+        console.log("🔍 Edit mode detected, product ID:", editProductId);
+        // Wait for auth, then load product
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                loadProductForEditing(editProductId);
+            }
+        });
+    }
+
+    // Get form data helper function
+    window.lvGetFormData = function() {
+        console.log("📋 Product types:", productTypeList);
+        console.log("📋 Product categories (from list):", productCategoriesList);
+        console.log("📋 Product categories type:", typeof productCategoriesList, "Is array:", Array.isArray(productCategoriesList));
+        console.log("📋 Product categories length:", productCategoriesList ? productCategoriesList.length : 0);
+        console.log("📋 Product categories content:", JSON.stringify(productCategoriesList));
+
+        return {
+            title: document.getElementById("productTitle").value,
+            subtitle: document.getElementById("productSubtitle").value,
+            description: document.getElementById("productDescription").value,
+            price: document.getElementById("price").value,
+            compareAt: document.getElementById("compareAt").value,
+            costPerItem: document.getElementById("costPerItem").value,
+            currency: document.getElementById("currency").value,
+            sku: document.getElementById("sku").value,
+            barcode: document.getElementById("barcode").value,
+            trackInventory: document.getElementById("trackInventory").checked,
+            inventoryLocation: document.getElementById("inventoryLocation").value,
+            inventoryAvailable: document.getElementById("inventoryAvailable").value,
+            weight: document.getElementById("weight").value,
+            weightUnit: document.getElementById("weightUnit").value,
+            variantSize: document.getElementById("variantSize").value,
+            variantColor: document.getElementById("variantColor").value,
+            variantMaterial: document.getElementById("variantMaterial").value,
+            variantStyle: document.getElementById("variantStyle").value,
+            variantPrice: document.getElementById("variantPrice").value,
+            googleAgeGroup: document.getElementById("googleAgeGroup").value,
+            googleCondition: document.getElementById("googleCondition").value,
+            googleGender: document.getElementById("googleGender").value,
+            googleMPN: document.getElementById("googleMPN").value,
+            seoTitle: document.getElementById("seoTitle").value,
+            seoDescription: document.getElementById("seoDescription").value,
+            seoKeywords: keywordsList.join(", "),
+            seoUrl: document.getElementById("seoUrl").value,
+            inciIngredients: document.getElementById("finalInciList").value,
+            type: productTypeList.join(", "),
+            vendor: document.getElementById("productVendor").value,
+            collections: document.getElementById("collections").value,
+            tags: tagsList.join(", "),
+            // categories array used by store.html filtering
+            categories: productCategoriesList
+        };
+    };
+
+    window.lumivueFeaturedInput=document.getElementById("featuredImage");
+    const featuredTile=document.getElementById("featuredTile");
+    const featuredInput=document.getElementById("featuredImage");
+    const featuredPreview=document.getElementById("featuredPreview");
+    const featuredLabel=document.getElementById("featuredLabel");
+    const featuredRemove=document.getElementById("featuredRemove");
+
+    const galleryTile=document.getElementById("galleryTile");
+    const galleryInput=document.getElementById("galleryImages");
+    const galleryLabel=document.getElementById("galleryLabel");
+    const galleryPreviewContainer=document.getElementById("galleryPreviewContainer");
+    let galleryState=[];
+
+    const videoTile=document.getElementById("videoTile");
+    const videoInput=document.getElementById("productVideo");
+    const videoPreview=document.getElementById("videoPreview");
+    const videoLabel=document.getElementById("videoLabel");
+    const videoRemove=document.getElementById("videoRemove");
+
+    // Image validation helper
+    function validateImage(file, maxSizeKB = 400, maxWidth = 1200, maxHeight = 1200) {
+      // Check file size (400KB = 400 * 1024 bytes)
+      if (file.size > maxSizeKB * 1024) {
+        alert(`Image file size must be ${maxSizeKB}KB or less. This file is ${(file.size / 1024).toFixed(1)}KB.`);
+        return false;
+      }
+      
+      // Check dimensions
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          if (img.width > maxWidth || img.height > maxHeight) {
+            alert(`Image dimensions must be ${maxWidth}x${maxHeight}px or smaller. This image is ${img.width}x${img.height}px.`);
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        };
+        img.onerror = () => {
+          alert("Invalid image file.");
+          resolve(false);
+        };
+        img.src = URL.createObjectURL(file);
+      });
+    }
+
+    // Video validation helper
+    function validateVideo(file, maxWidth = 1280, maxHeight = 720) {
+      return new Promise((resolve) => {
+        const video = document.createElement("video");
+        video.preload = "metadata";
+        video.onloadedmetadata = () => {
+          window.URL.revokeObjectURL(video.src);
+          if (video.videoWidth > maxWidth || video.videoHeight > maxHeight) {
+            alert(`Video resolution must be ${maxWidth}x${maxHeight} (720p) or smaller. This video is ${video.videoWidth}x${video.videoHeight}.`);
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        };
+        video.onerror = () => {
+          alert("Invalid video file.");
+          resolve(false);
+        };
+        video.src = URL.createObjectURL(file);
+      });
+    }
+
+    // Featured image
+    featuredTile.onclick=()=>featuredInput.click();
+    featuredInput.onchange=async()=>{
+      const f=featuredInput.files?.[0];if(!f)return;
+      
+      // Validate image
+      const isValid = await validateImage(f, 400, 1200, 1200);
+      if (!isValid) {
+        featuredInput.value = "";
+        return;
+      }
+      
+      const r=new FileReader();
+      r.onload=e=>{
+        featuredPreview.src=e.target.result;
+        featuredPreview.style.display="block";
+        featuredLabel.style.display="none";
+        featuredRemove.style.display="inline-flex";
+        // Update preview card
+        document.getElementById("previewImage").src=e.target.result;
+        document.getElementById("previewImage").style.display="block";
+        document.getElementById("previewImagePlaceholder").style.display="none";
+      };
+      r.readAsDataURL(f);
+    };
+    featuredRemove.onclick=e=>{
+      e.stopPropagation();
+      featuredInput.value="";
+      featuredPreview.src="";
+      featuredPreview.style.display="none";
+      featuredLabel.style.display="block";
+      featuredRemove.style.display="none";
+      // Reset preview card image
+      document.getElementById("previewImage").src="";
+      document.getElementById("previewImage").style.display="none";
+      document.getElementById("previewImagePlaceholder").style.display="flex";
+    };
+
+    // Gallery (up to 19)
+    function updateGalleryLabel(){const c=galleryState.length;galleryLabel.textContent=c?`${c} photo${c>1?"s":""} selected (max 19)`:"Add gallery photos\nUp to 19 additional images"}
+    function renderGallery(){
+      galleryPreviewContainer.innerHTML="";
+      galleryState.forEach((item,i)=>{
+        const tile=document.createElement("div");tile.className="lv-gallery-tile";
+        const img=document.createElement("img");img.className="lv-gallery-img";img.src=item.url;
+        const rm=document.createElement("span");rm.className="lv-gallery-remove";rm.textContent="✕";
+        rm.onclick=()=>{URL.revokeObjectURL(item.url);galleryState.splice(i,1);renderGallery();updateGalleryLabel()}
+        tile.append(img,rm);galleryPreviewContainer.appendChild(tile);
+      });
+    }
+    galleryTile.onclick=()=>galleryInput.click();
+    galleryInput.onchange=async()=>{
+      const files=[...(galleryInput.files||[])];if(!files.length)return;
+      const remain=19-galleryState.length;const use=files.slice(0,remain);
+      
+      // Validate each image before adding
+      const validFiles = [];
+      for (const f of use) {
+        const isValid = await validateImage(f, 400, 1200, 1200);
+        if (isValid) {
+          validFiles.push(f);
+        }
+      }
+      
+      validFiles.forEach(f=>galleryState.push({file:f,url:URL.createObjectURL(f)}));
+      if(files.length>use.length)alert("Only the first 19 images are used.");
+      if(validFiles.length < use.length) {
+        alert(`${use.length - validFiles.length} image(s) were rejected due to size or dimension limits.`);
+      }
+      renderGallery();updateGalleryLabel();
+    };
+
+    // Video
+    videoTile.onclick=()=>videoInput.click();
+    
+    // Update preview when price changes
+    const priceInput = document.getElementById("price");
+    const previewPriceEl = document.getElementById("previewPrice");
+    if (priceInput && previewPriceEl) {
+        priceInput.addEventListener("input", () => {
+            const price = parseFloat(priceInput.value) || 0;
+            const currencyEl = document.getElementById("currency");
+            const currency = currencyEl && currencyEl.value === "USD" ? "$" : (currencyEl ? currencyEl.value : "$");
+            previewPriceEl.textContent = `${currency}${price.toFixed(2)}`;
+        });
+    }
+    
+    // Update preview when title changes
+    const titleInput = document.getElementById("productTitle");
+    const previewTitleEl = document.getElementById("previewTitle");
+    if (titleInput && previewTitleEl) {
+        titleInput.addEventListener("input", () => {
+            previewTitleEl.textContent = titleInput.value || "Untitled product";
+        });
+    }
+    
+    // Update preview when subtitle changes
+    const subtitleInput = document.getElementById("productSubtitle");
+    const previewSubtitleEl = document.getElementById("previewSubtitle");
+    if (subtitleInput && previewSubtitleEl) {
+        subtitleInput.addEventListener("input", () => {
+            previewSubtitleEl.textContent = subtitleInput.value || "";
+        });
+    }
+    
+    // Product Type tag functionality
+    let productTypeList = [];
+    const productTypeInput = document.getElementById("productType");
+    const productTypeContainer = document.getElementById("productTypeContainer");
+    
+    window.renderProductTypes = function() {
+        if (!productTypeContainer) return;
+        productTypeContainer.innerHTML = "";
+        productTypeList.forEach((type, i) => {
+            const tagEl = document.createElement("span");
+            tagEl.style.cssText = "display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;border:1px solid var(--lv-border-strong);background:#fbf4ea;font-size:11px;";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.style.cssText = "border:none;background:transparent;cursor:pointer;font-size:14px;line-height:1;padding:0;color:#6b7280;";
+            btn.textContent = "×";
+            btn.onclick = () => {
+                productTypeList.splice(i, 1);
+                renderProductTypes();
+            };
+            tagEl.innerHTML = `<span>${type}</span>`;
+            tagEl.appendChild(btn);
+            productTypeContainer.appendChild(tagEl);
+        });
+    };
+    
+    if (productTypeInput) {
+        productTypeInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const value = productTypeInput.value.trim();
+                if (value && !productTypeList.includes(value)) {
+                    productTypeList.push(value);
+                    productTypeInput.value = "";
+                    renderProductTypes();
+                }
+            }
+        });
+    }
+    
+    // Product Categories tag functionality
+    let productCategoriesList = [];
+    const productCategoriesInput = document.getElementById("productCategories");
+    const productCategoriesContainer = document.getElementById("productCategoriesContainer");
+    
+    window.renderProductCategories = function() {
+        if (!productCategoriesContainer) {
+            console.error("❌ productCategoriesContainer not found!");
+            return;
+        }
+        productCategoriesContainer.innerHTML = "";
+        console.log("🔄 Rendering categories. Current list:", productCategoriesList);
+        productCategoriesList.forEach((category, i) => {
+            if (!category || !category.trim()) return; // Skip empty categories
+            const tagEl = document.createElement("span");
+            tagEl.style.cssText = "display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;border:1px solid var(--lv-border-strong);background:#fbf4ea;font-size:11px;";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.style.cssText = "border:none;background:transparent;cursor:pointer;font-size:14px;line-height:1;padding:0;color:#6b7280;";
+            btn.textContent = "×";
+            btn.onclick = () => {
+                productCategoriesList.splice(i, 1);
+                renderProductCategories();
+                console.log("🗑️ Category removed. Updated list:", productCategoriesList);
+            };
+            tagEl.innerHTML = `<span>${category}</span>`;
+            tagEl.appendChild(btn);
+            productCategoriesContainer.appendChild(tagEl);
+        });
+        console.log("✅ Rendered", productCategoriesList.length, "categories");
+    };
+    
+    if (productCategoriesInput) {
+        productCategoriesInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const value = productCategoriesInput.value.trim();
+                if (value) {
+                    // Case-insensitive check to avoid duplicates
+                    const valueLower = value.toLowerCase();
+                    const alreadyExists = productCategoriesList.some(cat => cat.toLowerCase() === valueLower);
+                    if (!alreadyExists) {
+                        productCategoriesList.push(value);
+                        productCategoriesInput.value = "";
+                        renderProductCategories();
+                        console.log("✅ Category added:", value);
+                        console.log("✅ Current categories list:", productCategoriesList);
+                    } else {
+                        console.log("⚠️ Category already exists:", value);
+                    }
+                }
+            }
+        });
+    } else {
+        console.error("❌ productCategoriesInput element not found!");
+    }
+    
+    // Keywords tag functionality
+    let keywordsList = [];
+    const seoKeywordsInput = document.getElementById("seoKeywords");
+    const seoKeywordsTags = document.getElementById("seoKeywordsTags");
+    const seoKeywordsCount = document.getElementById("seoKeywordsCount");
+    
+    window.renderKeywordsTags = function() {
+        if (!seoKeywordsTags) return;
+        seoKeywordsTags.innerHTML = "";
+        keywordsList.forEach((keyword, i) => {
+            const tag = document.createElement("span");
+            tag.style.cssText = "display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;border:1px solid var(--lv-border-strong);background:#fbf4ea;font-size:11px;";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.style.cssText = "border:none;background:transparent;cursor:pointer;font-size:14px;line-height:1;padding:0;color:#6b7280;";
+            btn.textContent = "×";
+            btn.onclick = () => {
+                keywordsList.splice(i, 1);
+                renderKeywordsTags();
+                updateKeywordsCount();
+            };
+            tag.innerHTML = `<span>${keyword}</span>`;
+            tag.appendChild(btn);
+            seoKeywordsTags.appendChild(tag);
+        });
+        updateKeywordsCount();
+    };
+    
+    window.updateKeywordsCount = function() {
+        if (seoKeywordsCount) {
+            seoKeywordsCount.textContent = keywordsList.length;
+        }
+    };
+    
+    if (seoKeywordsInput) {
+        seoKeywordsInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const value = seoKeywordsInput.value.trim();
+                if (value && !keywordsList.includes(value)) {
+                    keywordsList.push(value);
+                    seoKeywordsInput.value = "";
+                    renderKeywordsTags();
+                }
+            }
+        });
+    }
+    
+    // Tags tag functionality
+    let tagsList = [];
+    const tagsInput = document.getElementById("tags");
+    const tagsContainer = document.getElementById("tagsContainer");
+    
+    window.renderTags = function() {
+        if (!tagsContainer) return;
+        tagsContainer.innerHTML = "";
+        tagsList.forEach((tag, i) => {
+            const tagEl = document.createElement("span");
+            tagEl.style.cssText = "display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;border:1px solid var(--lv-border-strong);background:#fbf4ea;font-size:11px;";
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.style.cssText = "border:none;background:transparent;cursor:pointer;font-size:14px;line-height:1;padding:0;color:#6b7280;";
+            btn.textContent = "×";
+            btn.onclick = () => {
+                tagsList.splice(i, 1);
+                renderTags();
+            };
+            tagEl.innerHTML = `<span>${tag}</span>`;
+            tagEl.appendChild(btn);
+            tagsContainer.appendChild(tagEl);
+        });
+    };
+    
+    if (tagsInput) {
+        tagsInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const value = tagsInput.value.trim();
+                if (value && !tagsList.includes(value)) {
+                    tagsList.push(value);
+                    tagsInput.value = "";
+                    renderTags();
+                }
+            }
+        });
+    }
+    
+    videoInput.onchange=async()=>{
+      const f=videoInput.files?.[0];if(!f)return;
+      
+      // Validate video dimensions (1280x720 max)
+      const isValid = await validateVideo(f, 1280, 720);
+      if (!isValid) {
+        videoInput.value = "";
+        return;
+      }
+      
+      const url=URL.createObjectURL(f);
+      videoPreview.src=url;
+      videoPreview.style.display="block";
+      videoLabel.style.display="none";
+      videoRemove.style.display="inline-flex";
+      videoPreview.play().catch(()=>{});
+    };
+    videoRemove.onclick=e=>{
+      e.stopPropagation();
+      videoInput.value="";
+      videoPreview.src="";
+      videoPreview.style.display="none";
+      videoLabel.style.display="block";
+      videoRemove.style.display="none";
+    };
+
+    // Auto-generate SEO fields
+    document.getElementById("autoGenerateSeoBtn").onclick=()=>{
+      const title=document.getElementById("productTitle").value;
+      const desc=document.getElementById("productDescription").value;
+      const keywords=document.getElementById("tags").value;
+
+      if(!title){alert("Please enter a product title");return}
+      if(!desc){alert("Please enter a product description");return}
+
+      // Simple SEO title and description generation
+      const seoTitle=`Buy ${title} Online | Your Store Name`;
+      const seoDescription=`Discover the benefits of ${title}. ${desc} Order now and enjoy fast shipping!`;
+
+      document.getElementById("seoTitle").value=seoTitle;
+      document.getElementById("seoDescription").value=seoDescription;
+
+      // Generate keywords from tags
+      const tagList=keywords.split(",").map(t=>t.trim()).filter(t=>t);
+      document.getElementById("seoKeywords").value=tagList.join(", ");
+
+      // Set URL handle
+      const urlHandle=title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+      document.getElementById("seoUrl").value=urlHandle;
+
+      document.getElementById("seoSuccessMessage").style.display="block";
+
+      // Count characters
+      document.getElementById("seoTitleCount").textContent=seoTitle.length;
+      document.getElementById("seoDescCount").textContent=seoDescription.length;
+      document.getElementById("seoKeywordsCount").textContent=tagList.length;
+    };
+
+    // AI INCI INGREDIENT GENERATOR - Works for all product types
+    const inciDatabase = {
+      // Base ingredients by product type
+      moisturizer: ["Aqua", "Glycerin", "Cetearyl Alcohol", "Butyrospermum Parkii (Shea Butter)", "Caprylic/Capric Triglyceride"],
+      serum: ["Aqua", "Glycerin", "Propanediol", "Pentylene Glycol"],
+      cleanser: ["Aqua", "Sodium Cocoyl Isethionate", "Cocamidopropyl Betaine", "Glycerin", "Coco-Glucoside"],
+      toner: ["Aqua", "Glycerin", "Propanediol", "Pentylene Glycol"],
+      mask: ["Aqua", "Kaolin", "Glycerin", "Bentonite", "Cetearyl Alcohol"],
+      oil: ["Simmondsia Chinensis (Jojoba) Seed Oil", "Argania Spinosa (Argan) Kernel Oil", "Rosa Canina (Rosehip) Fruit Oil"],
+      sunscreen: ["Aqua", "Zinc Oxide", "Titanium Dioxide", "Glycerin", "C12-15 Alkyl Benzoate"],
+      exfoliant: ["Aqua", "Glycolic Acid", "Lactic Acid", "Glycerin", "Propanediol"],
+      "eye-cream": ["Aqua", "Glycerin", "Caffeine", "Niacinamide", "Pentylene Glycol"],
+      "lip-balm": ["Cera Alba (Beeswax)", "Butyrospermum Parkii (Shea Butter)", "Cocos Nucifera (Coconut) Oil", "Theobroma Cacao (Cocoa) Seed Butter"],
+      "body-lotion": ["Aqua", "Glycerin", "Cetearyl Alcohol", "Caprylic/Capric Triglyceride", "Butyrospermum Parkii (Shea Butter)"],
+      shampoo: ["Aqua", "Sodium Cocoyl Isethionate", "Cocamidopropyl Betaine", "Glycerin", "Coco-Glucoside"],
+      conditioner: ["Aqua", "Cetearyl Alcohol", "Behentrimonium Chloride", "Glycerin", "Cetyl Alcohol"],
+      soap: ["Sodium Cocoate", "Sodium Palmate", "Aqua", "Glycerin", "Sodium Olivate", "Cocos Nucifera (Coconut) Oil"],
+      candle: ["Soy Wax", "Paraffin Wax", "Beeswax", "Fragrance", "Stearic Acid"],
+      lotion: ["Aqua", "Glycerin", "Cetearyl Alcohol", "Caprylic/Capric Triglyceride", "Dimethicone"]
+    };
+
+    const activeIngredients = {
+      "hyaluronic acid": "Sodium Hyaluronate",
+      "niacinamide": "Niacinamide",
+      "vitamin c": "Ascorbic Acid",
+      "vitamin e": "Tocopherol",
+      "retinol": "Retinol",
+      "salicylic acid": "Salicylic Acid",
+      "glycolic acid": "Glycolic Acid",
+      "lactic acid": "Lactic Acid",
+      "caffeine": "Caffeine",
+      "peptides": "Palmitoyl Tripeptide-1",
+      "ceramides": "Ceramide NP",
+      "collagen": "Hydrolyzed Collagen",
+      "aloe vera": "Aloe Barbadensis Leaf Juice",
+      "tea tree": "Melaleuca Alternifolia (Tea Tree) Leaf Oil",
+      "lavender": "Lavandula Angustifolia (Lavender) Oil",
+      "rose": "Rosa Damascena Flower Oil",
+      "chamomile": "Chamomilla Recutita (Chamomile) Flower Extract",
+      "green tea": "Camellia Sinensis Leaf Extract"
+    };
+
+    const preservatives = ["Phenoxyethanol", "Ethylhexylglycerin", "Potassium Sorbate", "Sodium Benzoate"];
+    const emulsifiers = ["Cetearyl Glucoside", "Polysorbate 20", "Xanthan Gum"];
+    const thickeners = ["Carbomer", "Xanthan Gum", "Hydroxyethylcellulose"];
+
+    // Ensure button exists before attaching handler
+    const generateInciBtn = document.getElementById("generateInciBtn");
+    if (generateInciBtn) {
+      generateInciBtn.onclick = async () => {
+        try {
+          const productTypeInput = document.getElementById("productFormulationType").value.trim().toLowerCase();
+          const keyIngreds = document.getElementById("keyIngredients").value.toLowerCase();
+          const goal = document.getElementById("formulationGoal").value.toLowerCase();
+
+          if (!productTypeInput) {
+            alert("Please enter a product type");
+            return;
+          }
+
+          // Show loading
+          document.getElementById("inciLoadingState").style.display = "block";
+          document.getElementById("inciResultField").style.display = "none";
+
+          // Simulate AI processing delay
+          await new Promise(resolve => setTimeout(resolve, 1500));
+
+          // Build ingredient list
+          let ingredients = [];
+
+          // Find matching product type in database (case-insensitive, partial match)
+          let matchedType = null;
+          for (const dbType in inciDatabase) {
+            if (productTypeInput.includes(dbType) || dbType.includes(productTypeInput)) {
+              matchedType = dbType;
+              break;
+            }
+          }
+          
+          // Also check common variations
+          if (!matchedType) {
+            const typeMap = {
+              "cream": "moisturizer",
+              "lotion": "body-lotion",
+              "essence": "toner",
+              "face oil": "oil",
+              "facial oil": "oil",
+              "body butter": "moisturizer",
+              "scrub": "exfoliant"
+            };
+            for (const [key, value] of Object.entries(typeMap)) {
+              if (productTypeInput.includes(key)) {
+                matchedType = value;
+                break;
+              }
+            }
+          }
+
+          // Start with base ingredients for product type
+          if (matchedType && inciDatabase[matchedType]) {
+            ingredients.push(...inciDatabase[matchedType]);
+          } else {
+            // Default base for unknown types
+            ingredients.push("Aqua", "Glycerin", "Cetearyl Alcohol");
+          }
+
+          // Add active ingredients mentioned by user
+          if (keyIngreds) {
+            const userIngreds = keyIngreds.split(",").map(i => i.trim().toLowerCase());
+            userIngreds.forEach(ingred => {
+              if (activeIngredients[ingred]) {
+                ingredients.push(activeIngredients[ingred]);
+              } else {
+                // Add as-is if not in database (capitalize first letter of each word)
+                const formatted = ingred.split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+                ingredients.push(formatted);
+              }
+            });
+          }
+
+          // Add goal-based actives
+          if (goal.includes("hydrat") || goal.includes("moist")) {
+            ingredients.push("Sodium Hyaluronate", "Panthenol");
+          }
+          if (goal.includes("anti-aging") || goal.includes("wrinkle")) {
+            ingredients.push("Retinol", "Palmitoyl Tripeptide-1");
+          }
+          if (goal.includes("brighten") || goal.includes("glow")) {
+            ingredients.push("Niacinamide", "Ascorbic Acid");
+          }
+          if (goal.includes("acne") || goal.includes("clear")) {
+            ingredients.push("Salicylic Acid", "Tea Tree Oil");
+          }
+          if (goal.includes("sensitive") || goal.includes("calm")) {
+            ingredients.push("Allantoin", "Bisabolol");
+          }
+
+          // Add functional ingredients based on product type (use matchedType or check input)
+          const typeForCheck = matchedType || productTypeInput;
+          if (["moisturizer", "serum", "lotion", "body-lotion"].some(t => typeForCheck.includes(t) || productTypeInput.includes(t))) {
+            ingredients.push(...emulsifiers.slice(0, 1));
+            ingredients.push(...preservatives.slice(0, 2));
+          }
+          if (["cleanser", "shampoo"].some(t => typeForCheck.includes(t) || productTypeInput.includes(t))) {
+            ingredients.push("Citric Acid");
+          }
+          if (!["oil", "soap", "candle"].some(t => typeForCheck.includes(t) || productTypeInput.includes(t))) {
+            ingredients.push(...preservatives.slice(0, 2));
+          }
+
+          // Remove duplicates and format
+          ingredients = [...new Set(ingredients)];
+
+          // Display result
+          const inciList = ingredients.join(", ");
+          const inciResultEl = document.getElementById("inciResult");
+          const finalInciEl = document.getElementById("finalInciList");
+          
+          if (inciResultEl) {
+            inciResultEl.value = inciList;
+          }
+          document.getElementById("inciLoadingState").style.display = "none";
+          document.getElementById("inciResultField").style.display = "block";
+          
+          // Automatically copy to Final INCI List field
+          if (finalInciEl) {
+            finalInciEl.value = inciList;
+            console.log("✅ Generated INCI list automatically copied to Final INCI field");
+          } else {
+            console.error("❌ finalInciList element not found!");
+          }
+        } catch (err) {
+          console.error("Error generating INCI:", err);
+          alert("Error generating INCI list: " + err.message);
+          document.getElementById("inciLoadingState").style.display = "none";
+        }
+      };
+    } else {
+      console.error("generateInciBtn not found!");
+    }
+
+    // Copy INCI to clipboard
+    const copyInciBtn = document.getElementById("copyInciBtn");
+    if (copyInciBtn) {
+      copyInciBtn.onclick = () => {
+        const inciText = document.getElementById("inciResult").value;
+        if (!inciText) {
+          alert("No INCI list to copy. Please generate one first.");
+          return;
+        }
+        navigator.clipboard.writeText(inciText).then(() => {
+          const btn = document.getElementById("copyInciBtn");
+          const originalText = btn.textContent;
+          btn.textContent = "✅ Copied!";
+          setTimeout(() => {
+            btn.textContent = originalText;
+          }, 2000);
+        }).catch(err => {
+          alert("Failed to copy: " + err);
+        });
+      };
+    } else {
+      console.error("copyInciBtn not found!");
+    }
+    
+    // Use INCI list button - copy generated list to Final INCI field
+    const useInciBtn = document.getElementById("useInciBtn");
+    if (useInciBtn) {
+      useInciBtn.onclick = () => {
+        const inciText = document.getElementById("inciResult").value;
+        if (!inciText) {
+          alert("No INCI list to use. Please generate one first.");
+          return;
+        }
+        document.getElementById("finalInciList").value = inciText;
+        const btn = document.getElementById("useInciBtn");
+        const originalText = btn.textContent;
+        btn.textContent = "✅ Copied to Final INCI Field!";
+        setTimeout(() => {
+          btn.textContent = originalText;
+        }, 2000);
+      };
+    }
+
+    // PUBLISH BUTTON - Add product to Firestore
+    document.getElementById("publishBtnTop").addEventListener("click",async()=>{
+      console.log("Publishing product...");
+      try{
+        const user=auth.currentUser;
+        if(!user){alert("Please sign in to publish");return}
+
+        const data=window.lvGetFormData();
+        if(!data.title||!data.price){alert("Please add a title and price");return}
+
+        // Show loading state
+        const btn=document.getElementById("publishBtnTop");
+        const originalText=btn.textContent;
+        btn.textContent="Publishing...";
+        btn.disabled=true;
+
+        // Upload featured image
+        let imageUrl=null;
+        const fileInput=window.lumivueFeaturedInput;
+        if(fileInput&&fileInput.files&&fileInput.files[0]){
+          const file=fileInput.files[0];
+          const path=`listing-images/${Date.now()}_${file.name}`;
+          const imgRef=storage.ref(path);
+          const snap=await imgRef.put(file);
+          imageUrl=await snap.ref.getDownloadURL();
+        } else if(currentProductId){
+          // Keep existing image if editing and no new image uploaded
+          const docSnap = await db.collection("listings").doc(currentProductId).get();
+          if(docSnap.exists){
+            imageUrl = docSnap.data().imageUrl;
+          }
+        }
+        
+        // Upload gallery images
+        let galleryImageUrls = [];
+        const galleryFiles = galleryState.filter(item => item.file).map(item => item.file);
+        if (galleryFiles.length > 0) {
+          console.log(`Uploading ${galleryFiles.length} gallery images...`);
+          for (const file of galleryFiles) {
+            const path = `listing-images/${Date.now()}_${file.name}`;
+            const imgRef = storage.ref(path);
+            const snap = await imgRef.put(file);
+            const url = await snap.ref.getDownloadURL();
+            galleryImageUrls.push(url);
+          }
+          // Also add existing URLs from galleryState (images that were loaded but not replaced)
+          const existingUrls = galleryState.filter(item => item.url && !item.file).map(item => item.url);
+          galleryImageUrls = [...galleryImageUrls, ...existingUrls];
+        } else {
+          // Use existing URLs from galleryState (either loaded from edit or existing)
+          galleryImageUrls = galleryState.filter(item => item.url && !item.file).map(item => item.url);
+          // If galleryState is empty but we're editing, get from Firestore
+          if (galleryImageUrls.length === 0 && currentProductId) {
+            const docSnap = await db.collection("listings").doc(currentProductId).get();
+            if (docSnap.exists && docSnap.data().galleryImageUrls) {
+              galleryImageUrls = docSnap.data().galleryImageUrls;
+            }
+          }
+        }
+        
+        // Upload video
+        let videoUrl = null;
+        const videoFileInput = document.getElementById("productVideo");
+        if (videoFileInput && videoFileInput.files && videoFileInput.files[0]) {
+          const file = videoFileInput.files[0];
+          const path = `listing-videos/${Date.now()}_${file.name}`;
+          const videoRef = storage.ref(path);
+          const snap = await videoRef.put(file);
+          videoUrl = await snap.ref.getDownloadURL();
+        } else if (currentProductId) {
+          // Keep existing video if editing and no new video uploaded
+          const docSnap = await db.collection("listings").doc(currentProductId).get();
+          if (docSnap.exists && docSnap.data().videoUrl) {
+            videoUrl = docSnap.data().videoUrl;
+          }
+        }
+
+        // Prepare payload
+        console.log("📋 Form data categories:", data.categories);
+        console.log("📋 productCategoriesList (tag input):", productCategoriesList);
+        console.log("📋 productCategoriesList type:", typeof productCategoriesList, "Is array:", Array.isArray(productCategoriesList));
+        console.log("📋 productCategoriesList length:", productCategoriesList ? productCategoriesList.length : 0);
+        
+        // ALWAYS use productCategoriesList as the source of truth (from tag input)
+        // This ensures we get the categories the vendor actually typed and added
+        let categoriesArray = [];
+        
+        // Debug: Log the current state
+        console.log("🔍 DEBUG PUBLISH: productCategoriesList state:", {
+            exists: !!productCategoriesList,
+            isArray: Array.isArray(productCategoriesList),
+            length: productCategoriesList ? productCategoriesList.length : 0,
+            content: productCategoriesList,
+            stringified: JSON.stringify(productCategoriesList)
+        });
+        
+        if (productCategoriesList && Array.isArray(productCategoriesList) && productCategoriesList.length > 0) {
+            // Filter out empty strings and trim whitespace
+            categoriesArray = productCategoriesList
+                .map(cat => cat ? cat.toString().trim() : "")
+                .filter(cat => cat.length > 0);
+            console.log("✅ Using categories from productCategoriesList (tag input):", categoriesArray);
+            console.log("✅ Categories count:", categoriesArray.length);
+        } else {
+            // Fallback: try to get from form data
+            if (data.categories) {
+                categoriesArray = Array.isArray(data.categories) 
+                    ? data.categories.map(cat => cat ? cat.toString().trim() : "").filter(cat => cat.length > 0)
+                    : (data.categories ? [data.categories.toString().trim()].filter(cat => cat.length > 0) : []);
+                console.log("⚠️ productCategoriesList empty, using form data categories:", categoriesArray);
+            } else {
+                categoriesArray = [];
+                console.warn("⚠️ No categories found - productCategoriesList and form data both empty");
+            }
+        }
+        
+        console.log("📦 Final categories array being saved:", categoriesArray);
+        console.log("📦 Categories array length:", categoriesArray.length);
+        console.log("📦 Categories array JSON:", JSON.stringify(categoriesArray));
+        
+        if (categoriesArray.length === 0) {
+            console.error("❌ ERROR: Categories array is EMPTY - product will not appear in category chips!");
+            console.error("❌ Make sure you typed categories in the 'Product Categories' field and pressed Enter/comma");
+        }
+        
+        // Build payload - preserve existing values when editing
+        let finalImageUrl = imageUrl;
+        let finalGalleryImageUrls = galleryImageUrls.length > 0 ? galleryImageUrls : null;
+        let finalVideoUrl = videoUrl;
+        
+        // If editing and no new media uploaded, preserve existing media
+        if (currentProductId && !imageUrl) {
+          const existingDoc = await db.collection("listings").doc(currentProductId).get();
+          if (existingDoc.exists) {
+            const existingData = existingDoc.data();
+            if (!finalImageUrl && existingData.imageUrl) finalImageUrl = existingData.imageUrl;
+            if (!finalGalleryImageUrls && existingData.galleryImageUrls) finalGalleryImageUrls = existingData.galleryImageUrls;
+            if (!finalVideoUrl && existingData.videoUrl) finalVideoUrl = existingData.videoUrl;
+          }
+        }
+        
+        // Get status from form (or default to "active" for publish)
+        const statusSelect = document.getElementById("productStatus");
+        const productStatus = statusSelect ? statusSelect.value : "active";
+        
+        // Build payload - ALWAYS include categories (even if empty array)
+        // Categories can be any product type - skincare, cosmetics, soaps, candles, oils, etc.
+        const payload = {
+          ...data,
+          status: productStatus, // Use status from form select
+          priceNumber:parseFloat(data.price||"0")||0,
+          vendorUid:user.uid,
+          categories: categoriesArray  // Always an array - can contain any category names
+        };
+        
+        // Ensure categories is always in the payload as an array
+        if (!payload.categories || !Array.isArray(payload.categories)) {
+          payload.categories = [];
+          console.warn("⚠️ Categories was not an array, setting to empty array");
+        }
+        
+        // Only include media fields if they have values (don't set to null)
+        if (finalImageUrl) payload.imageUrl = finalImageUrl;
+        if (finalGalleryImageUrls && finalGalleryImageUrls.length > 0) payload.galleryImageUrls = finalGalleryImageUrls;
+        if (finalVideoUrl) payload.videoUrl = finalVideoUrl;
+        if (variants.length > 0) payload.variants = variants;
+        console.log("Full payload:", payload);
+        console.log("Payload categories:", payload.categories);
+
+        // Update or create
+        let productId;
+        if(currentProductId){
+          // Update existing product - only update when user explicitly clicks Publish
+          console.log("🔄 Updating existing product:", currentProductId);
+          console.log("🔄 Update payload categories:", payload.categories);
+          
+          // Get existing document to preserve fields not in payload
+          const existingDoc = await db.collection("listings").doc(currentProductId).get();
+          const existingData = existingDoc.exists ? existingDoc.data() : {};
+          
+          // Build update data - ALWAYS include categories even if empty array
+          // Preserve createdAt and other metadata
+          const updateData = {
+            ...payload,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            // Preserve createdAt if it exists
+            createdAt: existingData.createdAt || firebase.firestore.FieldValue.serverTimestamp(),
+            // ALWAYS include categories - ensure it's an array
+            categories: Array.isArray(payload.categories) ? payload.categories : (payload.categories ? [payload.categories] : [])
+          };
+          
+          console.log("🔄 Update data being sent:", updateData);
+          console.log("🔄 Update data categories (type):", typeof updateData.categories, "Is array:", Array.isArray(updateData.categories));
+          console.log("🔄 Update data categories (value):", updateData.categories);
+          console.log("🔄 Update data categories (length):", updateData.categories ? updateData.categories.length : 0);
+          console.log("🔄 Existing product status before update:", existingData.status);
+          console.log("🔄 Existing product categories before update:", existingData.categories);
+          
+          await db.collection("listings").doc(currentProductId).update(updateData);
+          productId = currentProductId;
+          console.log("✅ Product updated:", productId);
+          
+          // Verify the update
+          const updatedDoc = await db.collection("listings").doc(productId).get();
+          if (updatedDoc.exists) {
+            const updatedData = updatedDoc.data();
+            console.log("✅ Updated product categories:", updatedData.categories);
+            console.log("✅ Updated product categories type:", typeof updatedData.categories, "Is array:", Array.isArray(updatedData.categories));
+            console.log("✅ Updated product categories JSON:", JSON.stringify(updatedData.categories));
+            console.log("✅ Updated product status:", updatedData.status);
+            if (!updatedData.categories || updatedData.categories.length === 0) {
+              console.warn("⚠️ WARNING: Product was updated with NO categories!");
+              console.warn("⚠️ This product will NOT appear in category chips on store.html");
+            } else {
+              console.log(`✅ Product has ${updatedData.categories.length} category/categories saved successfully`);
+              console.log(`✅ Categories: ${updatedData.categories.join(", ")}`);
+            }
+          }
+        } else {
+          // Create new product
+          payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          const ref=await db.collection("listings").add(payload);
+          productId = ref.id;
+          console.log("Product created:", productId);
+          console.log("🔍 Verifying saved product...");
+          // Verify the product was saved with categories
+          const savedDoc = await db.collection("listings").doc(productId).get();
+          if (savedDoc.exists) {
+            const savedData = savedDoc.data();
+            console.log("✅ Saved product categories:", savedData.categories);
+            console.log("✅ Saved product status:", savedData.status);
+            console.log("✅ Saved product title:", savedData.title);
+            console.log("✅ Saved product vendorUid:", savedData.vendorUid);
+            
+              if (!savedData.categories || savedData.categories.length === 0) {
+                console.warn("⚠️ WARNING: Product was saved with NO categories!");
+                console.warn("⚠️ Make sure you typed categories in the 'Product Categories' field and pressed Enter/comma before publishing.");
+              } else {
+                console.log(`✅ Product has ${savedData.categories.length} category/categories saved successfully`);
+                console.log(`✅ Categories: ${savedData.categories.join(", ")}`);
+                console.log("✅ Saved product categories type:", typeof savedData.categories, "Is array:", Array.isArray(savedData.categories));
+                console.log("✅ Saved product categories JSON:", JSON.stringify(savedData.categories));
+              }
+          } else {
+            console.error("❌ ERROR: Product document not found after creation!");
+          }
+        }
+
+        // Redirect to product page
+        alert("✅ Product published successfully!");
+        window.location.href=`listing.html`;
+      }catch(err){
+        console.error("Publish error:",err);
+        alert("❌ Error publishing product: "+err.message);
+        document.getElementById("publishBtnTop").textContent="Publish product";
+        document.getElementById("publishBtnTop").disabled=false;
+      }
+    });
+
+    // SAVE DRAFT BUTTON
+    document.getElementById("saveDraftBtnTop").addEventListener("click",async()=>{
+      try{
+        const user=auth.currentUser;
+        if(!user){alert("Please sign in to save draft");return}
+
+        const data=window.lvGetFormData();
+        if(!data.title){alert("Please add a product title");return}
+
+        const btn=document.getElementById("saveDraftBtnTop");
+        const originalText=btn.textContent;
+        btn.textContent="Saving...";
+        btn.disabled=true;
+
+        // Upload featured image if exists
+        let imageUrl=null;
+        const fileInput=window.lumivueFeaturedInput;
+        if(fileInput&&fileInput.files&&fileInput.files[0]){
+          const file=fileInput.files[0];
+          const path=`listing-images/${Date.now()}_${file.name}`;
+          const imgRef=storage.ref(path);
+          const snap=await imgRef.put(file);
+          imageUrl=await snap.ref.getDownloadURL();
+        } else if(currentProductId){
+          const docSnap = await db.collection("listings").doc(currentProductId).get();
+          if(docSnap.exists){
+            imageUrl = docSnap.data().imageUrl;
+          }
+        }
+        
+        // Upload gallery images
+        let galleryImageUrls = [];
+        const galleryFiles = galleryState.filter(item => item.file).map(item => item.file);
+        if (galleryFiles.length > 0) {
+          for (const file of galleryFiles) {
+            const path = `listing-images/${Date.now()}_${file.name}`;
+            const imgRef = storage.ref(path);
+            const snap = await imgRef.put(file);
+            const url = await snap.ref.getDownloadURL();
+            galleryImageUrls.push(url);
+          }
+        } else {
+          // Use existing URLs from galleryState (either loaded from edit or existing)
+          galleryImageUrls = galleryState.filter(item => item.url && !item.file).map(item => item.url);
+          // If galleryState is empty but we're editing, get from Firestore
+          if (galleryImageUrls.length === 0 && currentProductId) {
+            const docSnap = await db.collection("listings").doc(currentProductId).get();
+            if (docSnap.exists && docSnap.data().galleryImageUrls) {
+              galleryImageUrls = docSnap.data().galleryImageUrls;
+            }
+          }
+        }
+        
+        // Upload video
+        let videoUrl = null;
+        const videoFileInput = document.getElementById("productVideo");
+        if (videoFileInput && videoFileInput.files && videoFileInput.files[0]) {
+          const file = videoFileInput.files[0];
+          const path = `listing-videos/${Date.now()}_${file.name}`;
+          const videoRef = storage.ref(path);
+          const snap = await videoRef.put(file);
+          videoUrl = await snap.ref.getDownloadURL();
+        } else if (currentProductId) {
+          const docSnap = await db.collection("listings").doc(currentProductId).get();
+          if (docSnap.exists && docSnap.data().videoUrl) {
+            videoUrl = docSnap.data().videoUrl;
+          }
+        }
+
+        // ALWAYS use productCategoriesList as the source of truth (from tag input)
+        console.log("📋 Form data categories for draft:", data.categories);
+        console.log("📋 productCategoriesList (tag input) for draft:", productCategoriesList);
+        console.log("📋 productCategoriesList type:", typeof productCategoriesList, "Is array:", Array.isArray(productCategoriesList));
+        
+        // Debug: Log the current state
+        console.log("🔍 DEBUG DRAFT: productCategoriesList state:", {
+            exists: !!productCategoriesList,
+            isArray: Array.isArray(productCategoriesList),
+            length: productCategoriesList ? productCategoriesList.length : 0,
+            content: productCategoriesList,
+            stringified: JSON.stringify(productCategoriesList)
+        });
+        
+        let categoriesArray = [];
+        if (productCategoriesList && Array.isArray(productCategoriesList) && productCategoriesList.length > 0) {
+            // Filter out empty strings and trim whitespace
+            categoriesArray = productCategoriesList
+                .map(cat => cat ? cat.toString().trim() : "")
+                .filter(cat => cat.length > 0);
+            console.log("✅ Using categories from productCategoriesList (tag input) for draft:", categoriesArray);
+            console.log("✅ Draft categories count:", categoriesArray.length);
+        } else {
+            // Fallback: try to get from form data
+            if (data.categories) {
+                categoriesArray = Array.isArray(data.categories) 
+                    ? data.categories.map(cat => cat ? cat.toString().trim() : "").filter(cat => cat.length > 0)
+                    : (data.categories ? [data.categories.toString().trim()].filter(cat => cat.length > 0) : []);
+                console.log("⚠️ productCategoriesList empty, using form data categories for draft:", categoriesArray);
+            } else {
+                categoriesArray = [];
+                console.warn("⚠️ No categories found for draft - productCategoriesList and form data both empty");
+            }
+        }
+        
+        console.log("💾 Saving draft with categories:", categoriesArray);
+        console.log("💾 Draft categories array length:", categoriesArray.length);
+        console.log("💾 Draft categories array JSON:", JSON.stringify(categoriesArray));
+        
+        if (categoriesArray.length === 0) {
+            console.error("❌ ERROR: Categories array is EMPTY for draft - product will not appear in category chips!");
+            console.error("❌ Make sure you typed categories in the 'Product Categories' field and pressed Enter/comma");
+        }
+
+        // If editing, get existing document to preserve fields
+        let existingData = {};
+        if (currentProductId) {
+          const existingDoc = await db.collection("listings").doc(currentProductId).get();
+          if (existingDoc.exists) {
+            existingData = existingDoc.data();
+          }
+        }
+        
+        // Get status from form (or default to "draft" for save draft)
+        const statusSelect = document.getElementById("productStatus");
+        const productStatus = statusSelect ? statusSelect.value : "draft";
+        
+        // Build payload - ALWAYS include categories (even if empty array)
+        // Categories can be any product type - skincare, cosmetics, soaps, candles, oils, etc.
+        const payload = {
+          ...data,
+          status: productStatus, // Use status from form select
+          priceNumber:parseFloat(data.price||"0")||0,
+          vendorUid:user.uid,
+          categories: categoriesArray  // Always an array - can contain any category names
+        };
+        
+        // Ensure categories is always in the payload as an array
+        if (!payload.categories || !Array.isArray(payload.categories)) {
+          payload.categories = [];
+          console.warn("⚠️ Categories was not an array for draft, setting to empty array");
+        }
+        
+        // Only include media fields if they have values (don't set to null)
+        // Preserve existing values if no new ones uploaded
+        if (imageUrl) {
+          payload.imageUrl = imageUrl;
+        } else if (currentProductId && existingData.imageUrl) {
+          payload.imageUrl = existingData.imageUrl;
+        }
+        
+        if (galleryImageUrls.length > 0) {
+          payload.galleryImageUrls = galleryImageUrls;
+        } else if (currentProductId && existingData.galleryImageUrls) {
+          payload.galleryImageUrls = existingData.galleryImageUrls;
+        }
+        
+        if (videoUrl) {
+          payload.videoUrl = videoUrl;
+        } else if (currentProductId && existingData.videoUrl) {
+          payload.videoUrl = existingData.videoUrl;
+        }
+        
+        if (variants.length > 0) {
+          payload.variants = variants;
+        } else if (currentProductId && existingData.variants) {
+          payload.variants = existingData.variants;
+        }
+        console.log("💾 Draft payload:", payload);
+
+        if(currentProductId){
+          // Update existing draft - ALWAYS include categories
+          console.log("💾 Updating draft:", currentProductId);
+          console.log("💾 Draft payload categories:", payload.categories);
+          
+          // Get existing document to preserve fields
+          const existingDoc = await db.collection("listings").doc(currentProductId).get();
+          const existingData = existingDoc.exists ? existingDoc.data() : {};
+          
+          const updateData = {
+            ...payload,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            // Preserve createdAt
+            createdAt: existingData.createdAt || firebase.firestore.FieldValue.serverTimestamp(),
+            // ALWAYS include categories - ensure it's an array
+            categories: Array.isArray(payload.categories) ? payload.categories : (payload.categories ? [payload.categories] : [])
+          };
+          
+          console.log("💾 Draft update data categories (type):", typeof updateData.categories, "Is array:", Array.isArray(updateData.categories));
+          console.log("💾 Draft update data categories (value):", updateData.categories);
+          console.log("💾 Draft update data categories (length):", updateData.categories ? updateData.categories.length : 0);
+          console.log("💾 Draft update data being sent:", updateData);
+          console.log("💾 Draft update data categories:", updateData.categories);
+          await db.collection("listings").doc(currentProductId).update(updateData);
+          
+          // Verify the update
+          const updatedDoc = await db.collection("listings").doc(currentProductId).get();
+          if (updatedDoc.exists) {
+            const updatedData = updatedDoc.data();
+            console.log("✅ Draft updated with categories:", updatedData.categories);
+          }
+          
+          alert("✅ Draft saved successfully!");
+        } else {
+          // Create new draft
+          payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          const ref=await db.collection("listings").add(payload);
+          currentProductId = ref.id;
+          console.log("💾 Draft created:", currentProductId);
+          
+          // Verify the creation
+          const savedDoc = await db.collection("listings").doc(currentProductId).get();
+          if (savedDoc.exists) {
+            const savedData = savedDoc.data();
+            console.log("✅ Draft created with categories:", savedData.categories);
+          }
+          
+          document.getElementById("deleteBtnTop").style.display = "inline-block";
+          // Update URL without reload
+          window.history.replaceState({}, '', `create-listing.html?edit=${currentProductId}`);
+          alert("✅ Draft saved successfully!");
+        }
+
+        btn.textContent=originalText;
+        btn.disabled=false;
+      }catch(err){
+        console.error("Save draft error:",err);
+        alert("❌ Error saving draft: "+err.message);
+        document.getElementById("saveDraftBtnTop").textContent="Save draft";
+        document.getElementById("saveDraftBtnTop").disabled=false;
+      }
+    });
+
+    // DISCARD BUTTON
+    document.getElementById("discardBtnTop").addEventListener("click",()=>{
+      if(confirm("Are you sure you want to discard all changes? This cannot be undone.")){
+        window.location.href="listings.html";
+      }
+    });
+
+    // DELETE BUTTON
+    document.getElementById("deleteBtnTop").addEventListener("click",async()=>{
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Please sign in to delete products");
+        return;
+      }
+
+      if(!currentProductId){
+        alert("No product to delete");
+        return;
+      }
+
+      // Confirm deletion
+      const productTitle = document.getElementById("productTitle")?.value || "this product";
+      if(!confirm(`Are you sure you want to permanently delete "${productTitle}"?\n\nThis action cannot be undone. The product will be removed from your store and will no longer be visible to buyers.`)){
+        return;
+      }
+
+      try{
+        const btn=document.getElementById("deleteBtnTop");
+        const originalText=btn.textContent;
+        btn.textContent="Deleting...";
+        btn.disabled=true;
+
+        // Security check: Verify the product belongs to the current user
+        const productDoc = await db.collection("listings").doc(currentProductId).get();
+        if (!productDoc.exists) {
+          throw new Error("Product not found");
+        }
+
+        const productData = productDoc.data();
+        if (productData.vendorUid !== user.uid) {
+          throw new Error("You don't have permission to delete this product");
+        }
+
+        // Delete the product
+        await db.collection("listings").doc(currentProductId).delete();
+        console.log("✅ Product deleted:", currentProductId);
+
+        alert("✅ Product deleted successfully!");
+        // Redirect to listing page
+        window.location.href="listing.html";
+      }catch(err){
+        console.error("Delete error:",err);
+        alert("❌ Error deleting product: "+err.message);
+        const btn=document.getElementById("deleteBtnTop");
+        btn.textContent="Delete";
+        btn.disabled=false;
+      }
+    });
+
+
+    // Variant Metafield logic
+let variants = [];
+const variantList = document.getElementById('variantList');
+const addVariantBtn = document.getElementById('addVariantBtn');
+function renderVariants() {
+    variantList.innerHTML = '';
+    variants.forEach((v, i) => {
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.gap = '10px';
+        div.style.marginBottom = '6px';
+        div.innerHTML = `
+            <span style="font-size:12px;">
+                <b>Size:</b> ${v.size || '-'} | 
+                <b>Color:</b> ${v.color || '-'} | 
+                <b>Material:</b> ${v.material || '-'} | 
+                <b>Style:</b> ${v.style || '-'}${v.price ? ` | <b>Price:</b> $${v.price.toFixed(2)}` : ''}
+            </span>
+            <button type="button" class="lv-pill-btn" onclick="variants.splice(${i}, 1); renderVariants();" style="font-size:11px;padding:4px 10px;">Remove</button>
+        `;
+        variantList.appendChild(div);
+    });
+}
+if (addVariantBtn) {
+    addVariantBtn.addEventListener('click', () => {
+        const size = document.getElementById('variantSize').value;
+        const color = document.getElementById('variantColor').value;
+        const material = document.getElementById('variantMaterial').value;
+        const style = document.getElementById('variantStyle').value;
+        const price = document.getElementById('variantPrice').value;
+        if (size || color || material || style || price) {
+            variants.push({ size, color, material, style, price: price ? parseFloat(price) : null });
+            document.getElementById('variantSize').value = '';
+            document.getElementById('variantColor').value = '';
+            document.getElementById('variantMaterial').value = '';
+            document.getElementById('variantStyle').value = '';
+            document.getElementById('variantPrice').value = '';
+            renderVariants();
+        }
+    });
+}
+
+    </script>
+</body>
+</html>

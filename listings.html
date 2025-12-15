@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>LumiVue – My Products</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+        :root {
+            /* LumiVue latte / espresso system same as create-listing */
+            --lv-bg: #f4f1eb;
+            --lv-surface: #ffffff;
+            --lv-border: #e6d7c6;
+            --lv-border-strong: #d9c6b3;
+            --lv-text: #2c1e19;          /* espresso */
+            --lv-text-muted: #7a6a5c;
+            --lv-pill: #e3ceb2;          /* beige pill */
+            --lv-pill-border: #c9a07a;   /* caramel outline */
+            --lv-accent-soft: #fbf3e7;
+            --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
+            --lv-radius-lg: 14px;
+            --lv-radius-md: 10px;
+
+            --lv-danger: #c15b4b;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Remove all hover pop-ups, transforms, and transitions */
+        *:hover,
+        *:focus,
+        *:active {
+            transition: none !important;
+            transform: none !important;
+            box-shadow: none !important;
+            filter: none !important;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+            background: var(--lv-bg);
+            color: var(--lv-text);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        /* ─── TOP BAR ─────────────────────────────── */
+        .lv-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: linear-gradient(180deg,#fbf8f2 0%, #f6f1ea 100%);
+            border-bottom: 1px solid rgba(0,0,0,.06);
+            backdrop-filter: saturate(120%) blur(8px);
+        }
+
+        .lv-header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .lv-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: #d3b79e;
+            color: #2b2118;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,.28);
+            flex: 0 0 28px;
+        }
+
+        .lv-wordmark {
+            letter-spacing: .38em;
+            font-weight: 700;
+            font-size: 13px;
+            margin-left: 6px
+        }
+
+        .lv-nav {
+            margin-left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 14px;
+            color: var(--lv-text-muted)
+        }
+
+            .lv-nav a {
+                padding: 2px 0;
+                border-bottom: 1px solid transparent
+            }
+
+                .lv-nav a:hover {
+                    color: var(--lv-text);
+                    border-bottom-color: var(--lv-border)
+                }
+
+                .lv-nav a.active {
+                    color: var(--lv-text);
+                    font-weight: 600;
+                    border-bottom-color: var(--lv-border)
+                }
+
+        .lv-actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .lv-pill-btn {
+            background: #e6d8c7;
+            border: 1px solid var(--lv-border-strong);
+            color: var(--lv-text);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            letter-spacing: .06em;
+            cursor: pointer;
+        }
+
+        .lv-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: #d3b79e;
+            color: #2b2118;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,.28);
+        }
+
+        /* ─── MAIN LAYOUT ─────────────────────────────── */
+        .lv-main {
+            max-width: 1120px;
+            margin: 24px auto 48px;
+            padding: 0 18px;
+        }
+
+        .lv-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .lv-page-title {
+            font-size: 24px;
+            font-weight: 700
+        }
+
+        .lv-page-subtitle {
+            font-size: 14px;
+            color: var(--lv-text-muted);
+            margin-top: 4px
+        }
+
+        /* ─── PRODUCT GRID ─────────────────────────────── */
+        .lv-products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+            gap: 18px;
+        }
+
+        .lv-product-card {
+            background: var(--lv-surface);
+            border: 1px solid var(--lv-border);
+            border-radius: var(--lv-radius-lg);
+            box-shadow: var(--lv-shadow-soft);
+            padding: 14px;
+            cursor: pointer;
+        }
+
+        .lv-product-image {
+            width: 100%;
+            height: 240px;
+            border-radius: var(--lv-radius-md);
+            background: #e5e1d8;
+            object-fit: cover;
+            margin-bottom: 12px;
+        }
+        
+        .lv-product-media-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        
+        .lv-product-media-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            border-radius: var(--lv-radius-md);
+            overflow: hidden;
+        }
+        
+        .lv-product-media-item {
+            aspect-ratio: 1;
+            object-fit: cover;
+            width: 100%;
+            background: #e5e1d8;
+        }
+        
+        .lv-product-media-item.video {
+            position: relative;
+        }
+        
+        .lv-product-media-item.video::after {
+            content: "▶";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        
+        .lv-product-media-count {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .lv-product-status {
+            display: inline-block;
+            background: var(--lv-pill);
+            border: 1px solid var(--lv-pill-border);
+            color: var(--lv-text);
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 8px;
+        }
+
+            .lv-product-status.active {
+                background: #c8e6c9;
+                border-color: #81c784;
+            }
+
+        .lv-product-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .lv-product-subtitle {
+            font-size: 13px;
+            color: var(--lv-text-muted);
+            margin-bottom: 8px;
+        }
+
+        .lv-product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .lv-product-vendor {
+            color: var(--lv-text-muted);
+        }
+
+        .lv-product-price {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .lv-empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .lv-empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .lv-empty-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .lv-empty-text {
+            font-size: 14px;
+            color: var(--lv-text-muted);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="lv-header">
+        <div class="lv-header-inner">
+            <div class="lv-badge">LV</div>
+            <div class="lv-wordmark">L U M I V U E</div>
+
+            <nav class="lv-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="listings.html" class="active">My products</a>
+                <a href="create-listing.html">Create listing</a>
+               
+            </nav>
+
+            <div class="lv-actions">
+                <button class="lv-pill-btn" onclick="window.location.href='create-listing.html'">Create new product</button>
+                <div class="lv-avatar">M</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="lv-main">
+        <div class="lv-page-header">
+            <div>
+                <div class="lv-page-title">My Products</div>
+                <div class="lv-page-subtitle">Manage your product listings and inventory</div>
+            </div>
+        </div>
+
+        <!-- Product grid will be populated here -->
+        <div id="productsContainer" class="lv-products-grid"></div>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="lv-empty-state" style="display:none;">
+            <div class="lv-empty-icon">📦</div>
+            <div class="lv-empty-title">No products yet</div>
+            <div class="lv-empty-text">Create your first product listing to get started</div>
+            <button class="lv-pill-btn" onclick="window.location.href='create-listing.html'">Create your first product</button>
+        </div>
+    </main>
+
+    <!-- Firebase compat SDK (same as all other pages) -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+            authDomain: "lumivue-c8fdf.firebaseapp.com",
+            projectId: "lumivue-c8fdf",
+            storageBucket: "lumivue-c8fdf.firebasestorage.app",
+            messagingSenderId: "120420036736",
+            appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Check authentication and load products
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                // Show login prompt but don't block page access
+                console.log('User not logged in - page accessible but features may be limited');
+                const container = document.getElementById("productsContainer");
+                const emptyState = document.getElementById("emptyState");
+                if (container) container.style.display = "none";
+                if (emptyState) {
+                    emptyState.style.display = "block";
+                    emptyState.innerHTML = '<p>Please sign in to view your products.</p>';
+                }
+                return;
+            }
+
+            try {
+                const container = document.getElementById("productsContainer");
+                const emptyState = document.getElementById("emptyState");
+
+                const snapshot = await db.collection("listings")
+                    .where("vendorUid", "==", user.uid)
+                    .get();
+
+                if (snapshot.empty) {
+                    container.style.display = "none";
+                    emptyState.style.display = "block";
+                    return;
+                }
+
+                container.style.display = "grid";
+                emptyState.style.display = "none";
+                container.innerHTML = "";
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const card = document.createElement("div");
+                    card.className = "lv-product-card";
+                    card.onclick = () => window.location.href = `create-listing.html?edit=${doc.id}`;
+
+                    const statusClass = data.status === "active" ? "active" : "";
+                    const statusText = data.status === "active" ? "Active" : "Draft";
+                    const price = data.priceNumber || parseFloat(data.price) || 0;
+                    const currency = data.currency === "USD" ? "$" : data.currency;
+                    
+                    // Collect all media: featured image + gallery images + video
+                    const allMedia = [];
+                    if (data.imageUrl) {
+                        allMedia.push({ type: 'image', url: data.imageUrl });
+                    }
+                    if (data.galleryImageUrls && Array.isArray(data.galleryImageUrls)) {
+                        data.galleryImageUrls.forEach(url => {
+                            if (url) allMedia.push({ type: 'image', url: url });
+                        });
+                    }
+                    if (data.videoUrl) {
+                        allMedia.push({ type: 'video', url: data.videoUrl });
+                    }
+                    
+                    // Build media grid HTML
+                    let mediaHTML = '';
+                    if (allMedia.length > 0) {
+                        const mediaToShow = allMedia.slice(0, 16); // Show up to 16 items in 4x4 grid
+                        const totalCount = allMedia.length;
+                        
+                        mediaHTML = '<div class="lv-product-media-container">';
+                        mediaHTML += '<div class="lv-product-media-grid">';
+                        mediaToShow.forEach((media, index) => {
+                            if (media.type === 'video') {
+                                mediaHTML += `<video class="lv-product-media-item video" src="${media.url}" muted></video>`;
+                            } else {
+                                mediaHTML += `<img class="lv-product-media-item" src="${media.url}" alt="${data.title || 'Product image'}" />`;
+                            }
+                        });
+                        mediaHTML += '</div>';
+                        if (totalCount > 16) {
+                            mediaHTML += `<div class="lv-product-media-count">+${totalCount - 16} more</div>`;
+                        } else if (totalCount > 1) {
+                            mediaHTML += `<div class="lv-product-media-count">${totalCount} items</div>`;
+                        }
+                        mediaHTML += '</div>';
+                    } else {
+                        mediaHTML = '<div class="lv-product-image"></div>';
+                    }
+
+                    card.innerHTML = `
+                        ${mediaHTML}
+                        <span class="lv-product-status ${statusClass}">${statusText}</span>
+                        <div class="lv-product-title">${data.title || "Untitled"}</div>
+                        <div class="lv-product-subtitle">${data.subtitle || ""}</div>
+                        <div class="lv-product-meta">
+                            <span class="lv-product-vendor">${data.vendor || "Unknown"} · ${data.type || "Product"}</span>
+                            <span class="lv-product-price">${currency}${price.toFixed(2)}</span>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                console.error("Error:", err);
+                document.getElementById("emptyState").style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>
