@@ -239,10 +239,16 @@
             overflow: hidden;
             border-radius: 12px;
             background: #ddd3c6;
-            height: 120px;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            height: 220px;
+            min-height: 210px;
+            max-height: 230px;
         }
 
         .lv-card-image {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -295,15 +301,24 @@
             line-height: 1.2;
         }
 
+        /* Footer (bigger + readable) */
         .lv-footer {
             max-width: 1120px;
             margin: 0 auto 40px;
-            padding: 0 24px;
-            font-size: 12px;
+            padding: 0 24px 18px;
+            font-size: 14px;
+            line-height: 1.55;
             color: var(--lv-text-muted);
         }
 
-        .lv-footer p { margin: 4px 0; }
+        .lv-footer p { margin: 8px 0; }
+        .lv-footer strong { color: var(--lv-text); }
+
+        .lv-footer-copy {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--lv-text-muted);
+        }
 
         .lv-loading {
             text-align: center;
@@ -337,6 +352,11 @@
                 </nav>
 
                 <div class="lv-header-actions">
+                    <!-- Cart Button -->
+                    <a class="lv-cart-btn" href="cart.html" title="Shopping Cart" style="position: relative; display: inline-flex; align-items: center; justify-content: center; height: 34px; width: 34px; padding: 0; border-radius: 50%; background: #e6d8c7; color: var(--lv-text); font-weight: 600; font-size: 18px; border: 1px solid var(--lv-border-strong); cursor: pointer; text-decoration: none;">
+                        🛒
+                        <span class="lv-cart-count" style="position: absolute; top: -6px; right: -6px; background: var(--lv-accent); color: #ffffff; font-size: 10px; font-weight: 700; min-width: 18px; height: 18px; border-radius: 50%; display: none; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--lv-bg);">0</span>
+                    </a>
                     <!-- Logout Button (hidden by default) -->
                     <button class="lv-btn-text" id="logoutBtn" style="display: none;">Sign out</button>
                     <!-- My Account Button (hidden by default) -->
@@ -406,6 +426,7 @@
         <footer class="lv-footer">
             <p><strong>Sell your creations on LumiVue.</strong></p>
             <p>LumiVue is a beauty-only marketplace built for skincare formulators, candle makers, soap artists, and cosmetic creators.</p>
+            <p class="lv-footer-copy">© <span id="lvYear"></span> LumiVue. All rights reserved.</p>
         </footer>
     </div>
 
@@ -413,6 +434,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Cart Utility -->
+    <script src="cart.js"></script>
 
     <script>
         const firebaseConfig = {
@@ -428,42 +452,89 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // Footer year
+        (function () {
+            const y = document.getElementById('lvYear');
+            if (y) y.textContent = new Date().getFullYear();
+        })();
+
+        // Initialize cart
+        cart.init(auth, db);
+        
+        // Hide cart UI updates for vendors
+        window.addEventListener('cartUpdated', (e) => {
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    try {
+                        const creatorDoc = await db.collection('creators').doc(user.uid).get();
+                        if (creatorDoc.exists) {
+                            const cartBtn = document.querySelector('.lv-cart-btn');
+                            if (cartBtn) cartBtn.style.display = 'none';
+                        }
+                    } catch (e) {
+                        // Ignore
+                    }
+                }
+            });
+        });
+
         // Check auth state and show/hide account buttons
         auth.onAuthStateChanged(async (user) => {
             const logoutBtn = document.getElementById('logoutBtn');
+            const myAccountBtn = document.getElementById('myAccountBtn');
             const signInBtn = document.getElementById('signInBtn');
 
             if (user) {
                 try {
-                    // Check if user is a buyer
+                    // Check both collections
                     const buyerDoc = await db.collection('buyers').doc(user.uid).get();
+                    const creatorDoc = await db.collection('creators').doc(user.uid).get();
                     
-                    if (buyerDoc.exists) {
-                        // Show Logout button for buyers
+                    console.log('User authenticated:', user.uid);
+                    console.log('Is buyer:', buyerDoc.exists);
+                    console.log('Is creator:', creatorDoc.exists);
+                    
+                    if (creatorDoc.exists) {
+                        // User is a vendor - hide cart and Add to Cart buttons
+                        console.log('Hiding cart for vendor');
+                        const cartBtn = document.querySelector('.lv-cart-btn');
+                        if (cartBtn) cartBtn.style.display = 'none';
                         if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+                        if (myAccountBtn) myAccountBtn.style.display = 'none';
                         if (signInBtn) signInBtn.style.display = 'none';
+                        // Hide all Add to Cart buttons
+                        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                            btn.style.display = 'none';
+                        });
+                    } else if (buyerDoc.exists) {
+                        // User is a buyer - show cart and all buttons
+                        console.log('Showing cart for buyer');
+                        const cartBtn = document.querySelector('.lv-cart-btn');
+                        if (cartBtn) cartBtn.style.display = 'inline-flex';
+                        if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+                        if (myAccountBtn) myAccountBtn.style.display = 'inline-flex';
+                        if (signInBtn) signInBtn.style.display = 'none';
+                        // Show all Add to Cart buttons
+                        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                            btn.style.display = 'inline-flex';
+                        });
                     } else {
-                        // Check if vendor
-                        const creatorDoc = await db.collection('creators').doc(user.uid).get();
-                        
-                        if (creatorDoc.exists) {
-                            // Vendor logged in
-                            if (logoutBtn) logoutBtn.style.display = 'inline-flex';
-                            if (signInBtn) signInBtn.style.display = 'none';
-                        } else {
-                            // No buyer or creator doc - show sign in
-                            if (logoutBtn) logoutBtn.style.display = 'none';
-                            if (signInBtn) signInBtn.style.display = 'inline-flex';
-                        }
+                        // No buyer or creator doc - show sign in
+                        console.log('No role found for user');
+                        if (logoutBtn) logoutBtn.style.display = 'none';
+                        if (myAccountBtn) myAccountBtn.style.display = 'none';
+                        if (signInBtn) signInBtn.style.display = 'inline-flex';
                     }
                 } catch (error) {
                     console.error('Error checking user type:', error);
                     if (logoutBtn) logoutBtn.style.display = 'none';
+                    if (myAccountBtn) myAccountBtn.style.display = 'none';
                     if (signInBtn) signInBtn.style.display = 'inline-flex';
                 }
             } else {
-                // Not logged in
+                // Not logged in - hide all account buttons
                 if (logoutBtn) logoutBtn.style.display = 'none';
+                if (myAccountBtn) myAccountBtn.style.display = 'none';
                 if (signInBtn) signInBtn.style.display = 'inline-flex';
             }
         });
@@ -552,7 +623,6 @@
 
                 const card = document.createElement("article");
                 card.className = "lv-card";
-                card.style.cursor = "pointer";
                 card.innerHTML = `
                     <a href="product-detail.html?id=${product.id}" style="text-decoration: none; color: inherit; display: block;">
                         <div class="lv-card-image-wrap">
@@ -567,11 +637,91 @@
                             <span class="lv-pill">${product.type || 'Product'}</span>
                             <span class="lv-price">${currency}${price.toFixed(2)}</span>
                         </div>
-                        <div class="lv-card-footer">
-                            <span class="lv-btn-ghost" style="display: inline-flex; width: 100%; align-items: center; justify-content: center; height: 28px; padding: 0 14px; border-radius: 50px; background: #e6d8c7; border: 1px solid var(--lv-border-strong); color: var(--lv-text); font-weight: 500; font-size: 11px; line-height: 1.2;">View product</span>
-                        </div>
                     </a>
+                    <div class="lv-card-footer" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--lv-border);">
+                        <button class="lv-btn-ghost add-to-cart-btn" data-product-id="${product.id}" style="display: inline-flex; width: 100%; align-items: center; justify-content: center; height: 32px; padding: 0 14px; border-radius: 50px; background: #e6d8c7; border: 1px solid var(--lv-border-strong); color: var(--lv-text); font-weight: 500; font-size: 12px; line-height: 1.2; cursor: pointer;">Add to Cart</button>
+                    </div>
                 `;
+                
+                // Add click handler for Add to Cart button
+                const addToCartBtn = card.querySelector('.add-to-cart-btn');
+                if (addToCartBtn) {
+                    // Check if current user is vendor and hide button immediately
+                    (async () => {
+                        try {
+                            const user = auth.currentUser;
+                            if (user) {
+                                const creatorDoc = await db.collection('creators').doc(user.uid).get();
+                                if (creatorDoc.exists) {
+                                    addToCartBtn.style.display = 'none';
+                                }
+                            }
+                        } catch (e) {
+                            // Keep button visible if check fails
+                        }
+                    })();
+                    
+                    addToCartBtn.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Check if user is a vendor - don't allow vendors to add to cart
+                        try {
+                            const user = auth.currentUser;
+                            if (user) {
+                                const creatorDoc = await db.collection('creators').doc(user.uid).get();
+                                if (creatorDoc.exists) {
+                                    alert('Vendors cannot add items to cart. Please use a buyer account.');
+                                    return;
+                                }
+                            }
+                        } catch (err) {
+                            console.warn('Could not check vendor status:', err);
+                        }
+                        
+                        if (!auth.currentUser) {
+                            alert('Please sign in to add items to cart');
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                    
+                        // Prepare product data
+                        const productData = {
+                            id: product.id,
+                            title: product.title || 'Untitled Product',
+                            subtitle: product.subtitle || '',
+                            price: price,
+                            priceNumber: price,
+                            currency: product.currency || 'USD',
+                            imageUrl: product.imageUrl || '',
+                            vendor: product.vendor || '',
+                            vendorUid: product.vendorUid || ''
+                        };
+                        
+                        const btn = addToCartBtn;
+                        const originalText = btn.textContent;
+                        btn.disabled = true;
+                        btn.textContent = 'Adding...';
+                        
+                        try {
+                            const success = await cart.addToCart(productData, 1);
+                            if (success) {
+                                btn.textContent = '✓ Added!';
+                                setTimeout(() => {
+                                    btn.textContent = originalText;
+                                    btn.disabled = false;
+                                }, 2000);
+                            } else {
+                                btn.textContent = originalText;
+                                btn.disabled = false;
+                            }
+                        } catch (error) {
+                            console.error('Error adding to cart:', error);
+                            btn.textContent = originalText;
+                            btn.disabled = false;
+                        }
+                    });
+                }
 
                 grid.appendChild(card);
             });
@@ -599,7 +749,7 @@
                 card.className = "lv-card";
                 card.style.cursor = "pointer";
                 card.innerHTML = `
-                    <a href="store.html?uid=${vendorUid}" style="text-decoration: none; color: inherit; display: block;">
+                    <a href="listings.html?vendorUid=${encodeURIComponent(vendorUid)}" style="text-decoration: none; color: inherit; display: block;">
                         <div class="lv-card-image-wrap">
                             ${firstProduct.imageUrl 
                                 ? `<img class="lv-card-image" src="${firstProduct.imageUrl}" alt="${firstProduct.vendor || 'Store'}" />`
