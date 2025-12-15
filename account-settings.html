@@ -8,18 +8,17 @@
 
   <style>
     :root {
-      /* Latte / Cream luxury palette – same as other pages */
       --lv-bg: #f4f1eb;
       --lv-surface: #ffffff;
       --lv-border: #ddd3c6;
       --lv-border-strong: #ccc0b1;
-      --lv-text: #2c1e19;          /* espresso */
+      --lv-text: #2c1e19;
       --lv-text-muted: #7a6a5c;
       --lv-accent: #c98a5a;
       --lv-accent-soft: #fbede1;
       --lv-radius-lg: 14px;
       --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
-      --lv-button-bg: #e1c8a6;     /* same as Marketplace nav button */
+      --lv-button-bg: #e1c8a6;
     }
 
     body {
@@ -40,8 +39,6 @@
       max-width: 1120px;
       margin: 0 auto;
     }
-
-    /* TOP BAR – matches landing / payouts / policies */
 
     .site-header {
       padding-bottom: 8px;
@@ -113,10 +110,8 @@
     }
 
     .nav-pill:hover {
-      background: var(--lv-button-bg); /* no hover pop-up */
+      background: var(--lv-button-bg);
     }
-
-    /* HEADER CARD */
 
     .account-header-card {
       background: var(--lv-surface);
@@ -155,13 +150,11 @@
     .section-card {
       background: var(--lv-surface);
       border-radius: 22px;
-      padding: 22px 22px 20px;
+      padding: 22px;
       border: 1px solid var(--lv-border);
       box-shadow: var(--lv-shadow-soft);
       margin-bottom: 20px;
     }
-
-    /* GRID */
 
     .lv-account-grid {
       display: grid;
@@ -169,26 +162,15 @@
       gap: 1.3rem;
     }
 
-    /* CARDS – no lift / pop-up on hover */
-
     .lv-account-card {
       background: var(--lv-surface);
       border-radius: var(--lv-radius-lg);
       border: 1px solid var(--lv-border);
-      padding: 1.5rem 1.4rem;
-      cursor: pointer;
+      padding: 1.5rem;
       text-decoration: none;
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
-      transition:
-        border-color 0.18s ease,
-        background 0.18s ease;
-    }
-
-    .lv-account-card:hover {
-      border-color: var(--lv-border-strong);
-      background: var(--lv-surface); /* no color pop */
     }
 
     .lv-account-card-label {
@@ -210,30 +192,19 @@
       line-height: 1.5;
     }
 
-    .lv-account-pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.2rem;
-    }
-
-    /* 🔹 PILL BUTTONS – now same as Marketplace button */
     .lv-account-pill {
       font-size: 0.72rem;
       padding: 0.18rem 0.55rem;
       border-radius: 999px;
-      background: var(--lv-button-bg);          /* brown pill */
+      background: var(--lv-button-bg);
       border: 1px solid var(--lv-border-strong);
-      color: var(--lv-text);                    /* espresso text */
+      color: var(--lv-text);
     }
 
     .lv-account-card-arrow {
       margin-left: auto;
-      font-size: 0.95rem;
       color: var(--lv-text-muted);
     }
-
-    /* FOOTER CHIP */
 
     .lv-account-chip {
       margin-top: 1.3rem;
@@ -255,27 +226,11 @@
       background: #22c55e;
       box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
     }
-
-    @media (max-width: 640px) {
-      .page-shell {
-        padding: 14px 16px 30px;
-      }
-      .account-header-card {
-        padding: 18px 16px 16px;
-      }
-      .section-card {
-        padding: 18px 16px 18px;
-      }
-      .account-title-block h1 {
-        font-size: 18px;
-      }
-    }
   </style>
 </head>
 
 <body>
   <div class="page-shell auth-page">
-    <!-- TOP BAR -->
     <header class="site-header">
       <div class="site-header-inner">
         <div class="brand-stack-left">
@@ -294,7 +249,6 @@
       </div>
     </header>
 
-    <!-- HEADER CARD -->
     <section class="account-header-card">
       <div class="account-header-top">
         <div class="account-title-block">
@@ -308,120 +262,48 @@
       </div>
     </section>
 
-    <!-- SETTINGS GRID -->
     <section class="section-card">
       <div class="lv-account-grid">
 
-        <!-- Business + Branding -->
         <a href="edit-store.html" class="lv-account-card">
           <span class="lv-account-card-label">Profile</span>
           <div class="lv-account-card-title">Business Information & Branding</div>
-          <p class="lv-account-card-text">
-            Store name, business address, logo, banner, and buyer-facing profile details.
-          </p>
-          <div class="lv-account-pill-row">
-            <span class="lv-account-pill">Store name</span>
-            <span class="lv-account-pill">Address</span>
-            <span class="lv-account-pill">Logo</span>
-          </div>
+          <p class="lv-account-card-text">Store name, business address, logo, banner, and profile details.</p>
           <span class="lv-account-card-arrow">›</span>
         </a>
 
-        <!-- Legal -->
         <a href="account-legal.html" class="lv-account-card">
           <span class="lv-account-card-label">Compliance</span>
           <div class="lv-account-card-title">Legal & Compliance</div>
-          <p class="lv-account-card-text">
-            Entity details, licenses, and business documentation.
-          </p>
-          <div class="lv-account-pill-row">
-            <span class="lv-account-pill">Business entity</span>
-            <span class="lv-account-pill">Licenses</span>
-          </div>
+          <p class="lv-account-card-text">Entity details and business documentation.</p>
           <span class="lv-account-card-arrow">›</span>
         </a>
 
-        <!-- Tax -->
         <a href="account-tax.html" class="lv-account-card">
           <span class="lv-account-card-label">Tax</span>
           <div class="lv-account-card-title">Tax Information</div>
-          <p class="lv-account-card-text">
-            Tax IDs and reporting information, visible only to you and LumiVue compliance.
-          </p>
-          <div class="lv-account-pill-row">
-            <span class="lv-account-pill">EIN</span>
-            <span class="lv-account-pill">Region</span>
-          </div>
+          <p class="lv-account-card-text">Tax IDs and reporting information.</p>
           <span class="lv-account-card-arrow">›</span>
         </a>
 
-        <!-- Payouts -->
         <a href="account-payouts.html" class="lv-account-card">
           <span class="lv-account-card-label">Payouts</span>
           <div class="lv-account-card-title">Payout & Banking</div>
-          <p class="lv-account-card-text">
-            Banking details and payout schedule settings.
-          </p>
-          <div class="lv-account-pill-row">
-            <span class="lv-account-pill">Bank account</span>
-            <span class="lv-account-pill">Payout schedule</span>
-          </div>
+          <p class="lv-account-card-text">Banking details and payout schedule.</p>
           <span class="lv-account-card-arrow">›</span>
         </a>
 
-        <!-- Policies -->
         <a href="account-policies.html" class="lv-account-card">
           <span class="lv-account-card-label">Policies</span>
           <div class="lv-account-card-title">Store Policies</div>
-          <p class="lv-account-card-text">
-            Return rules, cancellations, and customer support guidelines.
-          </p>
-          <div class="lv-account-pill-row">
-            <span class="lv-account-pill">Refunds</span>
-            <span class="lv-account-pill">Processing time</span>
-          </div>
+          <p class="lv-account-card-text">Returns and customer guidelines.</p>
           <span class="lv-account-card-arrow">›</span>
         </a>
 
-        <!-- Shipping -->
         <a href="shipping.html" class="lv-account-card">
           <span class="lv-account-card-label">Logistics</span>
           <div class="lv-account-card-title">Shipping & Delivery</div>
-          <p class="lv-account-card-text">
-            Carriers, handling time, and shipping regions.
-          </p>
-          <div class="lv-account-pill-row">
-            <span class="lv-account-pill">Carriers</span>
-            <span class="lv-account-pill">Regions</span>
-          </div>
-          <span class="lv-account-card-arrow">›</span>
-        </a>
-
-        <!-- Google/SEO -->
-        <a href="google-fields.html" class="lv-account-card">
-          <span class="lv-account-card-label">Visibility</span>
-          <div class="lv-account-card-title">Google & SEO Fields</div>
-          <p class="lv-account-card-text">
-            Search visibility details and Google business integration.
-          </p>
-          <div class="lv-account-pill-row">
-            <span class="lv-account-pill">SEO</span>
-            <span class="lv-account-pill">Google fields</span>
-          </div>
-          <span class="lv-account-card-arrow">›</span>
-        </a>
-
-        <!-- Reviews -->
-        <a href="reviews.html" class="lv-account-card">
-          <span class="lv-account-card-label">Support</span>
-          <div class="lv-account-card-title">Reviews & Support</div>
-          <p class="lv-account-card-text">
-            Customer reviews and support settings.
-          </p>
-          <div class="lv-account-pill-row">
-            <span class="lv-account-pill">Support email</span>
-            <span class="lv-account-pill">Response time</span>
-          </div>
+          <p class="lv-account-card-text">Carriers, handling time, and regions.</p>
           <span class="lv-account-card-arrow">›</span>
         </a>
 
@@ -433,28 +315,5 @@
       </div>
     </section>
   </div>
-
-  <!-- Firebase (same project as payouts / policies) -->
-  <script type="module">
-    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
-      authDomain: "lumivue-c8fdf.firebaseapp.com",
-      projectId: "lumivue-c8fdf",
-      storageBucket: "lumivue-c8fdf.firebasestorage.app",
-      messagingSenderId: "120420036736",
-      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
-    };
-
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // No redirect – just log so the page always shows
-    onAuthStateChanged(auth, (user) => {
-      console.log("Account settings – user:", user ? user.uid : "not signed in");
-    });
-  </script>
 </body>
 </html>
