@@ -792,28 +792,25 @@
     </div>
   </div>
 
-   <!-- Firebase compat SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+  <!-- Firebase CDN SDKs (compat, same pattern as login.html) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 
-    <script>
-    // Initialize Firebase
+  <script>
+    // LumiVue Firebase config (same project as login.html)
     const firebaseConfig = {
-        apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
-        authDomain: "lumivue-c8fdf.firebaseapp.com",
-        projectId: "lumivue-c8fdf",
-        storageBucket: "lumivue-c8fdf.firebasestorage.app",
-        messagingSenderId: "120420036736",
-        appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
+      authDomain: "lumivue-c8fdf.firebaseapp.com",
+      projectId: "lumivue-c8fdf",
+      storageBucket: "lumivue-c8fdf.firebasestorage.app",
+      messagingSenderId: "120420036736",
+      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
     };
 
+    // Initialize Firebase (compat)
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-
 
     // shared handles
     const auth = firebase.auth();
@@ -1205,13 +1202,13 @@
 
       function initDashboard() {
         auth.onAuthStateChanged(async (user) => {
+          currentUser = user;
+          
           if (!user) {
-            const redirect = encodeURIComponent(window.location.pathname);
-            window.location.href = 'login.html?redirect=' + redirect;
+            // Show login prompt but don't block page access
+            console.log('User not logged in - page accessible but features may be limited');
             return;
           }
-
-          currentUser = user;
 
           try {
             const docRef = db.collection('creators').doc(user.uid);
@@ -1254,4 +1251,3 @@
   </script>
 </body>
 </html>
-
