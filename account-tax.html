@@ -549,8 +549,10 @@
       currentUser = user;
       if (!user) {
         setStatus("Not signed in", "error");
+        // Don't block page access - allow viewing
         return;
       }
+
       setStatus("Connected", "ok");
       await loadExisting();
     });
