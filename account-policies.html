@@ -688,6 +688,7 @@
 
       if (!user) {
         setStatus(""); // quiet when logged out
+        // Don't block page access - allow viewing
         return;
       }
 
