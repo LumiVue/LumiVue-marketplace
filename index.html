@@ -1,1069 +1,983 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <title>Edit Store · LumiVue Marketplace</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <title>LumiVue Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
 
   <style>
-    body {
-      background: var(--lv-bg, #f4f1eb);
-      color: var(--lv-text, #2c1e19);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    :root {
+      /* neutral latte / cream palette */
+      --lv-bg: #f4f1eb;            /* page background */
+      --lv-surface: #ffffff;       /* card background */
+      --lv-border: #ddd3c6;        /* soft beige border */
+      --lv-border-strong: #ccc0b1;
+      --lv-text: #2c1e19;          /* espresso text */
+      --lv-text-muted: #7a6a5c;    /* softer brown text */
+      --lv-accent: #c98a5a;        /* caramel accent */
+      --lv-accent-soft: #fbede1;   /* very light caramel accent */
+      --lv-radius-lg: 14px;
+      --lv-shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+      --lv-danger: #dc2626;
+      --lv-danger-soft: #fee2e2;
     }
 
-    /* Top LumiVue header */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      background: var(--lv-bg);
+      color: var(--lv-text);
+    }
+
+    .lv-page {
+      min-height: 100vh;
+    }
+
+    /* Top header */
+
     .lv-header {
-      padding: 12px 24px 4px;
-      background: transparent;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(244, 241, 235, 0.98);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(221, 211, 198, 0.7);
     }
 
     .lv-header-inner {
       max-width: 1120px;
       margin: 0 auto;
+      padding: 10px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
     }
 
-    .lv-header-left {
+    .lv-logo-wrap {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 10px;
     }
 
-    .lv-header-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      color: var(--lv-text, #2c1e19);
-    }
-
-    .lv-header-logo-circle {
-      width: 28px;
-      height: 28px;
+    .lv-logo-circle {
+      width: 32px;
+      height: 32px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #fef3c7, #e0b77b);
+      background: var(--lv-accent-soft);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 12px;
-      font-weight: 600;
-      color: #3b2a20;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      /* LV letters same espresso color as LUMIVUE text */
+      color: var(--lv-text);
     }
 
-    .lv-header-title {
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.4em;
+    .lv-logo-text {
+      font-size: 14px;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
+      /* main espresso color */
+      color: var(--lv-text);
     }
 
     .lv-nav {
       display: flex;
       align-items: center;
-      gap: 16px;
-      font-size: 13px;
+      gap: 18px;
+      font-size: 14px;
     }
 
     .lv-nav a {
       text-decoration: none;
-      color: var(--lv-text-muted, #8b8175);
+      /* ALL top nav text same color as logo */
+      color: var(--lv-text);
+      padding-bottom: 2px;
     }
 
-    .lv-header-right {
+    .lv-nav a:first-child {
+      border-bottom: 2px solid var(--lv-accent); /* underline only */
+      font-weight: 600;
+    }
+
+    .lv-header-actions {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    /* Flat brand pill buttons (top-right, etc.) */
-    .lv-pill {
-      padding: 6px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--lv-pill-border, #c9a07a);
-      background: var(--lv-pill, #e3ceb2);
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--lv-text, #2c1e19);
+    button {
+      transition: none; /* no animations */
+    }
+
+    .lv-btn-text {
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      /* same espresso color as logo */
+      color: var(--lv-text);
+      padding: 8px 10px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      /* keep completely flat */
-      transform: none !important;
-      box-shadow: none !important;
-      filter: none !important;
-      transition: none !important;
     }
 
-    .lv-pill:hover,
-    .lv-pill:focus,
-    .lv-pill:active {
-      background: var(--lv-pill, #e3ceb2);
-      color: var(--lv-text, #2c1e19);
-      transform: none !important;
-      box-shadow: none !important;
-      filter: none !important;
-      transition: none !important;
-    }
-
-    .lv-user-avatar {
-      width: 32px;
-      height: 32px;
+    .lv-btn-soft {
       border-radius: 999px;
-      background: linear-gradient(135deg, #f4e0c8, #e9c389);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: #3b2a20;
+      border: 1px solid var(--lv-border-strong);
+      background: var(--lv-surface);
+      font-size: 13px;
+      padding: 8px 14px;
+      cursor: pointer;
+      /* same espresso color */
+      color: var(--lv-text);
     }
 
-    /* Page layout + card */
-    .page-shell {
+    /* Main layout */
+
+    .lv-main {
       max-width: 1120px;
-      margin: 24px auto 48px;
-      padding: 0 24px 24px;
+      margin: 18px auto 40px;
+      padding: 0 24px 40px;
     }
 
-    .card-shell {
-      background: var(--lv-surface, #ffffff);
-      border-radius: 24px;
-      border: 1px solid var(--lv-border, #ddd3c6);
-      padding: 24px 24px 28px;
-      box-shadow:
-        0 24px 60px rgba(15, 23, 42, 0.12),
-        0 0 0 1px rgba(255, 255, 255, 0.6);
+    /* Hero card */
+
+    .lv-hero-card {
+      background: var(--lv-surface);
+      border-radius: 26px;
+      padding: 30px 32px 26px;
+      box-shadow: var(--lv-shadow-soft);
+      border: 1px solid var(--lv-border);
+      margin-bottom: 32px;
     }
 
-    .section-title {
-      font-size: 13px;
+    .lv-hero-title {
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--lv-text-muted, #8b8175);
-      margin-bottom: 4px;
+      margin: 0 0 8px;
+      text-align: center;
     }
 
-    .section-subtitle {
-      font-size: 13px;
-      color: var(--lv-text-muted, #8b8175);
-      margin-bottom: 18px;
+    .lv-hero-subtitle {
+      margin: 0 0 24px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--lv-text-muted);
     }
 
-    .field-grid {
+    .lv-hero-search-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 640px;
+      margin: 0 auto 16px;
+    }
+
+    .lv-hero-search-wrap {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .lv-hero-search-input {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 11px 16px;
+      font-size: 14px;
+      outline: none;
+      background: #f8f4ee;
+    }
+
+    .lv-hero-search-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 0 22px;
+      font-size: 14px;
+      font-weight: 600;
+      background: var(--lv-accent);
+      color: #ffffff;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .lv-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .lv-chip {
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 6px 14px;
+      font-size: 12px;
+      background: #f7efe4;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-chip.primary {
+      background: var(--lv-accent-soft);
+      color: var(--lv-accent);
+      border-color: var(--lv-accent-soft);
+      font-weight: 500;
+    }
+
+    /* Sections */
+
+    .lv-section {
+      margin-top: 32px;
+    }
+
+    .lv-section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .lv-section-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .lv-section-sub {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-card-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 16px 24px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 1024px) {
+      .lv-card-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 768px) {
-      .field-grid {
+      .lv-header-inner {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .lv-main {
+        padding: 0 16px 32px;
+      }
+
+      .lv-hero-card {
+        padding: 22px 18px 20px;
+      }
+
+      .lv-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .lv-card-grid {
         grid-template-columns: minmax(0, 1fr);
       }
     }
 
-    .field {
+    /* Cards */
+
+    .lv-card {
+      background: var(--lv-surface);
+      border-radius: var(--lv-radius-lg);
+      border: 1px solid var(--lv-border);
+      padding: 10px 10px 12px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+      transition: none; /* no hover animation */
     }
 
-    .field label {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--lv-text-muted, #8b8175);
-    }
-
-    .field small {
-      font-size: 11px;
-      color: var(--lv-text-muted, #9b8f82);
-    }
-
-    .lv-input,
-    .lv-textarea {
-      border-radius: 12px;
-      border: 1px solid var(--lv-border, #ddd3c6);
-      background: #fdfbf7;
-      padding: 9px 11px;
-      font-size: 13px;
-      color: var(--lv-text, #2c1e19);
-      outline: none;
-      width: 100%;
-      resize: vertical;
-    }
-
-    .lv-input:focus,
-    .lv-textarea:focus {
-      border-color: var(--accent-gold, #facc6b);
-      box-shadow: 0 0 0 1px rgba(250, 204, 107, 0.6);
-      background: #ffffff;
-    }
-
-    .lv-textarea {
-      min-height: 220px;
-      line-height: 1.6;
-    }
-
-    .media-row {
-      display: grid;
-      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.8fr);
-      gap: 18px 26px;
-      margin-top: 8px;
-    }
-
-    @media (max-width: 860px) {
-      .media-row {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .banner-preview {
-      border-radius: 20px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #f4e0c8, #e8d2b4);
-      min-height: 190px;
-      display: flex;
+    .lv-card-image-wrap {
       position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #ddd3c6;
+      height: 120px;
     }
 
-    .banner-preview img {
+    .lv-card-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
 
-    .banner-placeholder {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: rgba(0, 0, 0, 0.35);
-    }
-
-    /* Primary pill button (keep brand color, make flat) */
-    .lv-btn-primary {
-      padding: 8px 18px;
-      border-radius: 999px;
-      border: 1px solid var(--lv-pill-border, #c9a07a);
-      cursor: pointer;
-      background: var(--lv-pill, #e3ceb2);
-      color: var(--lv-text, #2c1e19);
+    .lv-card-title {
       font-size: 13px;
       font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      box-shadow: none !important;
-      transform: none !important;
-      filter: none !important;
-      transition: none !important;
+      margin: 0;
     }
 
-    .lv-btn-primary:hover,
-    .lv-btn-primary:focus,
-    .lv-btn-primary:active {
-      background: var(--lv-pill, #e3ceb2);
-      color: var(--lv-text, #2c1e19);
-      box-shadow: none !important;
-      transform: none !important;
-      filter: none !important;
-      transition: none !important;
+    .lv-card-subtitle {
+      font-size: 12px;
+      color: var(--lv-text-muted);
+      margin: 0;
     }
 
-    /* Ghost-style buttons (Save store profile, View my store, Add category) */
-    .lv-btn-ghost {
-      padding: 8px 16px;
+    .lv-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+
+    .lv-pill {
       border-radius: 999px;
-      border: 1px solid var(--lv-pill-border, #c9a07a);
-      background: var(--lv-pill, #e3ceb2);
-      color: var(--lv-text, #2c1e19);
+      border: 1px solid var(--lv-border-strong);
+      padding: 4px 9px;
+      font-size: 11px;
+      color: var(--lv-text-muted);
+      background: #f8f3ea;
+      white-space: nowrap;
+    }
+
+    .lv-price {
       font-size: 13px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--lv-text);
+    }
+
+    .lv-card-footer {
+      margin-top: 6px;
+    }
+
+    .lv-btn-ghost {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--lv-border-strong);
+      padding: 7px 10px;
+      font-size: 12px;
+      background: #f8f4ee;
+      color: var(--lv-text-muted);
       cursor: pointer;
-      /* keep completely flat */
-      box-shadow: none !important;
-      transform: none !important;
-      filter: none !important;
-      transition: none !important;
+      transition: none;
+    }
+
+    /* Footer */
+
+    .lv-footer {
+      max-width: 1120px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+      font-size: 12px;
+      color: var(--lv-text-muted);
+    }
+
+    .lv-footer p {
+      margin: 4px 0;
+    }
+
+    /* ------- FORCE NO HOVER VISUAL CHANGES ANYWHERE ------- */
+
+    .lv-nav a:hover,
+    .lv-nav a:active,
+    .lv-nav a:focus {
+      color: var(--lv-text);
+      text-decoration: none;
+      border-bottom-color: var(--lv-accent); /* same as normal for first link */
+      outline: none;
+    }
+
+    .lv-btn-text:hover,
+    .lv-btn-text:active,
+    .lv-btn-text:focus {
+      background: transparent;
+      color: var(--lv-text);
+      box-shadow: none;
+      transform: none;
+      outline: none;
+    }
+
+    .lv-btn-soft:hover,
+    .lv-btn-soft:active,
+    .lv-btn-soft:focus {
+      background: var(--lv-surface);
+      color: var(--lv-text);
+      box-shadow: none;
+      transform: none;
+      outline: none;
+    }
+
+    .lv-hero-search-btn:hover,
+    .lv-hero-search-btn:active,
+    .lv-hero-search-btn:focus {
+      background: var(--lv-accent);
+      color: #ffffff;
+      box-shadow: none;
+      transform: none;
+      outline: none;
     }
 
     .lv-btn-ghost:hover,
-    .lv-btn-ghost:focus,
-    .lv-btn-ghost:active {
-      background: var(--lv-pill, #e3ceb2);
-      color: var(--lv-text, #2c1e19);
-      box-shadow: none !important;
-      transform: none !important;
-      filter: none !important;
-      transition: none !important;
+    .lv-btn-ghost:active,
+    .lv-btn-ghost:focus {
+      background: #f8f4ee;
+      color: var(--lv-text-muted);
+      box-shadow: none;
+      transform: none;
+      outline: none;
     }
 
-    .status-line {
-      margin-top: 14px;
-      font-size: 12px;
-      color: var(--lv-text-muted, #8b8175);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 18px;
+    .lv-card:hover,
+    .lv-card:active,
+    .lv-card:focus {
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08); /* unchanged */
+      transform: none;
+      outline: none;
     }
 
-    .status-pill {
-      border-radius: 999px;
-      font-size: 11px;
-      padding: 4px 9px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      border: 1px solid rgba(148, 163, 184, 0.35);
+    /* === GLOBAL LV BUTTON FAMILY — MATCHING THE LV BUBBLE === */
+    .lv-btn-flat,
+    .lv-hero-search-btn,
+    .lv-chip,
+    .lv-chip.primary,
+    .lv-btn-text,
+    .lv-btn-soft {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 34px;                /* Same as LV bubble */
+        padding: 0 18px;             /* Balanced pill shape */
+        border-radius: 50px;
+        background: #e6d8c7;         /* Same warm beige as LV */
+        color: var(--lv-text);
+        font-weight: 600;
+        font-size: 14px;
+        border: 1px solid var(--lv-border-strong);
+        box-shadow: none !important;
+        transition: none !important;
+        cursor: pointer;
     }
 
-    .status-pill.error {
-      border-color: rgba(248, 113, 113, 0.55);
-      background: rgba(254, 226, 226, 0.6);
-      color: #b91c1c;
+    /* === Remove hover popups from ALL buttons === */
+    .lv-btn-flat:hover,
+    .lv-btn-soft:hover,
+    .lv-btn-text:hover,
+    .lv-hero-search-btn:hover,
+    .lv-chip:hover {
+        background: #e6d8c7 !important;
+        transform: none !important;
+        box-shadow: none !important;
     }
 
-    .status-pill.success {
-      border-color: rgba(34, 197, 94, 0.55);
-      background: rgba(220, 252, 231, 0.75);
-      color: #166534;
+    /* === LV BUBBLE (unchanged) === */
+    .lv-logo-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #e6d8c7;
+        color: var(--lv-text);
+        font-weight: 600;
+        font-size: 14px;
+        border: 1px solid var(--lv-border-strong);
+        box-shadow: none !important;
+        transition: none !important;
     }
 
-    .brand-values-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+    /* === PRODUCT "View product" BUTTONS === */
+    .lv-btn-ghost,
+    .lv-card-footer button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 34px;
+        padding: 0 18px;
+        border-radius: 50px;
+        background: #e6d8c7;
+        border: 1px solid var(--lv-border-strong);
+        color: var(--lv-text);
+        font-weight: 600;
+        font-size: 14px;
+        box-shadow: none !important;
     }
 
-    .brand-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--lv-border, #ddd3c6);
-      background: #fdfbf7;
-      font-size: 12px;
-      cursor: pointer;
+    /* === SEARCH BUTTON === */
+    .lv-hero-search-btn {
+        height: 34px;
     }
 
-    .brand-pill input {
-      accent-color: var(--accent-gold, #facc6b);
+    /* === CATEGORY CHIPS (Skincare, Cosmetics, etc.) === */
+    .lv-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px;
+        padding: 0 14px;
+        border-radius: 50px;
+        background: #e6d8c7 !important;
+        border: 1px solid var(--lv-border-strong);
+        color: var(--lv-text);
+        font-weight: 600;
+        font-size: 13px;
+        box-shadow: none !important;
     }
 
-    /* Shop Categories styling */
-    .lv-category-row {
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      margin-top: 12px;
-      flex-wrap: wrap;
+    /* === SPECIAL BLUE PRIMARY CHIP FIX === */
+    .lv-chip.primary {
+        background: #e6d8c7 !important;
+        color: var(--lv-text) !important;
+        border: 1px solid var(--lv-border-strong);
     }
 
-    .lv-category-chips {
-      margin-top: 10px;
+    /* === REMOVE UNDERLINE FROM NAV LINKS === */
+    .lv-nav a {
+        text-decoration: none !important;
+        border-bottom: none !important;
+        padding-bottom: 0 !important;
+        font-weight: 400 !important;   /* Makes Marketplace match Browse all */
     }
 
-    .lv-category-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
-      margin: 4px 6px 0 0;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.55);
-      font-size: 12px;
-      background: #fdfbf7;
+    .lv-nav a:hover,
+    .lv-nav a:active,
+    .lv-nav a:focus {
+        text-decoration: none !important;
+        border-bottom: none !important;
+        outline: none !important;
     }
 
-    .lv-category-chip button {
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      font-size: 14px;
-      line-height: 1;
-      padding: 0;
-      color: #6b7280;
-    }
-
-    @media (max-width: 640px) {
-      .lv-category-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-    }
   </style>
 </head>
 
 <body>
+  <div class="lv-page">
+    <header class="lv-header">
+      <div class="lv-header-inner">
+        <div class="lv-logo-wrap">
+          <div class="lv-logo-circle">LV</div>
+          <span class="lv-logo-text">LUMIVUE</span>
+        </div>
 
-  <!-- LumiVue top bar -->
-  <header class="lv-header">
-    <div class="lv-header-inner">
-
-      <div class="lv-header-left">
-        <a href="index.html" class="lv-header-logo">
-          <span class="lv-header-logo-circle">LV</span>
-          <span class="lv-header-title">L U M I V U E</span>
-        </a>
-
+        <!-- Navigation links -->
         <nav class="lv-nav">
           <a href="marketplace.html">Marketplace</a>
           <a href="browse.html">Browse all</a>
         </nav>
-      </div>
 
-      <div class="lv-header-right">
-        <a href="dashboard.html" class="lv-pill">Dashboard</a>
-        <a href="listings.html" class="lv-pill">Listings</a>
-        <button id="logoutBtn" class="lv-pill">LOG OUT</button>
-
-        <div class="lv-user-avatar">
-          <span>LV</span>
+        <!-- Header actions -->
+        <div class="lv-header-actions">
+          <a class="lv-btn-text" href="login.html">Sign in / Join</a>
+          <a class="lv-btn-soft" href="signup.html">For vendors</a>
         </div>
       </div>
+    </header>
 
-    </div>
-  </header>
-  <!-- end header -->
+    <main class="lv-main">
+      <!-- Hero search section -->
+      <section class="lv-hero-card">
+        <h1 class="lv-hero-title">Clean Beauty, Redefined.</h1>
+        <p class="lv-hero-subtitle">
+          Discover a curated selection of high-quality, transparently formulated beauty products from trusted indie creators.
+        </p>
 
-  <div class="page-shell">
-
-    <section class="card-shell">
-
-      <!-- BASIC INFO -->
-      <div class="section">
-        <div class="section-title">Store basics</div>
-        <div class="section-subtitle">Displayed at the top of your public store.</div>
-
-        <div class="field-grid">
-
-          <div class="field">
-            <label for="storeName">Store name</label>
-            <input id="storeName" class="lv-input" placeholder="La Perj" />
-          </div>
-
-          <div class="field">
-            <label for="tagline">Tagline</label>
-            <input id="tagline" class="lv-input" placeholder="Curated skincare, candles, and fragrances." />
-          </div>
-
-          <div class="field">
-            <label for="location">Location</label>
-            <input id="location" class="lv-input" placeholder="Tucson, AZ · Ships US only" />
-          </div>
-
-          <div class="field">
-            <label for="shippingNote">Shipping note</label>
-            <input id="shippingNote" class="lv-input" placeholder="Ships in 3–5 business days." />
-          </div>
-
-        </div>
-      </div>
-
-      <hr style="border:none; border-top:1px solid rgba(221,211,198,0.7); margin:24px 0;" />
-
-      <!-- BRAND STORY -->
-      <div class="section">
-        <div class="section-title">Brand story</div>
-        <div class="section-subtitle">Tell buyers who you are. This text appears on your store page.</div>
-
-        <div class="field">
-          <label for="brandStory">Brand story</label>
-          <textarea id="brandStory" class="lv-textarea"
-            placeholder="La Perj didn't start with a jar..."></textarea>
-        </div>
-      </div>
-
-      <hr style="border:none; border-top:1px solid rgba(221,211,198,0.7); margin:24px 0;" />
-
-      <!-- BANNER + VIDEO -->
-      <div class="section">
-        <div class="section-title">Visuals</div>
-        <div class="section-subtitle">Upload one banner image + one 30-second intro video.</div>
-
-        <div class="media-row">
-
-          <!-- Banner (also used as logo image in store) -->
-          <div class="field">
-            <label for="bannerFile">Banner / logo image</label>
-            <input id="bannerFile" type="file" accept="image/*" class="lv-input" />
-            <small>This photo is used as your store banner and logo preview.</small>
-
-            <div class="banner-preview" id="bannerPreview">
-              <div class="banner-placeholder" id="bannerPlaceholder">Store banner preview</div>
-            </div>
-          </div>
-
-          <!-- Video -->
-          <div class="field">
-            <label for="storeVideo">Intro video (30 seconds)</label>
-            <input id="storeVideo" type="file" accept="video/*" class="lv-input" />
-            <small>Short welcome video for your store.</small>
-
-            <video id="videoPreview" controls
-              style="width:100%; border-radius:18px; display:none; background:#000; margin-top:10px;"></video>
-            <small id="videoInfo" style="display:none; margin-top:6px;">This is your current intro video.</small>
-          </div>
-
-        </div>
-      </div>
-
-      <hr style="border:none; border-top:1px solid rgba(221,211,198,0.7); margin:24px 0;" />
-
-      <!-- STORE STATUS / SOCIAL / BRAND VALUES / COMING NEXT -->
-      <div class="section">
-        <div class="section-title">Store visibility & values</div>
-        <div class="section-subtitle">
-          Control how your shop appears in LumiVue and share what your brand stands for.
-        </div>
-
-        <!-- Store status -->
-        <div class="field" style="margin-bottom:16px;">
-          <label for="storePublic">Store status</label>
-          <div style="display:flex; align-items:flex-start; gap:8px; margin-top:4px;">
-            <input id="storePublic" type="checkbox" style="margin-top:3px;" />
-            <div>
-              <span style="font-size:13px;">Make my store public on LumiVue (discoverable on marketplace).</span>
-              <div style="font-size:11px; color:var(--lv-text-muted);">
-                You can still draft products even while your store is public.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Social links -->
-        <div class="field" style="margin-bottom:16px;">
-          <label>Social links</label>
-          <div class="field-grid">
-            <input id="socialShop" class="lv-input" placeholder="https://yourshop.com" />
-            <input id="socialInstagram" class="lv-input" placeholder="@yourbrand" />
-            <input id="socialTiktok" class="lv-input" placeholder="@tiktokhandle" />
-            <input id="socialYoutube" class="lv-input" placeholder="YouTube or channel name" />
-          </div>
-        </div>
-
-        <!-- Brand values -->
-        <div class="field" style="margin-bottom:12px;">
-          <label>Brand values</label>
-          <small>These will later appear as icons and filters on your listings.</small>
-
-          <div class="brand-values-grid" style="margin-top:8px;">
-            <label class="brand-pill">
-              <input type="checkbox" id="valueCrueltyFree" value="Cruelty-free" />
-              Cruelty-free
-            </label>
-            <label class="brand-pill">
-              <input type="checkbox" id="valueVegan" value="Vegan formulas" />
-              Vegan formulas
-            </label>
-            <label class="brand-pill">
-              <input type="checkbox" id="valueSmallBatch" value="Small batch" />
-              Small batch
-            </label>
-            <label class="brand-pill">
-              <input type="checkbox" id="valueHandmade" value="Handmade" />
-              Handmade
-            </label>
-            <label class="brand-pill">
-              <input type="checkbox" id="valueEco" value="Eco / recycled packaging" />
-              Eco / recycled packaging
-            </label>
-            <label class="brand-pill">
-              <input type="checkbox" id="valueCleanFragrance" value="Clean fragrance focus" />
-              Clean fragrance focus
-            </label>
-          </div>
-        </div>
-
-        <!-- Coming next note -->
-        <div style="font-size:11px; color:var(--lv-text-muted); margin-top:4px;">
-          <strong>Coming next (no action required yet)</strong><br />
-          Later you'll be able to pin featured products, upload a shop intro video gallery, add FAQs,
-          and build a small studio gallery — all powered from this same store profile.
-        </div>
-      </div>
-
-      <hr style="border:none; border-top:1px solid rgba(221,211,198,0.7); margin:24px 0;" />
-
-      <!-- SHOP CATEGORIES -->
-      <div class="section">
-        <div class="section-title">Shop categories</div>
-        <div class="section-subtitle">
-          Create custom categories (like "Moisturizers", "Body Wash", "Holiday sets") to organize products in your store.
-        </div>
-
-        <div class="field">
-          <label for="newCategoryName">Add a category</label>
-          <div class="lv-category-row">
+        <div class="lv-hero-search-row">
+          <div class="lv-hero-search-wrap">
             <input
-              id="newCategoryName"
-              class="lv-input"
-              placeholder="e.g. Moisturizers, Body Wash, Serums, Holiday Gifts"
+              type="text"
+              class="lv-hero-search-input"
+              placeholder="Search for products, brands, or ingredients..."
             />
-            <button type="button" id="addCategoryBtn" class="lv-btn-ghost">
-              + Add category
-            </button>
+            <button class="lv-hero-search-btn" type="button">Search</button>
           </div>
-          <small>These categories belong only to your shop. Buyers will see them in your store's sidebar.</small>
-        </div>
 
-        <div class="field" style="margin-top:14px;">
-          <label>Current categories</label>
-          <div id="categoriesEmpty" style="font-size:12px; color:var(--lv-text-muted);">
-            You haven't created any categories yet.
-          </div>
-          <div id="categoriesList" class="lv-category-chips">
-            <!-- Category chips injected here -->
+          <div class="lv-chip-row">
+            <span class="lv-chip primary">Skincare</span>
+            <span class="lv-chip">Cosmetics</span>
+            <span class="lv-chip">Haircare</span>
+            <span class="lv-chip">Body</span>
+            <span class="lv-chip">Fragrance</span>
+            <span class="lv-chip">Candles</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- SAVE / VIEW ACTIONS AT BOTTOM -->
-      <div class="section" style="margin-top:28px;">
-        <div class="section-subtitle" style="margin-bottom:10px;">
-          Changes save to your live store when you click <strong>Save store profile</strong>.
+      <!-- Featured products -->
+      <section class="lv-section">
+        <div class="lv-section-header">
+          <div>
+            <h2 class="lv-section-title">Featured products</h2>
+          </div>
+          <div class="lv-section-sub">
+            A preview of the kind of indie beauty you’ll discover on LumiVue.
+          </div>
         </div>
-        <div style="display:flex; justify-content:flex-end; gap:12px;">
-          <button id="saveBtn" class="lv-btn-ghost">Save store profile</button>
-          <button id="viewStoreBtn" class="lv-btn-ghost">View my store</button>
+
+        <div class="lv-card-grid">
+          <!-- 1 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/4202329/pexels-photo-4202329.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Crème de Lumière" />
+            </div>
+            <h3 class="lv-card-title">Crème de Lumière</h3>
+            <p class="lv-card-subtitle">Radiance-restoring face cream with niacinamide.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Skincare</span>
+              <span class="lv-price">$45.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
+
+          <!-- 2 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/6666403/pexels-photo-6666403.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Velvet Petal Lip Tint" />
+            </div>
+            <h3 class="lv-card-title">Velvet Petal Lip Tint</h3>
+            <p class="lv-card-subtitle">Soft-focus lip tint with botanical oils.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Cosmetics</span>
+              <span class="lv-price">$24.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
+
+          <!-- 3 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/6621497/pexels-photo-6621497.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Honey Oat Milk Bar" />
+            </div>
+            <h3 class="lv-card-title">Honey Oat Milk Bar</h3>
+            <p class="lv-card-subtitle">Cold-process soap with oat milk and honey. Collections</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Soap</span>
+              <span class="lv-price">$12.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
+
+          <!-- 4 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/278664/pexels-photo-278664.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Willow & Smoke Candle" />
+            </div>
+            <h3 class="lv-card-title">Willow & Smoke Candle</h3>
+            <p class="lv-card-subtitle">Clean-burning soy candle with smoked vanilla.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Candles</span>
+              <span class="lv-price">$28.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
+
+          <!-- 5 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/35026037/pexels-photo-35026037.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Lumière Serum" />
+            </div>
+            <h3 class="lv-card-title">Lumière Serum</h3>
+            <p class="lv-card-subtitle">Brightening vitamin C serum for morning glow rituals.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Skincare</span>
+              <span class="lv-price">$38.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
+
+          <!-- 6 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/15807351/pexels-photo-15807351.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Cloud Crème Body Soufflé" />
+            </div>
+            <h3 class="lv-card-title">Cloud Crème Body Soufflé</h3>
+            <p class="lv-card-subtitle">Whipped squalane body cream.Formulated Collections</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Body</span>
+              <span class="lv-price">$32.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
+
+          <!-- 7 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/3373738/pexels-photo-3373738.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Gloss Veil Shine" />
+            </div>
+            <h3 class="lv-card-title">Gloss Veil Shine</h3>
+            <p class="lv-card-subtitle">High-shine clean beauty gloss. Beauty collections</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Cosmetics</span>
+              <span class="lv-price">$18.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
+
+          <!-- 8 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/6634662/pexels-photo-6634662.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Vanilla Ember Candle" />
+            </div>
+            <h3 class="lv-card-title">Vanilla Ember Candle</h3>
+            <p class="lv-card-subtitle">Soft amber vanilla candle blend.Specialty collections</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Candles</span>
+              <span class="lv-price">$30.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
+
+          <!-- 9 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/6167443/pexels-photo-6167443.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Herbal Cloud Clay Mask" />
+            </div>
+            <h3 class="lv-card-title">Herbal Cloud Clay Mask</h3>
+            <p class="lv-card-subtitle">Detoxifying clay mask with chamomile and green tea.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Skincare</span>
+              <span class="lv-price">$29.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
+
+          <!-- 10 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/5420466/pexels-photo-5420466.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Citrus Bloom Soap Stack" />
+            </div>
+            <h3 class="lv-card-title">Citrus Bloom Soap Stack</h3>
+            <p class="lv-card-subtitle">Hand-cut soaps with citrus peel and petals.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Soap</span>
+              <span class="lv-price">$16.00</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View product</button>
+            </div>
+          </article>
         </div>
-      </div>
+      </section>
 
-      <!-- STATUS -->
-      <div class="status-line" id="statusLine"></div>
+      <!-- Featured creators -->
+      <section class="lv-section">
+        <div class="lv-section-header">
+          <div>
+            <h2 class="lv-section-title">Featured vendors</h2>
+          </div>
+          <div class="lv-section-sub">
+            Independent studios inside the LumiVue marketplace.
+          </div>
+        </div>
 
-    </section>
+        <div class="lv-card-grid">
+          <!-- 1 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/3751227/pexels-photo-3751227.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Seraphim Skincare" />
+            </div>
+            <h3 class="lv-card-title">Seraphim Skincare</h3>
+            <p class="lv-card-subtitle">Clinical-inspired serums for radiant skin.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Skincare studio</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+
+          <!-- 2 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/5420491/pexels-photo-5420491.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Moonlit Soap Co." />
+            </div>
+            <h3 class="lv-card-title">Moonlit Soap Co.</h3>
+            <p class="lv-card-subtitle">Artisan soaps poured in small lunar batches.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Soap studio</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+
+          <!-- 3 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/6755759/pexels-photo-6755759.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Willow & Wax Candles" />
+            </div>
+            <h3 class="lv-card-title">Willow & Wax Candles</h3>
+            <p class="lv-card-subtitle">Story-driven scent blends. Formulated blends</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Candle studio</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+
+          <!-- 4 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/2535913/pexels-photo-2535913.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Auric Atelier" />
+            </div>
+            <h3 class="lv-card-title">Auric Atelier</h3>
+            <p class="lv-card-subtitle">Soft-focus cosmetics for everyday ritual.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Cosmetics</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+
+          <!-- 5 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/17466173/pexels-photo-17466173.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Rosewater Rituals" />
+            </div>
+            <h3 class="lv-card-title">Rosewater Rituals</h3>
+            <p class="lv-card-subtitle">Botanical facial mists and toners. Stability Tested</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Skincare</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+
+          <!-- 6 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/10526293/pexels-photo-10526293.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Kindred Wax Studio" />
+            </div>
+            <h3 class="lv-card-title">Kindred Wax Studio</h3>
+            <p class="lv-card-subtitle">Neutral-toned pillar candles. Formulated blends</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Candles</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+
+          <!-- 7 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/5782661/pexels-photo-5782661.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Ember & Oak" />
+            </div>
+            <h3 class="lv-card-title">Ember & Oak</h3>
+            <p class="lv-card-subtitle">Hand poured rustic candle jars. Formulated blends</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Candle studio</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+
+          <!-- 8 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/1377034/pexels-photo-1377034.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Bloom Cosmetics" />
+            </div>
+            <h3 class="lv-card-title">Bloom Cosmetics</h3>
+            <p class="lv-card-subtitle">Soft pink cosmetic line. Cosmetic blends</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Cosmetics</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+
+          <!-- 9 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/3321416/pexels-photo-3321416.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Lunar Bloom Skincare" />
+            </div>
+            <h3 class="lv-card-title">Lunar Bloom Skincare</h3>
+            <p class="lv-card-subtitle">Nightly rituals for glow-obsessed skin.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Skincare</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+
+          <!-- 10 -->
+          <article class="lv-card">
+            <div class="lv-card-image-wrap">
+              <img class="lv-card-image" src="https://images.pexels.com/photos/5420575/pexels-photo-5420575.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Solstice Soap Studio" />
+            </div>
+            <h3 class="lv-card-title">Solstice Soap Studio</h3>
+            <p class="lv-card-subtitle">Seasonal soaps with herbs and petals.</p>
+            <div class="lv-card-meta">
+              <span class="lv-pill">Soap studio</span>
+            </div>
+            <div class="lv-card-footer">
+              <button class="lv-btn-ghost" type="button">View store</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lv-footer">
+      <p><strong>Sell your creations on LumiVue.</strong></p>
+      <p>
+        LumiVue is a beauty-only marketplace built for skincare formulators, candle makers, soap artists, and cosmetic creators.
+      </p>
+    </footer>
   </div>
+  
+  <!-- Firebase SDK - required for Auth, Firestore, Storage -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 
-  <!-- FIREBASE LOGIC -->
-  <script type="module">
-    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      collection,
-      addDoc,
-      getDocs,
-      deleteDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js";
-
+  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
-      authDomain: "lumivue-c8fdf.firebaseapp.com",
-      projectId: "lumivue-c8fdf",
-      storageBucket: "lumivue-c8fdf.firebasestorage.app",
-      messagingSenderId: "120420036736",
-      appId: "1:120420036736:web:0fbbc98b02ea54840d3665"
+        apiKey: "AIzaSyAMyoY8qYPr5KolzqnIEtE4sHl1b83iAQ8",
+        authDomain: "lumivue-c8fdf.firebaseapp.com",
+        projectId: "lumivue-c8fdf",
+        storageBucket: "lumivue-c8fdf.appspot.com",
+        messagingSenderId: "112402036736",
+        appId: "1:112402036736:web:bfbbe98b02ea5484803d65"
     };
 
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+    firebase.initializeApp(firebaseConfig);
 
-    const storeNameInput = document.getElementById("storeName");
-    const taglineInput = document.getElementById("tagline");
-    const locationInput = document.getElementById("location");
-    const shippingNoteInput = document.getElementById("shippingNote");
-    const brandStoryInput = document.getElementById("brandStory");
-
-    const bannerFileInput = document.getElementById("bannerFile");
-    const bannerPreview = document.getElementById("bannerPreview");
-    const bannerPlaceholder = document.getElementById("bannerPlaceholder");
-
-    const videoInput = document.getElementById("storeVideo");
-    const videoPreview = document.getElementById("videoPreview");
-    const videoInfo = document.getElementById("videoInfo");
-
-    const storePublicCheckbox = document.getElementById("storePublic");
-    const socialShopInput = document.getElementById("socialShop");
-    const socialInstagramInput = document.getElementById("socialInstagram");
-    const socialTiktokInput = document.getElementById("socialTiktok");
-    const socialYoutubeInput = document.getElementById("socialYoutube");
-
-    const valueCrueltyFree = document.getElementById("valueCrueltyFree");
-    const valueVegan = document.getElementById("valueVegan");
-    const valueSmallBatch = document.getElementById("valueSmallBatch");
-    const valueHandmade = document.getElementById("valueHandmade");
-    const valueEco = document.getElementById("valueEco");
-    const valueCleanFragrance = document.getElementById("valueCleanFragrance");
-
-    const saveBtn = document.getElementById("saveBtn");
-    const viewStoreBtn = document.getElementById("viewStoreBtn");
-    const statusLine = document.getElementById("statusLine");
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    // Categories elements
-    const newCategoryNameInput = document.getElementById("newCategoryName");
-    const addCategoryBtn = document.getElementById("addCategoryBtn");
-    const categoriesList = document.getElementById("categoriesList");
-    const categoriesEmpty = document.getElementById("categoriesEmpty");
-
-    let currentUser = null;
-
-    function setStatus(msg, type = "") {
-      statusLine.innerHTML = "";
-      if (!msg) return;
-
-      const pill = document.createElement("span");
-      pill.classList.add("status-pill");
-      if (type === "error") pill.classList.add("error");
-      if (type === "success") pill.classList.add("success");
-
-      const text = document.createElement("span");
-      text.textContent = msg;
-
-      statusLine.appendChild(pill);
-      statusLine.appendChild(text);
-    }
-
-    function previewBanner(url) {
-      bannerPreview.innerHTML = "";
-      if (!url) {
-        bannerPreview.appendChild(bannerPlaceholder);
-        bannerPlaceholder.style.display = "flex";
-        return;
-      }
-      const img = document.createElement("img");
-      img.src = url;
-      img.alt = "Store banner";
-      bannerPlaceholder.style.display = "none";
-      bannerPreview.appendChild(img);
-    }
-
-    function previewVideo(url) {
-      if (!url) {
-        videoPreview.style.display = "none";
-        videoInfo.style.display = "none";
-        return;
-      }
-      videoPreview.src = url;
-      videoPreview.style.display = "block";
-      videoInfo.style.display = "block";
-    }
-
-    function getSelectedBrandValues() {
-      const values = [];
-      if (valueCrueltyFree.checked) values.push(valueCrueltyFree.value);
-      if (valueVegan.checked) values.push(valueVegan.value);
-      if (valueSmallBatch.checked) values.push(valueSmallBatch.value);
-      if (valueHandmade.checked) values.push(valueHandmade.value);
-      if (valueEco.checked) values.push(valueEco.value);
-      if (valueCleanFragrance.checked) values.push(valueCleanFragrance.value);
-      return values;
-    }
-
-    function applyBrandValues(values) {
-      if (!Array.isArray(values)) return;
-      valueCrueltyFree.checked = values.includes(valueCrueltyFree.value);
-      valueVegan.checked = values.includes(valueVegan.value);
-      valueSmallBatch.checked = values.includes(valueSmallBatch.value);
-      valueHandmade.checked = values.includes(valueHandmade.value);
-      valueEco.checked = values.includes(valueEco.value);
-      valueCleanFragrance.checked = values.includes(valueCleanFragrance.value);
-    }
-
-    async function loadProfile(user) {
-      try {
-        const profileRef = doc(db, "stores", user.uid, "profile", "main");
-        const snap = await getDoc(profileRef);
-
-        if (snap.exists()) {
-          const data = snap.data();
-          storeNameInput.value = data.storeName || "";
-          taglineInput.value = data.tagline || "";
-          locationInput.value = data.location || "";
-          shippingNoteInput.value = data.shippingNote || "";
-          brandStoryInput.value = data.brandStory || "";
-
-          // Use bannerImageUrl or storeLogoUrl for the banner preview
-          previewBanner(data.bannerImageUrl || data.storeLogoUrl || "");
-          previewVideo(data.storeVideoUrl || "");
-
-          storePublicCheckbox.checked = !!data.storePublic;
-
-          socialShopInput.value = data.socialShop || "";
-          socialInstagramInput.value = data.socialInstagram || "";
-          socialTiktokInput.value = data.socialTiktok || "";
-          socialYoutubeInput.value = data.socialYoutube || "";
-
-          applyBrandValues(data.brandValues || []);
-        } else {
-          previewBanner("");
-          previewVideo("");
-        }
-      } catch (err) {
-        console.error(err);
-        setStatus("Could not load your store profile.", "error");
-      }
-    }
-
-    async function ensureVendor(user) {
-      try {
-        const creatorRef = doc(db, "creators", user.uid);
-        const snap = await getDoc(creatorRef);
-
-        if (!snap.exists()) {
-          window.location.href = "account.html";
-          return false;
-        }
-        return true;
-      } catch (err) {
-        console.error(err);
-        setStatus("We couldn't verify your creator account.", "error");
-        return false;
-      }
-    }
-
-    // make uploads non-blocking so profile can still save
-    async function saveProfile(user) {
-      setStatus("Saving…");
-
-      const profileRef = doc(db, "stores", user.uid, "profile", "main");
-      const data = {
-        storeName: storeNameInput.value.trim(),
-        tagline: taglineInput.value.trim(),
-        location: locationInput.value.trim(),
-        shippingNote: shippingNoteInput.value.trim(),
-        brandStory: brandStoryInput.value.trim(),
-        storePublic: storePublicCheckbox.checked,
-        socialShop: socialShopInput.value.trim(),
-        socialInstagram: socialInstagramInput.value.trim(),
-        socialTiktok: socialTiktokInput.value.trim(),
-        socialYoutube: socialYoutubeInput.value.trim(),
-        brandValues: getSelectedBrandValues(),
-        updatedAt: new Date().toISOString()
-      };
-
-      // Banner upload (used for banner + logo)
-      if (bannerFileInput.files[0]) {
-        try {
-          const file = bannerFileInput.files[0];
-          const path = `listing-images/${Date.now()}_${file.name}`;
-          const bannerRef = ref(storage, path);
-          await uploadBytes(bannerRef, file);
-          const url = await getDownloadURL(bannerRef);
-          data.bannerImageUrl = url;   // hero fallback image
-          data.storeLogoUrl = url;     // logo circle in store.html
-          previewBanner(url);
-        } catch (err) {
-          console.error("Banner upload failed", err);
-          setStatus("Banner image could not be uploaded.", "error");
-        }
-      }
-
-      // Video upload (intro video for hero)
-      if (videoInput.files[0]) {
-        try {
-          const file = videoInput.files[0];
-          const path = `listing-videos/${Date.now()}_${file.name}`;
-          const videoRef = ref(storage, path);
-          await uploadBytes(videoRef, file);
-          const url = await getDownloadURL(videoRef);
-          data.storeVideoUrl = url;
-          previewVideo(url);
-        } catch (err) {
-          console.error("Video upload failed", err);
-          setStatus("Intro video could not be uploaded.", "error");
-        }
-      }
-
-      try {
-        // Save store profile
-        await setDoc(profileRef, data, { merge: true });
-
-        // Also update the creators doc so dashboard can show storeName + visibility
-        const creatorRef = doc(db, "creators", user.uid);
-        await setDoc(
-          creatorRef,
-          {
-            storeName: data.storeName || "",
-            isPublic: !!data.storePublic,
-            ownerName: user.displayName || "",
-            storeLogoUrl: data.storeLogoUrl || null,
-            updatedAt: serverTimestamp()
-          },
-          { merge: true }
-        );
-
-        setStatus("Profile saved", "success");
-      } catch (err) {
-        console.error(err);
-        setStatus("Could not save profile.", "error");
-      }
-    }
-
-    // Load seller's categories from Firestore
-    async function loadCategories(user) {
-      if (!categoriesList || !categoriesEmpty) return;
-      categoriesList.innerHTML = "";
-      categoriesEmpty.style.display = "block";
-      categoriesEmpty.textContent = "Loading categories…";
-
-      try {
-        const colRef = collection(db, "stores", user.uid, "categories");
-        const snap = await getDocs(colRef);
-
-        if (snap.empty) {
-          categoriesEmpty.style.display = "block";
-          categoriesEmpty.textContent = "You haven't created any categories yet.";
-          return;
-        }
-
-        categoriesEmpty.style.display = "none";
-
-        snap.forEach((docSnap) => {
-          const data = docSnap.data();
-          const name = data.name || "Untitled";
-          const chip = document.createElement("div");
-          chip.className = "lv-category-chip";
-          chip.innerHTML = `
-          <span>${name}</span>
-          <button type="button" data-cat-id="${docSnap.id}" aria-label="Delete category ${name}">×</button>
-        `;
-          categoriesList.appendChild(chip);
-        });
-
-      } catch (err) {
-        console.error("Error loading categories", err);
-        categoriesEmpty.style.display = "block";
-        categoriesEmpty.textContent = "Could not load categories.";
-      }
-    }
-
-    // Add a category for this seller
-    async function addCategory() {
-      if (!currentUser || !newCategoryNameInput) return;
-      const name = newCategoryNameInput.value.trim();
-      if (!name) return;
-
-      try {
-        setStatus("Adding category…");
-
-        const colRef = collection(db, "stores", currentUser.uid, "categories");
-        await addDoc(colRef, {
-          name,
-          createdAt: serverTimestamp()
-        });
-
-        newCategoryNameInput.value = "";
-        await loadCategories(currentUser);
-        setStatus("Category added", "success");
-      } catch (err) {
-        console.error("Error adding category", err);
-        setStatus("Could not add category.", "error");
-      }
-    }
-
-    // Delete a category
-    async function deleteCategory(catId) {
-      if (!currentUser || !catId) return;
-      const ok = confirm("Remove this category from your shop?");
-      if (!ok) return;
-
-      try {
-        setStatus("Removing category…");
-        const catRef = doc(db, "stores", currentUser.uid, "categories", catId);
-        await deleteDoc(catRef);
-        await loadCategories(currentUser);
-        setStatus("Category removed", "success");
-      } catch (err) {
-        console.error("Error deleting category", err);
-        setStatus("Could not remove category.", "error");
-      }
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        setStatus("You're not signed in. Store changes will save once you're logged in.", "error");
-        return;
-      }
-
-      currentUser = user;
-
-      const ok = await ensureVendor(user);
-      if (!ok) return;
-
-      await loadProfile(user);
-      await loadCategories(user);
-
-      if (saveBtn) {
-        saveBtn.onclick = () => saveProfile(user);
-      }
-
-      if (viewStoreBtn) {
-        viewStoreBtn.onclick = () =>
-          window.location.href = `store.html?uid=${encodeURIComponent(user.uid)}`;
-      }
-    });
-
-    if (bannerFileInput) {
-      bannerFileInput.addEventListener("change", () => {
-        const file = bannerFileInput.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = (e) => previewBanner(e.target.result);
-        reader.readAsDataURL(file);
-      });
-    }
-
-    if (videoInput) {
-      videoInput.addEventListener("change", () => {
-        const file = videoInput.files[0];
-        if (!file) return;
-
-        const url = URL.createObjectURL(file);
-        videoPreview.src = url;
-        videoPreview.style.display = "block";
-        videoInfo.style.display = "block";
-      });
-    }
-
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", async () => {
-        await signOut(auth);
-        window.location.href = "index.html";
-      });
-    }
-
-    // Wire category UI events
-    if (addCategoryBtn) {
-      addCategoryBtn.addEventListener("click", addCategory);
-    }
-
-    if (categoriesList) {
-      categoriesList.addEventListener("click", (e) => {
-        const btn = e.target.closest("button[data-cat-id]");
-        if (!btn) return;
-        const catId = btn.getAttribute("data-cat-id");
-        deleteCategory(catId);
-      });
-    }
+    const auth = firebase.auth();
+    const db = firebase.firestore();
   </script>
-
 </body>
-
 </html>
