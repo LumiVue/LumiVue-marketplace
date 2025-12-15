@@ -190,8 +190,7 @@
       line-height: 1.5;
     }
 
-    /* Pill-style buttons: Status, COMPLETED, NOT STARTED, Manage
-       all share the same size, color and shape */
+    /* Pill-style buttons: Status, COMPLETED, NOT STARTED, Manage */
     .lv-pill,
     .lv-status-pill,
     .lv-card-status,
@@ -199,9 +198,9 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 34px;          /* same height */
+      height: 34px;
       padding: 0 22px;
-      min-width: 130px;      /* <<< SAME WIDTH for COMPLETED + MANAGE */
+      min-width: 130px;
       border-radius: 999px;
       border: 1px solid var(--lv-border-strong);
       background: var(--lv-bubble-bg);
@@ -218,7 +217,6 @@
       cursor: pointer;
     }
 
-    /* remove hover changes for all these pills */
     .lv-status-pill:hover,
     .lv-card-status:hover,
     .lv-card-manage:hover,
@@ -293,7 +291,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      transition: none; /* no hover animation */
+      transition: none;
     }
 
     .lv-card:hover,
@@ -440,7 +438,7 @@
               <span class="lv-card-note">Required before payouts can be activated.</span>
               <button type="button"
                       class="lv-card-manage lv-pill"
-                      onclick="goTo('account-legal.html')">
+                      onclick="event.stopPropagation(); goTo('account-legal.html');">
                 Manage
               </button>
             </div>
@@ -459,7 +457,7 @@
               <span class="lv-card-note">Helps keep payouts compliant and secure.</span>
               <button type="button"
                       class="lv-card-manage lv-pill"
-                      onclick="goTo('account-tax.html')">
+                      onclick="event.stopPropagation(); goTo('account-tax.html');">
                 Manage
               </button>
             </div>
@@ -478,7 +476,7 @@
               <span class="lv-card-note">Encrypted and never shared with buyers.</span>
               <button type="button"
                       class="lv-card-manage lv-pill"
-                      onclick="goTo('account-payouts.html')">
+                      onclick="event.stopPropagation(); goTo('account-payouts.html');">
                 Manage
               </button>
             </div>
@@ -497,7 +495,7 @@
               <span class="lv-card-note">You can edit your brand at any time.</span>
               <button type="button"
                       class="lv-card-manage lv-pill"
-                      onclick="goTo('edit-store.html')">
+                      onclick="event.stopPropagation(); goTo('edit-store.html');">
                 Manage
               </button>
             </div>
@@ -516,7 +514,7 @@
               <span class="lv-card-note">Applies to all listings by default.</span>
               <button type="button"
                       class="lv-card-manage lv-pill"
-                      onclick="goTo('shipping.html')">
+                      onclick="event.stopPropagation(); goTo('shipping.html');">
                 Manage
               </button>
             </div>
@@ -535,8 +533,27 @@
               <span class="lv-card-note">Shown on your public store profile.</span>
               <button type="button"
                       class="lv-card-manage lv-pill"
-                      onclick="goTo('account-policies.html')">
+                      onclick="event.stopPropagation(); goTo('account-policies.html');">
                 Manage
+              </button>
+            </div>
+          </article>
+
+          <!-- Vendor Membership (Stripe subscription) -->
+          <article class="lv-card" id="membershipCard">
+            <div class="lv-card-header">
+              <div class="lv-card-title">Vendor membership ($9.99/mo)</div>
+              <div class="lv-card-status lv-pill" id="status-membership">Not active</div>
+            </div>
+            <div class="lv-card-body">
+              Activate your monthly vendor membership to sell on LumiVue. Your subscription status updates automatically after payment.
+            </div>
+            <div class="lv-card-footer">
+              <span class="lv-card-note" id="membershipNote">Required to enable vendor access.</span>
+              <button type="button"
+                      class="lv-card-manage lv-pill"
+                      id="membershipBtn">
+                Subscribe
               </button>
             </div>
           </article>
@@ -580,6 +597,12 @@
       const onboardingLabel  = document.getElementById('onboardingPercent');
       const overallStatus    = document.getElementById('overallStatusPill');
 
+      const membershipStatusEl = document.getElementById('status-membership');
+      const membershipBtn = document.getElementById('membershipBtn');
+      const membershipNote = document.getElementById('membershipNote');
+
+      const STRIPE_PRICE_ID = "price_1Seg6zFFCAoQlog4QKQ6kZeR";
+
       const sectionStatusEls = {
         legal:      document.getElementById('status-legal'),
         tax:        document.getElementById('status-tax'),
@@ -593,9 +616,20 @@
       let auth = null;
       let currentUser = null;
 
+      let isMembershipActive = false;
+
       function setSectionStatus(el, isDone) {
         if (!el) return;
         el.textContent = isDone ? 'Completed' : 'Not started';
+      }
+
+      function setMembershipUI(active, statusText) {
+        isMembershipActive = !!active;
+        if (membershipStatusEl) membershipStatusEl.textContent = active ? 'Active' : (statusText || 'Not active');
+        if (membershipBtn) membershipBtn.textContent = active ? 'Manage' : 'Subscribe';
+        if (membershipNote) membershipNote.textContent = active
+          ? 'Subscription active. You can manage billing in Stripe.'
+          : 'Required to enable vendor access.';
       }
 
       function updateFromCreatorDoc(data) {
@@ -611,17 +645,13 @@
 
         const percent = Math.round((completedCount / sections.length) * 100);
 
-        if (onboardingBar) {
-          onboardingBar.style.width = percent + '%';
-        }
-        if (onboardingLabel) {
-          onboardingLabel.textContent = percent + '%';
-        }
+        if (onboardingBar) onboardingBar.style.width = percent + '%';
+        if (onboardingLabel) onboardingLabel.textContent = percent + '%';
 
         if (overallStatus) {
-          if (percent === 100) {
+          if (percent === 100 && isMembershipActive) {
             overallStatus.textContent = 'Status: Ready for approval';
-          } else if (percent > 0) {
+          } else if (percent > 0 || isMembershipActive) {
             overallStatus.textContent = 'Status: In progress';
           } else {
             overallStatus.textContent = 'Status: Not approved yet';
@@ -629,9 +659,129 @@
         }
       }
 
+      async function ensureCustomerDoc(uid, email) {
+        // Extension uses /customers/{uid}
+        const ref = db.collection('customers').doc(uid);
+        await ref.set(
+          {
+            email: email || null,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          },
+          { merge: true }
+        );
+      }
+
+      function listenToSubscription(uid) {
+        // Extension writes subscription docs here:
+        // customers/{uid}/subscriptions/{subId}
+        const subsRef = db.collection('customers').doc(uid).collection('subscriptions');
+
+        subsRef.onSnapshot((snap) => {
+          let active = false;
+          let statusText = 'Not active';
+
+          snap.forEach((doc) => {
+            const d = doc.data() || {};
+            const status = (d.status || '').toLowerCase();
+            if (status === 'active' || status === 'trialing') active = true;
+            if (status) statusText = status.toUpperCase();
+          });
+
+          setMembershipUI(active, statusText);
+          // refresh header status text based on membership
+          // (won't break anything if creator doc hasn't loaded yet)
+          updateFromCreatorDoc(window.__lastCreatorData || {});
+        }, (err) => {
+          console.error('Subscription listener error', err);
+        });
+      }
+
+      async function startCheckout(uid) {
+        // Create a Checkout Session via Firestore write (Stripe Extension)
+        // customers/{uid}/checkout_sessions/{autoId}
+        const origin = window.location.origin;
+        const successUrl = origin + '/account.html?stripe=success';
+        const cancelUrl  = origin + '/account.html?stripe=cancel';
+
+        const sessionRef = await db
+          .collection('customers').doc(uid)
+          .collection('checkout_sessions')
+          .add({
+            price: STRIPE_PRICE_ID,
+            success_url: successUrl,
+            cancel_url: cancelUrl,
+            mode: 'subscription'
+          });
+
+        // Listen for the extension to populate the session doc with the Checkout URL or an error
+        sessionRef.onSnapshot((snap) => {
+          const data = snap.data() || {};
+          if (data.error) {
+            console.error('Stripe checkout error:', data.error);
+            alert('Stripe checkout error. Please try again or check Stripe settings.');
+            return;
+          }
+          // Extension usually returns a "url" (best) or sometimes "sessionId"
+          if (data.url) {
+            window.location.href = data.url;
+          } else if (data.sessionId) {
+            // If your extension returns sessionId only, you can still proceed,
+            // but url is the typical value. We'll show a clear message instead of failing silently.
+            alert('Checkout session created, but no URL returned. Please check the Stripe extension configuration.');
+          }
+        });
+      }
+
+      async function openCustomerPortal(uid) {
+        // Many versions of the extension also support a billing portal session via:
+        // customers/{uid}/portal_sessions/{autoId}
+        // We'll try it safely; if not supported, user can manage in Stripe dashboard.
+        try {
+          const origin = window.location.origin;
+          const returnUrl = origin + '/account.html';
+
+          const ref = await db
+            .collection('customers').doc(uid)
+            .collection('portal_sessions')
+            .add({ return_url: returnUrl });
+
+          ref.onSnapshot((snap) => {
+            const data = snap.data() || {};
+            if (data.error) {
+              console.error('Portal error:', data.error);
+              alert('Billing portal not available. You can manage billing in Stripe for now.');
+              return;
+            }
+            if (data.url) window.location.href = data.url;
+          });
+        } catch (e) {
+          console.error('Portal not supported / error:', e);
+          alert('Billing portal not available. You can manage billing in Stripe for now.');
+        }
+      }
+
+      function attachMembershipButton() {
+        if (!membershipBtn) return;
+
+        membershipBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!currentUser) return;
+
+          // If already active, attempt portal; otherwise checkout
+          if (isMembershipActive) {
+            await openCustomerPortal(currentUser.uid);
+          } else {
+            await startCheckout(currentUser.uid);
+          }
+        });
+      }
+
       function initFirebase() {
         db = firebase.firestore();
         auth = firebase.auth();
+
+        attachMembershipButton();
 
         auth.onAuthStateChanged(async (user) => {
           if (!user) {
@@ -642,16 +792,47 @@
 
           currentUser = user;
 
+          // Verify user role matches the page
+          const creatorSnap = await db.collection('creators').doc(user.uid).get();
+          const buyerSnap = await db.collection('buyers').doc(user.uid).get();
+
+          const isCreatorPage = window.location.pathname.includes('account.html');
+          const isBuyerPage = window.location.pathname.includes('buyer-dashboard');
+
+          if (isCreatorPage && !creatorSnap.exists && buyerSnap.exists) {
+            window.location.href = 'buyer-dashboard.html';
+            return;
+          }
+
+          if (isBuyerPage && !buyerSnap.exists && creatorSnap.exists) {
+            window.location.href = 'account.html';
+            return;
+          }
+
+          if (!creatorSnap.exists && !buyerSnap.exists) {
+            console.error('User has no creator or buyer profile');
+            window.location.href = 'login.html';
+            return;
+          }
+
+          // Ensure Stripe extension has a customer doc to work with
+          try {
+            await ensureCustomerDoc(user.uid, user.email || null);
+            listenToSubscription(user.uid);
+          } catch (err) {
+            console.error('Error ensuring customer doc / subscription listener', err);
+          }
+
           try {
             const docRef = db.collection('creators').doc(user.uid);
             const snap = await docRef.get();
-            if (snap.exists) {
-              updateFromCreatorDoc(snap.data() || {});
-            } else {
-              updateFromCreatorDoc({});
-            }
+            const data = snap.exists ? (snap.data() || {}) : {};
+            window.__lastCreatorData = data;
+            updateFromCreatorDoc(data);
           } catch (err) {
             console.error('Error loading vendor account overview', err);
+            window.__lastCreatorData = {};
+            updateFromCreatorDoc({});
           }
         });
       }
