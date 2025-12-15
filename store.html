@@ -4,25 +4,20 @@
     <meta charset="UTF-8" />
     <title>LumiVue Storefront</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="styles.css" />
 
     <style>
         :root {
-            /* LumiVue latte / espresso system same as create-listing */
             --lv-bg: #f4f1eb;
             --lv-surface: #ffffff;
-            --lv-border: #e6d7c6;
-            --lv-border-strong: #d9c6b3;
-            --lv-text: #2c1e19;          /* espresso */
+            --lv-border: #ddd3c6;
+            --lv-border-strong: #ccc0b1;
+            --lv-text: #2c1e19;
             --lv-text-muted: #7a6a5c;
-            --lv-pill: #e3ceb2;          /* beige pill */
-            --lv-pill-border: #c9a07a;   /* caramel outline */
-            --lv-accent-soft: #fbf3e7;
-            --lv-shadow-soft: 0 24px 60px rgba(15,23,42,.08);
-            --lv-radius-lg: 14px;
-            --lv-radius-md: 10px;
-
-            --lv-danger: #c15b4b;
+            --lv-accent: #c98a5a;
+            --lv-accent-soft: #fbede1;
+            --lv-radius-lg: 18px;
+            --lv-shadow-soft: 0 30px 80px rgba(15, 23, 42, 0.22);
+            --lv-hero-latte: #f1ddc2;
         }
 
         * {
@@ -107,12 +102,12 @@
         .nav-tab-link {
             padding: 6px 14px;
             border-radius: 999px;
-            border: 1px solid var(--lv-border-strong);
-            background: #e6d8c7;
+            border: none;
+            background: #efe1cf;
             font-size: 11px;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: var(--lv-text);
+            color: #3b2719;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -122,9 +117,7 @@
         }
 
             .nav-tab-link:hover {
-                background: #e6d8c7;
-                transition: none !important;
-                transform: none !important;
+                background: #e5d3be;
             }
 
         .nav-right {
@@ -229,17 +222,17 @@
             display: flex;
             flex-direction: column;
             cursor: pointer;
-            transition: none !important;
+            transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
         }
 
             .product-card:hover {
-                transform: none !important;
-                box-shadow: 0 22px 55px rgba(15,23,42,0.18);
-                border-color: var(--lv-border);
+                transform: translateY(-3px);
+                box-shadow: 0 28px 65px rgba(15,23,42,0.22);
+                border-color: rgba(201,138,90,0.7);
             }
 
             .product-card.placeholder:hover {
-                transform: none !important;
+                transform: none;
                 box-shadow: 0 22px 55px rgba(15,23,42,0.18);
                 border-color: var(--lv-border);
             }
@@ -405,8 +398,6 @@
 
             .feature-link:hover {
                 background: #efd6b5;
-                transition: none !important;
-                transform: none !important;
             }
     </style>
 </head>
@@ -523,6 +514,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 
+    <!-- Cart Utility -->
+    <script src="cart.js"></script>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAMmOyBqyPr5KoIzqnItE4sH1lb83iQAo8",
@@ -538,22 +532,15 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         const storage = firebase.storage();
+
+        // Initialize cart
+        if (window.cart) {
+            cart.init(auth, db);
+        }
     </script>
     
-    <!-- FORCE STORE TO ALWAYS LOAD CORRECT VENDOR -->
-    <script>
-        auth.onAuthStateChanged(user => {
-            if (!user) return;
-
-            const params = new URLSearchParams(window.location.search);
-            const urlUid = params.get("uid");
-
-            // Redirect if the UID in the URL is missing or wrong
-            if (!urlUid || urlUid !== user.uid) {
-                window.location.replace(`store.html?uid=${user.uid}`);
-            }
-        });
-    </script>
+    <!-- STORE IS PUBLIC - Buyers can view any vendor's store -->
+    <!-- No authentication required - store is accessible to everyone -->
 
     <!-- STORE LOGIC -->
     <script>
@@ -684,6 +671,10 @@
         }
 
         async function loadStoreProfile(uid, currentUser) {
+            if (!db) {
+                console.warn("Firestore not available");
+                return;
+            }
             try {
                 const profileRef = db
                     .collection("stores")
@@ -760,193 +751,129 @@
                         data.faqText ||
                         "Frequently asked questions and answers will appear here once the creator saves them in Edit Store.";
                 }
+
+                // Load reviews
+                await loadStoreReviews(uid);
             } catch (err) {
                 console.error("Profile error:", err);
             }
         }
 
+        async function loadStoreReviews(storeUid) {
+            if (!storeUid || !db) return;
+
+            const reviewsCard = document.getElementById('reviewsCard');
+            if (!reviewsCard) return;
+
+            try {
+                const reviewsRef = db.collection('stores').doc(storeUid).collection('reviews');
+                const snapshot = await reviewsRef.orderBy('createdAt', 'desc').limit(3).get();
+
+                if (snapshot.empty) {
+                    reviewsCard.querySelector('.feature-card-body').innerHTML = `
+                        Read what other buyers are saying about this store and its products. A highlighted testimonial can be featured here.
+                    `;
+                    return;
+                }
+
+                let reviewsHTML = '';
+                let totalRating = 0;
+                let reviewCount = 0;
+
+                snapshot.forEach(doc => {
+                    const review = doc.data();
+                    totalRating += review.rating || 0;
+                    reviewCount++;
+                    const date = review.createdAt?.toDate ? review.createdAt.toDate().toLocaleDateString() : 'Recently';
+                    const stars = '⭐'.repeat(review.rating || 0);
+                    
+                    reviewsHTML += `
+                        <div style="margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--lv-border);">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                                <div>
+                                    <div style="font-weight: 600; color: var(--lv-text);">${review.buyerName || 'Anonymous'}</div>
+                                    <div style="font-size: 12px; color: var(--lv-text-muted); margin-top: 4px;">${date}</div>
+                                </div>
+                                <div style="font-size: 14px;">${stars}</div>
+                            </div>
+                            <div style="color: var(--lv-text); margin-top: 8px;">${review.comment || ''}</div>
+                        </div>
+                    `;
+                });
+
+                const avgRating = reviewCount > 0 ? (totalRating / reviewCount).toFixed(1) : '0.0';
+                const allStars = '⭐'.repeat(Math.round(parseFloat(avgRating)));
+
+                reviewsCard.querySelector('.feature-card-body').innerHTML = `
+                    <div style="margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <div style="font-size: 24px; font-weight: 700; color: var(--lv-text);">${avgRating}</div>
+                            <div style="font-size: 18px;">${allStars}</div>
+                            <div style="font-size: 13px; color: var(--lv-text-muted);">${reviewCount} review${reviewCount !== 1 ? 's' : ''}</div>
+                        </div>
+                    </div>
+                    ${reviewsHTML}
+                    <a href="reviews.html?uid=${storeUid}" style="color: var(--lv-text); text-decoration: underline; font-size: 13px; margin-top: 12px; display: inline-block;">See all reviews</a>
+                `;
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                reviewsCard.querySelector('.feature-card-body').innerHTML = `
+                    Read what other buyers are saying about this store and its products. A highlighted testimonial can be featured here.
+                `;
+            }
+        }
+
         async function loadStoreProducts(uid) {
+            if (!db) {
+                productGridEl.innerHTML = "";
+                productsStatusEl.textContent = "Firebase not available. Please check your browser settings or try refreshing the page.";
+                renderPlaceholders(3);
+                return;
+            }
             try {
                 productGridEl.innerHTML = "";
                 productsStatusEl.textContent = "Loading products...";
 
-                console.log(`🔍 Querying products for vendor: ${uid}`);
-                
-                // First, let's see ALL products and their categories for debugging
-                const allProductsSnapshot = await db.collection("listings")
-                    .where("vendorUid", "==", uid)
-                    .get();
-                console.log(`📊 TOTAL products in database for this vendor: ${allProductsSnapshot.size}`);
-                allProductsSnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    console.log(`📦 Product: "${data.title || doc.id}"`, {
-                        id: doc.id,
-                        status: data.status,
-                        categories: data.categories,
-                        categoriesType: typeof data.categories,
-                        isArray: Array.isArray(data.categories),
-                        categoryCount: Array.isArray(data.categories) ? data.categories.length : 0
-                    });
-                });
+                console.log(`Querying products for vendor: ${uid}`);
 
-                // Base query: this vendor's active products
+                // Base query: this vendor's active products (always get all, filter in memory to avoid index requirement)
                 let q = db.collection("listings")
                     .where("vendorUid", "==", uid)
-                    .where("status", "==", "active")
-                    .orderBy("createdAt", "desc");
-
-                // If a category filter is selected, narrow results to listings that include that category
-                if (activeCategoryFilter) {
-                    // Expect an array field "categories" on listing docs (set from create-listing/edit-store)
-                    // Note: Removed orderBy to avoid requiring a composite index - results will be sorted in memory
-                    console.log(`Filtering by category: "${activeCategoryFilter}"`);
-                    try {
-                        q = db.collection("listings")
-                            .where("vendorUid", "==", uid)
-                            .where("status", "==", "active")
-                            .where("categories", "array-contains", activeCategoryFilter);
-                    } catch (err) {
-                        console.error("Query error:", err);
-                        // Fallback: get all products and filter in memory
-                        q = db.collection("listings")
-                            .where("vendorUid", "==", uid)
-                            .where("status", "==", "active");
-                    }
-                }
+                    .where("status", "==", "active");
 
                 const snapshot = await q.get();
                 
-                // Convert to array
+                // Convert to array and filter by category in memory (avoids needing composite index)
                 let products = [];
                 snapshot.forEach((doc) => {
                     products.push({ id: doc.id, ...doc.data() });
                 });
                 
-                // If filtering by category, also do client-side filtering (case-insensitive) as fallback
+                // Filter by category in memory if a category is selected
                 if (activeCategoryFilter) {
-                    const originalCount = products.length;
+                    console.log(`Filtering by category: "${activeCategoryFilter}"`);
                     const filterStrNormalized = activeCategoryFilter.trim().toLowerCase();
-                    console.log(`🔍 Filtering products with category: "${activeCategoryFilter}" (normalized: "${filterStrNormalized}")`);
-                    
                     products = products.filter((product) => {
                         const categories = product.categories || [];
-                        if (!Array.isArray(categories)) {
-                            console.log(`⚠️ Product "${product.title || product.id}" has non-array categories:`, categories);
-                            return false;
-                        }
+                        if (!Array.isArray(categories)) return false;
                         
-                        // Case-insensitive matching with detailed logging
-                        const hasCategory = categories.some(cat => {
-                            if (!cat) return false;
-                            const catStr = cat.toString().trim();
-                            const catStrNormalized = catStr.toLowerCase();
-                            const matches = catStrNormalized === filterStrNormalized;
-                            
-                            if (matches) {
-                                console.log(`✅ Match found: Product "${product.title || product.id}" has category "${catStr}" matching filter "${activeCategoryFilter}"`);
-                            }
-                            
-                            return matches;
-                        });
-                        
-                        if (!hasCategory && categories.length > 0) {
-                            console.log(`❌ No match: Product "${product.title || product.id}" has categories: [${categories.map(c => `"${c}"`).join(", ")}] but filter is "${activeCategoryFilter}"`);
-                        }
-                        
-                        return hasCategory;
-                    });
-                    console.log(`📊 Client-side filter result: ${originalCount} products → ${products.length} products for category "${activeCategoryFilter}"`);
-                }
-                
-                // Debug: Log all products and their categories
-                if (activeCategoryFilter) {
-                    console.log(`Final products count: ${products.length} for category "${activeCategoryFilter}"`);
-                    products.forEach((product) => {
-                        console.log(`Product: ${product.title || product.id}`, {
-                            categories: product.categories,
-                            status: product.status
-                        });
-                    });
-                }
-
-                console.log(`Found ${products.length} active products for vendor ${uid}${activeCategoryFilter ? " in category " + activeCategoryFilter : ""}`);
-                
-                // Additional debug: Check if any products have categories array
-                if (activeCategoryFilter && products.length === 0) {
-                    // Try to see all products to debug
-                    const allProducts = await db.collection("listings")
-                        .where("vendorUid", "==", uid)
-                        .where("status", "==", "active")
-                        .get();
-                    console.log(`🔍 DEBUG: Total active products for vendor: ${allProducts.size}`);
-                    console.log(`🔍 DEBUG: Looking for category: "${activeCategoryFilter}"`);
-                    console.log(`🔍 DEBUG: Category filter (lowercase): "${activeCategoryFilter.toLowerCase().trim()}"`);
-                    
-                    const filterStrNormalized = activeCategoryFilter.trim().toLowerCase();
-                    let foundAnyMatch = false;
-                    let productsWithCategories = 0;
-                    let productsWithoutCategories = 0;
-                    
-                    allProducts.forEach((doc) => {
-                        const data = doc.data();
-                        const categories = data.categories || [];
-                        const categoryArray = Array.isArray(categories) ? categories : [];
-                        
-                        if (categoryArray.length === 0) {
-                            productsWithoutCategories++;
-                            console.log(`⚠️ Product "${data.title || doc.id}" has NO categories`);
-                            return;
-                        }
-                        
-                        productsWithCategories++;
-                        
-                        // Check exact match
-                        const hasExactMatch = categoryArray.includes(activeCategoryFilter);
-                        
-                        // Check case-insensitive match
-                        const hasCaseInsensitiveMatch = categoryArray.some(cat => {
+                        // Case-insensitive matching
+                        return categories.some(cat => {
                             if (!cat) return false;
                             return cat.toString().trim().toLowerCase() === filterStrNormalized;
                         });
-                        
-                        console.log(`📦 Product "${data.title || doc.id}":`, {
-                            categories: categoryArray,
-                            categoryCount: categoryArray.length,
-                            isArray: Array.isArray(categories),
-                            hasExactMatch: hasExactMatch,
-                            hasCaseInsensitiveMatch: hasCaseInsensitiveMatch,
-                            status: data.status,
-                            vendorUid: data.vendorUid
-                        });
-                        
-                        console.log(`  📋 Category details for "${data.title || doc.id}":`);
-                        categoryArray.forEach((cat, idx) => {
-                            const catStr = cat ? cat.toString() : "(empty)";
-                            const catStrNormalized = catStr.trim().toLowerCase();
-                            const exactMatch = catStr === activeCategoryFilter;
-                            const caseInsensitiveMatch = catStrNormalized === filterStrNormalized;
-                            console.log(`    [${idx}] "${catStr}" (normalized: "${catStrNormalized}")`);
-                            console.log(`        Exact match with "${activeCategoryFilter}"? ${exactMatch}`);
-                            console.log(`        Case-insensitive match? ${caseInsensitiveMatch}`);
-                            if (exactMatch || caseInsensitiveMatch) {
-                                foundAnyMatch = true;
-                                console.log(`        ✅ THIS SHOULD MATCH!`);
-                            }
-                        });
                     });
-                    
-                    console.log(`📊 Summary: ${productsWithCategories} products with categories, ${productsWithoutCategories} products without categories`);
-                    
-                    if (!foundAnyMatch) {
-                        console.log(`❌ No products found with category "${activeCategoryFilter}"`);
-                        console.log(`💡 TROUBLESHOOTING:`);
-                        console.log(`   1. Make sure you typed "${activeCategoryFilter}" in the Product Categories field in create-listing.html`);
-                        console.log(`   2. Make sure you pressed Enter/comma after typing the category`);
-                        console.log(`   3. Make sure you clicked "Publish product" (not just "Save draft")`);
-                        console.log(`   4. Check that the category name matches exactly (case-insensitive): "${activeCategoryFilter}"`);
-                        console.log(`   5. The category chip name must match the product category name`);
-                    }
+                    console.log(`Filtered to ${products.length} products for category "${activeCategoryFilter}"`);
                 }
+                
+                // Sort by createdAt (descending - newest first)
+                products.sort((a, b) => {
+                    const aTime = a.createdAt?.toMillis?.() || (a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0);
+                    const bTime = b.createdAt?.toMillis?.() || (b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0);
+                    return bTime - aTime;
+                });
+
+                console.log(`Found ${products.length} active products for vendor ${uid}${activeCategoryFilter ? " in category " + activeCategoryFilter : ""}`);
 
                 if (products.length === 0) {
                     productsStatusEl.textContent = activeCategoryFilter
@@ -958,22 +885,16 @@
 
                 productsStatusEl.textContent = "";
 
-                // Sort by createdAt (descending - newest first)
-                products.sort((a, b) => {
-                    const aTime = a.createdAt?.toMillis?.() || (a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0);
-                    const bTime = b.createdAt?.toMillis?.() || (b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0);
-                    return bTime - aTime;
-                });
-
                 products.forEach((product) => {
                     const data = product;
-                    console.log(`Rendering product: ${data.title || product.id}`, data);
+                    console.log(`Product: ${product.id}`, data);
 
                     const card = document.createElement("article");
                     card.className = "product-card";
 
                     const imgWrap = document.createElement("div");
                     imgWrap.className = "product-img-wrap";
+                    imgWrap.style.position = "relative";
 
                     if (data.imageUrl) {
                         const img = document.createElement("img");
@@ -987,6 +908,7 @@
                         label.textContent = "No image";
                         imgWrap.appendChild(label);
                     }
+
 
                     const body = document.createElement("div");
                     body.className = "product-body";
@@ -1026,13 +948,107 @@
                     if (subEl.textContent) body.appendChild(subEl);
                     body.appendChild(footer);
 
+                    // Add action buttons for wishlist and follow store (only for logged-in buyers)
+                    const actionsRow = document.createElement("div");
+                    actionsRow.style.cssText = "display: flex; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--lv-border);";
+                    actionsRow.className = "product-actions";
+
+                    // Add to Wishlist button
+                    const wishlistBtn = document.createElement("button");
+                    wishlistBtn.style.cssText = "flex: 1; padding: 4px 8px; border-radius: 6px; border: 1px solid #7a6a5c; background: transparent; color: #7a6a5c; font-size: 10px; font-weight: 600; cursor: pointer; min-width: 60px; height: 28px;";
+                    wishlistBtn.textContent = "Wishlist";
+                    wishlistBtn.title = "Add to Wishlist";
+                    wishlistBtn.onclick = async (e) => {
+                        e.stopPropagation();
+                        if (!auth.currentUser) {
+                            alert('Please sign in to add items to wishlist');
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                        try {
+                            const productData = {
+                                id: product.id,
+                                title: data.title || 'Untitled Product',
+                                subtitle: data.subtitle || '',
+                                price: price,
+                                priceNumber: price,
+                                currency: data.currency || 'USD',
+                                imageUrl: data.imageUrl || '',
+                                vendor: data.vendor || '',
+                                vendorUid: data.vendorUid || ''
+                            };
+                            const success = await cart.addToWishlist(productData);
+                            if (success) {
+                                wishlistBtn.textContent = "In Wishlist";
+                                // Dispatch event to update buyer-dashboard
+                                window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+                            }
+                        } catch (error) {
+                            console.error('Error adding to wishlist:', error);
+                            alert('Failed to add to wishlist');
+                        }
+                    };
+
+                    // Follow Store button
+                    const followBtn = document.createElement("button");
+                    followBtn.style.cssText = "flex: 1; padding: 4px 8px; border-radius: 6px; border: 1px solid #7a6a5c; background: transparent; color: #7a6a5c; font-size: 10px; font-weight: 600; cursor: pointer; min-width: 60px; height: 28px;";
+                    followBtn.textContent = "Follow";
+                    followBtn.title = "Follow Store";
+                    followBtn.onclick = async (e) => {
+                        e.stopPropagation();
+                        if (!auth.currentUser) {
+                            alert('Please sign in to follow stores');
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                        try {
+                            const storeName = data.vendor || 'Store';
+                            const success = await cart.followStore(data.vendorUid, storeName);
+                            if (success) {
+                                followBtn.textContent = "Following";
+                                // Dispatch event to update buyer-dashboard
+                                window.dispatchEvent(new CustomEvent('followingUpdated'));
+                            }
+                        } catch (error) {
+                            console.error('Error following store:', error);
+                            alert('Failed to follow store');
+                        }
+                    };
+
+                    // Check if already in wishlist or following (async) - only for logged-in users
+                    if (auth.currentUser && window.cart) {
+                        (async () => {
+                            try {
+                                // Check wishlist
+                                const wishlist = await cart.getWishlist();
+                                const isInWishlist = wishlist.some(item => item.id === product.id);
+                                if (isInWishlist) {
+                                    wishlistBtn.textContent = "In Wishlist";
+                                }
+
+                                // Check if following
+                                const following = await cart.getFollowedStores();
+                                const isFollowing = following.some(store => store.vendorUid === data.vendorUid);
+                                if (isFollowing) {
+                                    followBtn.textContent = "Following";
+                                }
+                            } catch (e) {
+                                console.warn('Error checking wishlist/following:', e);
+                            }
+                        })();
+                    }
+
+                    actionsRow.appendChild(wishlistBtn);
+                    actionsRow.appendChild(followBtn);
+                    body.appendChild(actionsRow);
+
                     card.appendChild(imgWrap);
                     card.appendChild(body);
 
-                    // Click to view product details
-                    card.addEventListener("click", () => {
-                        console.log("🖱️ Product card clicked:", data.title, "ID:", product.id);
-                        window.location.href = `product-detail-new.html?id=${encodeURIComponent(product.id)}`;
+                    // Click to view product details (but not on buttons)
+                    card.addEventListener("click", (e) => {
+                        if (e.target.tagName === 'BUTTON') return;
+                        window.location.href = `product-detail.html?id=${encodeURIComponent(product.id)}`;
                     });
 
                     productGridEl.appendChild(card);
@@ -1050,6 +1066,15 @@
 
         async function loadStoreCategories(uid) {
             if (!categoriesChipsEl) return;
+            
+            if (!db) {
+                categoriesChipsEl.innerHTML = "";
+                const chip = document.createElement("span");
+                chip.className = "feature-tag";
+                chip.textContent = "Firebase not available.";
+                categoriesChipsEl.appendChild(chip);
+                return;
+            }
 
             categoriesChipsEl.innerHTML = "";
             const loading = document.createElement("span");
@@ -1074,25 +1099,28 @@
                 snap.forEach((docSnap) => {
                     const data = docSnap.data();
                     const name = data.name || "Category";
-                    
-                    console.log(`Loading category chip: "${name}"`);
 
                     const chip = document.createElement("button");
                     chip.type = "button";
                     chip.className = "feature-tag";
                     chip.textContent = name;
 
-                    // When buyer clicks a category, navigate to store.html with category parameter
+                    // When buyer clicks a category, filter products shown in the grid for this store
                     chip.addEventListener("click", (e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         
                         if (!currentStoreUid) return;
 
-                        console.log(`Category chip clicked: "${name}"`);
-                        // Navigate to store.html with category filter
-                        const url = `store.html?uid=${encodeURIComponent(currentStoreUid)}&category=${encodeURIComponent(name)}`;
-                        window.location.href = url;
+                        // Toggle filter: clicking the same chip again clears the filter
+                        if (activeCategoryFilter === name) {
+                            activeCategoryFilter = null;
+                        } else {
+                            activeCategoryFilter = name;
+                        }
+
+                        // Reload products using the selected (or cleared) category filter
+                        loadStoreProducts(currentStoreUid);
                     });
 
                     categoriesChipsEl.appendChild(chip);
@@ -1111,13 +1139,6 @@
             setupNavScroll();
 
             const urlUid = getStoreUidFromUrl();
-            
-            // Check for category parameter in URL
-            const params = new URLSearchParams(window.location.search);
-            const urlCategory = params.get("category");
-            if (urlCategory) {
-                activeCategoryFilter = urlCategory;
-            }
 
             if (urlUid) {
                 wireLinksForUid(urlUid);
